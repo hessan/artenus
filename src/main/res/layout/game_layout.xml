@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.annahid.libs.artenus.unified.AdLayout
+	android:id="@+id/adLayout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.annahid.libs.artenus.ui.Stage
+        android:id="@+id/gameStage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</com.annahid.libs.artenus.unified.AdLayout>

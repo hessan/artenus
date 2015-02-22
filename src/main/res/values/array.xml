@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="item_type_list">
+        <item>CONSUMABLE(00)</item>
+        <item>NON_CONSUMABLE(01)</item>
+        <item>SUBSCRIPTION(02)</item>
+        <item>ALL(10)</item>
+    </string-array>
+    
+</resources>
