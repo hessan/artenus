@@ -32,7 +32,7 @@ public final class SoundManager {
 	 * Adds sounds to the pool. You must add all your sound effects to the pool
 	 * before using them in the game.
 	 *
-	 * @param resourceIds raw resource identifiers.
+	 * @param resourceIds raw resource identifiers
 	 */
 	@SuppressWarnings("deprecation")
 	public static void addSounds(int... resourceIds) {
@@ -44,7 +44,7 @@ public final class SoundManager {
 	 * Plays a sound effect. The sound should be already added to the pool using
 	 * {@link #addSounds(int...)}.
 	 *
-	 * @param resourceId The raw resource identifier for the sound.
+	 * @param resourceId The raw resource identifier for the sound
 	 */
 	public static void playSound(int resourceId) {
 		playSound(resourceId, 1.0f);
@@ -54,7 +54,7 @@ public final class SoundManager {
 	 * Plays a sound effect with the given volume. The sound should be already
 	 * added to the pool using
 	 *
-	 * @param resourceId The raw resource identifier for the sound.
+	 * @param resourceId The raw resource identifier for the sound
 	 * @param vol        The volume to play the sound. This volume is relative to the
 	 *                   normal play-back of the sound with the current system volume for media.
 	 *                   This value should be specified as a number between 0 and 1.
@@ -70,7 +70,7 @@ public final class SoundManager {
 	/**
 	 * Stops play-back of a currently playing sound.
 	 *
-	 * @param resourceId The raw resource identifier for the sound.
+	 * @param resourceId The raw resource identifier for the sound
 	 */
 	public static void stopSound(int resourceId) {
 		soundPool.stop(soundPoolMap.get(resourceId));
@@ -79,7 +79,7 @@ public final class SoundManager {
 	/**
 	 * Sets the general volume of the sound manager.
 	 *
-	 * @param volume The new volume which is a number between 0 and 1.
+	 * @param volume The new volume which is a number between 0 and 1
 	 */
 	public static void setGeneralVolume(float volume) {
 		generalVolume = volume;
@@ -119,8 +119,8 @@ public final class SoundManager {
 	 * loop after calling this function. Specifying {@code null} for the
 	 * file name will stop play-back and remove the background music.
 	 *
-	 * @param fileName The file name for the music file. This name should
-	 * @param volume   Play-back volume.
+	 * @param fileName The file name for the music file
+	 * @param volume   Play-back volume
 	 */
 	public static void setMusic(String fileName, float volume) {
 		if (currentMusic != null)
@@ -154,7 +154,7 @@ public final class SoundManager {
 	 * Plays a music file from the {@code assets} folder of the application.
 	 * The music is played only once.
 	 *
-	 * @param fileName The file name for the music file. This name should
+	 * @param fileName The file name for the music file
 	 */
 	public static void playMusic(String fileName) {
 		if (currentMusic != null)
@@ -248,7 +248,7 @@ public final class SoundManager {
 	/**
 	 * Initializes the class using the given application context.
 	 *
-	 * @param context The application context.
+	 * @param context The application context
 	 */
 	@SuppressWarnings("deprecation")
 	public static void initContext(Context context) {
@@ -271,7 +271,7 @@ public final class SoundManager {
 	/**
 	 * Determines whether the class has already been initialized.
 	 *
-	 * @return    {@code true} if initialized, or {@code false} otherwise.
+	 * @return    {@code true} if initialized, or {@code false} otherwise
 	 */
 	public static boolean isContextInitialized() {
 		return context != null;

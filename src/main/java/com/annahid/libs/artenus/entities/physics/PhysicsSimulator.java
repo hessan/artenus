@@ -38,11 +38,6 @@ public final class PhysicsSimulator {
 	 */
 	public static float pixelsPerMeter = 60;
 
-	private World world;
-	private List<CollisionInfo> collisions = new ArrayList<>();
-	private CollisionListener collisionListener = null;
-	private boolean paused = false;
-
 	/**
 	 * Use this field to scale the physical time. The value of this parameter is
 	 * originally 1, which means that the time in the physical world is as fast
@@ -89,7 +84,7 @@ public final class PhysicsSimulator {
 	 * Sets the 2-dimensional gravity of the physical world.
 	 * (meters per seconds squared).
 	 *
-	 * @return The gravity of the world.
+	 * @return The gravity of the world
 	 */
 	public Point2D getGravity() {
 		final Vec2 gravity = world.getGravity();
@@ -99,8 +94,8 @@ public final class PhysicsSimulator {
 	/**
 	 * Sets the 2-dimensional gravity of the physical world.
 	 *
-	 * @param xFactor The x factor of gravity.
-	 * @param yFactor The y factor of gravity.
+	 * @param xFactor The x factor of gravity
+	 * @param yFactor The y factor of gravity
 	 */
 	public void setGravity(float xFactor, float yFactor) {
 		world.setGravity(new Vec2(xFactor, yFactor));
@@ -120,7 +115,7 @@ public final class PhysicsSimulator {
 	/**
 	 * Gets the collision listener currently appointed for handling collisions.
 	 *
-	 * @return The collision listener or {@code null} if none assigned.
+	 * @return The collision listener or {@code null} if none assigned
 	 * @see CollisionListener
 	 */
 	public CollisionListener getCollisionListener() {
@@ -132,9 +127,9 @@ public final class PhysicsSimulator {
 	 * scene and you do not need to directly invoke it.
 	 *
 	 * @param elapsedTime        The time passed since last frame. This value will be scaled
-	 *                           using {@link #timeScale}.
-	 * @param velocityIterations The number of velocity points to interpolate between.
-	 * @param positionIterations The number of position points to interpolate between.
+	 *                           using {@link #timeScale}
+	 * @param velocityIterations The number of velocity points to interpolate between
+	 * @param positionIterations The number of position points to interpolate between
 	 */
 	public void step(float elapsedTime, int velocityIterations, int positionIterations) {
 		if (!paused)
@@ -160,7 +155,7 @@ public final class PhysicsSimulator {
 	 * Changes the paused state of the simulator. Physical bodies in a paused simulator
 	 * remain halted until the simulator is resumed.
 	 *
-	 * @param p {@code true} to pause the simulator or {@code false} to un-pause it.
+	 * @param p {@code true} to pause the simulator or {@code false} to un-pause it
 	 */
 	public void setPaused(boolean p) {
 		paused = p;
@@ -169,7 +164,7 @@ public final class PhysicsSimulator {
 	/**
 	 * Gets whether the simulator is paused.
 	 *
-	 * @return {@code true} if paused or {@code false} otherwise.
+	 * @return {@code true} if paused or {@code false} otherwise
 	 */
 	public boolean isPaused() {
 		return paused;
@@ -179,7 +174,7 @@ public final class PhysicsSimulator {
 	 * Attaches a physical body to the simulator. You do not need to call this method
 	 * directly if you are using physics simulation through a scene.
 	 *
-	 * @param body The new physical body.
+	 * @param body The new physical body
 	 * @see com.annahid.libs.artenus.entities.physics.PhysicalBody
 	 */
 	public void attach(PhysicalBody body) {
@@ -237,7 +232,7 @@ public final class PhysicsSimulator {
 	 * detached from the simulator, it must be disposed. Physical objects removed from
 	 * the scene are NOT reusable.
 	 *
-	 * @param body The physical body to remove.
+	 * @param body The physical body to remove
 	 * @see com.annahid.libs.artenus.entities.physics.PhysicalBody
 	 */
 	public void detach(PhysicalBody body) {
@@ -253,4 +248,9 @@ public final class PhysicsSimulator {
 			world.destroyBody(body.body);
 		}
 	}
+
+	private World world;
+	private List<CollisionInfo> collisions = new ArrayList<>();
+	private CollisionListener collisionListener = null;
+	private boolean paused = false;
 }

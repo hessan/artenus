@@ -9,10 +9,10 @@ package com.annahid.libs.artenus.scripting;
  */
 public interface ScriptHost {
 	/**
-	 * Executes a script code.
+	 * Executes a script code
 	 *
-	 * @param command The command or piece of code.
-	 * @return The result or {@code null} if there is not result.
+	 * @param command The command or piece of code
+	 * @return The result or {@code null} if there is not result
 	 */
 	public Object execute(String command);
 

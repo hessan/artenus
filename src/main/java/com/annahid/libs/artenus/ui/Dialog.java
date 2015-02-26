@@ -39,7 +39,7 @@ public abstract class Dialog extends Scene {
 	/**
 	 * Constructs a {@code Dialog} that will be popped up above a given scene.
 	 *
-	 * @param parentScene The underlying scene.
+	 * @param parentScene The underlying scene
 	 */
 	public Dialog(Scene parentScene) {
 		super(parentScene.getStage());
@@ -115,8 +115,8 @@ public abstract class Dialog extends Scene {
 	}
 
 	/**
-	 * Handles the back button for this dialog. The default implementation
-	 * cancels the dialog by calling the {@code cancel()} method.
+	 * Handles the back button for this dialog. The default implementation cancels the dialog by
+	 * calling the {@code cancel()} method.
 	 */
 	@Override
 	public boolean onBackButton() {
@@ -125,12 +125,11 @@ public abstract class Dialog extends Scene {
 	}
 
 	/**
-	 * Advances animation for this dialog. The {@code advance}
-	 * method for {@code Scene} is overridden and finalized by this class,
-	 * and this method is a replacement. This method is only called if the
-	 * dialog is not fading in or out.
+	 * Advances animation for this dialog. The {@code advance} method for {@code Scene} is
+	 * overridden and finalized by this class, and this method is a replacement. This method is only
+	 * called if the dialog is not fading in or out.
 	 *
-	 * @param elapsedTime The time passed since the last frame.
+	 * @param elapsedTime The time passed since the last frame
 	 */
 	protected abstract void advanceDialog(float elapsedTime);
 
@@ -138,9 +137,8 @@ public abstract class Dialog extends Scene {
 	 * Advances animation for this dialog when it is fading in.
 	 * The end of the fade-in process is determined by the return value.
 	 *
-	 * @param elapsedTime The time passed since the last frame.
-	 * @return    {@code true} if the dialog has completed fading in, or
-	 * {@code false} otherwise.
+	 * @param elapsedTime The time passed since the last frame
+	 * @return    {@code true} if the dialog has completed fading in, {@code false} otherwise
 	 */
 	protected abstract boolean fadeIn(float elapsedTime);
 
@@ -148,9 +146,8 @@ public abstract class Dialog extends Scene {
 	 * Advances animation for this dialog when it is fading out. The end
 	 * of the fade-out process is determined by the return value.
 	 *
-	 * @param elapsedTime The time passed since the last frame.
-	 * @return    {@code true} if the dialog has completed fading out, or
-	 * {@code false} otherwise.
+	 * @param elapsedTime The time passed since the last frame
+	 * @return    {@code true} if the dialog has completed fading out, {@code false} otherwise
 	 */
 	protected abstract boolean fadeOut(float elapsedTime);
 
@@ -158,8 +155,7 @@ public abstract class Dialog extends Scene {
 	 * Indicates whether the underlying scene is fully covered by this dialog.
 	 * In this case the underlying scene is not drawn for better performance.
 	 *
-	 * @return {@code true} if the dialog fully covers the parent scene, and
-	 * {@code false} otherwise.
+	 * @return {@code true} if the dialog fully covers the parent scene, {@code false} otherwise
 	 */
 	public boolean isFull() {
 		return false;

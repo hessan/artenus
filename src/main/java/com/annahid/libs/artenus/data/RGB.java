@@ -26,9 +26,9 @@ public final class RGB {
 	/**
 	 * Constructs a new {@code RGB} using the give red, green and blue components.
 	 *
-	 * @param cr The red component of the color.
-	 * @param cg The green component of the color.
-	 * @param cb The blue component of the color.
+	 * @param cr The red component of the color
+	 * @param cg The green component of the color
+	 * @param cb The blue component of the color
 	 */
 	public RGB(float cr, float cg, float cb) {
 		r = cr;
@@ -39,7 +39,7 @@ public final class RGB {
 	/**
 	 * Constructs a new {@code RGB} using the color's string representation.
 	 *
-	 * @param rgb A hexadecimal string of the form rrggbb or RRGGBB.
+	 * @param rgb A hexadecimal string of the form rrggbb or RRGGBB
 	 */
 	public RGB(String rgb) {
 		r = Integer.parseInt(rgb.substring(0, 2), 16) / 256.0f;

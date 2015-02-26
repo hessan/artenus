@@ -325,8 +325,8 @@ public final class Stage extends GLSurfaceView {
 	 * of XML attributes. This method will be automatically called if you put the
 	 * {@code Stage} tag in your layout XML.
 	 *
-	 * @param context The application context.
-	 * @param attrs   The set of attributes.
+	 * @param context The application context
+	 * @param attrs   The set of attributes
 	 */
 	public Stage(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -383,6 +383,11 @@ public final class Stage extends GLSurfaceView {
 		setScene(new IntroScene(this));
 	}
 
+	/**
+	 * Sets the background color of the loading screen.
+	 *
+	 * @param bgColor	Background color
+	 */
 	public void setLoadingBackColor(RGB bgColor) {
 		loadingBackground.r = bgColor.r;
 		loadingBackground.g = bgColor.g;
@@ -392,8 +397,8 @@ public final class Stage extends GLSurfaceView {
 	/**
 	 * Converts screen x to stage x coordination considering the scaling factor.
 	 *
-	 * @param x Screen x.
-	 * @return Stage x.
+	 * @param x Screen x
+	 * @return Stage x
 	 */
 	public final float screenToStageX(float x) {
 		return x * w / screenWidth;
@@ -402,8 +407,8 @@ public final class Stage extends GLSurfaceView {
 	/**
 	 * Converts screen y to stage x coordination considering the scaling factor.
 	 *
-	 * @param y Screen y.
-	 * @return Stage y.
+	 * @param y Screen y
+	 * @return Stage y
 	 */
 	public final float screenToStageY(float y) {
 		return y * h / screenHeight;
@@ -412,8 +417,8 @@ public final class Stage extends GLSurfaceView {
 	/**
 	 * Converts stage x to screen x coordination considering the scaling factor.
 	 *
-	 * @param x Stage x.
-	 * @return Screen x.
+	 * @param x Stage x
+	 * @return Screen x
 	 */
 	public final float stageToScreenX(float x) {
 		return x * screenWidth / w;
@@ -422,8 +427,8 @@ public final class Stage extends GLSurfaceView {
 	/**
 	 * Converts stage y to screen y coordination considering the scaling factor.
 	 *
-	 * @param y Screen y.
-	 * @return Stage y.
+	 * @param y Screen y
+	 * @return Stage y
 	 */
 	public final float stageToScreenY(float y) {
 		return y * screenHeight / h;
@@ -432,7 +437,7 @@ public final class Stage extends GLSurfaceView {
 	/**
 	 * Gets the currently assigned input manager.
 	 *
-	 * @return The input manager.
+	 * @return The input manager
 	 */
 	public final InputManager getInputManager() {
 		return inputMan;
@@ -441,7 +446,7 @@ public final class Stage extends GLSurfaceView {
 	/**
 	 * Appoints a new input manager to handle inputs for this {@code Stage}.
 	 *
-	 * @param inputManager The new input manager.
+	 * @param inputManager The new input manager
 	 */
 	public void setInputManager(InputManager inputManager) {
 		inputMan = inputManager;
@@ -460,7 +465,7 @@ public final class Stage extends GLSurfaceView {
 	 * scene will not be shown immediately and will go through a transition
 	 * effect and possibly a local loading procedure.
 	 *
-	 * @param scene The new scene.
+	 * @param scene The new scene
 	 */
 	public final void setScene(Scene scene) {
 		if (!(currentScene instanceof IntroScene)) {
@@ -473,7 +478,7 @@ public final class Stage extends GLSurfaceView {
 	 * Gets the current scene. If a new scene has been set, but the transition
 	 * is not yet complete, previous scene might be returned.
 	 *
-	 * @return The current scene.
+	 * @return The current scene
 	 */
 	public final Scene getScene() {
 		return currentScene;
@@ -484,7 +489,7 @@ public final class Stage extends GLSurfaceView {
 	 * value is always 600 and otherwise it is the scaled version of screen
 	 * width to match the height of 600.
 	 *
-	 * @return Stage width.
+	 * @return Stage width
 	 */
 	public final float getGLWidth() {
 		return w;
@@ -495,7 +500,7 @@ public final class Stage extends GLSurfaceView {
 	 * value is always 600 and otherwise it is the scaled version of screen
 	 * height to match the width of 600.
 	 *
-	 * @return Stage width.
+	 * @return Stage width
 	 */
 	public final float getGLHeight() {
 		return h;
@@ -505,7 +510,7 @@ public final class Stage extends GLSurfaceView {
 	 * Gets the real screen width. This width is the width of the stage, not
 	 * the whole device screen.
 	 *
-	 * @return Screen width.
+	 * @return Screen width
 	 */
 	public final int getScreenWidth() {
 		return screenWidth;
@@ -515,7 +520,7 @@ public final class Stage extends GLSurfaceView {
 	 * Gets the real screen height. This height is the height of the stage,
 	 * not the whole device screen.
 	 *
-	 * @return Screen height.
+	 * @return Screen height
 	 */
 	public final int getScreenHeight() {
 		return screenHeight;
@@ -524,7 +529,7 @@ public final class Stage extends GLSurfaceView {
 	/**
 	 * Sets the default background color for scenes that don't specify one.
 	 *
-	 * @param rgb The default color.
+	 * @param rgb The default color
 	 */
 	public void setDefaultBackColor(RGB rgb) {
 		setDefaultBackColor(rgb.r, rgb.g, rgb.b);
@@ -533,9 +538,9 @@ public final class Stage extends GLSurfaceView {
 	/**
 	 * Sets the default background color for scenes that don't specify one.
 	 *
-	 * @param r The red component of the color.
-	 * @param g The green component of the color.
-	 * @param b The blue component of the color.
+	 * @param r The red component of the color
+	 * @param g The green component of the color
+	 * @param b The blue component of the color
 	 */
 	public void setDefaultBackColor(float r, float g, float b) {
 		defClearColor.r = r;
@@ -547,10 +552,10 @@ public final class Stage extends GLSurfaceView {
 	 * Sets screen tint. The color specified will cover the stage screen and
 	 * all scenes that are displayed on it.
 	 *
-	 * @param r The red component of the tint.
-	 * @param g The green component of the tint.
-	 * @param b The blue component of the tint.
-	 * @param a The alpha transparency value of the tint.
+	 * @param r The red component of the tint
+	 * @param g The green component of the tint
+	 * @param b The blue component of the tint
+	 * @param a The alpha transparency value of the tint
 	 */
 	public final void setTint(float r, float g, float b, float a) {
 		tintColor[0] = r;
@@ -565,7 +570,7 @@ public final class Stage extends GLSurfaceView {
 	 * method is intended for internal use and manual invocation is not
 	 * recommended.
 	 *
-	 * @param gl The OpenGL context.
+	 * @param gl The OpenGL context
 	 */
 	public final void drawLoading(GL10 gl) {
 		final RGB clearColor = loadingBackground;
@@ -602,7 +607,7 @@ public final class Stage extends GLSurfaceView {
 	 * Adds up to the value of blur on this stage. This method needs the {@code supportES2}
 	 * attribute to be set for this {@code Stage} and the device to support OpenGLES 2.
 	 *
-	 * @param blur The amount to be added to the blur.
+	 * @param blur The amount to be added to the blur
 	 */
 	public final void addBlur(float blur) {
 		this.blur = Math.max(0, this.blur + blur);
@@ -612,7 +617,7 @@ public final class Stage extends GLSurfaceView {
 	 * Sets the amount of blur on this stage. This method needs the {@code supportES2}
 	 * attribute to be set for this {@code Stage} and the device to support OpenGLES 2.
 	 *
-	 * @param blur The value of a blur in the range 0 to 1.
+	 * @param blur The value of a blur in the range 0 to 1
 	 */
 	public final void setBlur(float blur) {
 		this.blur = Math.max(blur, 0);
@@ -621,7 +626,7 @@ public final class Stage extends GLSurfaceView {
 	/**
 	 * Gets the current value of blur specified for this {@code Stage}.
 	 *
-	 * @return The blur value in the range 0 to 1.
+	 * @return The blur value in the range 0 to 1
 	 */
 	public final float getBlur() {
 		return blur;
@@ -632,7 +637,7 @@ public final class Stage extends GLSurfaceView {
 	 * returned by this method depends on the {@code supportES2} attribute setting for
 	 * this {@code Stage} and also on device capabilities.
 	 *
-	 * @return    {@code true} if OpenGLES 2 is supported, and {@code false} otherwise.
+	 * @return    {@code true} if OpenGLES 2 is supported, and {@code false} otherwise
 	 */
 	public boolean supportsES2() {
 		return supportsEs2;
@@ -641,8 +646,8 @@ public final class Stage extends GLSurfaceView {
 	/**
 	 * This method handles the physical back button for this {@code Stage}.
 	 *
-	 * @return Whether the back button has been handled by this {@code Stage} or the
-	 * currently active {@code Scene}.
+	 * @return {@code true} if the back button has been handled by this {@code Stage} or the
+	 * currently active {@code Scene}, {@code false} otherwise
 	 * @see com.annahid.libs.artenus.ui.Scene
 	 */
 	public boolean onBackButton() {
@@ -659,7 +664,7 @@ public final class Stage extends GLSurfaceView {
 	 * Gets the currently assigned stage manager. A stage manager handles basic events
 	 * and functionality for this {@code Stage}.
 	 *
-	 * @return The stage manager for this stage.
+	 * @return The stage manager for this stage
 	 */
 	public StageManager getStageManager() {
 		return handler;
@@ -669,7 +674,7 @@ public final class Stage extends GLSurfaceView {
 	 * Appoints a stage manager to handle required functionality for this {@code Stage}.
 	 * You MUST assign a stage manager before doing anything else with this {@code Stage}.
 	 *
-	 * @param stageManager The stage manager.
+	 * @param stageManager The stage manager
 	 */
 	public void setStageManager(StageManager stageManager) {
 		handler = stageManager;
@@ -732,7 +737,7 @@ public final class Stage extends GLSurfaceView {
 	/**
 	 * Forces the new scene. This method is called from the intro scene.
 	 *
-	 * @param scene The new scene.
+	 * @param scene The new scene
 	 */
 	final void forceScene(Scene scene) {
 		blur = 0;
@@ -740,7 +745,7 @@ public final class Stage extends GLSurfaceView {
 	}
 
 	/**
-	 * Schedules the advance (frame) timer.
+	 * Schedules the advance (frame) timer
 	 */
 	private void scheduleTimer() {
 		if (advanceThread == null) {

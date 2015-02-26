@@ -45,7 +45,8 @@ public abstract class InputManager {
 	public static final int EVENT_UP = 1;
     /**
 	 * Indicates that a change has happened during a press gesture (between
-	 * {@link com.annahid.libs.artenus.input.InputManager#EVENT_UP} and {@link com.annahid.libs.artenus.input.InputManager#EVENT_DOWN}).
+	 * {@link com.annahid.libs.artenus.input.InputManager#EVENT_UP} and
+	 * {@link com.annahid.libs.artenus.input.InputManager#EVENT_DOWN}).
 	 */
 	public static final int EVENT_MOVE = 2;
 
@@ -77,8 +78,7 @@ public abstract class InputManager {
 	 * Appoints an {@link InputListener} to respond to input status changes of this
 	 * {@code InputManager}. Each time the key map or the direction changes, the
 	 * listener is signaled to process the event.
-	 * @param listener	The new listener to be appointed. Providing {@code null} for
-	 * this parameter removes the listener.
+	 * @param listener	The new listener to be appointed, or {@code null} to remove the listener
 	 * @see InputListener
 	 */
 	public final void setListener(InputListener listener) {
@@ -114,8 +114,8 @@ public abstract class InputManager {
 	 * Changes the status of a key or a combination of keys to pressed. Subclasses
 	 * should use this method to alter the key map. This method must be called
 	 * after a {@link #holdKeyMap()} call and before a {@link #releaseKeyMap()}
-	 * call. Otherwise the changes will not be reported.
-	 * @param keyCode	The key identifier(s) to be pressed.
+	 * call. Otherwise the changes will not be reported
+	 * @param keyCode	The key identifier(s) to be pressed
 	 */
 	protected void pressKeys(int keyCode) {
 		keyMap |= keyCode;
@@ -126,7 +126,7 @@ public abstract class InputManager {
 	 * should use this method to alter the key map. This method must be called
 	 * after a {@link #holdKeyMap()} call and before a {@link #releaseKeyMap()}
 	 * call. Otherwise the changes will not be reported.
-	 * @param keyCode	The key identifier(s) to be released.
+	 * @param keyCode	The key identifier(s) to be released
 	 */
 	protected void releaseKeys(int keyCode) {
 		keyMap &= ~keyCode;
@@ -135,9 +135,8 @@ public abstract class InputManager {
 	/**
 	 * Determines whether the key (or any of the multiple keys) specified are
 	 * currently in the pressed state.
-	 * @param keyCode	The key identifier(s) to check.
-	 * @return	{@code true} if the key (or any of the keys} are pressed or
-	 * {@code false} otherwise.
+	 * @param keyCode	The key identifier(s) to check
+	 * @return	{@code true} if the key (or any of the keys} are pressed or {@code false} otherwise
 	 */
 	public boolean isKeyPressed(int keyCode) {
 		return (keyMap & keyCode) != 0;
@@ -148,7 +147,7 @@ public abstract class InputManager {
 	 * about the pressed state of the keys. If you {@code and} the return value with
 	 * any of the key identifiers, the result will be zero if the corresponding key
 	 * is not pressed, and non-zero otherwise. 
-	 * @return	The key map bitwise integer.
+	 * @return	The key map bitwise integer
 	 */
 	public int getKeyMap() {
 		return keyMap;
@@ -156,8 +155,7 @@ public abstract class InputManager {
 
 	/**
 	 * Gets the status of the direction knob.
-	 * @return The direction vector. The length of the vector is normally either
-	 * 1 or zero. 
+	 * @return The direction vector. The length of the vector is normally either 1 or zero.
 	 */
 	public final Point2D getDirection() {
 		return direction;
@@ -168,7 +166,7 @@ public abstract class InputManager {
 	 * touch events, regardless of the source of their input. Subclasses of
 	 * {@code InputManager} that need to handle touch events can override this method.
 	 * Calling the superclass method in this case is NOT necessary.
-	 * @param stage	The {@link com.annahid.libs.artenus.ui.Stage} this event originates from.
+	 * @param stage	The {@link com.annahid.libs.artenus.ui.Stage} this event originates from
 	 * @param event	The {@code MotionEvent} associated to this event. See Android
 	 * documentation for information about  {@code MotionEvent}.
 	 * @see com.annahid.libs.artenus.ui.Stage
@@ -181,7 +179,7 @@ public abstract class InputManager {
 	 * where they should do those procedures. All input managers must implement
 	 * this method. This method is called internally and you must not invoke it
 	 * manually.
-	 * @param context	The application context for this input manager.
+	 * @param context	The application context for this input manager
 	 */
 	public abstract void register(Context context);
 	

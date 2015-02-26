@@ -23,8 +23,8 @@ public final class TextSprite extends SpriteEntity {
 	/**
 	 * Constructs a {@code TextSprite} using the given font and font size.
 	 *
-	 * @param font     The font for this text.
-	 * @param fontSize The font size to use.
+	 * @param font     The font for this text
+	 * @param fontSize The font size to use
 	 */
 	public TextSprite(Font font, int fontSize) {
 		this(font, fontSize, "");
@@ -34,9 +34,9 @@ public final class TextSprite extends SpriteEntity {
 	 * Constructs a {@code TextSprite} using the given font and font size. The text
 	 * initially displayed for the sprite is also specified.
 	 *
-	 * @param font        The font for this text.
-	 * @param fontSize    The font size to use.
-	 * @param initialText The initial text of the sprite.
+	 * @param font        The font for this text
+	 * @param fontSize    The font size to use
+	 * @param initialText The initial text of the sprite
 	 */
 	public TextSprite(Font font, int fontSize, String initialText) {
 		super();
@@ -50,7 +50,7 @@ public final class TextSprite extends SpriteEntity {
 	 * its characters will flow from right to left.
 	 *
 	 * @param isRtl {@code true} will make this sprite right-to-left and {@code false} will make
-	 *              it left-to-right.
+	 *              it left-to-right
 	 */
 	public void setRTL(boolean isRtl) {
 		rtl = isRtl;
@@ -59,7 +59,7 @@ public final class TextSprite extends SpriteEntity {
 	/**
 	 * Sets the position of the text sprite so that it is centered at the given point.
 	 *
-	 * @param p The center point.
+	 * @param p The center point
 	 */
 	public void centerAt(Point2D p) {
 		centerAt(p.x, p.y);
@@ -68,8 +68,8 @@ public final class TextSprite extends SpriteEntity {
 	/**
 	 * Sets the position of the text sprite so that it is centered at the given point.
 	 *
-	 * @param x The x coordinate of the center point.
-	 * @param y The y coordinate of the center point.
+	 * @param x The x coordinate of the center point
+	 * @param y The y coordinate of the center point
 	 */
 	public void centerAt(float x, float y) {
 		final float w = myFont.getTextWidth(ca, scale.x) / (rtl ? -2 : 2);
@@ -80,7 +80,7 @@ public final class TextSprite extends SpriteEntity {
 	/**
 	 * Gets the current font assigned to this {@code TextSprite}.
 	 *
-	 * @return The assigned font.
+	 * @return The assigned font
 	 */
 	public final Font getFont() {
 		return myFont;
@@ -89,7 +89,7 @@ public final class TextSprite extends SpriteEntity {
 	/**
 	 * Assigns a new font to this {@code TextSprite}.
 	 *
-	 * @param font The new font to be assigned.
+	 * @param font The new font to be assigned
 	 */
 	public final void setFont(Font font) {
 		myFont = font;
@@ -98,7 +98,7 @@ public final class TextSprite extends SpriteEntity {
 	/**
 	 * Sets the text on this {@code TextSprite}. Changes will take effect immediately.
 	 *
-	 * @param value The string representation of the new text.
+	 * @param value The string representation of the new text
 	 */
 	public final void setText(String value) {
 		if (value != null)
@@ -110,7 +110,7 @@ public final class TextSprite extends SpriteEntity {
 	 * Determines whether this {@code TextSprite} represents an empty text. This is a faster
 	 * method than to retrieve the text and examine it manually.
 	 *
-	 * @return {@code true} if the text is an empty string, and {@code false} otherwise.
+	 * @return {@code true} if the text is an empty string, and {@code false} otherwise
 	 */
 	public final boolean isTextEmpty() {
 		return ca.length == 0;
@@ -120,7 +120,7 @@ public final class TextSprite extends SpriteEntity {
 	 * Gets the string representation of the text currently displayed for this {@code TextSprite}.
 	 * Keep in mind that this method returns a newly created String and can have memory overhead.
 	 *
-	 * @return The string representation of the current text.
+	 * @return The string representation of the current text
 	 */
 	public final String getText() {
 		return new String(ca);

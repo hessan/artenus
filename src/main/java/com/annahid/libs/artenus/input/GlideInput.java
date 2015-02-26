@@ -87,8 +87,7 @@ public final class GlideInput extends InputManager {
 	}
 
 	@Override
-	public void unregister() {
-	}
+	public void unregister() { }
 
 	/**
 	 * Handles touch events for {@code GlideInput}.

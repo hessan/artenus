@@ -91,6 +91,7 @@ public class FlyInput extends InputManager {
 	/**
 	 * Registers this {@code FlyInput} manager to the given context and begins listening for sensor data.
 	 */
+	@Override
 	public void register(Context context) {
 		sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 		sensorManager.registerListener(myListener, sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_GAME);
@@ -98,6 +99,7 @@ public class FlyInput extends InputManager {
 		lastTime = (float) System.currentTimeMillis() / 1000.0f;
 	}
 
+	@Override
 	public void unregister() {
 		sensorManager.unregisterListener(myListener);
 	}
@@ -159,7 +161,7 @@ public class FlyInput extends InputManager {
 			holdKeyMap();
 
 			for (int i = 0; i < buttons.size(); i++) {
-				TapRegion rct = buttons.get(i);
+				final TapRegion rct = buttons.get(i);
 
 				if (rct.hitTest(x, y)) {
 					pressKeys(1 << (4 + i));

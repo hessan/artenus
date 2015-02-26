@@ -30,11 +30,6 @@ public final class SpringAnimation implements AnimationHandler {
 	 */
 	public static final int TYPE_ROTATION = 8;
 
-	private int t;
-	private float decay, k, s;
-	private float currentValue;
-	private float targetValue, maxDiff;
-
 	/**
 	 * Constructs a {@code SpringAnimation} with the give type and values. The animation
 	 * will involve the selected component bounce back and forth centered on the target
@@ -42,9 +37,9 @@ public final class SpringAnimation implements AnimationHandler {
 	 * {@link #SpringAnimation(int, float, float, float, float)}.
 	 *
 	 * @param type    The type of the animation which indicates the property of the entity
-	 *                the spring motion will affect.
-	 * @param initial The initial value of the selected property for the animation.
-	 * @param target  The target value of the selected property for the animation.
+	 *                the spring motion will affect
+	 * @param initial The initial value of the selected property for the animation
+	 * @param target  The target value of the selected property for the animation
 	 * @see #TYPE_X
 	 * @see #TYPE_Y
 	 * @see #TYPE_SCALE
@@ -62,14 +57,14 @@ public final class SpringAnimation implements AnimationHandler {
 	 * factor to make the motion slow down gradually.
 	 *
 	 * @param type        The type of the animation which indicates the property of the entity
-	 *                    the spring motion will affect.
-	 * @param initial     The initial value of the selected property for the animation.
-	 * @param target      The target value of the selected property for the animation.
+	 *                    the spring motion will affect
+	 * @param initial     The initial value of the selected property for the animation
+	 * @param target      The target value of the selected property for the animation
 	 * @param kValue      The K value of the spring, which determines how quickly it will bounce
-	 *                    back from a stretched position.
+	 *                    back from a stretched position
 	 * @param decayFactor The decay factor of the spring motion. If this value is set to any
-	 *                    number above zero, the motion will decayed until it reaches a halt. The speed of decay
-	 *                    is determined by the value of this parameter.
+	 *                    number above zero, the motion will decayed until it reaches a halt. The
+	 *                    speed of decay is determined by the value of this parameter.
 	 */
 	public SpringAnimation(int type, float initial, float target, float kValue, float decayFactor) {
 		t = type;
@@ -92,10 +87,11 @@ public final class SpringAnimation implements AnimationHandler {
 	}
 
 	/**
-	 * Gets the target value of the property used in the animation. The target value can be viewed as
-	 * the center of oscillation.
+	 * Gets the target value of the property used in the animation. The target value can be viewed
+	 * as the center of oscillation.
 	 *
-	 * @return The target value of the selected property. Selected property is determined by animation type.
+	 * @return The target value of the selected property. Selected property is determined by
+	 *  animation type
 	 * @see #getType()
 	 */
 	public float getTargetValue() {
@@ -103,10 +99,11 @@ public final class SpringAnimation implements AnimationHandler {
 	}
 
 	/**
-	 * Gets the target value of the property used in the animation. The target value can be viewed as
-	 * the center of oscillation.
+	 * Gets the target value of the property used in the animation. The target value can be viewed
+	 * as the center of oscillation.
 	 *
-	 * @param value The target value of the selected property. Selected property is determined by animation type.
+	 * @param value The target value of the selected property. Selected property is determined by
+	 *              animation type.
 	 * @see #getType()
 	 */
 	public final void setTargetValue(float value) {
@@ -117,7 +114,7 @@ public final class SpringAnimation implements AnimationHandler {
 	 * Gets the spring animation type of this {@code SpringAnimation} object.
 	 *
 	 * @return The type of spring, which indicates the property of the entity that is affected
-	 * in the animation.
+	 *  by the animation
 	 * @see #TYPE_X
 	 * @see #TYPE_Y
 	 * @see #TYPE_SCALE
@@ -147,4 +144,9 @@ public final class SpringAnimation implements AnimationHandler {
 			entity.setScale(currentValue, currentValue);
 		else entity.setRotation(currentValue);
 	}
+
+	private int t;
+	private float decay, k, s;
+	private float currentValue;
+	private float targetValue, maxDiff;
 }

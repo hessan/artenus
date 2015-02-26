@@ -15,6 +15,7 @@ import javax.microedition.khronos.opengles.GL10;
  * This class is an implementation of {@link SpriteEntity} that displays an image block
  * on the screen. It provides tools for retrieving portions of a atlas texture and
  * handling frames for animations.
+ *
  * @author Hessan Feghhi
  * @see SpriteEntity
  */
@@ -38,9 +39,9 @@ public final class ImageSprite extends SpriteEntity {
 		 * dimensions and takes out the given number of blocks horizontally from
 		 * the texture. The remainder of the texture will remain unused.
 		 *
-		 * @param frameWidth  The width of each block.
-		 * @param frameHeight The height of each block.
-		 * @param frameCount  The number of blocks to cut out of the image.
+		 * @param frameWidth  The width of each block
+		 * @param frameHeight The height of each block
+		 * @param frameCount  The number of blocks to cut out of the image
 		 */
 		public Cutout(float frameWidth, float frameHeight, int frameCount) {
 			this(frameWidth, frameHeight, frameCount, 1, 0, 0);
@@ -52,10 +53,10 @@ public final class ImageSprite extends SpriteEntity {
 		 * cut out a grid of blocks from the texture with the given information.
 		 * The remainder of the texture will remain unused.
 		 *
-		 * @param frameWidth  The width of each block.
-		 * @param frameHeight The height of each block.
-		 * @param frameCountW The number of horizontal blocks.
-		 * @param frameCountH The number of vertical blocks.
+		 * @param frameWidth  The width of each block
+		 * @param frameHeight The height of each block
+		 * @param frameCountW The number of horizontal blocks
+		 * @param frameCountH The number of vertical blocks
 		 */
 		public Cutout(float frameWidth, float frameHeight, int frameCountW, int frameCountH) {
 			this(frameWidth, frameHeight, frameCountW, frameCountH, 0, 0);
@@ -67,12 +68,12 @@ public final class ImageSprite extends SpriteEntity {
 		 * that gives you the option to start at a given point in the texture.
 		 * This can be useful if you are using large atlas textures.
 		 *
-		 * @param frameWidth  The width of each block.
-		 * @param frameHeight The height of each block.
-		 * @param frameCountW The number of horizontal blocks.
-		 * @param frameCountH The number of vertical blocks.
-		 * @param startX      The x coordination of the starting pixel.
-		 * @param startY      The y coordination of the starting pixel.
+		 * @param frameWidth  The width of each block
+		 * @param frameHeight The height of each block
+		 * @param frameCountW The number of horizontal blocks
+		 * @param frameCountH The number of vertical blocks
+		 * @param startX      The x coordination of the starting pixel
+		 * @param startY      The y coordination of the starting pixel
 		 */
 		public Cutout(float frameWidth, float frameHeight, int frameCountW, int frameCountH, int startX, int startY) {
 			fw = frameWidth;
@@ -86,7 +87,7 @@ public final class ImageSprite extends SpriteEntity {
 		/**
 		 * Gets the frame (block) width associated with this cutout.
 		 *
-		 * @return The frame width.
+		 * @return The frame width
 		 */
 		public float getFrameWidth() {
 			return fw;
@@ -95,7 +96,7 @@ public final class ImageSprite extends SpriteEntity {
 		/**
 		 * Gets the frame (block) height associated with this cutout.
 		 *
-		 * @return The frame height.
+		 * @return The frame height
 		 */
 		public float getFrameHeight() {
 			return fh;
@@ -105,7 +106,7 @@ public final class ImageSprite extends SpriteEntity {
 		 * Determines whether the texture buffers for this cutout have already
 		 * been generated.
 		 *
-		 * @return    {@code true} if buffers are generated or {@code false} otherwise.
+		 * @return    {@code true} if buffers are generated or {@code false} otherwise
 		 */
 		boolean isGenerated() {
 			return textureBuffers != null;
@@ -149,7 +150,7 @@ public final class ImageSprite extends SpriteEntity {
 	 *
 	 * @param resourceId The resource identifier for the texture. This can be for an
 	 *                   ordinary image (png, jpeg, etc.) or an SVG file.
-	 * @param co         The cutout instructor to generate frames.
+	 * @param co         The cutout instructor to generate frames
 	 * @see TextureManager
 	 */
 	public ImageSprite(int resourceId, Cutout co) {
@@ -162,7 +163,7 @@ public final class ImageSprite extends SpriteEntity {
 	/**
 	 * Gets the texture associated with this {@code ImageSprite}.
 	 *
-	 * @return The associated {@code Texture}.
+	 * @return The associated {@code Texture}
 	 */
 	public Texture getTexture() {
 		return frames;
@@ -172,7 +173,7 @@ public final class ImageSprite extends SpriteEntity {
 	 * Sets the current frame for this {@code ImageSprite}. Frames are determined by
 	 * the associated {@code ImageSprite.Cutout}.
 	 *
-	 * @param index The frame index to change to.
+	 * @param index The frame index to change to
 	 */
 	public void gotoFrame(int index) {
 		currentFrame = index;
@@ -182,7 +183,7 @@ public final class ImageSprite extends SpriteEntity {
 	 * Gets the current frame for this {@code ImageSprite}. Frames are determined by
 	 * the associated {@code ImageSprite.Cutout}.
 	 *
-	 * @return The current frame.
+	 * @return The current frame
 	 */
 	public int getCurrentFrame() {
 		return currentFrame;

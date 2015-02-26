@@ -21,8 +21,8 @@ public final class Point2D {
 	/**
 	 * Constructs a {@code Point2D} with the given components.
 	 *
-	 * @param px The x component of the point.
-	 * @param py The y component of the point.
+	 * @param px The x component of the point
+	 * @param py The y component of the point
 	 */
 	public Point2D(float px, float py) {
 		x = px;
@@ -41,9 +41,8 @@ public final class Point2D {
 	 * returns the result. The values in the original {@code Point2D} object are
 	 * not modified and the result is a new {@code Point2D} instance.
 	 *
-	 * @param scalar The scalar to multiply.
-	 * @return The resulting {@code Point2D} object which represents the new
-	 * values.
+	 * @param scalar The scalar to multiply
+	 * @return The resulting {@code Point2D} object which represents the new values
 	 */
 	public Point2D multiply(float scalar) {
 		return new Point2D(x * scalar, y * scalar);

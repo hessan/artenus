@@ -48,8 +48,8 @@ public interface StageManager {
 	 * When creating the initial scene, you should NOT add it to the stage
 	 * manually. This will be done later automatically in the framework.
 	 *
-	 * @param stage The stage that the new scene belongs to.
-	 * @return The first scene of the game.
+	 * @param stage The stage that the new scene belongs to
+	 * @return The first scene of the game
 	 * @see com.annahid.libs.artenus.ui.Stage
 	 * @see com.annahid.libs.artenus.ui.Scene
 	 */
@@ -59,7 +59,7 @@ public interface StageManager {
 	 * This method is invoked whenever an external event is triggered. This
 	 * event can be one of "pause", "resume" or "display".
 	 *
-	 * @param stage   The stage for which the event has occurred.
+	 * @param stage   The stage for which the event has occurred
 	 * @param eventId The event identifier. The value is one of
 	 *                {@link StageManager#EVENT_PAUSE},
 	 *                {@link StageManager#EVENT_RESUME}, or

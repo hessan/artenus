@@ -26,8 +26,8 @@ public class ConsoleActivity extends Activity {
 	/**
 	 * Opens a console window with the given script host.
 	 *
-	 * @param context The application context.
-	 * @param host    The script host interpreting scripts.
+	 * @param context The application context
+	 * @param host    The script host interpreting scripts
 	 * @see ScriptHost
 	 */
 	public static void openConsole(Context context, ScriptHost host) {
@@ -42,7 +42,7 @@ public class ConsoleActivity extends Activity {
 	/**
 	 * Sets the script showing on the editor.
 	 *
-	 * @param script The script code.
+	 * @param script The script code
 	 */
 	public static void setScript(String script) {
 		code = script;
@@ -51,7 +51,7 @@ public class ConsoleActivity extends Activity {
 	/**
 	 * Retrieves the scripts currently showing on the editor.
 	 *
-	 * @return The script text.
+	 * @return The script text
 	 */
 	public static String getScript() {
 		return code;

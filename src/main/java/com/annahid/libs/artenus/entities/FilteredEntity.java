@@ -4,6 +4,10 @@ import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.data.RGB;
 import com.annahid.libs.artenus.ui.Scene;
 
+/**
+ * An entity that applies all its methods on an underlying entity. This class is the superclass
+ * of all classes that provide a modification on the behavior of other entities.
+ */
 public abstract class FilteredEntity implements Entity {
 
 	@Override

@@ -15,8 +15,8 @@ public abstract class Effect {
 	 * Chains another effect with this effect. The renderer will process this effect after it is
 	 * done processing the chained effect.
 	 *
-	 * @param effect The effect to be chained.
-	 * @return The chained effect, which is normally the same as the argument.
+	 * @param effect The effect to be chained
+	 * @return The chained effect, which is normally the same as the argument
 	 */
 	public Effect over(Effect effect) {
 		baseEffect = effect;

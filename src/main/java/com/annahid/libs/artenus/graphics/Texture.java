@@ -21,6 +21,7 @@ import javax.microedition.khronos.opengles.GL10;
  * This class represents a texture. A texture is an image that can be used in
  * real-time graphics libraries. All images must be converted to instances of
  * this class before they can be used in this framework.
+ *
  * @author Hessan Feghhi
  *
  */
@@ -29,7 +30,7 @@ public class Texture {
 	 * Creates a new OpenGL texture identifier. This identifier is required to
 	 * load the texture in OpenGL.
 	 *
-	 * @return The texture identifier.
+	 * @return The texture identifier
 	 */
 	private static int newTextureID() {
 		int[] temp = new int[1];
@@ -38,48 +39,115 @@ public class Texture {
 	}
 
 	/**
-	 * The texture identifier associated with this {@code Texture}.
+	 * Loads the texture in the foreground. Use this method if you need a texture to load
+	 * immediately for a specific purpose. For most applications, Artenus pipeline would
+	 * automatically handle texture loading and life cycle.
 	 */
-	protected int textureId;
+	public void waitLoad() {
+		loadImage();
+		loadEGL();
+	}
 
 	/**
-	 * The width of this {@code Texture} in pixels.
+	 * Prepares the OpenGL context for rendering this {@code Texture}. This method must be
+	 * called before calling {@link #draw(float, float, float, float, float)} for
+	 * correct rendering. However, it is recommended that you do not call any of these
+	 * methods directly. The framework handles low-level rendering.
+	 *
+	 * @param textureBuffer The texture buffer
+	 * @param wrap          OpenGL texture wrapping method
 	 */
-	protected int width;
+	public final void prepare(FloatBuffer textureBuffer, int wrap) {
+		GLES10.glEnable(GL10.GL_TEXTURE_2D);
+		GLES10.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
+		GLES10.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		GLES10.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
+		GLES10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, wrap);
+		GLES10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, wrap);
+	}
 
 	/**
-	 * The height of this {@code Texture} in pixels.
+	 * Renders this {@code Texture} on the given OpenGL context in the given rectangular
+	 * region. It is recommended that you do not call this method directly.
+	 *
+	 * @param x   The x coordinate of the region to draw the texture
+	 * @param y   The y coordinate of the region to draw the texture
+	 * @param w   The width of the region to draw the texture
+	 * @param h   The height of the region to draw the texture
+	 * @param rot The rotation angle of the rectangular region
 	 */
-	protected int height;
+	public final void draw(float x, float y, float w, float h, float rot) {
+		GLES10.glPushMatrix();
+		GLES10.glTranslatef(x, y, 0);
+		GLES10.glRotatef(rot, 0, 0, 1);
+		GLES10.glScalef(w, h, 0);
+		GLES10.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+		GLES10.glPopMatrix();
+	}
 
 	/**
-	 * The resource identifier of the image to be loaded into this {@code Texture}.
+	 * Indicates whether the texture is loaded. The texture can be displayed only when
+	 * it is loaded. You normally don't need to check this directly and the framework
+	 * takes all the required precautions not to allow you to use unloaded textures.
+	 *
+	 * @return    {@code true} if loaded, or {@code false} otherwise
 	 */
-	int resId;
-
-	/*
-     * Boolean indicating whether the image is being read.
-     */
-	boolean loading;
+	public final boolean isLoaded() {
+		return textureId >= 0;
+	}
 
 	/**
-	 * The temporary bitmap used to store the image before it is loaded into the EGL texture.
+	 * Gets the width of the {@code Texture}. This will be the processed width, so if
+	 * you are using an SVG texture, it will indicate the power-of-two estimation of the
+	 * width.
+	 *
+	 * @return The width of the texture
 	 */
-	private Bitmap bmp = null;
+	public final int getWidth() {
+		return width;
+	}
+
+	/**
+	 * Gets the height of the {@code Texture}. This will be the processed height, so if
+	 * you are using an SVG texture, it will indicate the power-of-two estimation of the
+	 * height.
+	 *
+	 * @return The width of the texture
+	 */
+	public final int getHeight() {
+		return height;
+	}
+
+	/**
+	 * Unloads this {@code Texture}. It is highly recommended that you do not call this
+	 * method directly, as it might cause problems. {@code TextureManager} takes the
+	 * responsibility for loading and unloading textures whenever required.
+	 *
+	 * @see TextureManager
+	 */
+	public final void destroy() {
+		GLES10.glDeleteTextures(1, new int[]{textureId}, 0);
+		textureId = -1;
+	}
+
+	/**
+	 * Gets the OpenGL texture identifier associated with this texture. Applications of
+	 * this method are rare and it is recommended not to use this method.
+	 *
+	 * @return The OpenGL texture identifier
+	 */
+	public final int getInternalTextureId() {
+		return textureId;
+	}
 
 	/**
 	 * Constructs a new {@code Texture} with the given image.
 	 *
-	 * @param resourceId The resource identifier of the image.
+	 * @param resourceId The resource identifier of the image
 	 */
 	Texture(int resourceId) {
 		resId = resourceId;
 		textureId = -1;
-	}
-
-	public void waitLoad() {
-		loadImage();
-		loadEGL();
 	}
 
 	boolean loadEGL() {
@@ -168,94 +236,32 @@ public class Texture {
 	}
 
 	/**
-	 * Prepares the OpenGL context for rendering this {@code Texture}. This method must be
-	 * called before calling {@link #draw(float, float, float, float, float)} for
-	 * correct rendering. However, it is recommended that you do not call any of these
-	 * methods directly. The framework handles low-level rendering.
-	 *
-	 * @param textureBuffer The texture buffer.
-	 * @param wrap          OpenGL texture wrapping method.
+	 * The texture identifier associated with this {@code Texture}.
 	 */
-	public final void prepare(FloatBuffer textureBuffer, int wrap) {
-		GLES10.glEnable(GL10.GL_TEXTURE_2D);
-		GLES10.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
-		GLES10.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		GLES10.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
-		GLES10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, wrap);
-		GLES10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, wrap);
-	}
+	protected int textureId;
 
 	/**
-	 * Renders this {@code Texture} on the given OpenGL context in the given rectangular
-	 * region. It is recommended that you do not call this method directly.
-	 *
-	 * @param x   The x coordinate of the region to draw the texture.
-	 * @param y   The y coordinate of the region to draw the texture.
-	 * @param w   The width of the region to draw the texture.
-	 * @param h   The height of the region to draw the texture.
-	 * @param rot The rotation angle of the rectangular region.
+	 * The width of this {@code Texture} in pixels.
 	 */
-	public final void draw(float x, float y, float w, float h, float rot) {
-		GLES10.glPushMatrix();
-		GLES10.glTranslatef(x, y, 0);
-		GLES10.glRotatef(rot, 0, 0, 1);
-		GLES10.glScalef(w, h, 0);
-		GLES10.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
-		GLES10.glPopMatrix();
-	}
+	protected int width;
 
 	/**
-	 * Indicates whether the texture is loaded. The texture can be displayed only when
-	 * it is loaded. You normally don't need to check this directly and the framework
-	 * takes all the required precautions not to allow you to use unloaded textures.
-	 *
-	 * @return    {@code true} if loaded, or {@code false} otherwise.
+	 * The height of this {@code Texture} in pixels.
 	 */
-	public final boolean isLoaded() {
-		return textureId >= 0;
-	}
+	protected int height;
 
 	/**
-	 * Gets the width of the {@code Texture}. This will be the processed width, so if
-	 * you are using an SVG texture, it will indicate the power-of-two estimation of the
-	 * width.
-	 *
-	 * @return The width of the texture.
+	 * The resource identifier of the image to be loaded into this {@code Texture}.
 	 */
-	public final int getWidth() {
-		return width;
-	}
+	int resId;
+
+	/*
+     * Boolean indicating whether the image is being read.
+     */
+	boolean loading;
 
 	/**
-	 * Gets the height of the {@code Texture}. This will be the processed height, so if
-	 * you are using an SVG texture, it will indicate the power-of-two estimation of the
-	 * height.
-	 *
-	 * @return The width of the texture.
+	 * The temporary bitmap used to store the image before it is loaded into the EGL texture.
 	 */
-	public final int getHeight() {
-		return height;
-	}
-
-	/**
-	 * Unloads this {@code Texture}. It is highly recommended that you do not call this
-	 * method directly, as it might cause problems. {@code TextureManager} takes the
-	 * responsibility for loading and unloading textures whenever required.
-	 *
-	 * @see TextureManager
-	 */
-	public final void destroy() {
-		GLES10.glDeleteTextures(1, new int[]{textureId}, 0);
-		textureId = -1;
-	}
-
-	/**
-	 * Gets the OpenGL texture identifier associated with this texture. Applications of
-	 * this method are rare and it is recommended not to use this method.
-	 *
-	 * @return The OpenGL texture identifier.
-	 */
-	public final int getInternalTextureId() {
-		return textureId;
-	}
+	private Bitmap bmp = null;
 }

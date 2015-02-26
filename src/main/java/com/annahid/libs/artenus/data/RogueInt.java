@@ -33,7 +33,7 @@ public class RogueInt {
 	/**
 	 * Constructs a {@code RougeInt} with the given initial value.
 	 *
-	 * @param initialValue The initial value to be stored.
+	 * @param initialValue The initial value to be stored
 	 */
 	public RogueInt(int initialValue) {
 		seed = (int) (100 * Math.random()) + 10;
@@ -43,7 +43,7 @@ public class RogueInt {
 	/**
 	 * Stores a new value in this {@code RougeInt} instance.
 	 *
-	 * @param newValue The new value to be stored.
+	 * @param newValue The new value to be stored
 	 */
 	public void setValue(int newValue) {
 		value = newValue * (seed > 60 ? 3 : 2) + seed;
@@ -52,7 +52,7 @@ public class RogueInt {
 	/**
 	 * Gets the value represented by this {@code RougeInt} instance.
 	 *
-	 * @return The stored value.
+	 * @return The stored value
 	 */
 	public int getValue() {
 		return (value - seed) / (seed > 60 ? 3 : 2);
@@ -60,6 +60,7 @@ public class RogueInt {
 
 	/**
 	 * Returns the string representation of the value represented by this {@code RougeInt} instance.
+	 * @return The string representation of the {@code int} value this {@code RogueInt} represents
 	 */
 	@Override
 	public String toString() {

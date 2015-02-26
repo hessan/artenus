@@ -14,7 +14,7 @@ public final class CircleShape implements Shape {
 	/**
 	 * Constructs a {@code CircleShape} using the given radius.
 	 *
-	 * @param radius The radius of the circle.
+	 * @param radius The radius of the circle
 	 */
 	public CircleShape(float radius) {
 		r = radius;
@@ -30,7 +30,8 @@ public final class CircleShape implements Shape {
 	}
 
 	/**
-	 * This method returns {@link com.annahid.libs.artenus.entities.physics.Shape#SHAPE_CIRCLE}.
+	 * Gets the type of this {@link com.annahid.libs.artenus.entities.physics.Shape}.
+	 * @return {@link com.annahid.libs.artenus.entities.physics.Shape#SHAPE_CIRCLE}
 	 */
 	@Override
 	public int getType() {
@@ -38,7 +39,7 @@ public final class CircleShape implements Shape {
 	}
 
 	@Override
-	public org.jbox2d.collision.shapes.Shape getBox2DShape() {
+	public Object createInternal() {
 		org.jbox2d.collision.shapes.Shape shape = new org.jbox2d.collision.shapes.CircleShape();
 		shape.m_radius = r / PhysicsSimulator.pixelsPerMeter;
 		return shape;

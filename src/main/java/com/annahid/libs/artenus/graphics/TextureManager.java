@@ -67,19 +67,27 @@ public final class TextureManager {
 		/**
 		 * Constructs a new {@code FontInfo} based on the information provided.
 		 *
-		 * @param resourceId      The resource identifier for the image containing character graphics.
+		 * @param resourceId      The resource identifier for the image containing character graphics
 		 * @param characterHeight The height of each character. The image will be divided vertically
-		 *                        into lines of this height.
-		 * @param startChar       The starting character represented in this font. This will represent the
-		 *                        first block taken out of the image.
-		 * @param charOffsets     The x positions of the characters. It starts with the first character and
-		 *                        for each character you should specify two points for the left and the right. Each time the
-		 *                        given x coordinate falls below the previous one, it is taken as a new line signal and the
+		 *                        into lines of this height
+		 * @param startChar       The starting character represented in this font. This will
+		 *                        represent the first block taken out of the image
+		 * @param charOffsets     The x positions of the characters. It starts with the first
+		 *                        character and for each character you should specify two points for
+		 *                        the left and the right. Each time the given x coordinate falls
+		 *                        below the previous one, it is taken as a new line signal and the
 		 *                        divider is moved a line forward.
-		 * @param hs              Horizontal spacing.
-		 * @param vs              Vertical spacing.
+		 * @param hs              Horizontal spacing
+		 * @param vs              Vertical spacing
 		 */
-		public FontInfo(int resourceId, int characterHeight, char startChar, int[] charOffsets, int hs, int vs) {
+		public FontInfo(
+				int resourceId,
+				int characterHeight,
+				char startChar,
+				int[] charOffsets,
+				int hs,
+				int vs
+		) {
 			this.resourceId = resourceId;
 			this.startChar = startChar;
 			this.charOffsets = charOffsets;
@@ -93,7 +101,7 @@ public final class TextureManager {
 	 * Gets the texture displayed in the loading screen. The framework has a default loading texture,
 	 * but it can also be modified for each game.
 	 *
-	 * @return The loading texture.
+	 * @return The loading texture
 	 */
 	public static Texture getLoadingTexture() {
 		return loadingTexture;
@@ -102,7 +110,7 @@ public final class TextureManager {
 	/**
 	 * Gets the width of the texture displayed in the loading screen.
 	 *
-	 * @return The width of the loading texture.
+	 * @return The width of the loading texture
 	 */
 	public static int getLoadingTextureWidth() {
 		return loadingTexW;
@@ -111,7 +119,7 @@ public final class TextureManager {
 	/**
 	 * Gets the height of the texture displayed in the loading screen.
 	 *
-	 * @return The height of the loading texture.
+	 * @return The height of the loading texture
 	 */
 	public static int getLoadingTextureHeight() {
 		return loadingTexH;
@@ -121,7 +129,7 @@ public final class TextureManager {
 	 * Sets the texture displayed in the loading screen. It is recommended that you don't call this
 	 * method directly and use {@code Stage} attributes to set the loading texture.
 	 *
-	 * @param resId The resource identifier for the loading texture.
+	 * @param resId The resource identifier for the loading texture
 	 * @see com.annahid.libs.artenus.ui.Stage
 	 */
 	public static void setLoadingTexture(int resId) {
@@ -137,7 +145,7 @@ public final class TextureManager {
 	 * your target devices. If you have textures that are only used in some scenes, consider using
 	 * local loading of those textures instead of globally loading them using this method.
 	 *
-	 * @param textureSet The set of resource identifiers for the textures to load.
+	 * @param textureSet The set of resource identifiers for the textures to load
 	 * @param fontSet    The set of font descriptors for the fonts used. Fonts cannot be loaded
 	 *                   locally and you should globally load all required fonts using this method.
 	 * @see com.annahid.libs.artenus.ui.StageManager
@@ -184,7 +192,7 @@ public final class TextureManager {
 	 * Loads the set of local texture for a {@code Scene}. This method should be called within the
 	 * {@link com.annahid.libs.artenus.ui.Scene#onLocalLoad()} method of the {@code Scene} class.
 	 *
-	 * @param textureSet The set of resource identifier for the textures to load.
+	 * @param textureSet The set of resource identifier for the textures to load
 	 * @see com.annahid.libs.artenus.ui.Scene
 	 */
 	public static void loadLocal(int... textureSet) {
@@ -229,9 +237,9 @@ public final class TextureManager {
 	/**
 	 * Gets the {@code Texture} associated with the given resource identifier.
 	 *
-	 * @param resourceId The resource identifier.
+	 * @param resourceId The resource identifier
 	 * @return The {@code Texture} corresponding to the resource identifier or {@code null} if
-	 * the texture has not been set up in the texture manager.
+	 * the texture has not been set up in the texture manager
 	 * @see com.annahid.libs.artenus.graphics.Texture
 	 */
 	public static Texture getTexture(int resourceId) {
@@ -242,9 +250,9 @@ public final class TextureManager {
 	 * Gets the {@code Font} associated with the given resource identifier. If the given resource
 	 * identifier does not represent a font this method might throw an exception.
 	 *
-	 * @param resourceId The resource identifier.
+	 * @param resourceId The resource identifier
 	 * @return The {@code Font} corresponding to the resource identifier or {@code null} if the
-	 * font has not been set up in the texture manager.
+	 * font has not been set up in the texture manager
 	 * @see com.annahid.libs.artenus.graphics.Font
 	 */
 	public static Font getFont(int resourceId) {

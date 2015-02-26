@@ -42,7 +42,7 @@ public class Scene implements Touchable {
 	/**
 	 * Constructs a new scene belonging to the given {@code Stage}.
 	 *
-	 * @param parentStage The parent stage.
+	 * @param parentStage The parent stage
 	 * @see Stage
 	 */
 	public Scene(Stage parentStage) {
@@ -54,7 +54,7 @@ public class Scene implements Touchable {
 	 * is originally {@code null}, but it is allocated on the first access, including
 	 * the invocation of this method.
 	 *
-	 * @return The physics simulator.
+	 * @return The physics simulator
 	 * @see PhysicsSimulator
 	 */
 	public final PhysicsSimulator getPhysicsSimulator() {
@@ -67,7 +67,7 @@ public class Scene implements Touchable {
 	 * Gets the background color for this scene. The returned object is not a copy, and
 	 * modifications will take effect in the scene.
 	 *
-	 * @return The background color.
+	 * @return The background color
 	 */
 	public final RGB getBackColor() {
 		return bgColor;
@@ -76,7 +76,7 @@ public class Scene implements Touchable {
 	/**
 	 * Sets the background color for this scene.
 	 *
-	 * @param color The background color.
+	 * @param color The background color
 	 */
 	public final void setBackColor(RGB color) {
 		bgColor.r = color.r;
@@ -87,9 +87,9 @@ public class Scene implements Touchable {
 	/**
 	 * Sets the background color for this scene.
 	 *
-	 * @param r The red component of the background color.
-	 * @param g The green component of the background color.
-	 * @param b The blue component of the background color.
+	 * @param r The red component of the background color
+	 * @param g The green component of the background color
+	 * @param b The blue component of the background color
 	 */
 	public final void setBackColor(float r, float g, float b) {
 		bgColor.r = r;
@@ -103,7 +103,7 @@ public class Scene implements Touchable {
 	 * removal will be handled automatically. Use this method only if you are using
 	 * sprites separately.
 	 *
-	 * @param entity The sprite to be added.
+	 * @param entity The sprite to be added
 	 * @see com.annahid.libs.artenus.entities.sprites.SpriteEntity
 	 */
 	public void add(Entity entity) {
@@ -116,7 +116,7 @@ public class Scene implements Touchable {
 	 * addition and removal will be handled automatically. Use this method only if
 	 * you are using sprites separately.
 	 *
-	 * @param sprite The sprite to be removed.
+	 * @param sprite The sprite to be removed
 	 * @see com.annahid.libs.artenus.entities.sprites.SpriteEntity
 	 */
 	public final void remove(Entity sprite) {
@@ -127,7 +127,7 @@ public class Scene implements Touchable {
 	 * Advances the animation for this scene. Subclasses should always call this
 	 * method from their superclass, as it handles physics and sprite animations.
 	 *
-	 * @param elapsedTime The time elapsed since last frame.
+	 * @param elapsedTime The time elapsed since last frame
 	 */
 	public void advance(float elapsedTime) {
 		if (!isHalted()) {
@@ -148,7 +148,7 @@ public class Scene implements Touchable {
 	 * method is not a copy, and modifying the coordinates will take effect
 	 * in the scene immediately.
 	 *
-	 * @return The translation vector.
+	 * @return The translation vector
 	 */
 	public final Point2D translationVector() {
 		return trans;
@@ -165,14 +165,14 @@ public class Scene implements Touchable {
 	 * be brought to the nearest position to the center of the screen, where
 	 * the dark regions of the map are not revealed.
 	 *
-	 * @param x   The x coordinate of the point to be brought to center.
-	 * @param y   The y coordinate of the point to be brought to center.
-	 * @param vx1 The x coordinate of the top-left corner of the map.
-	 * @param vy1 The y coordinate of the top-left corner of the map.
-	 * @param vx2 The x coordinate of the bottom-right corner of the map.
-	 * @param vy2 The y coordinate of the bottom-right corner of the map.
-	 * @param vpw Viewport width. This can simply be your stage width.
-	 * @param vph Viewport height. This can simply be your stage height.
+	 * @param x   The x coordinate of the point to be brought to center
+	 * @param y   The y coordinate of the point to be brought to center
+	 * @param vx1 The x coordinate of the top-left corner of the map
+	 * @param vy1 The y coordinate of the top-left corner of the map
+	 * @param vx2 The x coordinate of the bottom-right corner of the map
+	 * @param vy2 The y coordinate of the bottom-right corner of the map
+	 * @param vpw Viewport width. This can simply be your stage width
+	 * @param vph Viewport height. This can simply be your stage height
 	 */
 	public final void center(
 			float x, float y, float vx1, float vy1, float vx2, float vy2, float vpw, float vph) {
@@ -195,8 +195,8 @@ public class Scene implements Touchable {
 	/**
 	 * Changes the translation vector to the given point.
 	 *
-	 * @param x The x coordination of the new translation vector.
-	 * @param y The y coordination of the new translation vector.
+	 * @param x The x coordination of the new translation vector
+	 * @param y The y coordination of the new translation vector
 	 */
 	public final void moveTo(float x, float y) {
 		trans.x = x;
@@ -220,8 +220,7 @@ public class Scene implements Touchable {
 	/**
 	 * Checks whether the scene is halted.
 	 *
-	 * @return {@code true} if the scene is halted, and {@code false}
-	 * otherwise.
+	 * @return {@code true} if the scene is halted, and {@code false} otherwise
 	 */
 	public final boolean isHalted() {
 		return haltStart > 0;
@@ -242,7 +241,7 @@ public class Scene implements Touchable {
 	 * Gets the current dialog that is currently showing on the scene. Dialogs
 	 * halt the scene until they are dismissed.
 	 *
-	 * @return The current dialog.
+	 * @return The current dialog
 	 * @see Dialog
 	 */
 	public final Dialog getDialog() {
@@ -252,7 +251,7 @@ public class Scene implements Touchable {
 	/**
 	 * Gets the stage that this scene is displayed on.
 	 *
-	 * @return The parent stage.
+	 * @return The parent stage
 	 */
 	public final Stage getStage() {
 		return stage;
@@ -261,7 +260,7 @@ public class Scene implements Touchable {
 	/**
 	 * Indicates whether the resources for this scene are loaded.
 	 *
-	 * @return {@code true} if loaded, and {@code false} otherwise.
+	 * @return {@code true} if loaded, and {@code false} otherwise
 	 */
 	public final boolean isLoaded() {
 		return loaded;
@@ -271,7 +270,7 @@ public class Scene implements Touchable {
 	 * Handles the back button event. Subclasses can override this method to
 	 * handle the back button. Calling the superclass method is not necessary.
 	 *
-	 * @return {@code true} if handled, {@code false} if passed.
+	 * @return {@code true} if handled, {@code false} if passed
 	 */
 	public boolean onBackButton() {
 		return true;
@@ -297,7 +296,7 @@ public class Scene implements Touchable {
 	/**
 	 * Handles input for this scene.
 	 *
-	 * @param inputManager The input manager that triggered the event.
+	 * @param inputManager The input manager that triggered the event
 	 */
 	public void handleInput(InputManager inputManager) {
 	}
@@ -313,7 +312,7 @@ public class Scene implements Touchable {
 	 * This method is called after this scene goes out of a halted state. You
 	 * can use this method to resume your game timers.
 	 *
-	 * @param delay The time passed, in seconds, in the halted state.
+	 * @param delay The time passed, in seconds, in the halted state
 	 */
 	protected void onUnhalted(float delay) {
 	}
@@ -323,7 +322,7 @@ public class Scene implements Touchable {
 	 * Dialogs always invoke this method on their parent scene when they
 	 * are dismissed.
 	 *
-	 * @param dialog The dismissed dialog.
+	 * @param dialog The dismissed dialog
 	 * @see Dialog
 	 */
 	protected void onDialogDismissed(Dialog dialog) {
@@ -335,10 +334,10 @@ public class Scene implements Touchable {
 	 * is a dialog above the scene. In that case the dialog receives touch
 	 * events.
 	 *
-	 * @param action The touch action. Actions are defined in
-	 *               {@link com.annahid.libs.artenus.input.InputManager}.
-	 * @param x      The x coordination of the touched point.
-	 * @param y      The y coordination of the touched point.
+	 * @param action The touch action. See {@link com.annahid.libs.artenus.input.InputManager}
+	 *               for possible values.
+	 * @param x      The x coordination of the touched point
+	 * @param y      The y coordination of the touched point
 	 * @see Dialog
 	 */
 	public boolean handleTouch(int action, float x, float y) {
@@ -374,7 +373,7 @@ public class Scene implements Touchable {
 	/**
 	 * Indicates whether this scene is a dialog.
 	 *
-	 * @return {@code true} if this scene is a dialog, {@code false} otherwise.
+	 * @return {@code true} if this scene is a dialog, {@code false} otherwise
 	 */
 	boolean isDialog() {
 		return false;

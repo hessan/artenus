@@ -11,16 +11,13 @@ import com.annahid.libs.artenus.entities.Entity;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class FadeAnimation implements AnimationHandler {
-	private boolean fin;
-	private float s;
-
 	/**
-	 * Constructs a {@code FadeAnimation} with a given behavioral pattern.
+	 * Constructs a {@code FadeAnimation} with the specified behavior.
 	 *
-	 * @param fadeIn Whether the handled sprite should appear (or fade in).
-	 * @param speed  The speed of fading in. Setting this value to 1 causes a
-	 *               fully hidden object to appear completely in one second. Higher values make this
-	 *               transition faster and lower values make it slower.
+	 * @param fadeIn Whether the handled sprite should appear (or fade in)
+	 * @param speed  The speed of fading in. Setting this value to 1 causes a fully hidden object
+	 *               to appear completely in one second. Higher values make this transition faster
+	 *               and lower values make it slower.
 	 */
 	public FadeAnimation(boolean fadeIn, float speed) {
 		fin = fadeIn;
@@ -47,4 +44,7 @@ public final class FadeAnimation implements AnimationHandler {
 			else sprite.setAnimation(null);
 		}
 	}
+
+	private boolean fin;
+	private float s;
 }

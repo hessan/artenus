@@ -358,7 +358,7 @@ public class ConcurrentCollection<T> implements Collection<T> {
 	/**
 	 * This lock is used as a lock for synchronized parts of the implementation.
 	 */
-	private final Object listLock = new Object();
+	private final Object listLock = this;
 
 	private final class It implements Iterator<T> {
 		It(Element start) {

@@ -44,7 +44,7 @@ public class AESBasic {
 	/**
 	 * Creates a new instance of {@code AESBasic} with the given password.
 	 *
-	 * @param password The password for this instance.
+	 * @param password The password for this instance
 	 */
 	public AESBasic(String password) {
 		byte[] secretKey = new byte[16];
@@ -67,8 +67,8 @@ public class AESBasic {
 	/**
 	 * Encrypts a given string.
 	 *
-	 * @param original The string to be encrypted.
-	 * @return The string representation of the encrypted value.
+	 * @param original The string to be encrypted
+	 * @return The string representation of the encrypted value
 	 */
 	public String encrypt(String original) {
 		if (original == null)

@@ -13,6 +13,7 @@ import javax.microedition.khronos.opengles.GL10;
  * an image that divides that image into characters of different widths. Each font can represent
  * a limited set of characters out of the character space. You should be careful with the text
  * you handle with each font, as it might not support all characters included in the text.
+ *
  * @author Hessan Feghhi
  *
  */
@@ -20,19 +21,13 @@ public final class Font extends Texture {
 	private static final char accentedLetters[] = { 'à', 'è', 'ì', 'ò', 'ù', 'á', 'é', 'í', 'ó', 'ú', 'â', 'ê', 'î', 'ô', 'û' };
 	private static final char basicLetters[] = {'a', 'e', 'i', 'o', 'u'};
 
-	private float[] offsets;
-	private char firstChar;
-	private int horSpacing = -10, verSpacing = 0;
-	private FloatBuffer[] textureBuffers;
-	private float charH;
-
 	/**
 	 * Processes a text and conforms it to easily support accent-based characters in the framework
 	 * without the need to include accented letters in the actual font. You can use this method to
 	 * get the framework representation of latin strings with accented letters.
 	 *
-	 * @param text The text to be processed.
-	 * @return The processed text.
+	 * @param text The text to be processed
+	 * @return The processed text
 	 */
 	public static String processText(String text) {
 		String ret = (text == null) ? "" : text;
@@ -50,8 +45,8 @@ public final class Font extends Texture {
 	 * Sets the horizontal and vertical letter spacing for this font. Zero letter spacing will
 	 * usually give an odd look to the font. A negative horizontal spacing is recommended.
 	 *
-	 * @param hs Horizontal letter spacing.
-	 * @param vs Vertical letter spacing.
+	 * @param hs Horizontal letter spacing
+	 * @param vs Vertical letter spacing
 	 */
 	public final void setLetterSpacing(int hs, int vs) {
 		horSpacing = hs;
@@ -62,9 +57,9 @@ public final class Font extends Texture {
 	 * Calculates the width of a text if drawn with this {@code Font}, based of the font size
 	 * specified.
 	 *
-	 * @param text The string representation of the text.
+	 * @param text The string representation of the text
 	 * @param h    The font height
-	 * @return The width of the text.
+	 * @return The width of the text
 	 */
 	public final float getTextWidth(String text, float h) {
 		return getTextWidth(text.toCharArray(), h);
@@ -74,9 +69,9 @@ public final class Font extends Texture {
 	 * Calculates the width of a text if drawn with this {@code Font}, based of the font size
 	 * specified. This method is faster that {@link #getTextWidth(String, float)}.
 	 *
-	 * @param ca The character array representation of the text.
-	 * @param h  The font height.
-	 * @return The width of the text.
+	 * @param ca The character array representation of the text
+	 * @param h  The font height
+	 * @return The width of the text
 	 */
 	public final float getTextWidth(char[] ca, float h) {
 		final float sz = h / charH;
@@ -124,13 +119,13 @@ public final class Font extends Texture {
 	 * Draws a text on the OpenGL context using the information provided. This method is internally
 	 * called by {@code TextSprite} to draw the text.
 	 *
-	 * @param ca  The character array representation of the text.
-	 * @param sx  Starting x coordinate.
-	 * @param sy  Starting y coordinate.
-	 * @param h   The desired height of the text. This controls font size.
-	 * @param rot Rotation angle of the text.
+	 * @param ca  The character array representation of the text
+	 * @param sx  Starting x coordinate
+	 * @param sy  Starting y coordinate
+	 * @param h   The desired height of the text. This controls font size
+	 * @param rot Rotation angle of the text
 	 * @param rtl {@code true} if the text should be drawn in right-to-left direction,
-	 *            and {@code false} otherwise.
+	 *            and {@code false} otherwise
 	 */
 	public void draw(char[] ca, float sx, float sy, float h, float rot, boolean rtl) {
 		if (textureBuffers == null)
@@ -196,11 +191,12 @@ public final class Font extends Texture {
 	/**
 	 * Constructs a font with the information provided.
 	 *
-	 * @param resourceId      The resource identifier of the image containing font graphics.
-	 * @param characterHeight Character height.
-	 * @param startChar       Starting character included in the font.
-	 * @param charOffsets     Width offset pairs identifying each character. See the
-	 *                        documentation for {@code TextureManager.FontInfo} for more information about these offsets.
+	 * @param resourceId      The resource identifier of the image containing font graphics
+	 * @param characterHeight Character height
+	 * @param startChar       Starting character included in the font
+	 * @param charOffsets     Width offset pairs identifying each character. See
+	 *                        {@link com.annahid.libs.artenus.graphics.TextureManager.FontInfo} for
+	 *                        more information about these offsets.
 	 * @see TextureManager.FontInfo
 	 */
 	Font(int resourceId, int characterHeight, char startChar, int[] charOffsets) {
@@ -246,4 +242,10 @@ public final class Font extends Texture {
 			textureBuffers[index].position(0);
 		}
 	}
+
+	private float[] offsets;
+	private char firstChar;
+	private int horSpacing = -10, verSpacing = 0;
+	private FloatBuffer[] textureBuffers;
+	private float charH;
 }

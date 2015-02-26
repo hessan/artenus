@@ -21,9 +21,9 @@ public final class TapRegion {
 	 * Constructs a tap region with the given parameters.
 	 *
 	 * @param type   The region type identifier, which can be one of
-	 * @param width  The width of the tap region.
-	 * @param height The height of the tap region.
-	 *               {@link #REGION_RECTANGLE} and {@link #REGION_OVAL}.
+	 *                {@link #REGION_RECTANGLE} and {@link #REGION_OVAL}
+	 * @param width  The width of the tap region
+	 * @param height The height of the tap region
 	 */
 	@SuppressWarnings("unused")
 	public TapRegion(int type, float width, float height) {
@@ -34,10 +34,11 @@ public final class TapRegion {
 	 * Constructs a tap region with the given parameters.
 	 *
 	 * @param type   The region type identifier, which can be one of
-	 * @param width  The width of the tap region.
-	 * @param height The height of the tap region.
-	 * @param cx     The x component of the position.
-	 * @param cy     The y component of the position.
+	 *                {@link #REGION_RECTANGLE} and {@link #REGION_OVAL}
+	 * @param width  The width of the tap region
+	 * @param height The height of the tap region
+	 * @param cx     The x component of the position
+	 * @param cy     The y component of the position
 	 */
 	public TapRegion(int type, float width, float height, float cx, float cy) {
 		pos = new Point2D(cx, cy);
@@ -68,7 +69,7 @@ public final class TapRegion {
 	/**
 	 * Gets the width of this {@code TapRegion}.
 	 *
-	 * @return The width of this region.
+	 * @return The width of this region
 	 */
 	public float getWidth() {
 		return w;
@@ -77,7 +78,7 @@ public final class TapRegion {
 	/**
 	 * Gets the height of this {@code TapRegion}.
 	 *
-	 * @return The height of this region.
+	 * @return The height of this region
 	 */
 	public float getHeight() {
 		return h;
@@ -86,9 +87,9 @@ public final class TapRegion {
 	/**
 	 * Checks whether the motion information provided falls into this {@code TapRegion}.
 	 *
-	 * @param eventX The x component of the motion location.
-	 * @param eventY The y component of the motion location.
-	 * @return    {@code true} if the location falls into the region or {@code false} otherwise.
+	 * @param eventX The x component of the motion location
+	 * @param eventY The y component of the motion location
+	 * @return    {@code true} if the location falls into the region or {@code false} otherwise
 	 */
 	public boolean hitTest(float eventX, float eventY) {
 		final float hw = w / 2 * scale.x, hh = h / 2 * scale.y;

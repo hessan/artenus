@@ -76,8 +76,8 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * Constructs a {@code PhysicalBody} with a given shape.
 	 *
-	 * @param target    The entity to attach to this physical body.
-	 * @param shapeDesc The initial {@code Shape} specification of the body.
+	 * @param target    The entity to attach to this physical body
+	 * @param shapeDesc The initial {@code Shape} specification of the body
 	 */
 	public PhysicalBody(Entity target, Shape shapeDesc) {
 		super(target);
@@ -89,7 +89,7 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * Gets the mass of the {@code PhysicalBody} in kilograms.
 	 *
-	 * @return The mass of the body.
+	 * @return The mass of the body
 	 */
 	public final float getMass() {
 		if (body != null)
@@ -100,7 +100,7 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * Applies a 2-dimensional force to the {@code PhysicalBody}.
 	 *
-	 * @param force The force given in the SI unit.
+	 * @param force The force given in the SI unit
 	 */
 	public final void applyForce(Point2D force) {
 		if (body != null)
@@ -110,8 +110,8 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * Applies a 2-dimensional force to the {@code PhysicalBody}.
 	 *
-	 * @param force  The force given in the SI unit.
-	 * @param center The effective point of the force on the {@code PhysicalBody}.
+	 * @param force  The force given in the SI unit
+	 * @param center The effective point of the force on the {@code PhysicalBody}
 	 */
 	public final void applyForce(Point2D force, Point2D center) {
 		if (body != null)
@@ -121,7 +121,7 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * Applies a 2-dimensional impulse to the {@code PhysicalBody}.
 	 *
-	 * @param impulse The impulse to be applied in SI unit.
+	 * @param impulse The impulse to be applied in SI unit
 	 */
 	public final void applyLinearImpulse(Point2D impulse) {
 		if (body != null)
@@ -131,8 +131,8 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * Applies a 2-dimensional impulse to the {@code PhysicalBody}.
 	 *
-	 * @param impulse The impulse to be applied in SI unit.
-	 * @param center  The effective point of the impulse on the {@code PhysicalBody}.
+	 * @param impulse The impulse to be applied in SI unit
+	 * @param center  The effective point of the impulse on the {@code PhysicalBody}
 	 */
 	public void applyLinearImpulse(Point2D impulse, Point2D center) {
 		if (body != null)
@@ -143,7 +143,7 @@ public class PhysicalBody extends FilteredEntity {
 	 * Adds a joint descriptor to this {@code PhysicalBody}. For joints to be effective,
 	 * they should be added to both bodies involved.
 	 *
-	 * @param joint The joint to be added.
+	 * @param joint The joint to be added
 	 */
 	public final void add(JointDescriptor joint) {
 		joints.add(joint);
@@ -153,7 +153,7 @@ public class PhysicalBody extends FilteredEntity {
 	 * Sets the {@code Shape} of this body. If the body is already attached to a scene,
 	 * The shape will change will take effect on the next frame.
 	 *
-	 * @param s The new shape for the body.
+	 * @param s The new shape for the body
 	 * @see com.annahid.libs.artenus.entities.physics.Shape
 	 */
 	public final void setShape(Shape s) {
@@ -167,7 +167,7 @@ public class PhysicalBody extends FilteredEntity {
 	 * Gets the simulation type of this {@code PhysicalBody}. This type can be one
 	 * of {@link #TYPE_DYNAMIC}, {@link #TYPE_STATIC}, or {@link #TYPE_KINEMATIC}.
 	 *
-	 * @return The body type.
+	 * @return The body type
 	 */
 	public final int getType() {
 		return desc.type;
@@ -177,7 +177,7 @@ public class PhysicalBody extends FilteredEntity {
 	 * Sets the simulation type of the physical body. It can be one of the values
 	 * {@link #TYPE_STATIC}, {@link #TYPE_DYNAMIC}, or {@link #TYPE_KINEMATIC}.
 	 *
-	 * @param type The desired simulation type.
+	 * @param type The desired simulation type
 	 */
 	public final void setType(int type) {
 		if (body != null) {
@@ -198,7 +198,7 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * Sets the angular velocity of the body.
 	 *
-	 * @return The current angular velocity.
+	 * @return The current angular velocity
 	 */
 	public final float getAngularVelocity() {
 		if (body != null)
@@ -210,7 +210,7 @@ public class PhysicalBody extends FilteredEntity {
 	 * Sets the angular velocity of the body. If the object is active in simulation, its
 	 * current angular velocity will be replaced with the new value.
 	 *
-	 * @param velocity The new angular velocity.
+	 * @param velocity The new angular velocity
 	 */
 	public final void setAngularVelocity(float velocity) {
 		if (body != null)
@@ -221,7 +221,7 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * Gets the linear velocity of the body.
 	 *
-	 * @return The current linear velocity.
+	 * @return The current linear velocity
 	 */
 	public final Point2D getLinearVelocity() {
 		if (body != null) {
@@ -234,7 +234,7 @@ public class PhysicalBody extends FilteredEntity {
 	 * Sets the current linear velocity of the object. If the object is active in simulation,
 	 * its current linear velocity is replaced with the new value.
 	 *
-	 * @param velocity The new linear velocity.
+	 * @param velocity The new linear velocity
 	 */
 	public final void setLinearVelocity(Point2D velocity) {
 		setLinearVelocity(velocity.x, velocity.y);
@@ -244,8 +244,8 @@ public class PhysicalBody extends FilteredEntity {
 	 * Sets the current linear velocity of the object. If the object is active in simulation,
 	 * its current linear velocity is replaced with the new value.
 	 *
-	 * @param vx The x component of the new linear velocity.
-	 * @param vy The y component of the new linear velocity.
+	 * @param vx The x component of the new linear velocity
+	 * @param vy The y component of the new linear velocity
 	 */
 	public final void setLinearVelocity(float vx, float vy) {
 		if (body != null)
@@ -259,7 +259,7 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * Gets linear damping for the body.
 	 *
-	 * @return The body's linear damping.
+	 * @return The body's linear damping
 	 */
 	public float getLinearDamping() {
 		if (body != null)
@@ -270,7 +270,7 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * Sets linear damping for the body.
 	 *
-	 * @param damping The new linear damping.
+	 * @param damping The new linear damping
 	 */
 	public final void setLinearDamping(float damping) {
 		if (body != null)
@@ -282,7 +282,7 @@ public class PhysicalBody extends FilteredEntity {
 	 * Indicates whether the body is active in simulation and is considered in collision
 	 * detection.
 	 *
-	 * @return A value indicating whether the body is active.
+	 * @return A value indicating whether the body is active
 	 */
 	public final boolean isActive() {
 		if (body != null)
@@ -294,7 +294,7 @@ public class PhysicalBody extends FilteredEntity {
 	 * Modifies the active state of the body kin simulation. If the body is not active,
 	 * it is not accounted for in collision detection and physics simulation.
 	 *
-	 * @param active A value indicating whether the body should be active.
+	 * @param active A value indicating whether the body should be active
 	 */
 	public final void setActive(boolean active) {
 		if (body != null)
@@ -305,7 +305,7 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * Gets angular damping for the body.
 	 *
-	 * @return The body's angular damping.
+	 * @return The body's angular damping
 	 */
 	public float getAngularDamping() {
 		if (body != null)
@@ -316,7 +316,7 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * Sets angular for the body.
 	 *
-	 * @param damping The new angular damping.
+	 * @param damping The new angular damping
 	 */
 	public final void setAngularDamping(float damping) {
 		if (body != null)
@@ -327,7 +327,7 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * This method indicated whether the body is a bullet. A bullet is a fast-moving physical body.
 	 *
-	 * @return A value indicating whether the body is a bullet.
+	 * @return A value indicating whether the body is a bullet
 	 */
 	public boolean isBullet() {
 		if (body != null)
@@ -339,7 +339,7 @@ public class PhysicalBody extends FilteredEntity {
 	 * Sets whether the body is a bullet. A bullet is a fast-moving physical body. If you have an object
 	 * that has this characteristic in your game, you should set this flag for better collision processing.
 	 *
-	 * @param bullet A new value indicating whether the body is a bullet.
+	 * @param bullet A new value indicating whether the body is a bullet
 	 */
 	public void setBullet(boolean bullet) {
 		if (body != null)
@@ -350,7 +350,7 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * Gets whether the rotational angle of the body is fixed in simulation.
 	 *
-	 * @return A value indicating whether the body's rotation angle should remain fixed.
+	 * @return A value indicating whether the body's rotation angle should remain fixed
 	 */
 	public boolean isFixedRotation() {
 		if (body != null)
@@ -361,7 +361,7 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * Sets whether the rotational angle of the body is fixed in simulation.
 	 *
-	 * @param flag A value indicating whether the body's rotation angle should remain fixed.
+	 * @param flag A value indicating whether the body's rotation angle should remain fixed
 	 */
 	public void setFixedRotation(boolean flag) {
 		if (body != null)
@@ -372,7 +372,7 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * Gets the currently assigned density of the body.
 	 *
-	 * @return Density of the body.
+	 * @return Density of the body
 	 */
 	public float getDensity() {
 		return density;
@@ -383,7 +383,7 @@ public class PhysicalBody extends FilteredEntity {
 	 * Changing this value has no effect if the parent game object is already added to the scene. But
 	 * if you change the shape, the value is applied to the new shape.
 	 *
-	 * @param value The new value for density.
+	 * @param value The new value for density
 	 */
 	public void setDensity(float value) {
 		density = value;
@@ -393,7 +393,7 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * Gets the currently assigned friction of the body.
 	 *
-	 * @return Friction of the body.
+	 * @return Friction of the body
 	 */
 	public float getFriction() {
 		return friction;
@@ -404,7 +404,7 @@ public class PhysicalBody extends FilteredEntity {
 	 * Changing this value has no effect if the parent game object is already added to the scene. But
 	 * if you change the shape, the value is applied to the new shape.
 	 *
-	 * @param value The new value for friction.
+	 * @param value The new value for friction
 	 */
 	public void setFriction(float value) {
 		friction = value;
@@ -414,16 +414,16 @@ public class PhysicalBody extends FilteredEntity {
 	 * Gets the currently assigned restitution of the body. Restitution determines how much energy the
 	 * object loses when bouncing.
 	 *
-	 * @return Restitution of the body.
+	 * @return Restitution of the body
 	 */
 	public float getRestitution() {
 		return restitution;
 	}
 
 	/**
-	 * Sets the restitution of the body. Friction is accounted for whenever you assign a shape to the
-	 * body. Changing this value has no effect if the parent game object is already added to the scene.
-	 * But if you change the shape, the value is applied to the new shape.
+	 * Sets the restitution of the body. Friction is accounted for whenever you assign a shape to
+	 * the body. Changing this value has no effect if the parent game object is already added to the
+	 * scene. But if you change the shape, the value is applied to the new shape.
 	 *
 	 * @param value The new value for restitution. Setting this value to 1 ensures that the object
 	 *              will not lose any energy when bouncing.
@@ -450,8 +450,8 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * Modifies the position of the body. The values are given in pixels, but internally stored in metric format.
 	 *
-	 * @param x The x component of the new position in pixels.
-	 * @param y The y component of the new position in pixels.
+	 * @param x The x component of the new position in pixels
+	 * @param y The y component of the new position in pixels
 	 */
 	@Override
 	public void setPosition(float x, float y) {
@@ -469,7 +469,7 @@ public class PhysicalBody extends FilteredEntity {
 	/**
 	 * Gets the rotational angle of the body.
 	 *
-	 * @return The current rotational angle of the body in degrees.
+	 * @return The current rotational angle of the body in degrees
 	 */
 	@Override
 	public final float getRotation() {
@@ -482,7 +482,7 @@ public class PhysicalBody extends FilteredEntity {
 	 * Sets the rotation angle of the body. This value is internally stored in Radians, but the method
 	 * takes it in degrees to be compatible with game object attachments.
 	 *
-	 * @param rotation The new rotational angle of the body in degrees.
+	 * @param rotation The new rotational angle of the body in degrees
 	 */
 	@Override
 	public final void setRotation(float rotation) {
@@ -518,11 +518,24 @@ public class PhysicalBody extends FilteredEntity {
 		target.setEffect(effect);
 	}
 
+	/**
+	 * Calls {@code render} on the underlying entity, with specified flags.
+	 *
+	 * @param flags Rendering flags
+	 * @see com.annahid.libs.artenus.graphics.Renderable
+	 */
 	@Override
 	public void render(int flags) {
 		target.render(flags);
 	}
 
+	/**
+	 * Updates this physical body to its new state provided by the physics simulator. The underlying
+	 * entity may also be modified, depending on selected connections.
+	 *
+	 * @param elapsedTime Elapsed time in seconds since the last frame
+	 * @see com.annahid.libs.artenus.entities.physics.PhysicalBody#setConnections(int)
+	 */
 	@Override
 	public void advance(float elapsedTime) {
 		super.advance(elapsedTime);
@@ -564,7 +577,7 @@ public class PhysicalBody extends FilteredEntity {
 		def.density = density;
 		def.friction = friction;
 		def.restitution = restitution;
-		def.shape = shape.getBox2DShape();
+		def.shape = (org.jbox2d.collision.shapes.Shape) shape.createInternal();
 		body.createFixture(def);
 	}
 

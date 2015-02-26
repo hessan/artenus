@@ -26,13 +26,6 @@ import javax.microedition.khronos.opengles.GL10;
  */
 @SuppressWarnings("unused")
 public final class ImageGridSprite extends SpriteEntity {
-	private Texture frames;
-	private int[][] blocks;
-	private float[][] alphas;
-	private float blkW, blkH, w, h, m;
-	private Scene myScene;
-	private FloatBuffer[] textureBuffers = null;
-
 	/**
 	 * Constructs a {@code ImageGridSprite} using a image resource id and block parameters.
 	 * Like {@code Sprite}, this class supports SVG images with {@code raw} resource type
@@ -40,16 +33,16 @@ public final class ImageGridSprite extends SpriteEntity {
 	 * provide SVG images for better scaling in different screen resolutions. The image
 	 * is cut out into frames using the given block width and height.
 	 *
-	 * @param scene       The scene this {@code ImageGridSprite} belongs to.
-	 * @param resourceId  The resource identifier for the image.
-	 * @param frameWidth  The block width.
-	 * @param frameHeight The block height.
-	 * @param margin      The margin for each image block. It is recommended to have a
-	 *                    transparent margin for each block to avoid color mixing. This parameter specifies
-	 *                    the size of this margin. Grid blocks are squeezed together with this parameter to
-	 *                    diminish the transparent margin.
-	 * @param cols        The number of columns for this grid.
-	 * @param rows        The number of rows for this grid.
+	 * @param scene       The scene this {@code ImageGridSprite} belongs to
+	 * @param resourceId  The resource identifier for the image
+	 * @param frameWidth  The block width
+	 * @param frameHeight The block height
+	 * @param margin      The margin for each image block. It is recommended to have a transparent
+	 *                    margin for each block to avoid color mixing. This parameter specifies the
+	 *                    size of this margin. Grid blocks are squeezed together with this parameter
+	 *                    to diminish the transparent margin.
+	 * @param cols        The number of columns for this grid
+	 * @param rows        The number of rows for this grid
 	 */
 	public ImageGridSprite(
 			Scene scene, int resourceId,
@@ -69,9 +62,9 @@ public final class ImageGridSprite extends SpriteEntity {
 	/**
 	 * Gets the transparency value for the given grid block.
 	 *
-	 * @param col The column number of the block.
-	 * @param row The row number of the block.
-	 * @return The transparency (alpha) value.
+	 * @param col The column number of the block
+	 * @param row The row number of the block
+	 * @return The transparency (alpha) value
 	 */
 	public float getAlpha(int col, int row) {
 		try {
@@ -84,9 +77,9 @@ public final class ImageGridSprite extends SpriteEntity {
 	/**
 	 * Sets the transparency value of the given grid block.
 	 *
-	 * @param col   The column number of the block.
-	 * @param row   The row number of the block.
-	 * @param alpha The new transparency (alpha) value.
+	 * @param col   The column number of the block
+	 * @param row   The row number of the block
+	 * @param alpha The new transparency (alpha) value
 	 */
 	public void setAlpha(int col, int row, float alpha) {
 		try {
@@ -101,8 +94,8 @@ public final class ImageGridSprite extends SpriteEntity {
 	 * window cornered at the top-right corner of the screen. Blocks outside this
 	 * window will not be rendered.
 	 *
-	 * @param width  The width of the imaginary window.
-	 * @param height The height of the imaginary window.
+	 * @param width  The width of the imaginary window
+	 * @param height The height of the imaginary window
 	 */
 	public void setLimits(float width, float height) {
 		w = width;
@@ -113,9 +106,9 @@ public final class ImageGridSprite extends SpriteEntity {
 	 * Gets the current frame (image block index) of the given grid block. To
 	 * understand image frames, see the documentation for {@code Sprite}.
 	 *
-	 * @param col The column number of the block.
-	 * @param row The row number of the block.
-	 * @return The current frame.
+	 * @param col The column number of the block
+	 * @param row The row number of the block
+	 * @return The current frame
 	 * @see SpriteEntity
 	 */
 	public int getFrame(int col, int row) {
@@ -126,9 +119,9 @@ public final class ImageGridSprite extends SpriteEntity {
 	 * Sets the current frame of the given grid block. To understand image frames,
 	 * see the documentation for {@code Sprite}.
 	 *
-	 * @param col   The column number of the block.
-	 * @param row   The row number of the block.
-	 * @param frame The new frame number.
+	 * @param col   The column number of the block
+	 * @param row   The row number of the block
+	 * @param frame The new frame number
 	 * @see SpriteEntity
 	 */
 	public void setFrame(int col, int row, int frame) {
@@ -138,7 +131,7 @@ public final class ImageGridSprite extends SpriteEntity {
 	/**
 	 * Gets the number of columns for this grid.
 	 *
-	 * @return The number of columns.
+	 * @return The number of columns
 	 */
 	public int getColumns() {
 		return blocks.length;
@@ -147,7 +140,7 @@ public final class ImageGridSprite extends SpriteEntity {
 	/**
 	 * Gets the number of rows for this grid.
 	 *
-	 * @return The number of rows.
+	 * @return The number of rows
 	 */
 	public int getRows() {
 		return blocks[0].length;
@@ -156,7 +149,7 @@ public final class ImageGridSprite extends SpriteEntity {
 	/**
 	 * Gets the assigned width for this grid.
 	 *
-	 * @return The width of the grid in pixels.
+	 * @return The width of the grid in pixels
 	 */
 	public float getWidth() {
 		return blocks.length * blkW;
@@ -165,7 +158,7 @@ public final class ImageGridSprite extends SpriteEntity {
 	/**
 	 * Gets the assigned height for this grid.
 	 *
-	 * @return The height of the grid in pixels.
+	 * @return The height of the grid in pixels
 	 */
 	public float getHeight() {
 		return blocks[0].length * blkH;
@@ -233,8 +226,8 @@ public final class ImageGridSprite extends SpriteEntity {
 	/**
 	 * Converts a pixel coordination into the corresponding column number on the grid.
 	 *
-	 * @param x The x coordination value.
-	 * @return The resulting column number.
+	 * @param x The x coordination value
+	 * @return The resulting column number
 	 */
 	private int toGridX(float x) {
 		return (int) ((x - blkW / 2) / blkW + 0.5f);
@@ -243,10 +236,17 @@ public final class ImageGridSprite extends SpriteEntity {
 	/**
 	 * Converts a pixel coordination into the corresponding row number on the grid.
 	 *
-	 * @param y The y coordination value.
-	 * @return The resulting row number.
+	 * @param y The y coordination value
+	 * @return The resulting row number
 	 */
 	private int toGridY(float y) {
 		return (int) ((y - blkH / 2) / blkH + 0.5f);
 	}
+
+	private Texture frames;
+	private int[][] blocks;
+	private float[][] alphas;
+	private float blkW, blkH, w, h, m;
+	private Scene myScene;
+	private FloatBuffer[] textureBuffers = null;
 }

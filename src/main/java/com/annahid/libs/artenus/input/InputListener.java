@@ -2,8 +2,8 @@ package com.annahid.libs.artenus.input;
 
 /**
  * An interface for classes that response to input status changes.
- * @author Hessan Feghhi
  *
+ * @author Hessan Feghhi
  */
 public interface InputListener {
 	/**
@@ -12,7 +12,7 @@ public interface InputListener {
 	 * knob or the pressing or releasing of some action buttons.
 	 *
 	 * @param inputManager The calling input manager. Use this to retrieve
-	 *                     information about the event.
+	 *                     information about the event
 	 */
 	public void inputStatusChanged(InputManager inputManager);
 }

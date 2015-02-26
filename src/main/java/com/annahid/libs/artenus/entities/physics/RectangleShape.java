@@ -14,27 +14,28 @@ public final class RectangleShape implements Shape {
 	/**
 	 * Constructs a {@code RectangleShape} with given dimensions.
 	 *
-	 * @param width  The width of the rectangle.
-	 * @param height The height of the rectangle.
+	 * @param width  The width of the rectangle
+	 * @param height The height of the rectangle
 	 */
 	public RectangleShape(float width, float height) {
 		w = width;
 		h = height;
 	}
 
-	@Override
-	public org.jbox2d.collision.shapes.Shape getBox2DShape() {
-		final org.jbox2d.collision.shapes.PolygonShape shape =
-				new org.jbox2d.collision.shapes.PolygonShape();
-		shape.setAsBox(w / PhysicsSimulator.pixelsPerMeter, h / PhysicsSimulator.pixelsPerMeter);
-		return shape;
-	}
-
 	/**
-	 * This method returns {@link com.annahid.libs.artenus.entities.physics.Shape#SHAPE_RECTANGLE}.
+	 * Gets the type of this {@link com.annahid.libs.artenus.entities.physics.Shape}.
+	 * @return {@link com.annahid.libs.artenus.entities.physics.Shape#SHAPE_RECTANGLE}
 	 */
 	@Override
 	public int getType() {
 		return SHAPE_RECTANGLE;
+	}
+
+	@Override
+	public Object createInternal() {
+		final org.jbox2d.collision.shapes.PolygonShape shape =
+				new org.jbox2d.collision.shapes.PolygonShape();
+		shape.setAsBox(w / PhysicsSimulator.pixelsPerMeter, h / PhysicsSimulator.pixelsPerMeter);
+		return shape;
 	}
 }

@@ -27,10 +27,10 @@ public class PreferenceObfuscator {
 	private SharedPreferences.Editor mEditor;
 
 	/**
-	 * Constructor.
+	 * Constructors a new instance of {@code PreferenceObfuscator}.
 	 *
-	 * @param sp A SharedPreferences instance provided by the system.
-	 * @param o  The Obfuscator to use when reading or writing data.
+	 * @param sp A SharedPreferences instance provided by the system
+	 * @param o  The Obfuscator to use when reading or writing data
 	 */
 	public PreferenceObfuscator(SharedPreferences sp, Obfuscator o) {
 		mPreferences = sp;
@@ -38,14 +38,28 @@ public class PreferenceObfuscator {
 		mEditor = null;
 	}
 
+	/**
+	 * Sets the value for the specified setting.
+	 *
+	 * @param key Key to the setting
+	 * @param value	String representation of the value
+	 */
 	public void putString(String key, String value) {
 		if (mEditor == null) {
 			mEditor = mPreferences.edit();
 		}
+
 		String obfuscatedValue = mObfuscator.obfuscate(value, key);
 		mEditor.putString(key, obfuscatedValue);
 	}
 
+	/**
+	 * Gets the value of the specified setting.
+	 *
+	 * @param key	Key to the setting
+	 * @param defValue String representation of the default value
+	 * @return String representation of the value
+	 */
 	public String getString(String key, String defValue) {
 		final String value = mPreferences.getString(key, null);
 		String result;
@@ -64,6 +78,9 @@ public class PreferenceObfuscator {
 		return result;
 	}
 
+	/**
+	 * Commits changes to settings.
+	 */
 	public void commit() {
 		if (mEditor != null) {
 			mEditor.commit();

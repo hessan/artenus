@@ -15,12 +15,19 @@ import java.util.NoSuchElementException;
 import java.util.Stack;
 
 /**
- * This class holds a resizable array of {@code Entity} objects and provides methods to
+ * <p>
+ * This class holds a resizable list of {@code Entity} objects and provides methods to
  * render or advance their animation as a whole. It implements {@link Entity}, so it can
- * be added to {@code Scene} like any other entity.
- *
+ * be added to a {@link Scene} like any other entity.</p>
+ * <p>
+ * Entity collections have their own position, rotation, and scaling factors. The transformations
+ * of the entities added to a collection are relative to the global transformations of the
+ * collection. Effects in an entity collection are also added to the collection, and not to
+ * individual entities.
+ * </p>
  * @author Hessan Feghhi
  * @see Entity
+ * @see com.annahid.libs.artenus.entities.EntityPair
  * @see com.annahid.libs.artenus.ui.Scene
  */
 public class EntityCollection
@@ -137,7 +144,7 @@ public class EntityCollection
 	/**
 	 * Removes this collection from its current scene and associates it with a new one.
 	 *
-	 * @param newScene The new scene to associate with.
+	 * @param newScene The new scene to associate with
 	 */
 	public void setScene(Scene newScene) {
 		if (scene != null)
@@ -169,6 +176,14 @@ public class EntityCollection
 		return new BasicIterator(super.iterator());
 	}
 
+	/**
+	 * Returns an iterator over the elements. This iterator supports removal, like
+	 * {@link EntityCollection#iterator()}. The main difference is that it does not only search the
+	 * items directly contained in this collection. Instead, it recognizes entity collections and
+	 * iterates recursively through them as well.
+	 *
+	 * @return an iterator over the elements in this list and all sub-lists
+	 */
 	@NonNull
 	@SuppressWarnings("unused")
 	public Iterator<Entity> recursiveIterator() {
@@ -179,7 +194,7 @@ public class EntityCollection
 	 * Brings an entity to the end of its collection, causing it to appear above all other
 	 * entities. Entities in above collection will still cover the entity.
 	 *
-	 * @param entity The entity to bring to front.
+	 * @param entity The entity to bring to front
 	 */
 	public final boolean bringToFront(Entity entity) {
 		if(entity == getLast())
@@ -208,7 +223,7 @@ public class EntityCollection
 	 * displayed below all other entities. Sprites in bottom layers will still be covered by the
 	 * sprite.
 	 *
-	 * @param entity	The sprite to send to back.
+	 * @param entity	The sprite to send to back
 	 */
 	@SuppressWarnings("unused")
 	public final boolean sendToBack(Entity entity) {
@@ -368,13 +383,23 @@ public class EntityCollection
 			object.onAttach(scene);
 	}
 
-	public final boolean recursiveRemove(Object o) {
+	/**
+	 * Removes an entity from this collection, searching recursively through all items. The
+	 * difference between this method and {@link EntityCollection#remove(Object)} is that this
+	 * method recognizes entity collections added to this collection, and beside considering
+	 * themselves, it searches recursively through them as well, until it finds {@code e}.
+	 *
+	 * @param e	The entity to be removed
+	 * @return	{@code true} if the entity is removed, and {@code false} if it doesn't exist in
+	 *  this collection
+	 */
+	public final boolean recursiveRemove(@NonNull Entity e) {
 		Iterator<Entity> it = super.iterator();
 
 		while(it.hasNext()) {
 			final Entity entity = it.next();
 
-			if (entity.equals(o)) {
+			if (entity.equals(e)) {
 				it.remove();
 
 				if (scene != null) {
@@ -383,13 +408,19 @@ public class EntityCollection
 
 				return true;
 			} else if (entity instanceof EntityCollection &&
-					((EntityCollection) entity).recursiveRemove(o))
+					((EntityCollection) entity).recursiveRemove(e))
 				return true;
 		}
 
 		return false;
 	}
 
+	/**
+	 * Advances the associated animation handler, and then advances all entities added to this
+	 * collection.
+	 *
+	 * @param elapsedTime the amount of time since last call to this method
+	 */
 	@Override
 	public void advance(float elapsedTime) {
 		if (anim != null)

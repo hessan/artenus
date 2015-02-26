@@ -39,10 +39,11 @@ public final class SlideMenu extends EntityCollection implements Touchable {
 	
 	/**
 	 * Constructs a {@code SlideMenu} with the given information for the given scene.
-	 * @param scene	The scene to add this menu to.
-	 * @param center	The center location of the menu.
-	 * @param itemDistance	The distance between items.
-	 * @param height	The height of the menu. This is used for touch handling.
+	 *
+	 * @param scene	The scene to add this menu to
+	 * @param center	The center location of the menu
+	 * @param itemDistance	The distance between items
+	 * @param height	The height of the menu. This is used for touch handling
 	 */
 	public SlideMenu(Scene scene, Point2D center, float itemDistance, float height) {
         super(scene);
@@ -78,7 +79,8 @@ public final class SlideMenu extends EntityCollection implements Touchable {
 	 * Adjusts the tap focus for this {@code SlideMenu}. Tap focus is the vertical
 	 * distance inside which a touch can be considered as a "tap" if there is not
 	 * much horizontal motion.
-	 * @param tapHeight	The height of tap focus.
+	 *
+	 * @param tapHeight	The height of tap focus
 	 */
 	public void setTapFocus(float tapHeight) {
 		th = tapHeight;
@@ -86,7 +88,8 @@ public final class SlideMenu extends EntityCollection implements Touchable {
 	
 	/**
 	 * Adds a menu item in the form of a sprite.
-	 * @param sprite	The menu item.
+	 *
+	 * @param sprite	The menu item
 	 */
 	public final void add(SpriteEntity sprite) {
 		super.add(sprite);
@@ -116,7 +119,8 @@ public final class SlideMenu extends EntityCollection implements Touchable {
 	
 	/**
 	 * Advances animations for the amount of time specified.
-	 * @param elapsedTime	Elapsed time since last frame.
+	 *
+	 * @param elapsedTime	Elapsed time since last frame
 	 */
     @Override
 	public final void advance(float elapsedTime) {
@@ -155,8 +159,9 @@ public final class SlideMenu extends EntityCollection implements Touchable {
 	 * transparency information for each indicator. An indicator has full transparency
 	 * if the corresponding menu item is completely in view and starts to gradually
 	 * decrease to zero when it goes out of focus.
-	 * @param index	Menu item index.
-	 * @return	Indicator transparency.
+	 *
+	 * @param index	Menu item index
+	 * @return	Indicator transparency
 	 */
 	public final float getIndicatorAlpha(int index) {
 		return dotV[index];
@@ -165,10 +170,11 @@ public final class SlideMenu extends EntityCollection implements Touchable {
 	/**
 	 * Handles a touch event for this {@code SlideMenu}. It also determines whether
 	 * and item has been tapped.
-	 * @param action	The touch event that has been triggered.
-	 * @param x	The x coordinate of the touch event.
-	 * @param y	The y coordinate of the touch event.
-	 * @return	{@code true} if a menu item has been tapped, {@code false} otherwise.
+	 *
+	 * @param action	The touch event that has been triggered
+	 * @param x	The x coordinate of the touch event
+	 * @param y	The y coordinate of the touch event
+	 * @return	{@code true} if a menu item has been tapped, {@code false} otherwise
 	 */
 	public final boolean handleTouch(int action, float x, float y) {
 		if(action == InputManager.EVENT_DOWN) {
@@ -204,7 +210,8 @@ public final class SlideMenu extends EntityCollection implements Touchable {
 	
 	/**
 	 * Navigates to the menu item specified and focuses that item.
-	 * @param index	The item index.
+	 *
+	 * @param index	Item index
 	 */
 	public final void setSelectedItem(int index) {
 		sel = index;
@@ -212,7 +219,8 @@ public final class SlideMenu extends EntityCollection implements Touchable {
 	
 	/**
 	 * Gets the currently selected (focused) menu item.
-	 * @return	The item index.
+	 *
+	 * @return	Item index
 	 */
 	public final int getSelectedItem() {
 		return sel;

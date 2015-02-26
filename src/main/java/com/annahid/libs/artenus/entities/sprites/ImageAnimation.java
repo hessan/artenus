@@ -8,6 +8,7 @@ import com.annahid.libs.artenus.entities.Entity;
  * contained in an image sprite's cutout. You must only assign this animation to
  * instances of {@link com.annahid.libs.artenus.entities.sprites.ImageSprite}.
  * @see com.annahid.libs.artenus.entities.sprites.ImageSprite
+ *
  * @author Hessan Feghhi
  *
  */
@@ -31,17 +32,10 @@ public final class ImageAnimation implements AnimationHandler {
 	 */
 	public static final int TREND_PING_PONG = 2;
 
-	private int[] frames;
-	private int trend;
-	private int currentFrame;
-	private int delta;
-	private int frameDelay = 33;
-	private long lastFrame = 0;
-
 	/**
 	 * Constructs an {@code ImageAnimation} with the given set of frames and a loop trend.
 	 *
-	 * @param animationFrames The array of frames from the cutout to animate through.
+	 * @param animationFrames The array of frames from the cutout to animate through
 	 * @see #TREND_LOOP
 	 */
 	public ImageAnimation(int[] animationFrames) {
@@ -51,8 +45,8 @@ public final class ImageAnimation implements AnimationHandler {
 	/**
 	 * Constructs an {@code ImageAnimation} with the given set of frames and trend.
 	 *
-	 * @param animationFrames The array of frames from the cutout to animate through.
-	 * @param trend           The trend at which the frames will be animated.
+	 * @param animationFrames The array of frames from the cutout to animate through
+	 * @param trend           The trend at which the frames will be animated
 	 * @see #TREND_LOOP
 	 * @see #TREND_ONCE
 	 * @see #TREND_PING_PONG
@@ -65,11 +59,11 @@ public final class ImageAnimation implements AnimationHandler {
 	 * Constructs an {@code ImageAnimation} with the given set of frames and trend. The animation
 	 * is started at a given frame index.
 	 *
-	 * @param animationFrames The array of frames from the cutout to animate through.
-	 * @param trend           The trend at which the frames will be animated.
-	 * @param startIndex      The frame index at which the animation should start. This
-	 *                        index determines the item in the frame array and not the frame index belonging
-	 *                        to the sprite's cutout.
+	 * @param animationFrames The array of frames from the cutout to animate through
+	 * @param trend           The trend at which the frames will be animated
+	 * @param startIndex      The frame index at which the animation should start. This index
+	 *                        determines the item in the frame array and not the frame index
+	 *                        belonging to the sprite's cutout.
 	 * @see #TREND_LOOP
 	 * @see #TREND_ONCE
 	 * @see #TREND_PING_PONG
@@ -87,7 +81,7 @@ public final class ImageAnimation implements AnimationHandler {
 	 * It is recommended to use {@link #setFrameDelay(float)} instead as it is guaranteed not to
 	 * be deprecated in future versions.
 	 *
-	 * @param delay The interval between frames in milliseconds.
+	 * @param delay The interval between frames in milliseconds
 	 * @see #setFrameDelay(float)
 	 */
 	public void setFrameDelay(int delay) {
@@ -100,7 +94,7 @@ public final class ImageAnimation implements AnimationHandler {
 	 * {@link #setFrameDelay(int)} is that this method gets the delay in seconds and in floating
 	 * point format, which is compatible with the rest of the framework.
 	 *
-	 * @param delay The interval between frames in seconds.
+	 * @param delay The interval between frames in seconds
 	 * @see #setFrameDelay(int)
 	 */
 	public void setFrameDelay(float delay) {
@@ -123,7 +117,7 @@ public final class ImageAnimation implements AnimationHandler {
 	 * Gets the trend of this image animation. The value can  be one of {@link #TREND_LOOP},
 	 * {@link #TREND_ONCE} or {@link #TREND_PING_PONG}.
 	 *
-	 * @return The animation trend.
+	 * @return The animation trend
 	 * @see #TREND_LOOP
 	 * @see #TREND_ONCE
 	 * @see #TREND_PING_PONG
@@ -134,7 +128,8 @@ public final class ImageAnimation implements AnimationHandler {
 
 	/**
 	 * Called whenever the animation should update the image sprite based on elapsed time.
-	 * Frame timing is automatically handled based on your adjustment using {@link #setFrameDelay(int)}.
+	 * Frame timing is automatically handled based on your adjustment using
+	 * {@link #setFrameDelay(int)}.
 	 *
 	 * @see ImageAnimation#setFrameDelay(int)
 	 */
@@ -156,4 +151,11 @@ public final class ImageAnimation implements AnimationHandler {
 
 		((ImageSprite) sprite).gotoFrame(frames[currentFrame]);
 	}
+
+	private int[] frames;
+	private int trend;
+	private int currentFrame;
+	private int delta;
+	private int frameDelay = 33;
+	private long lastFrame = 0;
 }

@@ -21,9 +21,9 @@ public final class LineSprite extends SpriteEntity {
 	 * Constructs a {@code LineSprite} connecting two given points with the
 	 * line width that is specified.
 	 *
-	 * @param startPoint The first point of the line.
-	 * @param endPoint   The second point of the line.
-	 * @param width      The line width.
+	 * @param startPoint The first point of the line
+	 * @param endPoint   The second point of the line
+	 * @param width      The line width
 	 */
 	public LineSprite(Point2D startPoint, Point2D endPoint, float width) {
 		this.startPoint = startPoint;
@@ -35,7 +35,7 @@ public final class LineSprite extends SpriteEntity {
 	/**
 	 * Gets the first or starting point of the line.
 	 *
-	 * @return The starting point.
+	 * @return The starting point
 	 */
 	public final Point2D getStartPoint() {
 		return new Point2D(startPoint.x, startPoint.y);
@@ -44,7 +44,7 @@ public final class LineSprite extends SpriteEntity {
 	/**
 	 * Gets the second or end point of the line.
 	 *
-	 * @return The end point.
+	 * @return The end point
 	 */
 	public final Point2D getEndPoint() {
 		return new Point2D(endPoint.x, endPoint.y);
@@ -54,8 +54,8 @@ public final class LineSprite extends SpriteEntity {
 	 * Moves the first or starting point of the line to the given coordinates.
 	 * This triggers internal transform updates.
 	 *
-	 * @param x The x coordinate of the new point.
-	 * @param y The y coordinate of the new point.
+	 * @param x The x coordinate of the new point
+	 * @param y The y coordinate of the new point
 	 */
 	public final void setStartPoint(float x, float y) {
 		startPoint.x = x;
@@ -67,8 +67,8 @@ public final class LineSprite extends SpriteEntity {
 	 * Moves the second or end point of the line to the given coordinates.
 	 * This triggers internal transform updates.
 	 *
-	 * @param x The x coordinate of the new point.
-	 * @param y The y coordinate of the new point.
+	 * @param x The x coordinate of the new point
+	 * @param y The y coordinate of the new point
 	 */
 	public final void setEndPoint(float x, float y) {
 		endPoint.x = x;
@@ -80,8 +80,8 @@ public final class LineSprite extends SpriteEntity {
 	 * Moves both points of the line to the given coordinates.
 	 * This triggers internal transform updates.
 	 *
-	 * @param s The new starting point.
-	 * @param e The new end point.
+	 * @param s The new starting point
+	 * @param e The new end point
 	 */
 	public final void setPoints(Point2D s, Point2D e) {
 		startPoint.x = s.x;
@@ -94,7 +94,7 @@ public final class LineSprite extends SpriteEntity {
 	/**
 	 * Modifies line width. This triggers internal transform updates.
 	 *
-	 * @param w The new line width.
+	 * @param w The new line width
 	 */
 	public final void setLineWidth(float w) {
 		thickness = w;

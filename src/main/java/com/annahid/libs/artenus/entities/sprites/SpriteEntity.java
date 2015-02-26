@@ -18,17 +18,8 @@ import com.annahid.libs.artenus.ui.Scene;
  */
 @SuppressWarnings("UnusedDeclaration")
 public abstract class SpriteEntity implements Entity, Renderable {
-	protected final RGB cf = new RGB(1, 1, 1);
-	protected final Point2D pos, scale;
-	protected float rotation;
-	protected AnimationHandler anim;
-	protected float alpha;
-
-	Effect effect;
-
 	/**
-	 * Constructs a generic sprite. This method is called by subclasses to initialize
-	 * a {@code Sprite} instance.
+	 * Constructs a generic sprite. This method is called by subclasses to initialize the sprite.
 	 */
 	protected SpriteEntity() {
 		pos = new Point2D(0.0f, 0.0f);
@@ -38,10 +29,10 @@ public abstract class SpriteEntity implements Entity, Renderable {
 	}
 
 	/**
-	 * Sets the animation handler for this {@code Sprite}. Once set, the animation
-	 * will be played on this {@code Sprite} automatically, until set to {@code null}.
+	 * Sets the animation handler for this sprite. Once set, the animation will be played on this
+	 * sprite automatically, until set to {@code null}.
 	 *
-	 * @param animation The animation handler, or {@code null} to remove animation.
+	 * @param animation The animation handler, or {@code null} to remove animation
 	 */
 	public final void setAnimation(AnimationHandler animation) {
 		anim = animation;
@@ -49,126 +40,143 @@ public abstract class SpriteEntity implements Entity, Renderable {
 
 
 	/**
-	 * Gets the current animation handler assigned to this {@code Sprite}.
+	 * Gets the current animation handler assigned to this sprite.
 	 *
-	 * @return The animation handler, or {@code null} if it there is no animation
-	 * assigned to this {@code Sprite}.
+	 * @return The animation handler, or {@code null} if it there is no animation assigned to
+	 *  this sprite
 	 */
+	@Override
 	public final AnimationHandler getAnimation() {
 		return anim;
 	}
 
+	@Override
 	public final Point2D getPosition() {
 		return pos;
 	}
 
+	@Override
 	public final float getRotation() {
 		return rotation;
 	}
 
 	/**
-	 * Gets the 2-dimensional scaling factor for this {@code Sprite}.
+	 * Gets the 2-dimensional scaling factor for this sprite.
 	 *
-	 * @return The scaling factor on horizontal and vertical axes.
+	 * @return The scaling factor over horizontal and vertical axes
 	 */
+	@Override
 	public final Point2D getScale() {
 		return scale;
 	}
 
+	@Override
 	public final void setRotation(float angle) {
 		rotation = angle;
 	}
 
 	/**
-	 * Sets the scaling factor for this {@code Sprite}. Horizontal
-	 * and vertical scaling factors will be set to a single value.
+	 * Sets the scaling factor for this sprite. Horizontal and vertical scaling factors will be set
+	 * to a single value.
 	 *
-	 * @param scaleValue The scaling factor.
+	 * @param scaleValue The scaling factor
 	 */
+	@Override
 	public final void setScale(float scaleValue) {
 		scale.x = scale.y = scaleValue;
 	}
 
 	/**
-	 * Sets the scaling factor for this {@code Sprite}, specifying different
-	 * values horizontally and vertically.
+	 * Sets the scaling factor for this sprite, specifying different values horizontally and
+	 * vertically.
 	 *
-	 * @param scaleX Horizontal scaling factor.
-	 * @param scaleY Vertical scaling factor.
+	 * @param scaleX Horizontal scaling factor
+	 * @param scaleY Vertical scaling factor
 	 */
+	@Override
 	public final void setScale(float scaleX, float scaleY) {
 		scale.x = scaleX;
 		scale.y = scaleY;
 	}
 
 	/**
-	 * Rotates this {@code Sprite} the given number of degrees. This rotation
-	 * will be relative to this {@code Sprite}'s current rotation angle.
+	 * Rotates this sprite the given number of degrees. This rotation will be relative to this
+	 * sprite's current rotation angle.
 	 *
-	 * @param angle The angle in degrees to rotate.
+	 * @param angle The angle in degrees to rotate
 	 */
+	@Override
 	public final void rotate(float angle) {
 		rotation += (angle % 360);
 	}
 
 	/**
-	 * Moves this {@code Sprite} the given distance. The translation will be
-	 * relative to this {@code Sprite}'s current position.
+	 * Moves this sprite the given distance. The translation will be relative to this sprite's
+	 * current position.
 	 *
-	 * @param amountX The horizontal translation.
-	 * @param amountY The vertical translation.
+	 * @param amountX The horizontal translation
+	 * @param amountY The vertical translation
 	 */
+	@Override
 	public final void move(float amountX, float amountY) {
 		pos.x += amountX;
 		pos.y += amountY;
 	}
 
 	/**
-	 * Sets the position of this {@code Sprite}.
+	 * Sets the position of this sprite. This method is guaranteed not to have any performance
+	 * benefit over {@link SpriteEntity#setPosition(float, float)}.
 	 *
-	 * @param position The new position.
+	 * @param position The new position
 	 */
+	@Override
 	public final void setPosition(Point2D position) {
 		if (position != null)
 			setPosition(position.x, position.y);
 	}
 
+	/**
+	 * Sets the position of this sprite.
+	 *
+	 * @param x The x coordinate of the new position
+	 * @param y The y coordinate of the new position
+	 */
+	@Override
 	public void setPosition(float x, float y) {
 		pos.x = x;
 		pos.y = y;
 	}
 
 	/**
-	 * Sets the transparency value for this {@code Sprite}.
+	 * Sets the transparency value for this sprite. An alpha value of 1 indicates a fully opaque
+	 * sprite and a value of 0 is an invisible sprite. Any value in between can be specified to
+	 * achieve transparency.
 	 *
-	 * @param alphaValue The alpha value for transparency. A value of
-	 *                   1 indicates a fully opaque {@code Sprite} and a value of 0 is an
-	 *                   invisible {@code Sprite}. Any value in between can be specified to
-	 *                   achieve transparencies.
+	 * @param alphaValue The alpha value for transparency
 	 */
 	public final void setAlpha(float alphaValue) {
 		alpha = alphaValue;
 	}
 
 	/**
-	 * Gets the transparency value for this {@code Sprite}.
+	 * Gets the transparency value for this sprite.
 	 *
-	 * @return The alpha value for transparency. A value of
-	 * 1 indicates a fully opaque {@code Sprite} and a value of 0 is an
-	 * invisible {@code Sprite}.
+	 * @return The alpha value for transparency
+	 * @see com.annahid.libs.artenus.entities.sprites.SpriteEntity#setAlpha(float)
 	 */
 	public final float getAlpha() {
 		return alpha;
 	}
 
 	/**
-	 * Sets the color filter for this  {@code Sprite}. The original colors
-	 * will be multiplied by this color when rendering.
+	 * Sets the color filter for this sprite. The original colors will be multiplied by this color
+	 * when rendering.
 	 *
-	 * @param r The red multiplier.
-	 * @param g The green multiplier.
-	 * @param b The blue multiplier.
+	 * @param r The red multiplier
+	 * @param g The green multiplier
+	 * @param b The blue multiplier
 	 */
+	@Override
 	public final void setColorFilter(float r, float g, float b) {
 		cf.r = r;
 		cf.g = g;
@@ -176,11 +184,12 @@ public abstract class SpriteEntity implements Entity, Renderable {
 	}
 
 	/**
-	 * Sets the color filter for this  {@code Sprite}. The original colors
-	 * will be multiplied by this color when rendering.
+	 * Sets the color filter for this sprite. The original colors will be multiplied by this color
+	 * when rendering.
 	 *
-	 * @param rgb The color multipliers.
+	 * @param rgb The color multipliers
 	 */
+	@Override
 	public final void setColorFilter(RGB rgb) {
 		cf.r = rgb.r;
 		cf.g = rgb.g;
@@ -188,22 +197,21 @@ public abstract class SpriteEntity implements Entity, Renderable {
 	}
 
 	/**
-	 * Gets the color filter for this {@code Sprite}. Modifying the fields
-	 * in the returned value affects the color filter.
+	 * Gets the color filter for this sprite. Modifying the fields in the returned value affects
+	 * the color filter.
 	 *
-	 * @return The color filter.
+	 * @return The color filter
 	 */
+	@Override
 	public final RGB getColorFilter() {
 		return cf;
 	}
 
 	@Override
-	public void onAttach(Scene scene) {
-	}
+	public void onAttach(Scene scene) { }
 
 	@Override
-	public void onDetach(Scene scene) {
-	}
+	public void onDetach(Scene scene) { }
 
 	@Override
 	public Effect getEffect() {
@@ -216,10 +224,10 @@ public abstract class SpriteEntity implements Entity, Renderable {
 	}
 
 	/**
-	 * Advances the animation for this sprite. This method is called
-	 * by {@link com.annahid.libs.artenus.entities.EntityCollection} when the scene is being advanced.
+	 * Advances the animation for this sprite. This method is called by
+	 * {@link com.annahid.libs.artenus.entities.EntityCollection} when the scene is being advanced.
 	 *
-	 * @param elapsedTime The elapsed time since the previous frame.
+	 * @param elapsedTime The elapsed time since the previous frame
 	 */
 	@Override
 	public final void advance(float elapsedTime) {
@@ -228,4 +236,13 @@ public abstract class SpriteEntity implements Entity, Renderable {
 
 		anim.advance(this, elapsedTime);
 	}
+
+	protected final RGB cf = new RGB(1, 1, 1);
+	protected final Point2D pos, scale;
+	protected float rotation;
+	protected AnimationHandler anim;
+	protected float alpha;
+
+	Effect effect;
+
 }

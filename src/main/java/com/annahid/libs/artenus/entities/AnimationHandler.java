@@ -12,8 +12,8 @@ public interface AnimationHandler {
 	/**
 	 * Called whenever the animation should update the entity based on elapsed time.
 	 *
-	 * @param sprite      The {@link Entity} object to be updated.
-	 * @param elapsedTime Elapsed time since the last frame in seconds.
+	 * @param sprite      The {@link Entity} object to be updated
+	 * @param elapsedTime Elapsed time in seconds since the last frame
 	 * @see Entity
 	 */
 	public void advance(Entity sprite, float elapsedTime);

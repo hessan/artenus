@@ -6,12 +6,10 @@ package com.annahid.libs.artenus.entities.physics;
  * interface per each pair of colliding bodies.
  *
  * @author Hessan Feghhi
- *
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class CollisionInfo {
-	CollisionInfo() {
-	}
+	CollisionInfo() { }
 
 	/**
 	 * The first body involved in the collision.

@@ -12,10 +12,9 @@ package com.annahid.libs.artenus.entities.physics;
  */
 public interface CollisionListener {
 	/**
-	 * This method is called whenever a collision happens in the physical
-	 * world.
+	 * This method is called whenever a collision happens in the physical world.
 	 *
-	 * @param info Information about the collision.
+	 * @param info Information about the collision
 	 */
 	public void onCollision(CollisionInfo info);
 }

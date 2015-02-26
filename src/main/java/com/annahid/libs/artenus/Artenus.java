@@ -23,19 +23,15 @@ import java.lang.ref.WeakReference;
  * The abstract superclass of a typical Artenus SDK activity. This class should be
  * extended by the game application and the {@code init()} method must be implemented
  * to handle basic initializations and retrieving the stage.
+ *
  * @author Hessan Feghhi
  * 
  */
 public abstract class Artenus extends Activity {
-
-	private static Artenus instance;
-	private static boolean hideIntro;
-	private static int manifestStore;
-
 	/**
 	 * Gets the currently running instance of {@code Artenus}.
 	 *
-	 * @return The running instance.
+	 * @return The running instance
 	 */
 	public static Artenus getInstance() {
 		return instance;
@@ -44,7 +40,7 @@ public abstract class Artenus extends Activity {
 	/**
 	 * Determines whether an intro screen should be displayed before the game.
 	 *
-	 * @return true if there should be an intro, false otherwise.
+	 * @return true if there should be an intro, false otherwise
 	 */
 	public static boolean shouldHideIntro() {
 		return hideIntro;
@@ -54,14 +50,28 @@ public abstract class Artenus extends Activity {
 	private AudioManager audio;
 	private boolean hasOutFocused = false;
 
+	/**
+	 * Constructs a new instance of Artenus activity.
+	 *
+	 * @param hideIntro	A value indicating whether to hide the initial splash screen
+	 */
 	protected Artenus(boolean hideIntro) {
 		Artenus.hideIntro = hideIntro;
 	}
 
+	/**
+	 * Constructs a new instance of Artenus activity.
+	 */
 	protected Artenus() {
 		this(false);
 	}
 
+	/**
+	 * Gets the store preference specified in the application manifest for unified services.
+	 *
+	 * @return	Store identifier
+	 * @see com.annahid.libs.artenus.unified.UnifiedServices
+	 */
 	public static int getManifestAppStore() {
 		return manifestStore;
 	}
@@ -216,4 +226,8 @@ public abstract class Artenus extends Activity {
 	}
 
 	protected abstract void init(Stage stage);
+
+	private static Artenus instance;
+	private static boolean hideIntro;
+	private static int manifestStore;
 }
