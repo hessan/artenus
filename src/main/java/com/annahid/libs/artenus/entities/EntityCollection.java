@@ -16,9 +16,9 @@ import java.util.Stack;
 
 /**
  * <p>
- * This class holds a resizable list of {@code Entity} objects and provides methods to
- * render or advance their animation as a whole. It implements {@link Entity}, so it can
- * be added to a {@link Scene} like any other entity.</p>
+ * A resizable list of {@code Entity} objects that implements {@link Entity}, so it can be added to
+ * a scene as a single entity. When added as an entity, it renders all contained entities when
+ * its {@code render} method is called.</p>
  * <p>
  * Entity collections have their own position, rotation, and scaling factors. The transformations
  * of the entities added to a collection are relative to the global transformations of the

@@ -9,7 +9,7 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * This class is a {@code Texture} that represents a font. A font is a special-purpose cut-out of
+ * A {@code Texture} that represents a font. A font is a special-purpose cut-out of
  * an image that divides that image into characters of different widths. Each font can represent
  * a limited set of characters out of the character space. You should be careful with the text
  * you handle with each font, as it might not support all characters included in the text.

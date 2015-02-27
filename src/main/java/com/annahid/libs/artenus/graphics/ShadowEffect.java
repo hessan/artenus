@@ -3,8 +3,7 @@ package com.annahid.libs.artenus.graphics;
 import android.opengl.GLES10;
 
 /**
- * An implementation of {@link com.annahid.libs.artenus.graphics.Effect} that represents a shadow
- * effect.
+ * A subclass of {@link com.annahid.libs.artenus.graphics.Effect} that represents a shadow effect.
  *
  * @author Hessan Feghhi
  */

@@ -4,9 +4,10 @@ import com.annahid.libs.artenus.entities.AnimationHandler;
 import com.annahid.libs.artenus.entities.Entity;
 
 /**
- * This class targets only image sprites. It performs an animation based on the frames
- * contained in an image sprite's cutout. You must only assign this animation to
- * instances of {@link com.annahid.libs.artenus.entities.sprites.ImageSprite}.
+ * Performs an animation based on the frames contained in an image sprite's cutout. Note that this
+ * class targets only image sprites. You must only assign this animation to an instance of
+ * {@link com.annahid.libs.artenus.entities.sprites.ImageSprite}.
+ *
  * @see com.annahid.libs.artenus.entities.sprites.ImageSprite
  *
  * @author Hessan Feghhi

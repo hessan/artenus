@@ -1,5 +1,6 @@
 package com.annahid.libs.artenus.ui;
 
+import android.support.annotation.NonNull;
 import android.view.MotionEvent;
 
 import com.annahid.libs.artenus.data.Point2D;
@@ -15,7 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * This class provides the user interface for horizontal menus that use slide action
+ * Provides the user interface for horizontal menus that use slide action
  * to navigate. It takes sprites as menu items and handles scaling and moving them
  * as necessary. At any point you can get the currently focused item.
  * 
@@ -58,11 +59,21 @@ public final class SlideMenu extends EntityCollection implements Touchable {
 		centerY = center.y;
 	}
 
+	/**
+	 * Assigns a new event listener to listen to item selection events.
+	 *
+	 * @param listener	Event listener to be added
+	 */
     public void addListener(Listener listener) {
         itemChangeListeners.add(new WeakReference<>(listener));
     }
 
-    public void removeListener(Listener listener) {
+	/**
+	 * Removes an event listener currently assigned to this slide menu.
+	 *
+	 * @param listener	Event listener to be removed
+	 */
+    public void removeListener(@NonNull Listener listener) {
         for (Iterator<WeakReference<Listener>> iterator = itemChangeListeners.iterator();
              iterator.hasNext(); ) {
             WeakReference<Listener> weakRef = iterator.next();
@@ -107,7 +118,7 @@ public final class SlideMenu extends EntityCollection implements Touchable {
 	}
 	
 	/**
-	 * Clears all menu items.
+	 * Clears all menu items from this slide menu.
 	 */
     @Override
 	public void clear() {

@@ -31,31 +31,11 @@ import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * <p>This class is one of the key components you need in this framework. {@code Stage} is
- * where everything actually happens. Normally each game has a stage on which different
- * scenes appear. {@code Stage} can be added to your project as a {@code View}. You can
- * put it in your layout XML for your main activity. Below is an example of a layout
- * XML that has a {@code Stage} in it:</p>
- * <code style='white-space: pre'>
- * &lt;?xml version="1.0" encoding="utf-8"?&gt;
- * &lt;annahid.libs.artenus.unified.ads.AdLayout android:id="@+id/adLayout"
- *     xmlns:android="http://schemas.android.com/apk/res/android"
- *     xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
- *     xmlns:artenus="http://schemas.android.com/apk/res-auto"
- *     android:layout_width="match_parent"
- *     android:layout_height="match_parent"&gt;
- *     &lt;annahid.libs.artenus.ui.Stage
- *       android:id="@+id/elasticDropStage"
- *       android:layout_width="match_parent"
- *       android:layout_height="match_parent"
- *       artenus:loadingImage="@raw/loading" /&gt;
- * &lt;/annahid.libs.artenus.unified.ads.AdLayout&gt;
- * </code>
- * <p>Note that for each stage you add to your application, you need to assign a
- * {@code StageManager}. You can do this in your {@code Artenus} activity's {@code init()}
- * method. For more information about stage managers, please see the documentation for
- * {@code StageManager}. Although you can theoretically have as many stages as you want per
- * application, it is highly recommended that you have only one stage per application.</p>
+ * <p>This class is one of the key components of this framework. {@code Stage} is
+ * where everything actually happens. Each game has a stage on which different scenes appear.
+ * Its instance is passed to the application through {@link com.annahid.libs.artenus.Artenus#init}.
+ * The application needs to assign a {@link com.annahid.libs.artenus.ui.StageManager} to the
+ * stage in order to handle its important event.</p>
  * 
  * @author Hessan Feghhi
  * @see StageManager
@@ -282,6 +262,7 @@ public final class Stage extends GLSurfaceView {
 	private static float texScale = 1.0f;
 	private static FloatBuffer vertexBuffer = null;
 	private static int screenWidth, screenHeight;
+
 	static FloatBuffer textureBuffer = null;
 
 	/**
@@ -296,29 +277,6 @@ public final class Stage extends GLSurfaceView {
 	public static float getTextureScalingFactor() {
 		return texScale;
 	}
-
-	private final RGB defClearColor = new RGB(0, 0, 0);
-	private final RGB loadingBackground = new RGB(0, 0, 0);
-	private final float[] tintColor = {0f, 0f, 0f, 0f};
-	private Scene currentScene, nextScene;
-	private float stPhase;
-	private InputManager inputMan = null;
-	private Thread advanceThread;
-	private float w, h, blur = 0;
-	private boolean supportsEs2 = false;
-	private int[] backFrameBuffer, backTexBuffer;
-	private int advanceThreadId = 1000;
-	private StageManager handler = null;
-
-	private ImageSprite loadingSprite;
-	private LineSprite loadingBarSprite;
-
-	/**
-	 * This field is used to delay texture loading  a bit to let
-	 * the loading screen appear before. It holds the start time
-	 * for delay calculation.
-	 */
-	private long lll = 0;
 
 	/**
 	 * Constructs a new stage on the given application context and with the given set
@@ -715,6 +673,9 @@ public final class Stage extends GLSurfaceView {
 		return super.onTouchEvent(event);
 	}
 
+	/**
+	 * This method is inherited from {@code GLSurfaceView}.
+	 */
 	@Override
 	public void onPause() {
 		super.onPause();
@@ -725,6 +686,9 @@ public final class Stage extends GLSurfaceView {
 			handler.onEvent(this, StageManager.EVENT_PAUSE);
 	}
 
+	/**
+	 * This method is inherited from {@code GLSurfaceView}.
+	 */
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -753,4 +717,27 @@ public final class Stage extends GLSurfaceView {
 			advanceThread.start();
 		}
 	}
+
+	private final RGB defClearColor = new RGB(0, 0, 0);
+	private final RGB loadingBackground = new RGB(0, 0, 0);
+	private final float[] tintColor = {0f, 0f, 0f, 0f};
+	private Scene currentScene, nextScene;
+	private float stPhase;
+	private InputManager inputMan = null;
+	private Thread advanceThread;
+	private float w, h, blur = 0;
+	private boolean supportsEs2 = false;
+	private int[] backFrameBuffer, backTexBuffer;
+	private int advanceThreadId = 1000;
+	private StageManager handler = null;
+
+	private ImageSprite loadingSprite;
+	private LineSprite loadingBarSprite;
+
+	/**
+	 * This field is used to delay texture loading  a bit to let
+	 * the loading screen appear before. It holds the start time
+	 * for delay calculation.
+	 */
+	private long lll = 0;
 }

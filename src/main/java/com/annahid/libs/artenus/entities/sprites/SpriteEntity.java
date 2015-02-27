@@ -9,10 +9,10 @@ import com.annahid.libs.artenus.graphics.Renderable;
 import com.annahid.libs.artenus.ui.Scene;
 
 /**
- * This class is the base class for all sprites. A sprite is a mobile piece of graphic
- * that can represent an object in the game. Sprites are the graphical entities that
- * are used in scenes. They can be moved, rotated, scaled and animated according to
- * their role in the game.
+ * The base class for all sprites. A sprite is a mobile piece of graphic that can represent an
+ * object in the game. Sprites are the graphical entities that are used in scenes. They can be
+ * moved, rotated, scaled and animated according to their role in the game.
+ *
  * @author Hessan Feghhi
  * @see com.annahid.libs.artenus.ui.Scene
  */

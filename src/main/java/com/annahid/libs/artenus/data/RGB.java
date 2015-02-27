@@ -1,7 +1,7 @@
 package com.annahid.libs.artenus.data;
 
 /**
- * This class represents a color with red, green, and blue components. This class does not
+ * Represents a color with red, green, and blue components. This class does not
  * provide transparency since it is not to be used for that purpose.
  *
  * @author Hessan Feghhi

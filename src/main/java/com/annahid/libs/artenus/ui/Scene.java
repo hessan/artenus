@@ -13,7 +13,7 @@ import com.annahid.libs.artenus.input.Touchable;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * This class represents a single screen in a game. If you view the whole game as a play,
+ * Represents a single screen in a game. If you view the whole game as a play,
  * the terms for {@link Stage} and {@code Scene} will make complete sense to you, as
  * they are intentionally named this way in the framework. A game can have several scenes
  * based on its nature. For example, a simple game consists of a menu scene, a game scene
@@ -25,19 +25,6 @@ import javax.microedition.khronos.opengles.GL10;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class Scene implements Touchable {
-	/**
-	 * The parent stage for this scene. You MUST not modify the value of this field as it
-	 * might cause inconsistency in the scene-stage relation.
-	 */
-	protected Stage stage;
-
-	private final EntityCollection sprites = new EntityCollection(this);
-	private PhysicsSimulator physics = null;
-	private final Point2D trans = new Point2D(0.0f, 0.0f);
-	private boolean loaded = false;
-	private long haltStart = 0;
-	RGB bgColor = new RGB(0, 0, 0);
-	Dialog dialog = null;
 
 	/**
 	 * Constructs a new scene belonging to the given {@code Stage}.
@@ -378,4 +365,19 @@ public class Scene implements Touchable {
 	boolean isDialog() {
 		return false;
 	}
+
+	RGB bgColor = new RGB(0, 0, 0);
+	Dialog dialog = null;
+
+	/**
+	 * The parent stage for this scene. You MUST not modify the value of this field as it
+	 * might cause inconsistency in the scene-stage relation.
+	 */
+	protected Stage stage;
+
+	private final EntityCollection sprites = new EntityCollection(this);
+	private PhysicsSimulator physics = null;
+	private final Point2D trans = new Point2D(0.0f, 0.0f);
+	private boolean loaded = false;
+	private long haltStart = 0;
 }

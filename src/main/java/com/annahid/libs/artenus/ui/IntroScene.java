@@ -70,7 +70,13 @@ final class IntroScene extends Scene {
 		if (!gameRun) {
 			remove(annahid);
 			introShown = true;
-			stage.getStageManager().onLoadStage(stage);
+
+			final StageManager manager = stage.getStageManager();
+
+			if(manager == null)
+				throw new IllegalStateException("No stage manager is specified.");
+
+			manager.onLoadStage(stage);
 			stage.forceScene(stage.getStageManager().createInitialScene(stage));
 			gameRun = true;
 		}

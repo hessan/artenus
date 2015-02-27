@@ -335,7 +335,7 @@ public class ConcurrentCollection<T> implements Collection<T> {
 	}
 
 	/**
-	 * Gets the first element in this collection (the element at the front of the collection).
+	 * Returns the first element in this collection (the element at the front of the collection).
 	 *
 	 * @return the first element of this collection
 	 */
@@ -344,7 +344,7 @@ public class ConcurrentCollection<T> implements Collection<T> {
 	}
 
 	/**
-	 * Gets the last element in this collection (the element at the back of the collection).
+	 * Returns the last element in this collection (the element at the back of the collection).
 	 *
 	 * @return the last element of this collection
 	 */

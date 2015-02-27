@@ -28,7 +28,7 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * This class provides AES encryption functionality.
+ * Provides AES encryption functionality.
  * @author Hessan Feghhi
  *
  */

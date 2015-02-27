@@ -4,8 +4,9 @@ import com.annahid.libs.artenus.entities.AnimationHandler;
 import com.annahid.libs.artenus.entities.Entity;
 
 /**
- * This class performs a fading effect animation for sprites. You can specify whether
+ * Performs a fading effect animation for sprites. You can specify whether
  * you want the sprite to appear or disappear.
+ *
  * @author Hessan Feghhi
  *
  */

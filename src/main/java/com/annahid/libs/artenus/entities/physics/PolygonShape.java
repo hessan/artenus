@@ -5,7 +5,9 @@ import com.annahid.libs.artenus.data.Point2D;
 import org.jbox2d.common.Vec2;
 
 /**
- * This class represents a {@link com.annahid.libs.artenus.entities.physics.Shape} consisting of a convex polygon.
+ * Represents a {@link com.annahid.libs.artenus.entities.physics.Shape} consisting of a convex
+ * polygon.
+ *
  * @author Hessan Feghhi
  *
  */

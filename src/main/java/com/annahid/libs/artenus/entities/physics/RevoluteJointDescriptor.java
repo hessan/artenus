@@ -3,7 +3,7 @@ package com.annahid.libs.artenus.entities.physics;
 import com.annahid.libs.artenus.data.Point2D;
 
 /**
- * This class is an implementation of {@link com.annahid.libs.artenus.entities.physics.JointDescriptor}
+ * An implementation of {@link com.annahid.libs.artenus.entities.physics.JointDescriptor}
  * that describes a revolute joint. Revolute joints provide single-axis rotation function used in
  * many places such as door hinges, folding mechanisms, and other uni-axial rotation devices.
  * @author Hessan Feghhi

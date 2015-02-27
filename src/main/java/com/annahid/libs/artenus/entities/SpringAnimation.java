@@ -1,7 +1,7 @@
 package com.annahid.libs.artenus.entities;
 
 /**
- * This class performs a spring-like animation on an entity. This animation is NOT a complete
+ * Performs a spring-like animation on an entity. This animation is NOT a complete
  * physical simulation of a spring, and is just a loose visual effect that can be used for various
  * screen elements such as menus and buttons.
  *

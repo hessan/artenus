@@ -7,8 +7,9 @@ import com.annahid.libs.artenus.data.Point2D;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * This class is an implementation of {@link SpriteEntity} that represents a line.
- * It provides methods to control the appearance of the line.
+ * A subclass of {@link SpriteEntity} that represents a line. It provides methods to control the
+ * appearance of the line.
+ *
  * @author Hessan Feghhi
  *
  */

@@ -1,7 +1,7 @@
 package com.annahid.libs.artenus.graphics;
 
 /**
- * This class defines a visual effect that can be added to a sprite. Currently there is only one
+ * Superclass of all visual effects that can be added to a sprite. Currently there is only one
  * effect available, but there will be more added in the future. Each entity can only have a
  * single effect assigned to it through the
  * {@link com.annahid.libs.artenus.entities.Entity#setEffect(Effect)} method. Multiple effects

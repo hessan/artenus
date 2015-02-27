@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>This class is an implementation of {@link InputManager} that uses slide motions
+ * <p>A subclass of {@link InputManager} that uses slide motions
  * as the direction knob and {@link com.annahid.libs.artenus.input.TapRegion} objects as action buttons. Note that
  * {@link com.annahid.libs.artenus.input.TapRegion} is used in its isolated form in this class and is not attached
  * to the scene. The reason for this application is the flexibility {@code TapRegion}

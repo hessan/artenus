@@ -1,7 +1,7 @@
 package com.annahid.libs.artenus.entities.physics;
 
 /**
- * This class contains information about a collision. An instance of this class
+ * Contains information about a collision. An instance of this class
  * is passed to the {@code onCollision} method of the {@link CollisionListener}
  * interface per each pair of colliding bodies.
  *

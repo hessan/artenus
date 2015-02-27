@@ -13,7 +13,7 @@ import android.util.SparseIntArray;
 import java.io.IOException;
 
 /**
- * This class provides audio functionality for games. You can handle sound effects
+ * Provides audio functionality for games. You can handle sound effects
  * and music play-back easily through static methods provided by this class. 
  * @author Hessan Feghhi
  *

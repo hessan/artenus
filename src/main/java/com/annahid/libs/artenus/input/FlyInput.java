@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>This class is an implementation of {@link InputManager} that uses device tilting
+ * <p>A subclass of {@link InputManager} that uses device tilting
  * as the direction knob, and {@link TapRegion} objects as the the action buttons.
  * Quick shaking of the device (as if one is hitting the air) also triggers the first
  * action button. Note that {@link TapRegion} is used in its isolated form in this

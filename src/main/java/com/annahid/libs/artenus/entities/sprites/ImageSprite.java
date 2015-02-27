@@ -12,9 +12,8 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * This class is an implementation of {@link SpriteEntity} that displays an image block
- * on the screen. It provides tools for retrieving portions of a atlas texture and
- * handling frames for animations.
+ * A subclass of {@link SpriteEntity} that displays an image block on the screen. It provides tools
+ * for retrieving portions of a atlas texture and handling frames for animations.
  *
  * @author Hessan Feghhi
  * @see SpriteEntity

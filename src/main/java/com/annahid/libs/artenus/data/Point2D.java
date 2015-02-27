@@ -1,7 +1,7 @@
 package com.annahid.libs.artenus.data;
 
 /**
- * This class represents a 2-dimensional point and is used throughout this framework for positions,
+ * Represents a 2-dimensional point and is used throughout this framework for positions,
  * scaling factors, impulses, and other properties of objects.
  * 
  * @author Hessan Feghhi

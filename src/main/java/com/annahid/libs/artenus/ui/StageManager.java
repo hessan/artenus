@@ -1,13 +1,13 @@
 package com.annahid.libs.artenus.ui;
 
 /**
- * This class is one of the key classes that must be implemented in any
- * game that uses this platform. It is the companion of {@code Stage}
- * and handles basic functionality for the game. You can assign a
- * {@code StageManager} to your stage using the {@code setStageManager}
- * method in {@code Stage}. Failing to provide a {@code StageManager}
- * will cause your application to crash with a {@code NullPointerException}
- * since this class is the first class Stage looks for when loading.
+ * Interface for all classes that handle stage events. This is one of the key interfaces that must
+ * be implemented in any game that uses this framework. It is the companion of {@code Stage} and
+ * handles basic functionality for the game. You can assign a {@code StageManager} to your stage
+ * using {@link com.annahid.libs.artenus.ui.Stage#setStageManager}. Failing to provide a stage
+ * manager will cause your application to crash with an {@code IllegalStateException} when it tries
+ * to load the first scene.
+ *
  * @see com.annahid.libs.artenus.ui.Stage
  * @author Hessan Feghhi
  *

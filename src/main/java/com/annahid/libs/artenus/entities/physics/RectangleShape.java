@@ -1,7 +1,7 @@
 package com.annahid.libs.artenus.entities.physics;
 
 /**
- * This class represents a rectangular {@link com.annahid.libs.artenus.entities.physics.Shape} that
+ * Represents a rectangular {@link com.annahid.libs.artenus.entities.physics.Shape} that
  * can be used for physical simulation.
  *
  * @author Hessan Feghhi

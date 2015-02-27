@@ -6,7 +6,7 @@ import com.annahid.libs.artenus.entities.EntityCollection;
 import com.annahid.libs.artenus.entities.sprites.LineSprite;
 
 /**
- * This class is the superclass for all dialogs. A dialog is an interface
+ * The superclass for all dialogs. A dialog is an interface
  * that pauses the normal operation of a scene to do a short task, and
  * resumes the scene upon the completion of the task. Examples of dialogs
  * are pop-up messages, waiting circles, and friend choosers. When a dialog
@@ -17,24 +17,30 @@ import com.annahid.libs.artenus.entities.sprites.LineSprite;
  *
  */
 public abstract class Dialog extends Scene {
+	/**
+	 * Dialog result indicating the dialog is still active.
+	 */
 	public static final int RESULT_NONE = 0;
-	public static final int RESULT_YES = 1;
-	public static final int RESULT_NO = 2;
-	public static final int RESULT_OK = 3;
-	public static final int RESULT_CANCEL = 4;
-
-	private final EntityCollection col;
-	private final LineSprite shade;
-	private final Scene scene;
-	private boolean showing = false;
 
 	/**
-	 * The result of the dialog. Initially this field is {@code RESULT_NONE}.
-	 * Setting a different value for this field will cause the dialog to be
-	 * dismissed. The scene can then check the provided result and take an
-	 * action accordingly.
+	 * Dialog result indicating a positive user response to the dialog.
 	 */
-	protected int result;
+	public static final int RESULT_YES = 1;
+
+	/**
+	 * Dialog result indicating a negative user response to the dialog.
+	 */
+	public static final int RESULT_NO = 2;
+
+	/**
+	 * Dialog result indicating that the dialog is dismissed.
+	 */
+	public static final int RESULT_OK = 3;
+
+	/**
+	 * Dialog result indicating that the dialog is cancelled.
+	 */
+	public static final int RESULT_CANCEL = 4;
 
 	/**
 	 * Constructs a {@code Dialog} that will be popped up above a given scene.
@@ -59,16 +65,31 @@ public abstract class Dialog extends Scene {
 		result = RESULT_NONE;
 	}
 
+	/**
+	 * Halts the underlying scene and displays the dialog on top of it.
+	 */
 	public final void show() {
 		scene.halt();
 		scene.dialog = this;
 	}
 
+	/**
+	 * Adds an entity to the dialog. Dialog entities only belong to their
+	 * parent dialog, and are separate from the underlying scene.
+	 *
+	 * @param entity The sprite to be added
+	 */
 	@Override
 	public void add(Entity entity) {
 		col.add(entity);
 	}
 
+	/**
+	 * Gets the result of the dialog. If this method is called before the dialog
+	 * is dismissed, it returns {@link Dialog#RESULT_NONE}.
+	 *
+	 * @return	Dialog result code
+	 */
 	public final int getResult() {
 		return result;
 	}
@@ -81,10 +102,6 @@ public abstract class Dialog extends Scene {
 	 */
 	public void cancel() {
 		result = RESULT_CANCEL;
-	}
-
-	@Override
-	public final void onLocalLoad() {
 	}
 
 	@Override
@@ -167,4 +184,17 @@ public abstract class Dialog extends Scene {
 	final boolean isDialog() {
 		return true;
 	}
+
+	/**
+	 * The result of the dialog. Initially this field is {@code RESULT_NONE}.
+	 * Setting a different value for this field will cause the dialog to be
+	 * dismissed. The scene can then check the provided result and take an
+	 * action accordingly.
+	 */
+	protected int result;
+
+	private final EntityCollection col;
+	private final LineSprite shade;
+	private final Scene scene;
+	private boolean showing = false;
 }

@@ -1,7 +1,7 @@
 package com.annahid.libs.artenus.entities;
 
 /**
- * An interface for classes that handle animations for {@link Entity} objects. In order to make
+ * Interface for classes that handle animations for {@link Entity} objects. In order to make
  * animations effective, you should set their animation to an animation handler instance using
  * {@link Entity#setAnimation(AnimationHandler)}.
  *

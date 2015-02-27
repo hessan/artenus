@@ -11,7 +11,7 @@ import android.view.View;
 import com.annahid.libs.artenus.R;
 
 /**
- * This class provides a scripting console interface. You can type in commands
+ * Provides a scripting console interface. You can type in commands
  * and request execution. The request will be passed to the {@code ScriptHost}
  * object for processing. To use this interface, you must declare
  * {@code ConsoleActivity} as an activity in {@code AndroidManifest.xml}.

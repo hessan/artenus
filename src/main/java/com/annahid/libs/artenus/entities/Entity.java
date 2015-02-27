@@ -7,9 +7,9 @@ import com.annahid.libs.artenus.graphics.Renderable;
 import com.annahid.libs.artenus.ui.Scene;
 
 /**
- * Defines an entity that can be added to a scene. Entities provide various functionality, including
- * graphical, physical, or user interaction. A {@link Scene} is made up of a list of entities, and
- * it uses them for processing graphics and animation.
+ * Interface for all entities that can be added to a scene. Entities provide various functionality,
+ * including graphical, physical, or user interaction. A {@link Scene} is made up of a list of
+ * entities, and it uses them for processing graphics and animation.
  *
  * @see com.annahid.libs.artenus.ui.Scene
  * @author Hessan Feghhi

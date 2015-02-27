@@ -9,7 +9,7 @@ import com.annahid.libs.artenus.input.Touchable;
 import com.annahid.libs.artenus.ui.Scene;
 
 /**
- * <p>This class represents a pair of entities. The visual difference between this class and an
+ * <p>Represents a pair of connected entities. The visual difference between this class and an
  * {@link EntityCollection} with two items is that this class applies effects to underlying
  * entities, whereas an entity collection applies it to itself. The figure below makes the
  * difference clearer. Notice how the shadow looks for each implementation.</p>

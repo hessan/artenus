@@ -7,13 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * This class is a view group for an ad-driven game. It takes two
- * {@code View} objects as children. The first one will be the main
- * view and will take up the entire region, and the second one will
- * be considered as an ad unit, and will be placed accordingly. 
+ * A view group for an ad-driven game. It takes two {@code View} objects as children. The first one
+ * will be the main view and will take up the entire region, and the second one will be considered
+ * as an ad unit, and will be placed accordingly.
  * 
  * @author Hessan Feghhi
- *
  */
 public final class AdLayout extends ViewGroup {
 
@@ -23,7 +21,7 @@ public final class AdLayout extends ViewGroup {
 	/**
 	 * Constructs an {@code AdLayout} for the given application context.
 	 *
-	 * @param context The application context.
+	 * @param context The application context
 	 */
 	public AdLayout(Context context) {
 		super(context);
@@ -33,8 +31,8 @@ public final class AdLayout extends ViewGroup {
 	 * Constructs an {@code AdLayout} for the given application context
 	 * with the given set of XML attributes.
 	 *
-	 * @param context The application context.
-	 * @param attrs   The set of attributes.
+	 * @param context The application context
+	 * @param attrs   The set of attributes
 	 */
 	public AdLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -56,7 +54,10 @@ public final class AdLayout extends ViewGroup {
 			measureChild(child, widthMeasureSpec, heightMeasureSpec);
 		}
 
-		super.setMeasuredDimension(resolveSize(widthSize, widthMeasureSpec), resolveSize(heightSize, heightMeasureSpec));
+		super.setMeasuredDimension(
+				resolveSize(widthSize, widthMeasureSpec),
+				resolveSize(heightSize, heightMeasureSpec)
+		);
 	}
 
 	@Override
@@ -109,7 +110,7 @@ public final class AdLayout extends ViewGroup {
 	/**
 	 * Gets the height of the ad currently shown.
 	 *
-	 * @return The height in pixels.
+	 * @return The height in pixels
 	 */
 	final int getAdHeight() {
 		return adShown == AdManager.SHOW_HIDDEN ? 0 : adHeight;
@@ -118,7 +119,7 @@ public final class AdLayout extends ViewGroup {
 	/**
 	 * Shows the ad at a given location or hides it.
 	 *
-	 * @param show The location to display the ad, or ADLAYOUT_HIDDEN to hide it.
+	 * @param show The location to display the ad, or ADLAYOUT_HIDDEN to hide it
 	 */
 	final void showAd(int show) {
 		final int count = getChildCount();

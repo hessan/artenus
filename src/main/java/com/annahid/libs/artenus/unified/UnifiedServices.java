@@ -12,7 +12,7 @@ import com.annahid.libs.artenus.unified.impl.GoogleUnifiedServices;
 import com.annahid.libs.artenus.security.LoginManager;
 
 /**
- * This class provides all store-specific game functionality in a unified way. In-app billing, ad
+ * Provides all store-specific game functionality in a unified way. In-app billing, ad
  * management, and game services are handled by this class.
  */
 @SuppressWarnings("UnusedDeclaration")

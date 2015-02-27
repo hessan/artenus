@@ -18,7 +18,7 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * This class represents a texture. A texture is an image that can be used in
+ * Represents a texture. A texture is an image that can be used in
  * real-time graphics libraries. All images must be converted to instances of
  * this class before they can be used in this framework.
  *

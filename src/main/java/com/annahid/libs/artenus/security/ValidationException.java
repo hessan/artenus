@@ -17,8 +17,8 @@
 package com.annahid.libs.artenus.security;
 
 /**
- * Indicates that an error occurred while validating the integrity of data managed by an
- * {@link com.annahid.libs.artenus.security.Obfuscator}.}
+ * Exception thrown when an error occurs while validating the integrity of data managed by an
+ * {@link com.annahid.libs.artenus.security.Obfuscator}.
  */
 @SuppressWarnings("UnusedDeclaration")
 public class ValidationException extends Exception {

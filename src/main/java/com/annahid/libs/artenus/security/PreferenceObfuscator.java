@@ -19,7 +19,7 @@ package com.annahid.libs.artenus.security;
 import android.content.SharedPreferences;
 
 /**
- * An wrapper for SharedPreferences that transparently performs data obfuscation.
+ * A wrapper for SharedPreferences that transparently performs data obfuscation.
  */
 public class PreferenceObfuscator {
 	private final SharedPreferences mPreferences;

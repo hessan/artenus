@@ -1,7 +1,7 @@
 package com.annahid.libs.artenus.data;
 
 /**
- * <p>This class represents an integer value which cannot be discovered or altered
+ * <p>Represents an integer value which cannot be discovered or altered
  * using game hacking software. It is slower than int but more secure. It is recommended
  * to use this class instead of the primitive type int in your sensitive information.</p>
  * <p>Android applications are programmed in java, which inherently enables
@@ -50,7 +50,7 @@ public class RogueInt {
 	}
 
 	/**
-	 * Gets the value represented by this {@code RougeInt} instance.
+	 * Returns the value represented by this {@code RougeInt} instance.
 	 *
 	 * @return The stored value
 	 */

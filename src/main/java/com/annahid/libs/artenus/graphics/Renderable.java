@@ -1,16 +1,18 @@
 package com.annahid.libs.artenus.graphics;
 
 /**
- * An interface for classes that support rendering of visual content
+ * Interface for classes that support rendering of visual content
  */
 public interface Renderable {
 	/**
-	 * A flag that causes the renderer to ignore color filtering, if present.
+	 * Rendering flag: ignore color filtering, if present.
+	 * @see com.annahid.libs.artenus.entities.Entity#setColorFilter
 	 */
 	public static final int FLAG_IGNORE_COLOR_FILTER = 1;
 
 	/**
-	 * A flag that causes the renderer to ignore effects, if present.
+	 * Rendering flag: ignore effects, if present.
+	 * @see com.annahid.libs.artenus.graphics.Effect
 	 */
 	public static final int FLAG_IGNORE_EFFECTS = 2;
 

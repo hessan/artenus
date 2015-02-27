@@ -1,7 +1,7 @@
 package com.annahid.libs.artenus.entities.physics;
 
 /**
- * An interface for classes that process physical collision events. An instance of a class
+ * Interface for classes that process physical collision events. An instance of a class
  * that implements this interface is assigned to a
  * {@link com.annahid.libs.artenus.entities.physics.PhysicsSimulator} using the
  * {@code setCollisionListener} method and on each collision, the {@code onCollision} method is

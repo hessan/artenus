@@ -14,7 +14,7 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * <p>This class is an implementation of {@link SpriteEntity} that provides a grid of texture blocks.
+ * <p>A subclass of {@link SpriteEntity} that provides a grid of texture blocks.
  * It is intended for platform or map based games. You can create a large grid and add it to
  * the scene as a normal sprite. Only the portion of the grid that is visible will be rendered.
  * Use this sprite for level maps.</p>
