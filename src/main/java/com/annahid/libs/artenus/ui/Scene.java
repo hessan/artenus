@@ -274,7 +274,7 @@ public class Scene implements Touchable {
 
 	/**
 	 * If a scene has local resources, it should implement this method to load
-	 * those resources. Inside this method you can call the {@code loadLocal}
+	 * those resources. Inside this method you can call the {@code addLocal}
 	 * method from {@code TextureManager} to load your resources.
 	 */
 	public void onLocalLoad() {

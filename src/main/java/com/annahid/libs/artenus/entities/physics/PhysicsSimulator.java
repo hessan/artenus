@@ -30,7 +30,7 @@ import java.util.List;
 @SuppressWarnings("UnusedDeclaration")
 public final class PhysicsSimulator {
 	/**
-	 * Pixels per meters. This framework is based on pixel measures. However,
+	 * Pixels per meter. This framework is based on pixel measures. However,
 	 * everything other than distances are calculated by their SI units in physics
 	 * simulations. To conform distances to the SI unit, this value indicates
 	 * how many pixels define a meter. Note that setting this value to zero causes

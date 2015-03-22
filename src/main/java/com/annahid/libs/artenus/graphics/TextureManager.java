@@ -1,9 +1,12 @@
 package com.annahid.libs.artenus.graphics;
 
+import android.content.res.Resources;
 import android.util.SparseArray;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.annahid.libs.artenus.Artenus;
+import com.annahid.libs.artenus.data.ConcurrentCollection;
+
+import java.util.Collection;
 
 /**
  * This class is the central point to manipulate {@code Texture} objects in the framework.
@@ -41,7 +44,7 @@ public final class TextureManager {
 	public static final int STATE_LOADED = 3;
 
 	private static SparseArray<Texture> texMap = new SparseArray<>();
-	private static List<Texture> texList = new ArrayList<>();
+	private static Collection<Texture> texList = new ConcurrentCollection<>();
 	private static int state;
 	private static int[] localTex = null;
 	private static Texture loadingTexture;
@@ -50,52 +53,6 @@ public final class TextureManager {
 	private static final Object texLock = new Object();
 
 	static int loadingTexW, loadingTexH;
-
-	/**
-	 * This class is a descriptor for a font. Fonts need to be introduced to the texture manager
-	 * when loading the game, so it can create proper font textures based on the information provided.
-	 * Note that this is not a real font texture and is just a description of one.
-	 *
-	 * @author Hessan Feghhi
-	 */
-	public static final class FontInfo {
-		int resourceId, characterHeight;
-		int hSpacing, vSpacing;
-		char startChar;
-		int[] charOffsets;
-
-		/**
-		 * Constructs a new {@code FontInfo} based on the information provided.
-		 *
-		 * @param resourceId      The resource identifier for the image containing character graphics
-		 * @param characterHeight The height of each character. The image will be divided vertically
-		 *                        into lines of this height
-		 * @param startChar       The starting character represented in this font. This will
-		 *                        represent the first block taken out of the image
-		 * @param charOffsets     The x positions of the characters. It starts with the first
-		 *                        character and for each character you should specify two points for
-		 *                        the left and the right. Each time the given x coordinate falls
-		 *                        below the previous one, it is taken as a new line signal and the
-		 *                        divider is moved a line forward.
-		 * @param hs              Horizontal spacing
-		 * @param vs              Vertical spacing
-		 */
-		public FontInfo(
-				int resourceId,
-				int characterHeight,
-				char startChar,
-				int[] charOffsets,
-				int hs,
-				int vs
-		) {
-			this.resourceId = resourceId;
-			this.startChar = startChar;
-			this.charOffsets = charOffsets;
-			this.characterHeight = characterHeight;
-			hSpacing = hs;
-			vSpacing = vs;
-		}
-	}
 
 	/**
 	 * Gets the texture displayed in the loading screen. The framework has a default loading texture,
@@ -137,52 +94,47 @@ public final class TextureManager {
 	}
 
 	/**
-	 * Sets up the texture set for the framework. This method is one of the building blocks of the
+	 * Declares textures for the current context. This method is one of the building blocks of the
 	 * "loading" procedure in the game. It should be called from the {@code onLoadStage(Stage)}
 	 * method of {@code StageManager}. All textures used widely throughout the game should be
-	 * introduced to this method. Textures loaded using this method will always be available. Be
+	 * introduced using this method. Textures loaded using this method will always be available. Be
 	 * careful not to load a lot of textures using this method and consider memory constraints on
 	 * your target devices. If you have textures that are only used in some scenes, consider using
 	 * local loading of those textures instead of globally loading them using this method.
 	 *
-	 * @param textureSet The set of resource identifiers for the textures to load
-	 * @param fontSet    The set of font descriptors for the fonts used. Fonts cannot be loaded
-	 *                   locally and you should globally load all required fonts using this method.
+	 * @param textureSet The set of resource identifiers for the textures and fonts to load
 	 * @see com.annahid.libs.artenus.ui.StageManager
+	 * @see #addLocal(int...)
 	 */
-	public static void setup(int[] textureSet, FontInfo[] fontSet) {
+	public static void add(int... textureSet) {
 		state = STATE_LOADING;
 
-		final List<Texture> tempList = new ArrayList<>();
 		final SparseArray<Texture> tempMap = new SparseArray<>();
 
-		Texture tex;
+		for(Texture tex : texList) {
+			tempMap.put(tex.resId, tex);
+		}
+
+		Resources res = Artenus.getInstance().getResources();
 
 		for (int textureId : textureSet) {
-			tex = new Texture(textureId);
+			Texture tex;
+
+			if(
+					res.getResourceTypeName(textureId).equalsIgnoreCase("raw") &&
+					res.getResourceEntryName(textureId).startsWith("font_") ) {
+
+				tex = new Font(textureId);
+			}
+			else tex = new Texture(textureId);
+
 			tempMap.put(textureId, tex);
-			tempList.add(tex);
+			texList.add(tex);
 		}
 
-		for (FontInfo font : fontSet) {
-			tex = new Font(font.resourceId, font.characterHeight, font.startChar, font.charOffsets);
-			((Font) tex).setLetterSpacing(font.hSpacing, font.vSpacing);
-			tempMap.put(font.resourceId, tex);
-			tempList.add(tex);
-		}
-
-		state = STATE_UNLOADING;
-
-		final List<Texture> bkList = texList;
 		final SparseArray<Texture> bkMap = texMap;
 
-		texList = tempList;
 		texMap = tempMap;
-
-		for (int i = 0; i < bkList.size(); i++)
-			bkList.get(i).destroy();
-
-		bkList.clear();
 		bkMap.clear();
 
 		state = STATE_FRESH;
@@ -195,14 +147,15 @@ public final class TextureManager {
 	 * @param textureSet The set of resource identifier for the textures to load
 	 * @see com.annahid.libs.artenus.ui.Scene
 	 */
-	public static void loadLocal(int... textureSet) {
+	public static void addLocal(int... textureSet) {
 		Texture tex;
+
+		state = STATE_LOADING;
 
 		for (int textureId : textureSet) {
 			tex = new Texture(textureId);
 			texMap.put(textureId, tex);
 			texList.add(tex);
-			state = STATE_LOADING;
 		}
 
 		localTex = textureSet;
@@ -210,23 +163,18 @@ public final class TextureManager {
 	}
 
 	/**
-	 * Unloads local textures previously loaded using {@link #loadLocal(int[])}. This method is
+	 * Unloads local textures previously loaded using {@link #addLocal(int[])}. This method is
 	 * called internally and you do not need to manually handle the unloading of textures.
 	 */
 	public static void unloadLocal() {
 		if (localTex != null) {
 			state = STATE_UNLOADING;
 
-			synchronized (texLock) {
-				for (int textureId : localTex) {
-					final Texture tex = texMap.get(textureId);
-
-					if (tex != null) {
-						tex.destroy();
-						texMap.remove(textureId);
-						texList.remove(tex);
-					}
-				}
+			for (int textureId : localTex) {
+				final Texture tex = texMap.get(textureId);
+				tex.destroy();
+				texMap.remove(textureId);
+				texList.remove(tex);
 			}
 		}
 
@@ -330,14 +278,14 @@ public final class TextureManager {
 
 	/**
 	 * Unloads all textures and clears the list. After calling this method,
-	 * {@link #setup(int[], com.annahid.libs.artenus.graphics.TextureManager.FontInfo[])} needs to be called again to load a new set of textures.
+	 * {@link #add(int...)} needs to be called again to add a new set of textures.
 	 */
 	public static void unloadAll() {
 		synchronized (texLock) {
 			state = STATE_UNLOADING;
 
-			for (int i = 0; i < texList.size(); i++)
-				texList.get(i).destroy();
+			for (Texture tex : texList)
+				tex.destroy();
 
 			texList.clear();
 			texMap.clear();
@@ -354,8 +302,8 @@ public final class TextureManager {
 		synchronized (texLock) {
 			state = STATE_UNLOADING;
 
-			for (int i = 0; i < texList.size(); i++)
-				texList.get(i).destroy();
+			for (Texture tex : texList)
+				tex.destroy();
 
 			state = STATE_FRESH;
 		}

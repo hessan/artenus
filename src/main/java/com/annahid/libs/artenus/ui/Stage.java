@@ -523,45 +523,6 @@ public final class Stage extends GLSurfaceView {
 	}
 
 	/**
-	 * Renders the "loading" screen on the given OpenGL context. Like all the
-	 * methods in the framework that involve the OpenGL context directly, this
-	 * method is intended for internal use and manual invocation is not
-	 * recommended.
-	 *
-	 * @param gl The OpenGL context
-	 */
-	public final void drawLoading(GL10 gl) {
-		final RGB clearColor = loadingBackground;
-		gl.glViewport(0, 0, screenWidth, screenHeight);
-		gl.glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
-		gl.glClear(GLES10.GL_COLOR_BUFFER_BIT);
-
-		if (!TextureManager.getLoadingTexture().isLoaded())
-			TextureManager.getLoadingTexture().waitLoad();
-
-		if (loadingSprite == null) {
-			loadingSprite = new ImageSprite(-1, null);
-			loadingSprite.setPosition(getGLWidth() / 2, getGLHeight() / 2);
-
-			loadingBarSprite = new LineSprite(
-					new Point2D(0, getGLHeight()),
-					new Point2D(
-							getGLWidth() * TextureManager.getLoadedCount() / TextureManager.getTextureCount(),
-							getGLHeight()),
-					3);
-			loadingBarSprite.setAlpha(0.75f);
-		}
-
-		loadingSprite.render(0);
-		loadingBarSprite.setEndPoint(
-				getGLWidth() * TextureManager.getLoadedCount() / TextureManager.getTextureCount(),
-				getGLHeight());
-		loadingBarSprite.render(0);
-
-		gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-	}
-
-	/**
 	 * Adds up to the value of blur on this stage. This method needs the {@code supportES2}
 	 * attribute to be set for this {@code Stage} and the device to support OpenGLES 2.
 	 *
@@ -696,6 +657,45 @@ public final class Stage extends GLSurfaceView {
 
 		if (handler != null)
 			handler.onEvent(this, StageManager.EVENT_RESUME);
+	}
+
+	/**
+	 * Renders the "loading" screen on the given OpenGL context. Like all the
+	 * methods in the framework that involve the OpenGL context directly, this
+	 * method is intended for internal use and manual invocation is not
+	 * recommended.
+	 *
+	 * @param gl The OpenGL context
+	 */
+	final void drawLoading(GL10 gl) {
+		final RGB clearColor = loadingBackground;
+		gl.glViewport(0, 0, screenWidth, screenHeight);
+		gl.glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
+		gl.glClear(GLES10.GL_COLOR_BUFFER_BIT);
+
+		if (!TextureManager.getLoadingTexture().isLoaded())
+			TextureManager.getLoadingTexture().waitLoad();
+
+		if (loadingSprite == null) {
+			loadingSprite = new ImageSprite(-1, null);
+			loadingSprite.setPosition(getGLWidth() / 2, getGLHeight() / 2);
+
+			loadingBarSprite = new LineSprite(
+					new Point2D(0, getGLHeight()),
+					new Point2D(
+							getGLWidth() * TextureManager.getLoadedCount() / TextureManager.getTextureCount(),
+							getGLHeight()),
+					3);
+			loadingBarSprite.setAlpha(0.75f);
+		}
+
+		loadingSprite.render(0);
+		loadingBarSprite.setEndPoint(
+				getGLWidth() * TextureManager.getLoadedCount() / TextureManager.getTextureCount(),
+				getGLHeight());
+		loadingBarSprite.render(0);
+
+		gl.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 
 	/**

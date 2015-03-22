@@ -181,6 +181,7 @@ public class Texture {
 
 		final Resources res = Artenus.getInstance().getResources();
 		final boolean isSVG = res.getResourceTypeName(resId).equalsIgnoreCase("raw");
+
 		final float texScale = Stage.getTextureScalingFactor();
 
 		if (isSVG) {

@@ -554,8 +554,8 @@ public class PhysicalBody extends FilteredEntity {
 	}
 
 	/**
-	 * Sets connections for this physical body. Valid values are (@link POSITION) and
-	 * (@link ROTATION).
+	 * Sets connections for this physical body. Valid values are {@link #POSITION} and
+	 * {@link #ROTATION}.
 	 *
 	 * @param conn the bit-masked list of connections
 	 */

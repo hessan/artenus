@@ -3,7 +3,7 @@ package com.annahid.libs.artenus.input;
 import com.annahid.libs.artenus.data.Point2D;
 
 /**
- * An imaginary region used, by some input managers, to receive touch input.
+ * An imaginary region used by some input managers to receive touch input.
  */
 public final class TapRegion {
 	/**

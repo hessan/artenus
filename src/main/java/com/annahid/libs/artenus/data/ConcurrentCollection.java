@@ -39,9 +39,9 @@ public class ConcurrentCollection<T> implements Collection<T> {
 	 * @param object the element to be added
 	 */
 	public void prepend(@NonNull T object) {
-		final Element newElement = new Element(object);
+		final Element<T> newElement = new Element<>(object);
 
-		synchronized (listLock) {
+		synchronized (this) {
 			if (first != null) {
 				newElement.next = first;
 				first.prev = newElement;
@@ -59,10 +59,10 @@ public class ConcurrentCollection<T> implements Collection<T> {
 	 */
 	@Override
 	public boolean add(T object) {
-		final Element newElement = new Element(object);
+		final Element<T> newElement = new Element<>(object);
 
 		if (size == 0) {
-			synchronized (listLock) {
+			synchronized (this) {
 				first = last = newElement;
 				size = 1;
 			}
@@ -70,7 +70,7 @@ public class ConcurrentCollection<T> implements Collection<T> {
 			return true;
 		}
 
-		synchronized (listLock) {
+		synchronized (this) {
 			last.next = newElement;
 			newElement.prev = last;
 			last = newElement;
@@ -165,7 +165,7 @@ public class ConcurrentCollection<T> implements Collection<T> {
 		if (first == null)
 			return null;
 
-		Element temp = first;
+		Element<T> temp = first;
 		int index = 0;
 
 		while (index < location) {
@@ -203,24 +203,15 @@ public class ConcurrentCollection<T> implements Collection<T> {
 	 */
 	@Override
 	public boolean remove(Object object) {
-		Element current = first;
+		Iterator<T> it = iterator();
 
-		while (current != null) {
-			if (current.value.equals(object)) {
-				synchronized (listLock) {
-					if (current.next != null)
-						current.next.prev = current.prev;
-					else last = current;
+		while(it.hasNext()) {
+			T item = it.next();
 
-					if (current.prev != null)
-						current.prev.next = current.next;
-					else first = current;
-				}
-
+			if(item.equals(object)) {
+				it.remove();
 				return true;
 			}
-
-			current = current.next;
 		}
 
 		return false;
@@ -254,12 +245,12 @@ public class ConcurrentCollection<T> implements Collection<T> {
 	 */
 	@Override
 	public boolean retainAll(@NonNull Collection<?> collection) {
-		Element current = first;
+		Element<T> current = first;
 		boolean ret = false;
 
 		while (current != null) {
 			if (!collection.contains(current.value)) {
-				synchronized (listLock) {
+				synchronized (this) {
 					if (current.next != null)
 						current.next.prev = current.prev;
 					else last = current;
@@ -325,7 +316,7 @@ public class ConcurrentCollection<T> implements Collection<T> {
 	 * @param array This parameter is not used.
 	 * @param <T1>  This parameter is not used.
 	 * @return This method does not return. Instead, it throws a
-	 * {@code UnsupportedOperationException}
+	 * {@code UnsupportedOperationException}.
 	 * @throws UnsupportedOperationException
 	 */
 	@NonNull
@@ -352,16 +343,15 @@ public class ConcurrentCollection<T> implements Collection<T> {
 		return last == null ? null : last.value;
 	}
 
-	private Element first, last;
+	private Element<T> first, last;
 	private int size = 0;
 
 	/**
-	 * This lock is used as a lock for synchronized parts of the implementation.
+	 * Represents an iterator for a concurrent collection. An intance of this
+	 * iterator is returned by the {@link ConcurrentCollection#iterator()} method.
 	 */
-	private final Object listLock = this;
-
 	private final class It implements Iterator<T> {
-		It(Element start) {
+		It(Element<T> start) {
 			current = start;
 		}
 
@@ -382,7 +372,7 @@ public class ConcurrentCollection<T> implements Collection<T> {
 			if (recent == null)
 				return;
 
-			synchronized (listLock) {
+			synchronized (this) {
 				if (recent.prev == null)
 					first = recent.next;
 				else recent.prev.next = recent.next;
@@ -404,16 +394,22 @@ public class ConcurrentCollection<T> implements Collection<T> {
 			recent = null;
 		}
 
-		Element current, recent;
+		Element<T> current, recent;
 	}
 
-	private final class Element {
+	/**
+	 * This class represents an element in the linked list. ConcurrentCollection
+	 * uses a linked list internally.
+	 *
+	 * @param <T>	The type of the element in the linked list
+	 */
+	private static final class Element<T> {
 		Element(T value) {
 			this.value = value;
 			prev = next = null;
 		}
 
 		T value;
-		Element prev, next;
+		Element<T> prev, next;
 	}
 }

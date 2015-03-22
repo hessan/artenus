@@ -1,10 +1,18 @@
 package com.annahid.libs.artenus.graphics;
 
+import android.content.res.Resources;
 import android.opengl.GLES10;
+import android.util.Pair;
 
+import com.annahid.libs.artenus.Artenus;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.HashMap;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -95,21 +103,19 @@ public final class Font extends Texture {
 
 			c -= firstChar;
 
-			if (c >= 0) {
-				w = (offsets[c * 2 + 1] - offsets[c * 2]) * sz;
+			w = (offsets[c * 2 + 1] - offsets[c * 2]) * sz;
 
-				if (firstLetter) {
-					firstLetter = false;
+			if (firstLetter) {
+				firstLetter = false;
+			}
+
+			if (ca.length > i + 1)
+				if (ca[i + 1] == '\r') {
+					w = 0;
+					i++;
 				}
 
-				if (ca.length > i + 1)
-					if (ca[i + 1] == '\r') {
-						w = 0;
-						i++;
-					}
-
-				currentX += w + hSpacing;
-			}
+			currentX += w + hSpacing;
 		}
 
 		return Math.max(maxWidth, currentX);
@@ -161,28 +167,26 @@ public final class Font extends Texture {
 
 			c -= firstChar;
 
-			if (c >= 0) {
-				float w = (offsets[c * 2 + 1] - offsets[c * 2]) * sz;
+			float w = (offsets[c * 2 + 1] - offsets[c * 2]) * sz;
 
-				if (firstLetter) {
-					firstLetter = false;
+			if (firstLetter) {
+				firstLetter = false;
+			}
+
+			GLES10.glPushMatrix();
+			GLES10.glTranslatef(currentX + w / (rtl ? -2 : 2), y, 0);
+			GLES10.glScalef(w, h, 0);
+			GLES10.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffers[c]);
+			GLES10.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
+			GLES10.glPopMatrix();
+
+			if (ca.length > i + 1)
+				if (ca[i + 1] == '\r') {
+					i++;
+					continue;
 				}
 
-				GLES10.glPushMatrix();
-				GLES10.glTranslatef(currentX + w / (rtl ? -2 : 2), y, 0);
-				GLES10.glScalef(w, h, 0);
-				GLES10.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffers[c]);
-				GLES10.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
-				GLES10.glPopMatrix();
-
-				if (ca.length > i + 1)
-					if (ca[i + 1] == '\r') {
-						i++;
-						continue;
-					}
-
-				currentX += rtl ? (-w - hSpacing) : (w + hSpacing);
-			}
+			currentX += rtl ? (-w - hSpacing) : (w + hSpacing);
 		}
 
 		GLES10.glPopMatrix();
@@ -191,22 +195,92 @@ public final class Font extends Texture {
 	/**
 	 * Constructs a font with the information provided.
 	 *
-	 * @param resourceId      The resource identifier of the image containing font graphics
-	 * @param characterHeight Character height
-	 * @param startChar       Starting character included in the font
-	 * @param charOffsets     Width offset pairs identifying each character. See
-	 *                        {@link com.annahid.libs.artenus.graphics.TextureManager.FontInfo} for
-	 *                        more information about these offsets.
-	 * @see TextureManager.FontInfo
+	 * @param resourceId      The resource identifier of the SVG file containing font information
 	 */
-	Font(int resourceId, int characterHeight, char startChar, int[] charOffsets) {
+	Font(int resourceId) {
 		super(resourceId);
-		firstChar = startChar;
-		charH = characterHeight;
-		offsets = new float[charOffsets.length];
 
-		for (int i = 0; i < charOffsets.length; i++)
-			offsets[i] = charOffsets[i];
+		/* Load commented font information from the SVG file. */
+
+		final Resources res = Artenus.getInstance().getResources();
+
+		if (!res.getResourceTypeName(resId).equalsIgnoreCase("raw"))
+			throw new IllegalStateException("Not a valid font resource");
+
+		BufferedReader reader =
+				new BufferedReader(new InputStreamReader(res.openRawResource(resId)));
+
+		HashMap<Character, Pair<Float, Float>> map = new HashMap<>();
+
+		String line;
+		boolean isFont = false;
+		char first = Character.MAX_VALUE, last = Character.MIN_VALUE;
+
+		try {
+			while ((line = reader.readLine()) != null) {
+				int index = line.indexOf("ARTENUS_FONT");
+
+				if (index >= 0) {
+					String[] params = line.substring(index + 12).trim().split(",\\s*");
+
+					isFont = true;
+					charH = Integer.parseInt(params[0]);
+
+					if (params.length > 1) {
+						int hs = Integer.parseInt(params[1]), vs = 0;
+
+						if (params.length > 2)
+							vs = Integer.parseInt(params[2]);
+
+						horSpacing = hs;
+						verSpacing = vs;
+					}
+
+					while ((line = reader.readLine()) != null) {
+						line = line.trim();
+
+						if (line.startsWith("@")) {
+							String[] coords = line.substring(2).trim().split(",\\s*");
+
+							if (coords.length > 1) {
+								char c = line.charAt(1);
+
+								if(c > last)
+									last = c;
+
+								if(c < first)
+									first = c;
+
+								map.put(c, new Pair<>(
+										Float.parseFloat(coords[0]), Float.parseFloat(coords[1])
+								));
+							}
+						}
+					}
+
+					break;
+				}
+			}
+		} catch (IOException ex) {
+			isFont = false;
+		}
+
+		if (!isFont)
+			throw new IllegalStateException("Error reading font resource");
+
+		offsets = new float[(last - first + 1) << 1];
+
+		for(char c = first; c <= last; c++) {
+			Pair<Float, Float> result = map.get(c);
+
+			if(result != null) {
+				int index = (c - first) << 1;
+				offsets[index] = result.first;
+				offsets[index + 1] = result.second;
+			}
+		}
+
+		firstChar = first;
 	}
 
 	/**

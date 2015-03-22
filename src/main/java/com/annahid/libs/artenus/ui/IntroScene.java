@@ -26,7 +26,6 @@ final class IntroScene extends Scene {
 		super(parentStage);
 		startTime = System.currentTimeMillis();
 		showIntro = !Artenus.shouldHideIntro();
-		TextureManager.setup(new int[]{}, new TextureManager.FontInfo[]{});
 	}
 
 	@Override
@@ -63,7 +62,7 @@ final class IntroScene extends Scene {
 
 	@Override
 	public void onLocalLoad() {
-		TextureManager.loadLocal(R.raw.annahid);
+		TextureManager.addLocal(R.raw.annahid);
 	}
 
 	private void runGame(Stage stage) {
