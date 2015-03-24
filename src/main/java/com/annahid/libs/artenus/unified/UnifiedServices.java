@@ -17,12 +17,38 @@ import com.annahid.libs.artenus.security.LoginManager;
  */
 @SuppressWarnings("UnusedDeclaration")
 public abstract class UnifiedServices {
-	public static final int STORE_NONE = 0;
-	public static final int STORE_GOOGLE = 1;
-	public static final int STORE_AMAZON = 2;
-	public static final int STORE_BAZAAR = 3;
-	public static final int STORE_SAMSUNG = 4;
-	public static final int STORE_CANDO = 5;
+	/**
+	 * The Store defines the app store the unified services operate in
+	 */
+	public enum Store {
+		/**
+		 * Undefined app-store
+		 */
+		NONE,
+		/**
+		 * Google Play
+		 */
+		GOOGLE,
+		/**
+		 * Amazon Appstore
+		 */
+		AMAZON,
+
+		/**
+		 * Cafe Bazaar (local Iranian app-store)
+		 */
+		BAZAAR,
+
+		/**
+		 * Samsung Apps
+		 */
+		SAMSUNG,
+
+		/**
+		 * Cando (local Iranian app-store)
+		 */
+		CANDO
+	}
 
 	public static final int SERVICE_BILLING = 1;
 	public static final int SERVICE_GAMES = 2;
@@ -33,16 +59,16 @@ public abstract class UnifiedServices {
 	public static UnifiedServices getInstance(int services) {
 		if (instance == null) {
 			switch (Artenus.getManifestAppStore()) {
-				case STORE_GOOGLE:
+				case GOOGLE:
 					instance = new GoogleUnifiedServices();
 					break;
-				case STORE_AMAZON:
+				case AMAZON:
 					instance = new AmazonUnifiedServices();
 					break;
-				case STORE_BAZAAR:
+				case BAZAAR:
 					instance = new BazaarUnifiedServices();
 					break;
-				case STORE_CANDO:
+				case CANDO:
 					instance = new CandoUnifiedServices();
 					break;
 				default:
@@ -94,7 +120,7 @@ public abstract class UnifiedServices {
 		getInventoryManager().setSKUs(inventorySKUs);
 	}
 
-	public abstract int getStore();
+	public abstract Store getStore();
 
 	public abstract AdManager getAdManager();
 

@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.unified.UnifiedServices;
 import com.annahid.libs.artenus.security.LoginManager;
 import com.annahid.libs.artenus.security.LoginStatusListener;
@@ -55,8 +57,10 @@ final class GoogleLoginManager implements LoginManager,
 				mSignInClicked = false;
 				// Sign in dialog failed (canceled, etc)
 
-				if (listener != null && listener.get() != null)
+				if (listener != null && listener.get() != null) {
+					Log.e("SD", "A");
 					listener.get().onStatusChanged(false, LOGIN_MASK);
+				}
 			}
 
 			return true;
@@ -94,9 +98,15 @@ final class GoogleLoginManager implements LoginManager,
 	public void launchLogin(int services) {
 		final int available = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
 
-		if (mGoogleApiClient == null || available != ConnectionResult.SUCCESS) {
-			if (listener != null && listener.get() != null)
+		if(available != ConnectionResult.SUCCESS) {
+			GooglePlayServicesUtil.getErrorDialog(available, Artenus.getInstance(), 1111).show();
+			return;
+		}
+
+		if (mGoogleApiClient == null) {
+			if (listener != null && listener.get() != null) {
 				listener.get().onStatusChanged(false, LOGIN_MASK);
+			}
 			return;
 		}
 
@@ -108,8 +118,10 @@ final class GoogleLoginManager implements LoginManager,
 	public void logout(int services) {
 		mSignInClicked = false;
 
-		if (listener != null && listener.get() != null)
+		if (listener != null && listener.get() != null) {
+			Log.e("SD", "C");
 			listener.get().onStatusChanged(false, LOGIN_MASK);
+		}
 
 		if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
 			Games.signOut(mGoogleApiClient);
@@ -119,8 +131,10 @@ final class GoogleLoginManager implements LoginManager,
 
 	@Override
 	public void onConnected(Bundle bundle) {
-		if (listener != null && listener.get() != null)
+		if (listener != null && listener.get() != null) {
+			Log.e("SD", "D");
 			listener.get().onStatusChanged(true, LOGIN_MASK);
+		}
 
 		mSignInClicked = false;
 	}
@@ -165,8 +179,10 @@ final class GoogleLoginManager implements LoginManager,
 				return false;
 			}
 		} else {
-			if (listener != null && listener.get() != null)
+			if (listener != null && listener.get() != null) {
+				Log.e("SD", "E");
 				listener.get().onStatusChanged(false, LOGIN_MASK);
+			}
 
 			return false;
 		}

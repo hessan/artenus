@@ -26,7 +26,7 @@ import java.util.List;
 @SuppressWarnings("UnusedDeclaration")
 public class PhysicalBody extends FilteredEntity {
 	static final class Descriptor {
-		int type = PhysicalBody.TYPE_DYNAMIC;
+		Behavior type = Behavior.DYNAMIC;
 		float angularVelocity = 0;
 		float linearDamping = 0;
 		Point2D linearVelocity = new Point2D(0, 0);
@@ -53,21 +53,26 @@ public class PhysicalBody extends FilteredEntity {
 	public static final int ROTATION = 2;
 
 	/**
-	 * Defines a static body. Static bodies do not move and are fixed at
-	 * their place. Collisions dot alter their positions.
+	 * The Behavior specifies how a physical body is simulated. The default is DYNAMIC.
 	 */
-	public static final int TYPE_STATIC = 0;
+	public enum Behavior {
+		/**
+		 * Defines a dynamic body. Dynamic bodies are normally simulated.
+		 */
+		DYNAMIC,
 
-	/**
-	 * Defines a dynamic body. Dynamic bodies are normally simulated.
-	 */
-	public static final int TYPE_DYNAMIC = 1;
+		/**
+		 * Defines a static body. Static bodies do not move and are fixed at
+		 * their place. Collisions dot alter their positions.
+		 */
+		STATIC,
 
-	/**
-	 * Defines a kinematic body. Kinematic bodies can be manually moved or
-	 * rotated. But they cannot be moved by collisions or external forces.
-	 */
-	public static final int TYPE_KINEMATIC = 2;
+		/**
+		 * Defines a kinematic body. Kinematic bodies can be manually moved or
+		 * rotated. But they cannot be moved by collisions or external forces.
+		 */
+		KINEMATIC
+	}
 
 	public PhysicalBody(Entity entity) {
 		this(entity, null);
@@ -165,27 +170,29 @@ public class PhysicalBody extends FilteredEntity {
 
 	/**
 	 * Gets the simulation type of this {@code PhysicalBody}. This type can be one
-	 * of {@link #TYPE_DYNAMIC}, {@link #TYPE_STATIC}, or {@link #TYPE_KINEMATIC}.
+	 * of {@link Behavior#DYNAMIC}, {@link Behavior#STATIC}, or {@link Behavior#KINEMATIC}.
 	 *
 	 * @return The body type
+	 * @see Behavior
 	 */
-	public final int getType() {
+	public final Behavior getType() {
 		return desc.type;
 	}
 
 	/**
 	 * Sets the simulation type of the physical body. It can be one of the values
-	 * {@link #TYPE_STATIC}, {@link #TYPE_DYNAMIC}, or {@link #TYPE_KINEMATIC}.
+	 * {@link Behavior#STATIC}, {@link Behavior#DYNAMIC}, or {@link Behavior#KINEMATIC}.
 	 *
 	 * @param type The desired simulation type
+	 * @see Behavior
 	 */
-	public final void setType(int type) {
+	public final void setType(Behavior type) {
 		if (body != null) {
 			switch (type) {
-				case PhysicalBody.TYPE_DYNAMIC:
+				case DYNAMIC:
 					body.m_type = BodyType.DYNAMIC;
 					break;
-				case PhysicalBody.TYPE_STATIC:
+				case STATIC:
 					body.m_type = BodyType.STATIC;
 					break;
 				default:

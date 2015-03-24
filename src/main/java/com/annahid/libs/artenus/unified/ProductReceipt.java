@@ -4,17 +4,17 @@ import java.util.Date;
 
 @SuppressWarnings("UnusedDeclaration")
 public interface ProductReceipt {
-	public int getItemType();
+	int getItemType();
 
-	public String getOrderId();
+	String getOrderId();
 
-	public String getSKU();
+	String getSKU();
 
-	public Date getPurchaseDate();
+	Date getPurchaseDate();
 
-	public Date getCancelDate();
+	Date getCancelDate();
 
-	public boolean isPurchased();
+	boolean isPurchased();
 
-	public String getDeveloperPayload();
+	String getDeveloperPayload();
 }

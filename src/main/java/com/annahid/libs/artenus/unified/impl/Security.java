@@ -129,12 +129,12 @@ final class Security {
 		return false;
 	}
 
-	public static String getLicenseKey(Context context, int store) throws java.io.IOException, ValidationException {
+	public static String getLicenseKey(Context context, UnifiedServices.Store store) throws java.io.IOException, ValidationException {
 		final Obfuscator ob = new AESObfuscator(new byte[]{-47, 87, -95, -45, -103, -17, -11, 32, -64, 101, -36, -113, 64, 33, -128, -85, -57, 75, -64, 51}, context.getPackageName(), "IABK");
 		final InputStreamReader reader = new InputStreamReader(context.getAssets().open("artenus.abk"));
 		final BufferedReader br = new BufferedReader(reader);
 
-		int currentStore = store;
+		UnifiedServices.Store currentStore = store;
 		String result = null;
 
 		while (true) {
@@ -145,14 +145,14 @@ final class Security {
 
 			if (ln.startsWith("set_store")) {
 				if (ln.endsWith("(google)"))
-					currentStore = UnifiedServices.STORE_GOOGLE;
+					currentStore = UnifiedServices.Store.GOOGLE;
 				else if (ln.endsWith("(amazon)"))
-					currentStore = UnifiedServices.STORE_AMAZON;
+					currentStore = UnifiedServices.Store.AMAZON;
 				else if (ln.endsWith("(bazaar)"))
-					currentStore = UnifiedServices.STORE_BAZAAR;
+					currentStore = UnifiedServices.Store.BAZAAR;
 				else if (ln.endsWith("(cando)"))
-					currentStore = UnifiedServices.STORE_CANDO;
-				else currentStore = UnifiedServices.STORE_SAMSUNG;
+					currentStore = UnifiedServices.Store.CANDO;
+				else currentStore = UnifiedServices.Store.SAMSUNG;
 			} else {
 				result = ln;
 

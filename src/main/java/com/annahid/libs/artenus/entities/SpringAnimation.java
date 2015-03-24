@@ -11,24 +11,25 @@ package com.annahid.libs.artenus.entities;
 @SuppressWarnings("UnusedDeclaration")
 public final class SpringAnimation implements AnimationHandler {
 	/**
-	 * A spring animation type that affects the x component of the entity's position.
+	 * A value that specifies the animation should affect the x component of the entity's position
 	 */
-	public static final int TYPE_X = 1;
+	public static final int X = 1;
 
 	/**
-	 * A spring animation type that affects the y component of the entity's position.
+	 * A value that specifies the spring animation should affect the y component of the entity's
+	 * position
 	 */
-	public static final int TYPE_Y = 2;
+	public static final int Y = 2;
 
 	/**
-	 * A spring animation type that affects the entity's scale.
+	 * A value that specifies the spring animation should affect the entity's scale
 	 */
-	public static final int TYPE_SCALE = 4;
+	public static final int SCALE = 4;
 
 	/**
-	 * A spring animation type that affects the entity's rotational angle.
+	 * A value that specifies the spring animation should affect the entity's rotational angle
 	 */
-	public static final int TYPE_ROTATION = 8;
+	public static final int ROTATION = 8;
 
 	/**
 	 * Constructs a {@code SpringAnimation} with the give type and values. The animation
@@ -40,10 +41,10 @@ public final class SpringAnimation implements AnimationHandler {
 	 *                the spring motion will affect
 	 * @param initial The initial value of the selected property for the animation
 	 * @param target  The target value of the selected property for the animation
-	 * @see #TYPE_X
-	 * @see #TYPE_Y
-	 * @see #TYPE_SCALE
-	 * @see #TYPE_ROTATION
+	 * @see #X
+	 * @see #Y
+	 * @see #SCALE
+	 * @see #ROTATION
 	 * @see #SpringAnimation(int, float, float, float, float)
 	 */
 	public SpringAnimation(int type, float initial, float target) {
@@ -115,10 +116,10 @@ public final class SpringAnimation implements AnimationHandler {
 	 *
 	 * @return The type of spring, which indicates the property of the entity that is affected
 	 *  by the animation
-	 * @see #TYPE_X
-	 * @see #TYPE_Y
-	 * @see #TYPE_SCALE
-	 * @see #TYPE_ROTATION
+	 * @see #X
+	 * @see #Y
+	 * @see #SCALE
+	 * @see #ROTATION
 	 */
 	public final int getType() {
 		return t;
@@ -136,11 +137,11 @@ public final class SpringAnimation implements AnimationHandler {
 			else currentValue = targetValue - maxDiff;
 		}
 
-		if (t == TYPE_X)
+		if (t == X)
 			entity.getPosition().x = currentValue;
-		else if (t == TYPE_Y)
+		else if (t == Y)
 			entity.getPosition().y = currentValue;
-		else if (t == TYPE_SCALE)
+		else if (t == SCALE)
 			entity.setScale(currentValue, currentValue);
 		else entity.setRotation(currentValue);
 	}

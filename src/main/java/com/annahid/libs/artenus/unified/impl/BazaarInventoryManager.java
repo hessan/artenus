@@ -25,7 +25,7 @@ final class BazaarInventoryManager extends InventoryManager {
 		String base64EncodedPublicKey;
 
 		try {
-			base64EncodedPublicKey = Security.getLicenseKey(context, UnifiedServices.STORE_BAZAAR);
+			base64EncodedPublicKey = Security.getLicenseKey(context, UnifiedServices.Store.BAZAAR);
 		} catch (Exception ex) {
 			return;
 		}
@@ -125,7 +125,7 @@ final class BazaarInventoryManager extends InventoryManager {
 							details.getDescription(),
 							details.getPrice(),
 							details.getType().equals(BazaarIabHelper.ITEM_TYPE_SUBS) ?
-									Product.TYPE_SUBSCRIPTION : Product.TYPE_CONSUMABLE
+									Product.SUBSCRIPTION : Product.CONSUMABLE
 					);
 
 					if (inventory.hasPurchase(sku)) {

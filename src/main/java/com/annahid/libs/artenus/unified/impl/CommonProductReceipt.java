@@ -17,8 +17,8 @@ final class CommonProductReceipt implements ProductReceipt {
 		final String itemType = receipt.getItemType();
 
 		if (itemType.equals(IabHelper.ITEM_TYPE_SUBS))
-			return Product.TYPE_SUBSCRIPTION;
-		else return Product.TYPE_CONSUMABLE;
+			return Product.SUBSCRIPTION;
+		else return Product.CONSUMABLE;
 	}
 
 	@Override

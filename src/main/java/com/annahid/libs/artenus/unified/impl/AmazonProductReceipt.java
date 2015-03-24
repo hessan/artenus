@@ -17,11 +17,11 @@ final class AmazonProductReceipt implements ProductReceipt {
 	public int getItemType() {
 		switch (receipt.getProductType()) {
 			case CONSUMABLE:
-				return Product.TYPE_CONSUMABLE;
+				return Product.CONSUMABLE;
 			case SUBSCRIPTION:
-				return Product.TYPE_SUBSCRIPTION;
+				return Product.SUBSCRIPTION;
 			default:
-				return Product.TYPE_ENTITLEMENT;
+				return Product.ENTITLEMENT;
 		}
 	}
 

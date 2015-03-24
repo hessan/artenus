@@ -17,18 +17,18 @@ public interface StageManager {
 	 * Indicates that the stage has gone into a paused state. This event
 	 * is triggered when the activity's {@code onPause} is invoked.
 	 */
-	public static final int EVENT_PAUSE = 1;
+	int EVENT_PAUSE = 1;
 	/**
 	 * Indicates that the stage has resumed from a paused state. This event
 	 * is triggered when the activity's {@code onResume} is invoked.
 	 */
-	public static final int EVENT_RESUME = 2;
+	int EVENT_RESUME = 2;
 	/**
 	 * Indicates that the stage has just allocated resources to display
 	 * content. This event is triggered when the OpenGL view's
 	 * {@code onSurfaceCreated} method is invoked.
 	 */
-	public static final int EVENT_DISPLAY = 3;
+	int EVENT_DISPLAY = 3;
 
 	/**
 	 * This method is called to load the required global resources for the
@@ -39,7 +39,7 @@ public interface StageManager {
 	 * @param stage The stage for which the resources are going to be loaded.
 	 * @see com.annahid.libs.artenus.ui.Stage
 	 */
-	public void onLoadStage(Stage stage);
+	void onLoadStage(Stage stage);
 
 	/**
 	 * Create the initial scene for the stage. It will be the first scene that
@@ -53,7 +53,7 @@ public interface StageManager {
 	 * @see com.annahid.libs.artenus.ui.Stage
 	 * @see com.annahid.libs.artenus.ui.Scene
 	 */
-	public Scene createInitialScene(Stage stage);
+	Scene createInitialScene(Stage stage);
 
 	/**
 	 * This method is invoked whenever an external event is triggered. This
@@ -65,5 +65,5 @@ public interface StageManager {
 	 *                {@link StageManager#EVENT_RESUME}, or
 	 *                {@link StageManager#EVENT_DISPLAY}.
 	 */
-	public void onEvent(Stage stage, int eventId);
+	void onEvent(Stage stage, int eventId);
 }

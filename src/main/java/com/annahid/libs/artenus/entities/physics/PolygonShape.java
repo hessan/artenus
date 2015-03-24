@@ -13,7 +13,12 @@ import org.jbox2d.common.Vec2;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class PolygonShape implements Shape {
-	private Point2D[] pts;
+	/**
+	 * Type value representing a polygonal shape.
+	 *
+	 * @see Shape#getType()
+	 */
+	public static final int TYPE = 2;
 
 	/**
 	 * Constructs a {@code PolygonShape} using the convex hull of the given points.
@@ -26,11 +31,11 @@ public final class PolygonShape implements Shape {
 
 	/**
 	 * Gets the type of this {@link com.annahid.libs.artenus.entities.physics.Shape}.
-	 * @return {@link com.annahid.libs.artenus.entities.physics.Shape#SHAPE_POLYGON}
+	 * @return {@link #TYPE}
 	 */
 	@Override
 	public int getType() {
-		return SHAPE_POLYGON;
+		return TYPE;
 	}
 
 	@Override
@@ -47,4 +52,6 @@ public final class PolygonShape implements Shape {
 		shape.set(points, pts.length);
 		return shape;
 	}
+
+	private Point2D[] pts;
 }

@@ -7,29 +7,30 @@ import com.annahid.libs.artenus.data.Point2D;
  */
 public final class TapRegion {
 	/**
-	 * Defines a rectangular region type.
+	 * The Shape specifies the shape of the tap region.
 	 */
-	@SuppressWarnings("unused")
-	public static final int REGION_RECTANGLE = 0;
+	public enum Shape {
+		/**
+		 * A rectangular tap region
+		 */
+		RECTANGLE,
 
-	/**
-	 * Defines an oval region type.
-	 */
-	public static final int REGION_OVAL = 1;
-
-	private Point2D pos, scale;
-	private float rot, t, w, h;
+		/**
+		 * An oval tap region
+		 */
+		OVAL
+	}
 
 	/**
 	 * Constructs a tap region with the given parameters.
 	 *
 	 * @param type   The region type identifier, which can be one of
-	 *                {@link #REGION_RECTANGLE} and {@link #REGION_OVAL}
+	 *                {@link Shape#RECTANGLE} and {@link Shape#OVAL}
 	 * @param width  The width of the tap region
 	 * @param height The height of the tap region
 	 */
 	@SuppressWarnings("unused")
-	public TapRegion(int type, float width, float height) {
+	public TapRegion(TapRegion.Shape type, float width, float height) {
 		this(type, width, height, 0, 0);
 	}
 
@@ -37,13 +38,13 @@ public final class TapRegion {
 	 * Constructs a tap region with the given parameters.
 	 *
 	 * @param type   The region type identifier, which can be one of
-	 *                {@link #REGION_RECTANGLE} and {@link #REGION_OVAL}
+	 *                {@link Shape#RECTANGLE} and {@link Shape#OVAL}
 	 * @param width  The width of the tap region
 	 * @param height The height of the tap region
 	 * @param cx     The x component of the position
 	 * @param cy     The y component of the position
 	 */
-	public TapRegion(int type, float width, float height, float cx, float cy) {
+	public TapRegion(TapRegion.Shape type, float width, float height, float cx, float cy) {
 		pos = new Point2D(cx, cy);
 		scale = new Point2D(1, 1);
 		w = width;
@@ -108,8 +109,12 @@ public final class TapRegion {
 			y = pos.y + s * (x - pos.x) + c * (y - pos.y);
 		}
 
-		if (t == REGION_OVAL)
+		if (t == Shape.OVAL)
 			return Math.pow(x - pos.x, 2) / (hw * hw) + Math.pow(y - pos.y, 2) / (hh * hh) <= 1;
 		else return x > pos.x - hw && x < pos.x + hw && y > pos.y - hh && y < pos.y + hh;
 	}
+
+	private Point2D pos, scale;
+	private float rot, w, h;
+	private Shape t;
 }

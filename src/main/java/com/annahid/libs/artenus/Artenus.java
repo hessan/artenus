@@ -72,7 +72,7 @@ public abstract class Artenus extends Activity {
 	 * @return	Store identifier
 	 * @see com.annahid.libs.artenus.unified.UnifiedServices
 	 */
-	public static int getManifestAppStore() {
+	public static UnifiedServices.Store getManifestAppStore() {
 		return manifestStore;
 	}
 
@@ -94,27 +94,27 @@ public abstract class Artenus extends Activity {
 
 			switch (store) {
 				case "google":
-					manifestStore = UnifiedServices.STORE_GOOGLE;
+					manifestStore = UnifiedServices.Store.GOOGLE;
 					break;
 				case "amazon":
-					manifestStore = UnifiedServices.STORE_AMAZON;
+					manifestStore = UnifiedServices.Store.AMAZON;
 					break;
 				case "bazaar":
-					manifestStore = UnifiedServices.STORE_BAZAAR;
+					manifestStore = UnifiedServices.Store.BAZAAR;
 					break;
 				case "cando":
-					manifestStore = UnifiedServices.STORE_CANDO;
+					manifestStore = UnifiedServices.Store.CANDO;
 					break;
 				case "samsung":
-					manifestStore = UnifiedServices.STORE_SAMSUNG;
+					manifestStore = UnifiedServices.Store.SAMSUNG;
 					break;
 				default:
-					manifestStore = UnifiedServices.STORE_NONE;
+					manifestStore = UnifiedServices.Store.NONE;
 					break;
 			}
 
 		} catch (PackageManager.NameNotFoundException | NullPointerException e) {
-			manifestStore = UnifiedServices.STORE_NONE;
+			manifestStore = UnifiedServices.Store.NONE;
 		}
 
 		if (!SoundManager.isContextInitialized())
@@ -229,5 +229,5 @@ public abstract class Artenus extends Activity {
 
 	private static Artenus instance;
 	private static boolean hideIntro;
-	private static int manifestStore;
+	private static UnifiedServices.Store manifestStore;
 }

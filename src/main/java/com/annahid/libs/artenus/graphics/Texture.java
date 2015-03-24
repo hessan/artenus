@@ -27,18 +27,6 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class Texture {
 	/**
-	 * Creates a new OpenGL texture identifier. This identifier is required to
-	 * load the texture in OpenGL.
-	 *
-	 * @return The texture identifier
-	 */
-	private static int newTextureID() {
-		int[] temp = new int[1];
-		GLES10.glGenTextures(1, temp, 0);
-		return temp[0];
-	}
-
-	/**
 	 * Loads the texture in the foreground. Use this method if you need a texture to load
 	 * immediately for a specific purpose. For most applications, Artenus pipeline would
 	 * automatically handle texture loading and life cycle.
@@ -234,6 +222,18 @@ public class Texture {
 		}
 
 		loading = false;
+	}
+
+	/**
+	 * Creates a new OpenGL texture identifier. This identifier is required to
+	 * load the texture in OpenGL.
+	 *
+	 * @return The texture identifier
+	 */
+	private static int newTextureID() {
+		int[] temp = new int[1];
+		GLES10.glGenTextures(1, temp, 0);
+		return temp[0];
 	}
 
 	/**

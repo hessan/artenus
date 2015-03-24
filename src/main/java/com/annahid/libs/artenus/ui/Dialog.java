@@ -16,6 +16,7 @@ import com.annahid.libs.artenus.entities.sprites.LineSprite;
  * @author Hessan Feghhi
  *
  */
+@SuppressWarnings("unused")
 public abstract class Dialog extends Scene {
 	/**
 	 * Dialog result indicating the dialog is still active.

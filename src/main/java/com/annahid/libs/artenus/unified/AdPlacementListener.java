@@ -10,7 +10,7 @@ public interface AdPlacementListener {
 	 *
 	 * @param visible	{@code true} if the ad unit is visible, {@code false} otherwise
 	 */
-	public void onAdVisibilityChange(boolean visible);
+	void onAdVisibilityChange(boolean visible);
 
 	/**
 	 * Called when the height of the ad unit changes. This includes when it virtually
@@ -18,5 +18,5 @@ public interface AdPlacementListener {
 	 *
 	 * @param height	New height of the ad unit
 	 */
-	public void onHeightChange(int height);
+	void onHeightChange(int height);
 }

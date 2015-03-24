@@ -9,7 +9,12 @@ package com.annahid.libs.artenus.entities.physics;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class CircleShape implements Shape {
-	private float r;
+	/**
+	 * Type value representing a circular shape.
+	 *
+	 * @see Shape#getType()
+	 */
+	public static final int TYPE = 0;
 
 	/**
 	 * Constructs a {@code CircleShape} using the given radius.
@@ -31,11 +36,11 @@ public final class CircleShape implements Shape {
 
 	/**
 	 * Gets the type of this {@link com.annahid.libs.artenus.entities.physics.Shape}.
-	 * @return {@link com.annahid.libs.artenus.entities.physics.Shape#SHAPE_CIRCLE}
+	 * @return {@link #TYPE}
 	 */
 	@Override
 	public int getType() {
-		return SHAPE_CIRCLE;
+		return TYPE;
 	}
 
 	@Override
@@ -44,4 +49,6 @@ public final class CircleShape implements Shape {
 		shape.m_radius = r / PhysicsSimulator.pixelsPerMeter;
 		return shape;
 	}
+
+	private float r;
 }

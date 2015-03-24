@@ -44,8 +44,8 @@ public final class CandoUnifiedServices extends UnifiedServices {
 	}
 
 	@Override
-	public int getStore() {
-		return UnifiedServices.STORE_CANDO;
+	public Store getStore() {
+		return Store.CANDO;
 	}
 
 	@Override

@@ -16,31 +16,34 @@ import com.annahid.libs.artenus.entities.Entity;
 @SuppressWarnings("UnusedDeclaration")
 public final class ImageAnimation implements AnimationHandler {
 	/**
-	 * An animation trend that involves playing frames in a loop.
+	 * The Trend specifies how the animation frames are repeated. The default is LOOP.
 	 */
-	public static final int TREND_LOOP = 0;
-
-	/**
-	 * An animation trend that involves playing frames only once. Once the
-	 * animation reaches the final frame, it stops at that frame.
-	 */
-	public static final int TREND_ONCE = 1;
-
-	/**
-	 * An animation trend that plays frames backwards after it reaches the
-	 * final frame and goes into a forward trend when it reaches the first
-	 * frame and plays this way in a loop.
-	 */
-	public static final int TREND_PING_PONG = 2;
+	public enum Trend {
+		/**
+		 * Animation trend that involves playing frames in a loop
+		 */
+		LOOP,
+		/**
+		 * Animation trend that involves playing frames only once. Once the
+		 * animation reaches the final frame, it stops at that frame.
+		 */
+		ONCE,
+		/**
+		 * Animation trend that plays frames backwards after it reaches the
+		 * final frame and goes into a forward trend when it reaches the first
+		 * frame and plays this way in a loop.
+		 */
+		PING_PONG
+	}
 
 	/**
 	 * Constructs an {@code ImageAnimation} with the given set of frames and a loop trend.
 	 *
 	 * @param animationFrames The array of frames from the cutout to animate through
-	 * @see #TREND_LOOP
+	 * @see Trend#LOOP
 	 */
 	public ImageAnimation(int[] animationFrames) {
-		this(animationFrames, TREND_LOOP, 0);
+		this(animationFrames, Trend.LOOP, 0);
 	}
 
 	/**
@@ -48,11 +51,9 @@ public final class ImageAnimation implements AnimationHandler {
 	 *
 	 * @param animationFrames The array of frames from the cutout to animate through
 	 * @param trend           The trend at which the frames will be animated
-	 * @see #TREND_LOOP
-	 * @see #TREND_ONCE
-	 * @see #TREND_PING_PONG
+	 * @see Trend
 	 */
-	public ImageAnimation(int[] animationFrames, int trend) {
+	public ImageAnimation(int[] animationFrames, Trend trend) {
 		this(animationFrames, trend, 0);
 	}
 
@@ -65,12 +66,10 @@ public final class ImageAnimation implements AnimationHandler {
 	 * @param startIndex      The frame index at which the animation should start. This index
 	 *                        determines the item in the frame array and not the frame index
 	 *                        belonging to the sprite's cutout.
-	 * @see #TREND_LOOP
-	 * @see #TREND_ONCE
-	 * @see #TREND_PING_PONG
+	 * @see Trend
 	 * @see com.annahid.libs.artenus.entities.sprites.ImageSprite.Cutout
 	 */
-	public ImageAnimation(int[] animationFrames, int trend, int startIndex) {
+	public ImageAnimation(int[] animationFrames, Trend trend, int startIndex) {
 		frames = animationFrames;
 		this.trend = trend;
 		delta = 1;
@@ -115,15 +114,13 @@ public final class ImageAnimation implements AnimationHandler {
 	}
 
 	/**
-	 * Gets the trend of this image animation. The value can  be one of {@link #TREND_LOOP},
-	 * {@link #TREND_ONCE} or {@link #TREND_PING_PONG}.
+	 * Gets the trend of this image animation. The value can  be one of {@link Trend#LOOP},
+	 * {@link Trend#ONCE} or {@link Trend#PING_PONG}.
 	 *
 	 * @return The animation trend
-	 * @see #TREND_LOOP
-	 * @see #TREND_ONCE
-	 * @see #TREND_PING_PONG
+	 * @see Trend
 	 */
-	public int getTrend() {
+	public Trend getTrend() {
 		return trend;
 	}
 
@@ -140,21 +137,26 @@ public final class ImageAnimation implements AnimationHandler {
 			lastFrame = System.currentTimeMillis();
 		else return;
 
-		if (trend == TREND_LOOP)
-			currentFrame = (currentFrame + 1) % frames.length;
-		else if (trend == TREND_PING_PONG) {
-			currentFrame += delta;
+		switch(trend) {
+			case LOOP:
+				currentFrame = (currentFrame + 1) % frames.length;
+				break;
+			case PING_PONG:
+				currentFrame += delta;
 
-			if (currentFrame == 0 || currentFrame == frames.length - 1)
-				delta = -delta;
-		} else if (currentFrame < frames.length - 1)
-			currentFrame++;
+				if (currentFrame == 0 || currentFrame == frames.length - 1)
+					delta = -delta;
+				break;
+			default:
+				if (currentFrame < frames.length - 1)
+					currentFrame++;
+		}
 
 		((ImageSprite) sprite).gotoFrame(frames[currentFrame]);
 	}
 
 	private int[] frames;
-	private int trend;
+	private Trend trend;
 	private int currentFrame;
 	private int delta;
 	private int frameDelay = 33;

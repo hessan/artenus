@@ -7,10 +7,6 @@ import android.content.Intent;
 public abstract class InventoryManager {
 	protected static final int RC_REQUEST = 10002;
 
-	private Context mContext;
-	private InventoryListener listener;
-	private String[] inventorySKUs;
-
 	protected InventoryManager() {
 	}
 
@@ -49,4 +45,8 @@ public abstract class InventoryManager {
 	public abstract void purchase(String sku);
 
 	public abstract void consume(ProductReceipt receipt);
+
+	private Context mContext;
+	private InventoryListener listener;
+	private String[] inventorySKUs;
 }

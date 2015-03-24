@@ -25,7 +25,7 @@ final class GoogleInventoryManager extends InventoryManager {
 		String base64EncodedPublicKey;
 
 		try {
-			base64EncodedPublicKey = Security.getLicenseKey(context, UnifiedServices.STORE_GOOGLE);
+			base64EncodedPublicKey = Security.getLicenseKey(context, UnifiedServices.Store.GOOGLE);
 		} catch (Exception ex) {
 			return;
 		}
@@ -120,7 +120,7 @@ final class GoogleInventoryManager extends InventoryManager {
 							details.getDescription(),
 							details.getPrice(),
 							details.getType().equals(GoogleIabHelper.ITEM_TYPE_SUBS) ?
-									Product.TYPE_SUBSCRIPTION : Product.TYPE_CONSUMABLE
+									Product.SUBSCRIPTION : Product.CONSUMABLE
 					);
 
 					if (inventory.hasPurchase(sku))

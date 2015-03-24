@@ -16,5 +16,5 @@ public interface AnimationHandler {
 	 * @param elapsedTime Elapsed time in seconds since the last frame
 	 * @see Entity
 	 */
-	public void advance(Entity sprite, float elapsedTime);
+	void advance(Entity sprite, float elapsedTime);
 }

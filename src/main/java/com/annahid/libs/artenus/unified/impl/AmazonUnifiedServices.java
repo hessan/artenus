@@ -69,8 +69,8 @@ public class AmazonUnifiedServices extends UnifiedServices {
 	}
 
 	@Override
-	public int getStore() {
-		return STORE_AMAZON;
+	public Store getStore() {
+		return Store.AMAZON;
 	}
 
 	@Override

@@ -44,8 +44,8 @@ public final class BazaarUnifiedServices extends UnifiedServices {
 	}
 
 	@Override
-	public int getStore() {
-		return UnifiedServices.STORE_BAZAAR;
+	public Store getStore() {
+		return Store.BAZAAR;
 	}
 
 	@Override

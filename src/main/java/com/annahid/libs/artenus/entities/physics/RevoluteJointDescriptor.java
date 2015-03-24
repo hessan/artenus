@@ -9,7 +9,13 @@ import com.annahid.libs.artenus.data.Point2D;
  * @author Hessan Feghhi
  *
  */
-public class RevoluteJointDescriptor extends JointDescriptor {
+public class RevoluteJointDescriptor extends JointDescriptor {	/**
+	/* Type identifier for a revolute joint.
+	 *
+	 * @see RevoluteJointDescriptor
+	 */
+	public static final int TYPE = 0;
+
 	/**
 	 * Constructs a {@code RevoluteJointDescriptor} between two bodies at the given
 	 * anchor point. The bodies will be "pinned" together at that point.
@@ -19,7 +25,7 @@ public class RevoluteJointDescriptor extends JointDescriptor {
 	 * @param anchor The anchor point
 	 */
 	public RevoluteJointDescriptor(PhysicalBody b1, PhysicalBody b2, Point2D anchor) {
-		super(JOINT_REVOLUTE);
+		super(TYPE);
 		body1 = b1;
 		body2 = b2;
 		anchorPoint = anchor;

@@ -17,7 +17,7 @@ public interface LoginManager {
 	 * @param services    Bit-masked service flags
 	 * @return	{@code true} if all services require user authentication, {@code false} otherwise
 	 */
-	public boolean isLoginRequired(int services);
+	boolean isLoginRequired(int services);
 
 	/**
 	 * Checks whether specified unified services are authenticated.
@@ -25,14 +25,14 @@ public interface LoginManager {
 	 * @param services Bit-masked service flags
 	 * @return	{@code true} if all services are authenticated, {@code false} otherwise
 	 */
-	public boolean isLoggedIn(int services);
+	boolean isLoggedIn(int services);
 
 	/**
 	 * Assigns a new login listener to capture login events for this {@code LoginManager}.
 	 *
 	 * @param listener	Login listener, or {@code null} to remove the login listener
 	 */
-	public void setLoginStatusListener(LoginStatusListener listener);
+	void setLoginStatusListener(LoginStatusListener listener);
 
 	/**
 	 * Launches the login user interface, which asks the user for credentials.
@@ -40,7 +40,7 @@ public interface LoginManager {
 	 * @param services	Services to validate by this login session (this might not be used by
 	 *                  the specific implementation)
 	 */
-	public void launchLogin(int services);
+	void launchLogin(int services);
 
 	/**
 	 * Exists the currently authenticated session for specified services.
@@ -48,5 +48,5 @@ public interface LoginManager {
 	 * @param services	Services for which to end login session (this might not be used by
 	 *                  the specific implementation)
 	 */
-	public void logout(int services);
+	void logout(int services);
 }

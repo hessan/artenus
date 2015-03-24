@@ -63,6 +63,7 @@ public final class GoogleUnifiedServices extends UnifiedServices {
 			GoogleApiClient apiClient = builder.build();
 
 			if (hasServices(SERVICE_GAMES)) {
+				loginManager.setGoogleApiClient(apiClient);
 				gameServices.setGoogleApiClient(apiClient);
 				gameServices.onCreate(context);
 			}
@@ -97,8 +98,8 @@ public final class GoogleUnifiedServices extends UnifiedServices {
 	}
 
 	@Override
-	public int getStore() {
-		return STORE_GOOGLE;
+	public Store getStore() {
+		return Store.GOOGLE;
 	}
 
 	@Override

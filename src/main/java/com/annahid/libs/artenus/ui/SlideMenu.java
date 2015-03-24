@@ -25,18 +25,10 @@ import java.util.List;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class SlideMenu extends EntityCollection implements Touchable {
-    public static interface Listener {
-        public void onItemClicked(int itemIndex);
-        public void onItemChanged(int newItem, int prevItem);
+    public interface Listener {
+        void onItemClicked(int itemIndex);
+        void onItemChanged(int newItem, int prevItem);
     }
-
-	private float dotV[] = {0, 0};
-	private float centerX, centerY;
-	private float dist, h, th;
-	private float startX, startPos, currentPos;
-	private int sel;
-
-    private List<WeakReference<Listener>> itemChangeListeners = new LinkedList<>();
 	
 	/**
 	 * Constructs a {@code SlideMenu} with the given information for the given scene.
@@ -248,4 +240,12 @@ public final class SlideMenu extends EntityCollection implements Touchable {
             if(listener.get() != null)
                 listener.get().onItemClicked(item);
     }
+
+	private float dotV[] = {0, 0};
+	private float centerX, centerY;
+	private float dist, h, th;
+	private float startX, startPos, currentPos;
+	private int sel;
+
+	private List<WeakReference<Listener>> itemChangeListeners = new LinkedList<>();
 }

@@ -16,5 +16,5 @@ public interface CollisionListener {
 	 *
 	 * @param info Information about the collision
 	 */
-	public void onCollision(CollisionInfo info);
+	void onCollision(CollisionInfo info);
 }

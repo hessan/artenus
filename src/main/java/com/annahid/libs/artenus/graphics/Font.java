@@ -19,8 +19,32 @@ import javax.microedition.khronos.opengles.GL10;
 /**
  * A {@code Texture} that represents a font. A font is a special-purpose cut-out of
  * an image that divides that image into characters of different widths. Each font can represent
- * a limited set of characters out of the character space. You should be careful with the text
- * you handle with each font, as it might not support all characters included in the text.
+ * a limited set of characters out of the character space. Artenus fonts are normal SVG graphics
+ * with a comment block describing extra information. Below is an example of the comment block:
+ *
+ * <pre>
+ * &lt;!--
+ * ARTENUS_FONT 80,-5,0
+ * {@literal}A 0,  67
+ * {@literal}B 67, 124
+ * {@literal}C 124,198
+ * {@literal}D 0,  80
+ * --&gt;
+ * </pre>
+ * The above block introduces a font height of 80 pixels, horizontal spacing of -5, and vertical
+ * spacing of 0. There are four letters defined in the font:
+ *
+ * <ul>
+ *     <li>A starts from x=0 to x=67 in the first line of the graphics (y=0 to y=79).</li>
+ *     <li>B starts from x=0 to x=67 in the first line of the graphics (y=0 to y=79).</li>
+ *     <li>C starts from x=0 to x=67 in the first line of the graphics (y=0 to y=79).</li>
+ *     <li>D starts from x=0 to x=67 in the second line of the graphics (y=80 to y=159). Whenever
+ *      the first x value is less than the previous letter's <em>second</em> x, the interpreter
+ *      jumps to the next line. Thus you don't need to specify y values at all.</li>
+ * </ul>
+ *
+ * This comment block can be placed anywhere within the SVG file, but for best performance it is
+ * recommended to appear as high as possible.
  *
  * @author Hessan Feghhi
  *
@@ -221,7 +245,7 @@ public final class Font extends Texture {
 				int index = line.indexOf("ARTENUS_FONT");
 
 				if (index >= 0) {
-					String[] params = line.substring(index + 12).trim().split(",\\s*");
+					String[] params = line.substring(index + 12).trim().split("\\s*,\\s*");
 
 					isFont = true;
 					charH = Integer.parseInt(params[0]);
@@ -240,7 +264,7 @@ public final class Font extends Texture {
 						line = line.trim();
 
 						if (line.startsWith("@")) {
-							String[] coords = line.substring(2).trim().split(",\\s*");
+							String[] coords = line.substring(2).trim().split("\\s*,\\s*");
 
 							if (coords.length > 1) {
 								char c = line.charAt(1);
@@ -263,6 +287,13 @@ public final class Font extends Texture {
 			}
 		} catch (IOException ex) {
 			isFont = false;
+		}
+
+		try {
+			reader.close();
+		}
+		catch (IOException ex) {
+			// Do nothing
 		}
 
 		if (!isFont)

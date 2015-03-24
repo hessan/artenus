@@ -42,10 +42,12 @@ public abstract class AdManager {
 				if (adView == null)
 					return;
 
-				adm.adLayout.showAd(msg.arg1);
+				Show show = Show.values()[msg.arg1];
+
+				adm.adLayout.showAd(show);
 
 				if (adm.listener != null)
-					adm.listener.onAdVisibilityChange(msg.arg1 != SHOW_HIDDEN);
+					adm.listener.onAdVisibilityChange(show != Show.HIDDEN);
 			} else if (msg.what == MESSAGE_DESTROY_AD) {
 				final View adView = adm.getAdView();
 
@@ -58,39 +60,44 @@ public abstract class AdManager {
 	}
 
 	/**
-	 * An option that indicates the ad should be hidden.
+	 * Specifies whether and where an ad view can be displayed.
 	 */
-	public static final int SHOW_HIDDEN = 0;
+	public enum Show {
+		/**
+		 * An option that indicates the ad should be hidden.
+		 */
+		HIDDEN,
 
-	/**
-	 * An option that indicates the ad unit should be displayed at the top-left corner.
-	 */
-	public static final int SHOW_TOP_LEFT = 1;
+		/**
+		 * Indicates the ad unit should be displayed at the top-left corner.
+		 */
+		TOP_LEFT,
 
-	/**
-	 * An option that indicates the ad unit should be displayed at the top center.
-	 */
-	public static final int SHOW_TOP_CENTER = 2;
+		/**
+		 * Indicates the ad unit should be displayed at the top center.
+		 */
+		TOP_CENTER,
 
-	/**
-	 * An option that indicates the ad unit should be displayed at the top-right corner.
-	 */
-	public static final int SHOW_TOP_RIGHT = 3;
+		/**
+		 * Indicates the ad unit should be displayed at the top-right corner.
+		 */
+		TOP_RIGHT,
 
-	/**
-	 * An option that indicates the ad unit should be displayed at the bottom-left corner.
-	 */
-	public static final int SHOW_BOTTOM_LEFT = 4;
+		/**
+		 * Indicates the ad unit should be displayed at the bottom-left corner.
+		 */
+		BOTTOM_LEFT,
 
-	/**
-	 * An option that indicates the ad unit should be displayed at the bottom center.
-	 */
-	public static final int SHOW_BOTTOM_CENTER = 5;
+		/**
+		 * An option that indicates the ad unit should be displayed at the bottom center.
+		 */
+		BOTTOM_CENTER,
 
-	/**
-	 * An option that indicates the ad unit should be displayed at the bottom-right corner.
-	 */
-	public static final int SHOW_BOTTOM_RIGHT = 6;
+		/**
+		 * Indicates the ad unit should be displayed at the bottom-right corner.
+		 */
+		BOTTOM_RIGHT
+	}
 
 	protected AdLayout adLayout = null;
 
@@ -117,16 +124,16 @@ public abstract class AdManager {
 	 *
 	 * @param show	Value indicating ad placement options
 	 */
-	public final void showAd(int show) {
-		sendSignalToMainThread(MESSAGE_SHOW_AD, show);
+	public final void showAd(Show show) {
+		sendSignalToMainThread(MESSAGE_SHOW_AD, show.ordinal());
 	}
 
 	/**
-	 * Hides the ad unit. This is the same as calling {@link AdManager#showAd(int)} with the
-	 * {@link com.annahid.libs.artenus.unified.AdManager#SHOW_HIDDEN} option.
+	 * Hides the ad unit. This is the same as calling {@link AdManager#showAd(Show)} with the
+	 * {@link Show#HIDDEN} option.
 	 */
 	public final void hideAd() {
-		showAd(SHOW_HIDDEN);
+		showAd(Show.HIDDEN);
 	}
 
 	/**

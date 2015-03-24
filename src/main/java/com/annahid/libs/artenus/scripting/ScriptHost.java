@@ -14,11 +14,11 @@ public interface ScriptHost {
 	 * @param command The command or piece of code
 	 * @return The result or {@code null} if there is not result
 	 */
-	public Object execute(String command);
+	Object execute(String command);
 
 	/**
 	 * This method is called when the script console is closing. It
 	 * should free all resources allocated to the script host.
 	 */
-	public void onExit();
+	void onExit();
 }

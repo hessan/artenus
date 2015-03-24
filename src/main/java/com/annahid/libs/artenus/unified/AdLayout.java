@@ -14,8 +14,7 @@ import android.view.ViewGroup;
  * @author Hessan Feghhi
  */
 public final class AdLayout extends ViewGroup {
-
-	private int adShown = AdManager.SHOW_HIDDEN;
+	private AdManager.Show adShown = AdManager.Show.HIDDEN;
 	private int adHeight = 0;
 
 	/**
@@ -84,22 +83,22 @@ public final class AdLayout extends ViewGroup {
 				child.bringToFront();
 
 				switch (adShown) {
-					case AdManager.SHOW_TOP_LEFT:
+					case TOP_LEFT:
 						child.layout(l, t, l + mw, t + mh);
 						break;
-					case AdManager.SHOW_TOP_CENTER:
+					case TOP_CENTER:
 						child.layout((r + l - mw) / 2, t, (r + l + mw) / 2, t + mh);
 						break;
-					case AdManager.SHOW_TOP_RIGHT:
+					case TOP_RIGHT:
 						child.layout(r - mw, t, r, t + mh);
 						break;
-					case AdManager.SHOW_BOTTOM_LEFT:
+					case BOTTOM_LEFT:
 						child.layout(l, b - mh, l + mw, b);
 						break;
-					case AdManager.SHOW_BOTTOM_CENTER:
+					case BOTTOM_CENTER:
 						child.layout((r + l - mw) / 2, b - mh, (r + l + mw) / 2, b);
 						break;
-					case AdManager.SHOW_BOTTOM_RIGHT:
+					case BOTTOM_RIGHT:
 						child.layout(r - mw, b - mh, r, b);
 						break;
 				}
@@ -113,17 +112,17 @@ public final class AdLayout extends ViewGroup {
 	 * @return The height in pixels
 	 */
 	final int getAdHeight() {
-		return adShown == AdManager.SHOW_HIDDEN ? 0 : adHeight;
+		return adShown == AdManager.Show.HIDDEN ? 0 : adHeight;
 	}
 
 	/**
 	 * Shows the ad at a given location or hides it.
 	 *
-	 * @param show The location to display the ad, or ADLAYOUT_HIDDEN to hide it
+	 * @param show The location to display the ad, or HIDDEN to hide it
 	 */
-	final void showAd(int show) {
+	final void showAd(AdManager.Show show) {
 		final int count = getChildCount();
-		final int prevShow = adShown;
+		final AdManager.Show prevShow = adShown;
 
 		adShown = show;
 
@@ -132,10 +131,10 @@ public final class AdLayout extends ViewGroup {
 
 			if (!(child instanceof GLSurfaceView))
 				child.setVisibility(
-						show == AdManager.SHOW_HIDDEN ? View.INVISIBLE : View.VISIBLE);
+						show == AdManager.Show.HIDDEN ? View.INVISIBLE : View.VISIBLE);
 		}
 
-		if (prevShow != show && show != View.INVISIBLE)
+		if (prevShow != show && show != AdManager.Show.HIDDEN)
 			requestLayout();
 	}
 }

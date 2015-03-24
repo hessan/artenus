@@ -20,7 +20,7 @@ import java.util.Iterator;
  * <p>
  * The {@code size}, {@code isEmpty}, {@code iterator}, {@code add}, {@code prepend},
  * {@code getFirst}, and {@code getLast} operations are guaranteed to run in constant time. However,
- * no assumptions should be made about the running time of all of the other operations, as this
+ * no assumptions should be made about the running time of all the other operations, as this
  * implementation does not guarantee optimized behavior for them. </p>
  * <p>
  * Unlike implementations like {@code LinkedList}, iterators returned by this class's iterator and

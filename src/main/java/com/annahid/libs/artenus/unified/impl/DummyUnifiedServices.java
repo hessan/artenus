@@ -40,8 +40,8 @@ public final class DummyUnifiedServices extends UnifiedServices {
 	}
 
 	@Override
-	public int getStore() {
-		return UnifiedServices.STORE_SAMSUNG;
+	public Store getStore() {
+		return Store.SAMSUNG;
 	}
 
 	@Override

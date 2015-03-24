@@ -9,7 +9,12 @@ package com.annahid.libs.artenus.entities.physics;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class RectangleShape implements Shape {
-	private float w, h;
+	/**
+	 * Type value representing a rectangular shape.
+	 *
+	 * @see Shape#getType()
+	 */
+	public static final int TYPE = 1;
 
 	/**
 	 * Constructs a {@code RectangleShape} with given dimensions.
@@ -24,11 +29,11 @@ public final class RectangleShape implements Shape {
 
 	/**
 	 * Gets the type of this {@link com.annahid.libs.artenus.entities.physics.Shape}.
-	 * @return {@link com.annahid.libs.artenus.entities.physics.Shape#SHAPE_RECTANGLE}
+	 * @return {@link #TYPE}
 	 */
 	@Override
 	public int getType() {
-		return SHAPE_RECTANGLE;
+		return TYPE;
 	}
 
 	@Override
@@ -38,4 +43,6 @@ public final class RectangleShape implements Shape {
 		shape.setAsBox(w / PhysicsSimulator.pixelsPerMeter, h / PhysicsSimulator.pixelsPerMeter);
 		return shape;
 	}
+
+	private float w, h;
 }

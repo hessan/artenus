@@ -6,35 +6,14 @@ package com.annahid.libs.artenus.entities.physics;
  * @see com.annahid.libs.artenus.entities.physics.PhysicalBody
  * @author Hessan Feghhi
  */
-@SuppressWarnings("UnusedDeclaration")
 public interface Shape {
 	/**
-	 * Type value representing a circular shape.
-	 */
-	public static final int SHAPE_CIRCLE = 0;
-
-	/**
-	 * Type value representing a rectangular shape.
-	 */
-	public static final int SHAPE_RECTANGLE = 1;
-
-	/**
-	 * Type value representing a polygonal shape.
-	 */
-	public static final int SHAPE_POLYGON = 2;
-
-	/**
-	 * Type value representing a chain shape.
-	 */
-	public static final int SHAPE_CHAIN = 3;
-
-	/**
-	 * Gets the type of this {@code Shape}. Possible shape types are {@code SHAPE_CIRCLE},
-	 * {@code SHAPE_RECTANGLE}, {@code SHAPE_POLYGON} or {@code SHAPE_CHAIN}.
+	 * Gets the type of this {@code Shape}. Each shape defines its own type value, which is stored
+	 * as the constant {@code TYPE} within the corresponding class.
 	 *
 	 * @return The type of the shape
 	 */
-	public int getType();
+	int getType();
 
 	/**
 	 * Creates an internal representation of this {@code Shape}. The exact type of the returned
@@ -42,5 +21,5 @@ public interface Shape {
 	 *
 	 * @return Box2D representation of this {@code Shape}
 	 */
-	public Object createInternal();
+	Object createInternal();
 }

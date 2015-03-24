@@ -189,10 +189,10 @@ public final class PhysicsSimulator {
 			def.linearDamping = bodyDesc.linearDamping;
 
 			switch (bodyDesc.type) {
-				case PhysicalBody.TYPE_DYNAMIC:
+				case DYNAMIC:
 					def.type = BodyType.DYNAMIC;
 					break;
-				case PhysicalBody.TYPE_STATIC:
+				case STATIC:
 					def.type = BodyType.STATIC;
 					break;
 				default:
@@ -212,7 +212,7 @@ public final class PhysicsSimulator {
 			for (JointDescriptor joint : body.joints) {
 				if (joint.jointObject == null && joint.body1.body != null && joint.body2.body != null) {
 					switch (joint.jointType) {
-						case JointDescriptor.JOINT_REVOLUTE:
+						case RevoluteJointDescriptor.TYPE:
 							final RevoluteJointDef jointDef = new RevoluteJointDef();
 							final Point2D anchor = ((RevoluteJointDescriptor) joint).anchorPoint;
 							jointDef.initialize(joint.body1.body, joint.body2.body, new Vec2(anchor.x / PhysicsSimulator.pixelsPerMeter, anchor.y / PhysicsSimulator.pixelsPerMeter));

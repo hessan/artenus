@@ -120,11 +120,14 @@ public final class TextureManager {
 		for (int textureId : textureSet) {
 			Texture tex;
 
-			if(
-					res.getResourceTypeName(textureId).equalsIgnoreCase("raw") &&
-					res.getResourceEntryName(textureId).startsWith("font_") ) {
+			if(res.getResourceTypeName(textureId).equalsIgnoreCase("raw")) {
 
-				tex = new Font(textureId);
+				try {
+					tex = new Font(textureId);
+				}
+				catch(Exception ex) {
+					tex = new Texture(textureId);
+				}
 			}
 			else tex = new Texture(textureId);
 
@@ -141,7 +144,7 @@ public final class TextureManager {
 	}
 
 	/**
-	 * Loads the set of local texture for a {@code Scene}. This method should be called within the
+	 * Declares local textures for a scene. This method should be called within the
 	 * {@link com.annahid.libs.artenus.ui.Scene#onLocalLoad()} method of the {@code Scene} class.
 	 *
 	 * @param textureSet The set of resource identifier for the textures to load

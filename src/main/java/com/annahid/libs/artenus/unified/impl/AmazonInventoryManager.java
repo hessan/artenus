@@ -69,13 +69,13 @@ final class AmazonInventoryManager extends InventoryManager {
 
 					switch (amazonProduct.getProductType()) {
 						case CONSUMABLE:
-							type = Product.TYPE_CONSUMABLE;
+							type = Product.CONSUMABLE;
 							break;
 						case SUBSCRIPTION:
-							type = Product.TYPE_SUBSCRIPTION;
+							type = Product.SUBSCRIPTION;
 							break;
 						default:
-							type = Product.TYPE_ENTITLEMENT;
+							type = Product.ENTITLEMENT;
 					}
 
 					Product product = new Product(

@@ -1,13 +1,13 @@
 package com.annahid.libs.artenus.unified;
 
 public interface InventoryListener {
-	public void onInventoryFailure();
+	void onInventoryFailure();
 
-	public void onInventoryLoaded(ProductList inventory);
+	void onInventoryLoaded(ProductList inventory);
 
-	public void onPurchased(ProductReceipt purchase);
+	void onPurchased(ProductReceipt purchase);
 
-	public void onPurchaseFailure(ProductReceipt purchase);
+	void onPurchaseFailure(ProductReceipt purchase);
 
-	public void onConsumed(ProductReceipt purchase);
+	void onConsumed(ProductReceipt purchase);
 }

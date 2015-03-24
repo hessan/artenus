@@ -2,17 +2,9 @@ package com.annahid.libs.artenus.unified;
 
 @SuppressWarnings("UnusedDeclaration")
 public final class Product {
-	public static int TYPE_CONSUMABLE = 1;
-	public static int TYPE_SUBSCRIPTION = 2;
-	public static int TYPE_ENTITLEMENT = 4;
-
-	String sku;
-
-	private String title;
-	private String desc;
-	private String price;
-	private int type;
-	private ProductReceipt receipt;
+	public static int CONSUMABLE = 1;
+	public static int SUBSCRIPTION = 2;
+	public static int ENTITLEMENT = 4;
 
 	public Product(String sku, String title, String desc, String price, int type) {
 		this.sku = sku;
@@ -54,4 +46,12 @@ public final class Product {
 	public boolean equals(Object obj) {
 		return obj instanceof Product && ((Product) obj).sku.equals(sku);
 	}
+
+	String sku;
+
+	private String title;
+	private String desc;
+	private String price;
+	private int type;
+	private ProductReceipt receipt;
 }
