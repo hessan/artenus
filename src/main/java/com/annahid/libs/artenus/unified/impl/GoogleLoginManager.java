@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.unified.UnifiedServices;
@@ -58,7 +57,6 @@ final class GoogleLoginManager implements LoginManager,
 				// Sign in dialog failed (canceled, etc)
 
 				if (listener != null && listener.get() != null) {
-					Log.e("SD", "A");
 					listener.get().onStatusChanged(false, LOGIN_MASK);
 				}
 			}
@@ -100,10 +98,9 @@ final class GoogleLoginManager implements LoginManager,
 
 		if(available != ConnectionResult.SUCCESS) {
 			GooglePlayServicesUtil.getErrorDialog(available, Artenus.getInstance(), 1111).show();
-			return;
 		}
 
-		if (mGoogleApiClient == null) {
+		if (mGoogleApiClient == null || available != ConnectionResult.SUCCESS) {
 			if (listener != null && listener.get() != null) {
 				listener.get().onStatusChanged(false, LOGIN_MASK);
 			}
@@ -119,7 +116,6 @@ final class GoogleLoginManager implements LoginManager,
 		mSignInClicked = false;
 
 		if (listener != null && listener.get() != null) {
-			Log.e("SD", "C");
 			listener.get().onStatusChanged(false, LOGIN_MASK);
 		}
 
@@ -132,7 +128,6 @@ final class GoogleLoginManager implements LoginManager,
 	@Override
 	public void onConnected(Bundle bundle) {
 		if (listener != null && listener.get() != null) {
-			Log.e("SD", "D");
 			listener.get().onStatusChanged(true, LOGIN_MASK);
 		}
 
@@ -180,7 +175,6 @@ final class GoogleLoginManager implements LoginManager,
 			}
 		} else {
 			if (listener != null && listener.get() != null) {
-				Log.e("SD", "E");
 				listener.get().onStatusChanged(false, LOGIN_MASK);
 			}
 
