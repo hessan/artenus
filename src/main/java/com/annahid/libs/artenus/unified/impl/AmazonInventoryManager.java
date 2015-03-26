@@ -149,7 +149,6 @@ final class AmazonInventoryManager extends InventoryManager {
 
 	@Override
 	public void onCreate(Context context) {
-		super.onCreate(context);
 		PurchasingService.registerListener(context.getApplicationContext(), new MyPurchasingListener());
 	}
 

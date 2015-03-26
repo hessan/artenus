@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 
+import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.unified.UnifiedServices;
 import com.annahid.libs.artenus.unified.InventoryListener;
 import com.annahid.libs.artenus.unified.InventoryManager;
@@ -12,12 +13,9 @@ import com.annahid.libs.artenus.unified.ProductList;
 import com.annahid.libs.artenus.unified.ProductReceipt;
 
 final class CandoInventoryManager extends InventoryManager {
-	private IabHelper mHelper;
 
 	@Override
 	public void onCreate(Context context) {
-		super.onCreate(context);
-
 		String base64EncodedPublicKey;
 
 		try {
@@ -75,14 +73,14 @@ final class CandoInventoryManager extends InventoryManager {
 
 	@Override
 	public void subscribe(String sku) {
-		mHelper.launchPurchaseFlow((Activity) getContext(),
+		mHelper.launchPurchaseFlow(Artenus.getInstance(),
 				sku, CandoIabHelper.ITEM_TYPE_SUBS,
 				RC_REQUEST, mPurchaseFinishedListener, "");
 	}
 
 	@Override
 	public void purchase(String sku) {
-		mHelper.launchPurchaseFlow((Activity) getContext(),
+		mHelper.launchPurchaseFlow(Artenus.getInstance(),
 				sku, RC_REQUEST, mPurchaseFinishedListener, "");
 	}
 
@@ -181,4 +179,7 @@ final class CandoInventoryManager extends InventoryManager {
 			}
 		}
 	};
+
+	private IabHelper mHelper;
+	private static final int RC_REQUEST = 10002;
 }

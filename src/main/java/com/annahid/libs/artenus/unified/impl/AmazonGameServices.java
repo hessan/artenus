@@ -11,6 +11,7 @@ import com.amazon.ags.api.AmazonGamesStatus;
 import com.amazon.ags.api.achievements.AchievementsClient;
 import com.amazon.ags.api.achievements.GetAchievementResponse;
 import com.amazon.ags.api.leaderboards.LeaderboardsClient;
+import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.unified.GameServices;
 
 import java.util.EnumSet;
@@ -42,7 +43,7 @@ final class AmazonGameServices extends GameServices {
 			AmazonGamesFeature.Achievements, AmazonGamesFeature.Leaderboards);
 
 	public void onResume() {
-		AmazonGamesClient.initialize((Activity) getContext(), callback, myGameFeatures);
+		AmazonGamesClient.initialize(Artenus.getInstance(), callback, myGameFeatures);
 	}
 
 	public void onPause() {

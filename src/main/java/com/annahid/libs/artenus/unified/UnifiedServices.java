@@ -2,6 +2,7 @@ package com.annahid.libs.artenus.unified;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 
 import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.unified.impl.AmazonUnifiedServices;
@@ -12,8 +13,8 @@ import com.annahid.libs.artenus.unified.impl.GoogleUnifiedServices;
 import com.annahid.libs.artenus.security.LoginManager;
 
 /**
- * Provides all store-specific game functionality in a unified way. In-app billing, ad
- * management, and game services are handled by this class.
+ * Provides store-specific game functionality in a unified way. In-app billing, ad management, and
+ * game services are handled by this class.
  */
 @SuppressWarnings("UnusedDeclaration")
 public abstract class UnifiedServices {
@@ -50,12 +51,31 @@ public abstract class UnifiedServices {
 		CANDO
 	}
 
+	/**
+	 * Service flag for in-app billing
+	 * @see #getInstance
+	 */
 	public static final int SERVICE_BILLING = 1;
+
+	/**
+	 * Service flag for game services
+	 * @see #getInstance()
+	 */
 	public static final int SERVICE_GAMES = 2;
+
+	/**
+	 * Service flag for ads
+	 * @see #getInstance()
+	 */
 	public static final int SERVICE_ADS = 32;
 
-	private static UnifiedServices instance = null;
-
+	/**
+	 * Gets the current instance of {@code UnifiedServices}. If no such instance exists, a new
+	 * instance will be created, supporting services specified.
+	 *
+	 * @param services	The bit-masked list of services.
+	 * @return	Current instance
+	 */
 	public static UnifiedServices getInstance(int services) {
 		if (instance == null) {
 			switch (Artenus.getManifestAppStore()) {
@@ -83,52 +103,125 @@ public abstract class UnifiedServices {
 		return instance;
 	}
 
+	/**
+	 * Gets the current instance of {@code UnifiedServices}.
+	 *
+	 * @return	Current instance, or {@code null} if it is not yet created
+	 */
 	public static UnifiedServices getInstance() {
 		return instance;
 	}
 
-	private int services;
-
-	protected UnifiedServices() {
-	}
-
+	/**
+	 * This method is internally called as part of {@link Artenus#onCreate(Bundle)}.
+	 *
+	 * @param context	Artenus context
+	 */
 	public abstract void onCreate(Context context);
 
+	/**
+	 * This method is internally called as part of {@link Artenus#onCreate(Bundle)}.
+	 *
+	 * @param context	Artenus context
+	 */
 	public abstract void onDestroy(Context context);
 
-	public void onPause() {
-	}
+	/**
+	 * This method is internally called as part of {@link Artenus#onPause()}.
+	 */
+	public void onPause() { }
 
-	public void onResume() {
-	}
+	/**
+	 * This method is internally called as part of {@link Artenus#onResume()}.
+	 */
+	public void onResume() { }
 
-	public void onStart() {
-	}
+	/**
+	 * This method is internally called as part of {@link Artenus#onStart()}.
+	 */
+	public void onStart() { }
 
-	public void onStop() {
-	}
+	/**
+	 * This method is internally called as part of {@link Artenus#onStop()}.
+	 */
+	public void onStop() { }
 
+	/**
+	 * This method is internally called by {@link Artenus#onActivityResult(int, int, Intent)}.
+	 * Unified services implementations direct it to their sub-services to handle their own
+	 * activity requests.
+	 *
+	 * @param requestCode	The integer request code
+	 * @param resultCode	The integer result code returned by the child activity
+	 * @param data			An Intent, which can return result data to the caller
+	 * @return	{@code true} if handled, {@code false} otherwise
+	 */
 	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
 		return false;
 	}
 
+	/**
+	 * Checks if this instance supports specified services. These might be different than those
+	 * provided in {@link #getInstance(int)}, as implementations mask out services they don't
+	 * support.
+	 *
+	 * @param servicesMask	Bit-masked list of services
+	 * @return
+	 */
 	public final boolean hasServices(int servicesMask) {
 		return (services & servicesMask) != 0;
 	}
 
-	public final void setInventorySKUs(String[] inventorySKUs) {
-		getInventoryManager().setSKUs(inventorySKUs);
-	}
-
+	/**
+	 * Gets the app-store this instance operates in
+	 *
+	 * @return	The store
+	 * @see com.annahid.libs.artenus.unified.UnifiedServices.Store
+	 */
 	public abstract Store getStore();
 
+	/**
+	 * Gets an instance of {@link AdManager} provided by this implementation.
+	 *
+	 * @return	Ad manager instance, or {@code null} if ads are not supported
+	 */
 	public abstract AdManager getAdManager();
 
+	/**
+	 * Gets an instance of {@link GameServices} provided by this implementation.
+	 *
+	 * @return	Game services instance, or {@code null} if not supported
+	 */
 	public abstract GameServices getGameServices();
 
+	/**
+	 * Gets an instance of {@link LoginManager} provided by this implementation. The returned value
+	 * is never {@code null}.
+	 *
+	 * @return Login manager instance
+	 */
 	public abstract LoginManager getLoginManager();
 
+	/**
+	 * Gets an instance of {@link InventoryManager} provided by this implementation.
+	 *
+	 * @return	In-app billing manager instance, or {@code null} if not supported
+	 */
 	public abstract InventoryManager getInventoryManager();
 
+	/**
+	 * Called on sub-classes to initialize the services, and mask out those they don't support.
+	 *
+	 * @param inputServices	Bit-masked list of requested services
+	 * @return	Bit-masked list of requested services supported by the specific implementation
+	 */
 	protected abstract int init(int inputServices);
+
+	/**
+	 * Constructs an empty instance of {@code UnifiedServices}.
+	 */
+	protected UnifiedServices() { }
+
+	private int services;
+	private static UnifiedServices instance = null;
 }

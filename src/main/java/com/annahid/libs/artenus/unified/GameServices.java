@@ -23,15 +23,6 @@ public abstract class GameServices {
 	}
 
 	/**
-	 * Gets the context currently associated with this instance.
-	 *
-	 * @return	The context
-	 */
-	public final Context getContext() {
-		return mContext;
-	}
-
-	/**
 	 * This method is called internally when unified services are created.
 	 *
 	 * @param context	The context

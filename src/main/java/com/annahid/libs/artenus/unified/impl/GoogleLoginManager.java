@@ -74,6 +74,8 @@ final class GoogleLoginManager implements LoginManager,
 		}
 
 		mGoogleApiClient = apiClient;
+		mGoogleApiClient.registerConnectionCallbacks(this);
+		mGoogleApiClient.registerConnectionFailedListener(this);
 	}
 
 	@Override
@@ -108,6 +110,7 @@ final class GoogleLoginManager implements LoginManager,
 		}
 
 		mSignInClicked = true;
+
 		mGoogleApiClient.connect();
 	}
 
@@ -160,7 +163,6 @@ final class GoogleLoginManager implements LoginManager,
 	}
 
 	public boolean resolveConnectionFailure(ConnectionResult result, int requestCode) {
-
 		if (result.hasResolution()) {
 			try {
 				mResolvingConnectionFailure = true;

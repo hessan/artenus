@@ -2,6 +2,7 @@ package com.annahid.libs.artenus.unified.impl;
 
 import android.app.Activity;
 
+import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.unified.GameServices;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
@@ -29,7 +30,7 @@ final class GoogleGameServices extends GameServices {
 	@Override
 	public void showLeaderboard() {
 		if (mGoogleApiClient != null && mGoogleApiClient.isConnected())
-			((Activity) getContext()).startActivityForResult(
+			Artenus.getInstance().startActivityForResult(
 					Games.Leaderboards.getAllLeaderboardsIntent(mGoogleApiClient),
 					REQUEST_LEADERBOARDS);
 
@@ -38,7 +39,7 @@ final class GoogleGameServices extends GameServices {
 	@Override
 	public void showLeaderboard(String lbId) {
 		if (mGoogleApiClient != null && mGoogleApiClient.isConnected())
-			((Activity) getContext()).startActivityForResult(
+			Artenus.getInstance().startActivityForResult(
 					Games.Leaderboards.getLeaderboardIntent(mGoogleApiClient, lbId),
 					REQUEST_LEADERBOARD);
 	}
@@ -64,7 +65,7 @@ final class GoogleGameServices extends GameServices {
 	@Override
 	public void showAchievements() {
 		if (mGoogleApiClient != null && mGoogleApiClient.isConnected())
-			((Activity) getContext()).startActivityForResult(
+			Artenus.getInstance().startActivityForResult(
 					Games.Achievements.getAchievementsIntent(mGoogleApiClient),
 					REQUEST_ACHIEVEMENTS);
 	}
