@@ -385,8 +385,8 @@ public final class Stage extends GLSurfaceView {
 	/**
 	 * Converts stage y to screen y coordination considering the scaling factor.
 	 *
-	 * @param y Screen y
-	 * @return Stage y
+	 * @param y Stage y
+	 * @return  Screen y
 	 */
 	public final float stageToScreenY(float y) {
 		return y * screenHeight / h;

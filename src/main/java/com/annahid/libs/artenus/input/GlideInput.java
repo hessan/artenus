@@ -158,6 +158,12 @@ public final class GlideInput extends InputManager {
 				}
 			}
 		}
+
+		try {
+			Thread.sleep(5);
+		} catch (InterruptedException ex) {
+			// Do nothing
+		}
 	}
 
 	private void checkRelease(int pointerId) {

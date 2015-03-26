@@ -261,7 +261,7 @@ public final class TextureManager {
 			for (Object obj : list) {
 				final Texture tex = (Texture) obj;
 
-				if (!tex.isLoaded()) {
+				if (tex != null && !tex.isLoaded()) {
 					ret = STATE_FRESH;
 				} else count++;
 			}
