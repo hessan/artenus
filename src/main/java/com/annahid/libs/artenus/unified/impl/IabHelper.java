@@ -21,6 +21,9 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Base in-app billing helper class for Google Play, Cafe Bazaar, and Cando app-stores.
+ */
 @SuppressWarnings("UnusedDeclaration")
 abstract class IabHelper {
 	/**
@@ -33,7 +36,7 @@ abstract class IabHelper {
 		 *
 		 * @param result The result of the setup process.
 		 */
-		public void onIabSetupFinished(IabResult result);
+		void onIabSetupFinished(IabResult result);
 	}
 
 	/**
@@ -49,7 +52,7 @@ abstract class IabHelper {
 		 * @param result The result of the purchase.
 		 * @param info   The purchase information (null if purchase failed)
 		 */
-		public void onIabPurchaseFinished(IabResult result, IabPurchase info);
+		void onIabPurchaseFinished(IabResult result, IabPurchase info);
 	}
 
 	/**
@@ -62,7 +65,7 @@ abstract class IabHelper {
 		 * @param result The result of the operation.
 		 * @param inv    The inventory.
 		 */
-		public void onQueryInventoryFinished(IabResult result, Inventory inv);
+		void onQueryInventoryFinished(IabResult result, Inventory inv);
 	}
 
 	/**
@@ -75,7 +78,7 @@ abstract class IabHelper {
 		 * @param purchase The purchase that was (or was to be) consumed.
 		 * @param result   The result of the consumption operation.
 		 */
-		public void onConsumeFinished(IabPurchase purchase, IabResult result);
+		void onConsumeFinished(IabPurchase purchase, IabResult result);
 	}
 
 	/**
@@ -89,7 +92,7 @@ abstract class IabHelper {
 		 * @param results   The results of each consumption operation, corresponding to each
 		 *                  sku.
 		 */
-		public void onConsumeMultiFinished(List<IabPurchase> purchases, List<IabResult> results);
+		void onConsumeMultiFinished(List<IabPurchase> purchases, List<IabResult> results);
 	}
 
 	// Billing response codes

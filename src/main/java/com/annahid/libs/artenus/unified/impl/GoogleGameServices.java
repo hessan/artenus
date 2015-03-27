@@ -1,7 +1,5 @@
 package com.annahid.libs.artenus.unified.impl;
 
-import android.app.Activity;
-
 import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.unified.GameServices;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -9,7 +7,7 @@ import com.google.android.gms.games.Games;
 
 import java.util.List;
 
-final class GoogleGameServices extends GameServices {
+final class GoogleGameServices implements GameServices {
 	private static final int REQUEST_ACHIEVEMENTS = 9015;
 	private static final int REQUEST_LEADERBOARD = 9016;
 	private static final int REQUEST_LEADERBOARDS = 9017;

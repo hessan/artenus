@@ -166,7 +166,7 @@ public abstract class UnifiedServices {
 	 * support.
 	 *
 	 * @param servicesMask	Bit-masked list of services
-	 * @return
+	 * @return {@code true} if specified services are available, {@code false} otherwise
 	 */
 	public final boolean hasServices(int servicesMask) {
 		return (services & servicesMask) != 0;
@@ -218,7 +218,7 @@ public abstract class UnifiedServices {
 	protected abstract int init(int inputServices);
 
 	/**
-	 * Constructs an empty instance of {@code UnifiedServices}.
+	 * Called by subclasses to construct an empty instance of {@code UnifiedServices}.
 	 */
 	protected UnifiedServices() { }
 

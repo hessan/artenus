@@ -13,7 +13,7 @@ final class CommonProductReceipt implements ProductReceipt {
 	}
 
 	@Override
-	public int getItemType() {
+	public int getProductType() {
 		final String itemType = receipt.getItemType();
 
 		if (itemType.equals(IabHelper.ITEM_TYPE_SUBS))

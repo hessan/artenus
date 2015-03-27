@@ -13,11 +13,6 @@ import com.annahid.libs.artenus.Artenus;
 @SuppressWarnings("UnusedDeclaration")
 public abstract class InventoryManager {
 	/**
-	 * Constructs an empty instance of {@code InventoryManager}.
-	 */
-	protected InventoryManager() { }
-
-	/**
 	 * Sets the list of SKUs of interest. In order for the system to load SKUs at startup, they
 	 * should all be included for this call.
 	 *
@@ -28,30 +23,12 @@ public abstract class InventoryManager {
 	}
 
 	/**
-	 * Gets the list of SKUs currently handled by this instance.
-	 *
-	 * @return	List of product SKUs
-	 */
-	protected final String[] getSKUs() {
-		return inventorySKUs;
-	}
-
-	/**
 	 * Appoints a new listener to handle in-app billing events for this instance.
 	 *
 	 * @param listener	The new inventory listener, or {@code null} to remove the listener
 	 */
 	public final void setListener(InventoryListener listener) {
 		this.listener = listener;
-	}
-
-	/**
-	 * Gets the current inventory listener responsible for this instance.
-	 *
-	 * @return	Current inventory listener, or {@code null} if non-existent
-	 */
-	protected final InventoryListener getListener() {
-		return listener;
 	}
 
 	/**
@@ -109,6 +86,29 @@ public abstract class InventoryManager {
 	 * @see   InventoryListener
 	 */
 	public abstract void consume(ProductReceipt receipt);
+
+	/**
+	 * Constructs an empty instance of {@code InventoryManager}.
+	 */
+	protected InventoryManager() { }
+
+	/**
+	 * Gets the list of SKUs currently handled by this instance.
+	 *
+	 * @return	List of product SKUs
+	 */
+	protected final String[] getSKUs() {
+		return inventorySKUs;
+	}
+
+	/**
+	 * Gets the current inventory listener responsible for this instance.
+	 *
+	 * @return	Current inventory listener, or {@code null} if non-existent
+	 */
+	protected final InventoryListener getListener() {
+		return listener;
+	}
 
 	private InventoryListener listener;
 	private String[] inventorySKUs;

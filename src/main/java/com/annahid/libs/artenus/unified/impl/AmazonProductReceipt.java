@@ -14,7 +14,7 @@ final class AmazonProductReceipt implements ProductReceipt {
 	}
 
 	@Override
-	public int getItemType() {
+	public int getProductType() {
 		switch (receipt.getProductType()) {
 			case CONSUMABLE:
 				return Product.CONSUMABLE;

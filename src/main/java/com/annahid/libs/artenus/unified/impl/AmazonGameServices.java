@@ -1,7 +1,5 @@
 package com.annahid.libs.artenus.unified.impl;
 
-import android.app.Activity;
-
 import com.amazon.ags.api.AGResponseCallback;
 import com.amazon.ags.api.AGResponseHandle;
 import com.amazon.ags.api.AmazonGamesCallback;
@@ -17,7 +15,7 @@ import com.annahid.libs.artenus.unified.GameServices;
 import java.util.EnumSet;
 import java.util.List;
 
-final class AmazonGameServices extends GameServices {
+final class AmazonGameServices implements GameServices {
 	AmazonGamesClient agsClient;
 	AmazonLoginManager loginManager;
 

@@ -37,9 +37,6 @@ public class AmazonUnifiedServices extends UnifiedServices {
 	public void onCreate(Context context) {
 		if (inventoryManager != null)
 			inventoryManager.onCreate(context);
-
-		if (gameServices != null)
-			gameServices.onCreate(context);
 	}
 
 	public void onDestroy(Context context) {

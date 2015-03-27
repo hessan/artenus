@@ -1,36 +1,16 @@
 package com.annahid.libs.artenus.unified;
 
-import android.content.Context;
-
 import java.util.List;
 
 /**
- * The superclass of all classes that provide game services, such as achievements
- * and leaderboards. An implementation of unified services should provide an subclass of this class
- * if it supports game services.
+ * Interface for classes that provide game services, such as achievements and leaderboards. An
+ * implementation of unified services should provide an implementation of this interface if it
+ * supports game services.
  *
  * @see com.annahid.libs.artenus.unified.UnifiedServices
  */
-@SuppressWarnings("UnusedDeclaration")
-public abstract class GameServices {
-	private Context mContext;
-
-	/**
-	 * Called by subclasses to initiate a new {@code GameServices} instance.
-	 */
-	protected GameServices() {
-		mContext = null;
-	}
-
-	/**
-	 * This method is called internally when unified services are created.
-	 *
-	 * @param context	The context
-	 */
-	public void onCreate(Context context) {
-		mContext = context;
-	}
-
+@SuppressWarnings("unused")
+public interface GameServices {
 	/**
 	 * Submits a score to a given leaderboard.
 	 *
@@ -41,26 +21,26 @@ public abstract class GameServices {
 	 *                An example of use of this parameter is score validation using some extra in-game
 	 *                states and information.
 	 */
-	public abstract void submitScore(String lbId, int score, Object payload);
+	void submitScore(String lbId, int score, Object payload);
 
 	/**
 	 * Displays all leaderboards associated with this game.
 	 */
-	public abstract void showLeaderboard();
+	void showLeaderboard();
 
 	/**
 	 * Displays the desired leaderboard.
 	 *
 	 * @param lbId The string identifier of the leaderboard
 	 */
-	public abstract void showLeaderboard(String lbId);
+	void showLeaderboard(String lbId);
 
 	/**
 	 * Unlocks an achievement and considers it as achieved.
 	 *
 	 * @param achievementId The string identifier of the achievement
 	 */
-	public abstract void unlockAchievement(String achievementId);
+	void unlockAchievement(String achievementId);
 
 	/**
 	 * Reveals a hidden achievement. This is different from unlocking, as it
@@ -69,7 +49,7 @@ public abstract class GameServices {
 	 *
 	 * @param achievementId The string identifier of the achievement
 	 */
-	public abstract void revealAchievement(String achievementId);
+	void revealAchievement(String achievementId);
 
 	/**
 	 * Increments a progressive achievement. Once the progress is complete,
@@ -81,12 +61,12 @@ public abstract class GameServices {
 	 *                      their database. But it is recommended that you provide this number for
 	 *                      global support.
 	 */
-	public abstract void incrementAchievement(String achievementId, int amount, int max);
+	void incrementAchievement(String achievementId, int amount, int max);
 
 	/**
 	 * Displays an achievements dialog.
 	 */
-	public abstract void showAchievements();
+	void showAchievements();
 
 	/**
 	 * Ensures that all the achievements in a given list are unlocked. This method
@@ -95,12 +75,12 @@ public abstract class GameServices {
 	 *
 	 * @param achievementIds The list of string identifiers for the achievements
 	 */
-	public abstract void ensureAchievements(List<String> achievementIds);
+	void ensureAchievements(List<String> achievementIds);
 
 	/**
 	 * Indicates whether this {@code GameServices} supports achievements.
 	 *
 	 * @return {@code true} if achievements are supported, and {@code false} otherwise
 	 */
-	public abstract boolean supportsAchievements();
+	boolean supportsAchievements();
 }

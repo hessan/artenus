@@ -20,9 +20,12 @@ public interface InventoryListener {
 	void onInventoryLoaded(ProductList inventory);
 
 	/**
-	 * Called to report that a previous purchase has succeeded.
+	 * Called to report that a previous purchase has succeeded. It provides information about the
+	 * purchase. If the product is a consumable which needs to be consumed after purchase, this
+	 * would be a good place to consume it.
 	 *
 	 * @param purchase Purchase information
+	 * @see InventoryManager#consume(ProductReceipt)
 	 */
 	void onPurchased(ProductReceipt purchase);
 
