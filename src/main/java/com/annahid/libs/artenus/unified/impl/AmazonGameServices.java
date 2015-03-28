@@ -9,6 +9,7 @@ import com.amazon.ags.api.AmazonGamesStatus;
 import com.amazon.ags.api.achievements.AchievementsClient;
 import com.amazon.ags.api.achievements.GetAchievementResponse;
 import com.amazon.ags.api.leaderboards.LeaderboardsClient;
+import com.amazon.ags.api.overlay.PopUpLocation;
 import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.unified.GameServices;
 
@@ -32,6 +33,7 @@ final class AmazonGameServices implements GameServices {
 		@Override
 		public void onServiceReady(AmazonGamesClient amazonGamesClient) {
 			agsClient = amazonGamesClient;
+			agsClient.setPopUpLocation(PopUpLocation.TOP_CENTER);
 			loginManager.setGamesLoggedIn(true);
 		}
 	};

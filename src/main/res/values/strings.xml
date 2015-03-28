@@ -1,3 +1,4 @@
 <resources>
     <string name="run_command">Execute Command</string>
+    <string name="console_title">Command Console</string>
 </resources>

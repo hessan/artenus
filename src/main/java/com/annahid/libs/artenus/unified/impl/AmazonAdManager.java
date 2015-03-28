@@ -1,7 +1,13 @@
 package com.annahid.libs.artenus.unified.impl;
 
+import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 
+import com.amazon.device.ads.Ad;
+import com.amazon.device.ads.AdError;
+import com.amazon.device.ads.AdListener;
+import com.amazon.device.ads.AdProperties;
 import com.amazon.device.ads.AdRegistration;
 import com.amazon.device.ads.AdTargetingOptions;
 import com.annahid.libs.artenus.Artenus;
@@ -29,11 +35,40 @@ final class AmazonAdManager extends AdManager {
 
 		if (adView == null) {
 			adView = new com.amazon.device.ads.AdLayout(Artenus.getInstance());
-			adLayout.addView(adView);
-			adLayout.requestLayout();
+
+			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+					LinearLayout.LayoutParams.MATCH_PARENT,
+					LinearLayout.LayoutParams.WRAP_CONTENT);
+			adLayout.addView(adView, lp);
 
 			final AdTargetingOptions adOptions = new AdTargetingOptions();
 			adView.loadAd(adOptions);
+			adView.setListener(new AdListener() {
+				@Override
+				public void onAdLoaded(Ad ad, AdProperties adProperties) {
+					adLayout.requestLayout();
+				}
+
+				@Override
+				public void onAdFailedToLoad(Ad ad, AdError adError) {
+
+				}
+
+				@Override
+				public void onAdExpanded(Ad ad) {
+					adLayout.requestLayout();
+				}
+
+				@Override
+				public void onAdCollapsed(Ad ad) {
+					adLayout.requestLayout();
+				}
+
+				@Override
+				public void onAdDismissed(Ad ad) {
+
+				}
+			});
 		}
 	}
 

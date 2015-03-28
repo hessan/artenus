@@ -37,11 +37,15 @@ public class AmazonUnifiedServices extends UnifiedServices {
 	public void onCreate(Context context) {
 		if (inventoryManager != null)
 			inventoryManager.onCreate(context);
+		if (adManager != null)
+			adManager.onCreate();
 	}
 
 	public void onDestroy(Context context) {
 		if (inventoryManager != null)
 			inventoryManager.onDestroy(context);
+		if (adManager != null)
+			adManager.destroyAd();
 	}
 
 	@Override
@@ -61,8 +65,10 @@ public class AmazonUnifiedServices extends UnifiedServices {
 
 	@Override
 	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-		return inventoryManager != null &&
-				inventoryManager.onActivityResult(requestCode, resultCode, data);
+		if(inventoryManager != null)
+			inventoryManager.onActivityResult(requestCode, resultCode, data);
+
+		return false;
 	}
 
 	@Override
