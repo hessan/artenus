@@ -14,10 +14,9 @@ import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.R;
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.data.RGB;
-import com.annahid.libs.artenus.entities.sprites.ImageSprite;
-import com.annahid.libs.artenus.entities.sprites.LineSprite;
+import com.annahid.libs.artenus.graphics.sprites.ImageSprite;
+import com.annahid.libs.artenus.graphics.sprites.LineSprite;
 import com.annahid.libs.artenus.graphics.TextureManager;
-import com.annahid.libs.artenus.input.InputListener;
 import com.annahid.libs.artenus.input.InputManager;
 
 import java.nio.ByteBuffer;
@@ -393,32 +392,6 @@ public final class Stage extends GLSurfaceView {
 	}
 
 	/**
-	 * Gets the currently assigned input manager.
-	 *
-	 * @return The input manager
-	 */
-	public final InputManager getInputManager() {
-		return inputMan;
-	}
-
-	/**
-	 * Appoints a new input manager to handle inputs for this {@code Stage}.
-	 *
-	 * @param inputManager The new input manager
-	 */
-	public void setInputManager(InputManager inputManager) {
-		inputMan = inputManager;
-		inputMan.register(getContext());
-		inputMan.setListener(new InputListener() {
-			@Override
-			public void inputStatusChanged(InputManager inputManager) {
-				if (currentScene != null)
-					currentScene.handleInput(inputManager);
-			}
-		});
-	}
-
-	/**
 	 * Sets the next scene that should be shown on this {@code Stage}. The
 	 * scene will not be shown immediately and will go through a transition
 	 * effect and possibly a local loading procedure.
@@ -605,26 +578,27 @@ public final class Stage extends GLSurfaceView {
 	 */
 	@Override
 	public boolean onTouchEvent(@NonNull MotionEvent event) {
-		if (inputMan != null)
-			inputMan.onTouchEvent(this, event);
+		int action = event.getAction() & MotionEvent.ACTION_MASK;
+		final int pointerIndex = event.getActionIndex();
+		final float x = screenToStageX(event.getX(pointerIndex));
+		final float y = screenToStageY(event.getY(pointerIndex));
+		final int pointerId = event.getPointerId(pointerIndex);
+
+		if(action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN)
+			action = InputManager.EVENT_DOWN;
+		else if(action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_POINTER_UP)
+			action = InputManager.EVENT_UP;
+		else action = InputManager.EVENT_MOVE;
 
 		if (currentScene != null) {
-			float x = screenToStageX(event.getX()), y = screenToStageY(event.getY());
-			final int pointerIndex = event.getActionIndex();
-			int action = event.getAction() & MotionEvent.ACTION_MASK;
-
-			if (action == MotionEvent.ACTION_POINTER_UP)
-				action = InputManager.EVENT_UP;
-			else if (action == MotionEvent.ACTION_POINTER_DOWN)
-				action = InputManager.EVENT_DOWN;
-
 			if (currentScene.dialog != null) {
-				if (currentScene.dialog.getResult() == Dialog.RESULT_NONE && currentScene.dialog.isLoaded()) {
-					currentScene.dialog.handleTouch(pointerIndex, action, x, y);
+				if ( currentScene.dialog.getResult() == Dialog.RESULT_NONE
+						&& currentScene.dialog.isLoaded() ) {
+					currentScene.dialog.handleTouch(action, pointerId, x, y);
 					requestRender();
 				}
 			} else if (currentScene.isLoaded()) {
-				currentScene.handleTouch(pointerIndex, action, x, y);
+				currentScene.handleTouch(action, pointerId, x, y);
 				requestRender();
 			}
 
@@ -723,7 +697,6 @@ public final class Stage extends GLSurfaceView {
 	private final float[] tintColor = {0f, 0f, 0f, 0f};
 	private Scene currentScene, nextScene;
 	private float stPhase;
-	private InputManager inputMan = null;
 	private Thread advanceThread;
 	private float w, h, blur = 0;
 	private boolean supportsEs2 = false;

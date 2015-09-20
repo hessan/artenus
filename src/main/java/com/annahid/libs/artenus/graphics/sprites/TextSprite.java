@@ -1,4 +1,4 @@
-package com.annahid.libs.artenus.entities.sprites;
+package com.annahid.libs.artenus.graphics.sprites;
 
 import android.opengl.GLES10;
 

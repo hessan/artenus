@@ -7,8 +7,8 @@ import com.annahid.libs.artenus.data.RGB;
 import com.annahid.libs.artenus.entities.Entity;
 import com.annahid.libs.artenus.entities.EntityCollection;
 import com.annahid.libs.artenus.input.InputManager;
-import com.annahid.libs.artenus.entities.physics.PhysicsSimulator;
-import com.annahid.libs.artenus.input.Touchable;
+import com.annahid.libs.artenus.physics.PhysicsSimulator;
+import com.annahid.libs.artenus.entities.behavior.Touchable;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -91,7 +91,7 @@ public class Scene implements Touchable {
 	 * sprites separately.
 	 *
 	 * @param entity The sprite to be added
-	 * @see com.annahid.libs.artenus.entities.sprites.SpriteEntity
+	 * @see com.annahid.libs.artenus.graphics.sprites.SpriteEntity
 	 */
 	public void add(Entity entity) {
 		sprites.add(entity);
@@ -104,7 +104,7 @@ public class Scene implements Touchable {
 	 * you are using sprites separately.
 	 *
 	 * @param sprite The sprite to be removed
-	 * @see com.annahid.libs.artenus.entities.sprites.SpriteEntity
+	 * @see com.annahid.libs.artenus.graphics.sprites.SpriteEntity
 	 */
 	public final void remove(Entity sprite) {
 		sprites.recursiveRemove(sprite);
@@ -314,25 +314,10 @@ public class Scene implements Touchable {
 	 */
 	protected void onDialogDismissed(Dialog dialog) {
 	}
-
-	/**
-	 * Handles a touch event on this scene. Touch events are always passed
-	 * to the scene currently being displayed on the stage, except if there
-	 * is a dialog above the scene. In that case the dialog receives touch
-	 * events.
-	 *
-	 * @param action The touch action. See {@link com.annahid.libs.artenus.input.InputManager}
-	 *               for possible values.
-	 * @param x      The x coordination of the touched point
-	 * @param y      The y coordination of the touched point
-	 * @see Dialog
-	 */
-	public boolean handleTouch(int action, float x, float y) {
-		return sprites.handleTouch(action, x, y);
-	}
-
-	final void handleTouch(int pointerIndex, int action, float x, float y) {
-		handleTouch(action, x, y);
+	
+	@Override
+	public boolean handleTouch(int action, int pointerIndex, float x, float y) {
+		return sprites.handleTouch(action, pointerIndex, x, y);
 	}
 
 	/**

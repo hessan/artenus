@@ -2,27 +2,39 @@ package com.annahid.libs.artenus.entities;
 
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.data.RGB;
+import com.annahid.libs.artenus.entities.behavior.Animatable;
+import com.annahid.libs.artenus.entities.behavior.Transformable;
+import com.annahid.libs.artenus.graphics.Effect;
+import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.ui.Scene;
 
 /**
  * An entity that applies all its methods on an underlying entity. This class is the superclass
  * of all classes that provide a modification on the behavior of other entities.
  */
-public abstract class FilteredEntity implements Entity {
+public abstract class FilteredEntity
+		implements Entity, Animatable, Transformable, Renderable {
 
 	@Override
 	public final void setAnimation(AnimationHandler animation) {
-		target.setAnimation(animation);
+		if(target instanceof Animatable)
+			((Animatable)target).setAnimation(animation);
 	}
 
 	@Override
 	public final AnimationHandler getAnimation() {
-		return target.getAnimation();
+		if(target instanceof Animatable)
+			return ((Animatable)target).getAnimation();
+
+		return null;
 	}
 
 	@Override
 	public Point2D getPosition() {
-		return target.getPosition();
+		if(target instanceof Transformable)
+			return ((Transformable)target).getPosition();
+
+		return null;
 	}
 
 	@Override
@@ -32,7 +44,8 @@ public abstract class FilteredEntity implements Entity {
 
 	@Override
 	public void setPosition(float x, float y) {
-		target.setPosition(x, y);
+		if(target instanceof  Transformable)
+			((Transformable)target).setPosition(x, y);
 	}
 
 	@Override
@@ -43,12 +56,16 @@ public abstract class FilteredEntity implements Entity {
 
 	@Override
 	public float getRotation() {
-		return target.getRotation();
+		if(target instanceof Transformable)
+			return ((Transformable)target).getRotation();
+
+		return 0;
 	}
 
 	@Override
 	public void setRotation(float angle) {
-		target.setRotation(angle);
+		if(target instanceof Transformable)
+			((Transformable)target).setRotation(angle);
 	}
 
 	@Override
@@ -58,7 +75,10 @@ public abstract class FilteredEntity implements Entity {
 
 	@Override
 	public Point2D getScale() {
-		return target.getScale();
+		if(target instanceof Transformable)
+			return ((Transformable)target).getScale();
+
+		return null;
 	}
 
 	@Override
@@ -68,12 +88,14 @@ public abstract class FilteredEntity implements Entity {
 
 	@Override
 	public void setScale(float scaleX, float scaleY) {
-		target.setScale(scaleX, scaleY);
+		if(target instanceof Transformable)
+			((Transformable)target).setScale(scaleX, scaleY);
 	}
 
 	@Override
 	public void setColorFilter(float r, float g, float b) {
-		target.setColorFilter(r, g, b);
+		if(target instanceof Renderable)
+			((Renderable)target).setColorFilter(r, g, b);
 	}
 
 	@Override
@@ -83,7 +105,42 @@ public abstract class FilteredEntity implements Entity {
 
 	@Override
 	public RGB getColorFilter() {
-		return target.getColorFilter();
+		if(target instanceof Renderable)
+			return ((Renderable)target).getColorFilter();
+
+		return null;
+	}
+
+	@Override
+	public Effect getEffect() {
+		if(target instanceof Renderable)
+			return ((Renderable)target).getEffect();
+
+		return null;
+	}
+
+	@Override
+	public void setEffect(Effect effect) {
+		if(target instanceof Renderable)
+			((Renderable)target).setEffect(effect);
+	}
+
+	@Override
+	public void advance(float elapsedTime) {
+		if(target instanceof Animatable)
+			((Animatable)target).advance(elapsedTime);
+	}
+
+	/**
+	 * Calls {@code render} on the underlying entity, with specified flags.
+	 *
+	 * @param flags Rendering flags
+	 * @see Renderable
+	 */
+	@Override
+	public void render(int flags) {
+		if(target instanceof Renderable)
+			((Renderable)target).render(flags);
 	}
 
 	@Override
@@ -94,11 +151,6 @@ public abstract class FilteredEntity implements Entity {
 	@Override
 	public void onDetach(Scene scene) {
 		target.onDetach(scene);
-	}
-
-	@Override
-	public void advance(float elapsedTime) {
-		target.advance(elapsedTime);
 	}
 
 	public final Entity getUnderlyingEntity() {

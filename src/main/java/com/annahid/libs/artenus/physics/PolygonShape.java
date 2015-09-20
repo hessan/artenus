@@ -1,11 +1,11 @@
-package com.annahid.libs.artenus.entities.physics;
+package com.annahid.libs.artenus.physics;
 
 import com.annahid.libs.artenus.data.Point2D;
 
 import org.jbox2d.common.Vec2;
 
 /**
- * Represents a {@link com.annahid.libs.artenus.entities.physics.Shape} consisting of a convex
+ * Represents a {@link com.annahid.libs.artenus.physics.Shape} consisting of a convex
  * polygon.
  *
  * @author Hessan Feghhi
@@ -30,7 +30,7 @@ public final class PolygonShape implements Shape {
 	}
 
 	/**
-	 * Gets the type of this {@link com.annahid.libs.artenus.entities.physics.Shape}.
+	 * Gets the type of this {@link com.annahid.libs.artenus.physics.Shape}.
 	 * @return {@link #TYPE}
 	 */
 	@Override

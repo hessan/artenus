@@ -1,7 +1,7 @@
-package com.annahid.libs.artenus.entities.physics;
+package com.annahid.libs.artenus.physics;
 
 /**
- * Represents a rectangular {@link com.annahid.libs.artenus.entities.physics.Shape} that
+ * Represents a rectangular {@link com.annahid.libs.artenus.physics.Shape} that
  * can be used for physical simulation.
  *
  * @author Hessan Feghhi
@@ -28,7 +28,7 @@ public final class RectangleShape implements Shape {
 	}
 
 	/**
-	 * Gets the type of this {@link com.annahid.libs.artenus.entities.physics.Shape}.
+	 * Gets the type of this {@link com.annahid.libs.artenus.physics.Shape}.
 	 * @return {@link #TYPE}
 	 */
 	@Override

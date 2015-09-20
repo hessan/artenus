@@ -2,7 +2,7 @@ package com.annahid.libs.artenus.ui;
 
 import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.R;
-import com.annahid.libs.artenus.entities.sprites.ImageSprite;
+import com.annahid.libs.artenus.graphics.sprites.ImageSprite;
 import com.annahid.libs.artenus.graphics.TextureManager;
 
 /**

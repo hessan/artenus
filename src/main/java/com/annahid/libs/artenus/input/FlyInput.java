@@ -7,6 +7,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.view.MotionEvent;
 
+import com.annahid.libs.artenus.ui.Scene;
 import com.annahid.libs.artenus.ui.Stage;
 
 import java.util.ArrayList;
@@ -29,7 +30,6 @@ public class FlyInput extends InputManager {
 		return (float) Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 	}
 
-	private final List<TapRegion> buttons = new ArrayList<>();
 	private float[] angle = new float[]{0, 0, 0};
 	private SensorManager sensorManager;
 	private double lastTime;
@@ -92,15 +92,24 @@ public class FlyInput extends InputManager {
 	 * Registers this {@code FlyInput} manager to the given context and begins listening for sensor data.
 	 */
 	@Override
-	public void register(Context context) {
-		sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
-		sensorManager.registerListener(myListener, sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_GAME);
-		sensorManager.registerListener(myListener, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
+	public void onAttach(Scene scene) {
+		sensorManager = (SensorManager)
+				scene.getStage().getContext().getSystemService(Context.SENSOR_SERVICE);
+		sensorManager.registerListener(
+				myListener,
+				sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE),
+				SensorManager.SENSOR_DELAY_GAME
+		);
+		sensorManager.registerListener(
+				myListener,
+				sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+				SensorManager.SENSOR_DELAY_GAME
+		);
 		lastTime = (float) System.currentTimeMillis() / 1000.0f;
 	}
 
 	@Override
-	public void unregister() {
+	public void onDetach(Scene scene) {
 		sensorManager.unregisterListener(myListener);
 	}
 
@@ -110,84 +119,5 @@ public class FlyInput extends InputManager {
 
 	public void cancelY() {
 		angle[1] = 0.0f;
-	}
-
-	/**
-	 * Adds a new action button defined by a {@link TapRegion}. The buttons will be
-	 * assigned to the button indices in the order of addition. Buttons are effective
-	 * throughout the {@link com.annahid.libs.artenus.ui.Stage}, so you should be careful to clear the buttons
-	 * whenever they are no longer needed and add them back when they are needed again
-	 * (for example add them in the game scene and remove them when the game is over).
-	 *
-	 * @param button The button to be added.
-	 * @see com.annahid.libs.artenus.ui.Stage
-	 */
-	public void addButton(TapRegion button) {
-		buttons.add(button);
-		keyIds.add(-1);
-	}
-
-	/**
-	 * Clears all the buttons currently added to this input manager.
-	 */
-	public void clearButtons() {
-		buttons.clear();
-		keyIds.clear();
-	}
-
-	/**
-	 * Handles touch events for {@code FlyInput}.
-	 */
-	@Override
-	public void onTouchEvent(Stage stage, MotionEvent event) {
-		final int action = event.getAction() & MotionEvent.ACTION_MASK;
-
-		if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN) {
-			int pointerId;
-			float x, y;
-
-			if (action == MotionEvent.ACTION_DOWN) {
-				pointerId = event.getPointerId(0);
-				x = stage.screenToStageX(event.getX());
-				y = stage.screenToStageX(event.getY());
-			} else {
-
-				final int pointerIndex = event.getActionIndex();
-				pointerId = event.getPointerId(pointerIndex);
-				x = stage.screenToStageX(event.getX(pointerIndex));
-				y = stage.screenToStageY(event.getY(pointerIndex));
-			}
-
-			holdKeyMap();
-
-			for (int i = 0; i < buttons.size(); i++) {
-				final TapRegion rct = buttons.get(i);
-
-				if (rct.hitTest(x, y)) {
-					pressKeys(1 << (4 + i));
-					keyIds.set(i, pointerId);
-					break;
-				}
-			}
-
-			releaseKeyMap();
-		} else if (action == MotionEvent.ACTION_UP)
-			checkRelease(event.getPointerId(0));
-		else if (action == MotionEvent.ACTION_POINTER_UP)
-			checkRelease(event.getPointerId(event.getActionIndex()));
-	}
-
-	private void checkRelease(int pointerId) {
-		holdKeyMap();
-
-		for (int i = 0; i < buttons.size(); i++) {
-			if (keyIds.get(i) == pointerId) {
-				keyIds.set(i, -1);
-				releaseKeys(1 << (4 + i));
-				break;
-			}
-		}
-
-		releaseKeyMap();
 	}
 }

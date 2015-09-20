@@ -92,6 +92,9 @@ public abstract class Artenus extends Activity {
 					getPackageName(), PackageManager.GET_META_DATA);
 			final String store = ai.metaData.getString("com.annahid.libs.artenus.APP_STORE");
 
+			if(store == null)
+				throw new IllegalStateException("App store is not specified in the manifest.");
+
 			switch (store) {
 				case "google":
 					manifestStore = UnifiedServices.Store.GOOGLE;

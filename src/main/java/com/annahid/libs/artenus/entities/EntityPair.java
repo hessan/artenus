@@ -4,8 +4,11 @@ import android.opengl.GLES10;
 
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.data.RGB;
+import com.annahid.libs.artenus.entities.behavior.Animatable;
+import com.annahid.libs.artenus.entities.behavior.Transformable;
 import com.annahid.libs.artenus.graphics.Effect;
-import com.annahid.libs.artenus.input.Touchable;
+import com.annahid.libs.artenus.entities.behavior.Touchable;
+import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.ui.Scene;
 
 /**
@@ -20,7 +23,8 @@ import com.annahid.libs.artenus.ui.Scene;
  * Performance-wise, this class is recommended whenever you want to encapsulate only two entities.
  * </p>
  */
-public class EntityPair implements Entity, Touchable {
+public class EntityPair
+		implements Entity, Animatable, Touchable, Transformable, Renderable {
 
 	/**
 	 * Constructs a new entity pair, with given entities.
@@ -119,8 +123,10 @@ public class EntityPair implements Entity, Touchable {
 
 	@Override
 	public void setColorFilter(float r, float g, float b) {
-		first.setColorFilter(r, g, b);
-		second.setColorFilter(r, g, b);
+		if(first instanceof Renderable)
+			((Renderable)first).setColorFilter(r, g, b);
+		if(second instanceof Renderable)
+			((Renderable)second).setColorFilter(r, g, b);
 	}
 
 	@Override
@@ -130,7 +136,11 @@ public class EntityPair implements Entity, Touchable {
 
 	@Override
 	public RGB getColorFilter() {
-		return first.getColorFilter();
+		if(first instanceof Renderable)
+			return ((Renderable)first).getColorFilter();
+		else if(second instanceof Renderable)
+			return ((Renderable)second).getColorFilter();
+		else return new RGB(0, 0, 0);
 	}
 
 	@Override
@@ -157,8 +167,10 @@ public class EntityPair implements Entity, Touchable {
 		GLES10.glRotatef(rotation, 0, 0, 1);
 		GLES10.glScalef(scale.x, scale.y, 0);
 
-		first.render(flags);
-		second.render(flags);
+		if(first instanceof Renderable)
+			((Renderable)first).render(flags);
+		if(second instanceof Renderable)
+			((Renderable)second).render(flags);
 
 		GLES10.glPopMatrix();
 	}
@@ -168,26 +180,38 @@ public class EntityPair implements Entity, Touchable {
 		if (anim != null)
 			anim.advance(this, elapsedTime);
 
-		first.advance(elapsedTime);
-		second.advance(elapsedTime);
+		if(first instanceof Animatable)
+			((Animatable)first).advance(elapsedTime);
+		if(second instanceof Animatable)
+			((Animatable)second).advance(elapsedTime);
 	}
 
 	@Override
-	public boolean handleTouch(int action, float x, float y) {
-		return
-				(first instanceof Touchable && ((Touchable) first).handleTouch(action, x, y)) ||
-						(second instanceof Touchable && ((Touchable) second).handleTouch(action, x, y));
+	public boolean handleTouch(int action, int pointerIndex, float x, float y) {
+		return (
+						first instanceof Touchable
+								&& ((Touchable) first).handleTouch(action, pointerIndex, x, y)
+				) || (
+						second instanceof Touchable
+								&& ((Touchable) second).handleTouch(action, pointerIndex, x, y)
+				);
 	}
 
 	@Override
 	public Effect getEffect() {
-		return first.getEffect();
+		if(first instanceof Renderable)
+			return ((Renderable)first).getEffect();
+		else if(second instanceof Renderable)
+			return ((Renderable)second).getEffect();
+		else return null;
 	}
 
 	@Override
 	public void setEffect(Effect effect) {
-		first.setEffect(effect);
-		second.setEffect(effect);
+		if(first instanceof Renderable)
+			((Renderable)first).setEffect(effect);
+		if(second instanceof Renderable)
+			((Renderable)second).setEffect(effect);
 	}
 
 	private Entity first, second;

@@ -1,4 +1,4 @@
-package com.annahid.libs.artenus.entities.physics;
+package com.annahid.libs.artenus.physics;
 
 /**
  * Contains information about a collision. An instance of this class

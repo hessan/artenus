@@ -6,9 +6,9 @@ import android.view.MotionEvent;
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.entities.Entity;
 import com.annahid.libs.artenus.entities.EntityCollection;
-import com.annahid.libs.artenus.entities.sprites.SpriteEntity;
+import com.annahid.libs.artenus.entities.behavior.Transformable;
+import com.annahid.libs.artenus.graphics.sprites.SpriteEntity;
 import com.annahid.libs.artenus.input.InputManager;
-import com.annahid.libs.artenus.input.Touchable;
 
 import java.lang.ref.WeakReference;
 import java.util.Iterator;
@@ -24,7 +24,7 @@ import java.util.List;
  *
  */
 @SuppressWarnings("UnusedDeclaration")
-public final class SlideMenu extends EntityCollection implements Touchable {
+public final class SlideMenu extends EntityCollection {
     public interface Listener {
         void onItemClicked(int itemIndex);
         void onItemChanged(int newItem, int prevItem);
@@ -90,23 +90,33 @@ public final class SlideMenu extends EntityCollection implements Touchable {
 	}
 	
 	/**
-	 * Adds a menu item in the form of a sprite.
+	 * Adds a menu item in the form of an entity.
 	 *
-	 * @param sprite	The menu item
+	 * @param entity	The menu item
 	 */
-	public final void add(SpriteEntity sprite) {
-		super.add(sprite);
+	@Override
+	public final boolean add(Entity entity) {
+		if(!(entity instanceof Transformable))
+			throw new IllegalArgumentException("Menu items must be transformable.");
 
-		sprite.setPosition(centerX + currentPos + dist * (size() - 1), centerY);
-		
-		if(sel < 0)
-			sel = 0;
+		final boolean ret = super.add(entity);
 
-		if(dotV.length < size()) {
-			float[] newDotV = new float[size()];
-            System.arraycopy(dotV, 0, newDotV, 0, dotV.length);
-			dotV = newDotV;
+		if(ret) {
+			((Transformable)entity).setPosition(
+					centerX + currentPos + dist * (size() - 1), centerY
+			);
+
+			if (sel < 0)
+				sel = 0;
+
+			if (dotV.length < size()) {
+				float[] newDotV = new float[size()];
+				System.arraycopy(dotV, 0, newDotV, 0, dotV.length);
+				dotV = newDotV;
+			}
 		}
+
+		return ret;
 	}
 	
 	/**
@@ -141,7 +151,7 @@ public final class SlideMenu extends EntityCollection implements Touchable {
 		for(Entity entity : this) {
 			final float alpha = ((SpriteEntity)entity).getAlpha();
 
-			entity.setPosition(centerX + currentPos + dist * i, centerY);
+			((Transformable)entity).setPosition(centerX + currentPos + dist * i, centerY);
 			
 			if(i == sel) {
 				((SpriteEntity)entity).setAlpha(Math.min(1, alpha + elapsedTime * 2));
@@ -152,7 +162,7 @@ public final class SlideMenu extends EntityCollection implements Touchable {
 				dotV[i] = Math.max(0, dotV[i] - elapsedTime * 2);
 			}
 
-            entity.setScale(alpha, alpha);
+			((Transformable)entity).setScale(alpha, alpha);
 			i++;
 		}
 	}
@@ -179,7 +189,8 @@ public final class SlideMenu extends EntityCollection implements Touchable {
 	 * @param y	The y coordinate of the touch event
 	 * @return	{@code true} if a menu item has been tapped, {@code false} otherwise
 	 */
-	public final boolean handleTouch(int action, float x, float y) {
+	@Override
+	public final boolean handleTouch(int action, int pointerId, float x, float y) {
 		if(action == InputManager.EVENT_DOWN) {
 			if(y > centerY - h / 2 && y < centerY + h / 2) {
 				startX = x;
