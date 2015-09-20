@@ -1,4 +1,4 @@
-package com.annahid.libs.artenus.entities.physics;
+package com.annahid.libs.artenus.physics;
 
 import com.annahid.libs.artenus.data.Point2D;
 
@@ -23,7 +23,7 @@ import java.util.List;
  * {@code PhysicsSimulator} instance and it is recommended that you take advantage of that through
  * entities such as {@link PhysicalBody}.
  *
- * @see com.annahid.libs.artenus.entities.physics.PhysicalBody
+ * @see com.annahid.libs.artenus.physics.PhysicalBody
  * @author Hessan Feghhi
  *
  */
@@ -175,7 +175,7 @@ public final class PhysicsSimulator {
 	 * directly if you are using physics simulation through a scene.
 	 *
 	 * @param body The new physical body
-	 * @see com.annahid.libs.artenus.entities.physics.PhysicalBody
+	 * @see com.annahid.libs.artenus.physics.PhysicalBody
 	 */
 	public void attach(PhysicalBody body) {
 		if (body.body == null) {
@@ -233,7 +233,7 @@ public final class PhysicsSimulator {
 	 * the scene are NOT reusable.
 	 *
 	 * @param body The physical body to remove
-	 * @see com.annahid.libs.artenus.entities.physics.PhysicalBody
+	 * @see com.annahid.libs.artenus.physics.PhysicalBody
 	 */
 	public void detach(PhysicalBody body) {
 		if (body.body != null) {

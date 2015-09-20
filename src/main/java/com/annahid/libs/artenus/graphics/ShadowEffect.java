@@ -2,6 +2,8 @@ package com.annahid.libs.artenus.graphics;
 
 import android.opengl.GLES10;
 
+import com.annahid.libs.artenus.entities.behavior.Renderable;
+
 /**
  * A subclass of {@link com.annahid.libs.artenus.graphics.Effect} that represents a shadow effect.
  *

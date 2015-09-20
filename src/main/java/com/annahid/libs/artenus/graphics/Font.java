@@ -74,18 +74,6 @@ public final class Font extends Texture {
 	}
 
 	/**
-	 * Sets the horizontal and vertical letter spacing for this font. Zero letter spacing will
-	 * usually give an odd look to the font. A negative horizontal spacing is recommended.
-	 *
-	 * @param hs Horizontal letter spacing
-	 * @param vs Vertical letter spacing
-	 */
-	public final void setLetterSpacing(int hs, int vs) {
-		horSpacing = hs;
-		verSpacing = vs;
-	}
-
-	/**
 	 * Calculates the width of a text if drawn with this {@code Font}, based of the font size
 	 * specified.
 	 *

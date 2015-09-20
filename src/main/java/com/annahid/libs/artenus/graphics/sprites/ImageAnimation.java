@@ -1,14 +1,14 @@
-package com.annahid.libs.artenus.entities.sprites;
+package com.annahid.libs.artenus.graphics.sprites;
 
 import com.annahid.libs.artenus.entities.AnimationHandler;
-import com.annahid.libs.artenus.entities.Entity;
+import com.annahid.libs.artenus.entities.behavior.Animatable;
 
 /**
  * Performs an animation based on the frames contained in an image sprite's cutout. Note that this
  * class targets only image sprites. You must only assign this animation to an instance of
- * {@link com.annahid.libs.artenus.entities.sprites.ImageSprite}.
+ * {@link com.annahid.libs.artenus.graphics.sprites.ImageSprite}.
  *
- * @see com.annahid.libs.artenus.entities.sprites.ImageSprite
+ * @see com.annahid.libs.artenus.graphics.sprites.ImageSprite
  *
  * @author Hessan Feghhi
  *
@@ -67,7 +67,7 @@ public final class ImageAnimation implements AnimationHandler {
 	 *                        determines the item in the frame array and not the frame index
 	 *                        belonging to the sprite's cutout.
 	 * @see Trend
-	 * @see com.annahid.libs.artenus.entities.sprites.ImageSprite.Cutout
+	 * @see com.annahid.libs.artenus.graphics.sprites.ImageSprite.Cutout
 	 */
 	public ImageAnimation(int[] animationFrames, Trend trend, int startIndex) {
 		frames = animationFrames;
@@ -107,7 +107,7 @@ public final class ImageAnimation implements AnimationHandler {
 	 *
 	 * @return The current frame of the animation. This value indicates the index in the frame
 	 * array, and not the frame index belonging to the sprite's cutout.
-	 * @see com.annahid.libs.artenus.entities.sprites.ImageSprite.Cutout
+	 * @see com.annahid.libs.artenus.graphics.sprites.ImageSprite.Cutout
 	 */
 	public int getFrame() {
 		return currentFrame;
@@ -132,7 +132,7 @@ public final class ImageAnimation implements AnimationHandler {
 	 * @see ImageAnimation#setFrameDelay(int)
 	 */
 	@Override
-	public void advance(Entity sprite, float elapsedTime) {
+	public void advance(Animatable sprite, float elapsedTime) {
 		if (System.currentTimeMillis() - lastFrame >= frameDelay)
 			lastFrame = System.currentTimeMillis();
 		else return;
@@ -152,7 +152,7 @@ public final class ImageAnimation implements AnimationHandler {
 					currentFrame++;
 		}
 
-		((ImageSprite) sprite).gotoFrame(frames[currentFrame]);
+		((ImageSprite)sprite).gotoFrame(frames[currentFrame]);
 	}
 
 	private int[] frames;

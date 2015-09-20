@@ -1,9 +1,9 @@
-package com.annahid.libs.artenus.entities.physics;
+package com.annahid.libs.artenus.physics;
 
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.entities.Entity;
 import com.annahid.libs.artenus.entities.FilteredEntity;
-import com.annahid.libs.artenus.graphics.Effect;
+import com.annahid.libs.artenus.entities.behavior.Transformable;
 import com.annahid.libs.artenus.ui.Scene;
 
 import org.jbox2d.common.Vec2;
@@ -86,6 +86,11 @@ public class PhysicalBody extends FilteredEntity {
 	 */
 	public PhysicalBody(Entity target, Shape shapeDesc) {
 		super(target);
+
+		if(!(this.target instanceof Transformable))
+			throw new IllegalArgumentException(
+					"A physical body can only accept a transformable entity as target.");
+
 		desc = new Descriptor();
 		shape = shapeDesc;
 		body = null;
@@ -159,7 +164,7 @@ public class PhysicalBody extends FilteredEntity {
 	 * The shape will change will take effect on the next frame.
 	 *
 	 * @param s The new shape for the body
-	 * @see com.annahid.libs.artenus.entities.physics.Shape
+	 * @see com.annahid.libs.artenus.physics.Shape
 	 */
 	public final void setShape(Shape s) {
 		shape = s;
@@ -470,7 +475,7 @@ public class PhysicalBody extends FilteredEntity {
 		}
 
 		if ((connections & POSITION) != 0)
-			target.setPosition(x, y);
+			((Transformable)target).setPosition(x, y);
 	}
 
 	/**
@@ -498,7 +503,7 @@ public class PhysicalBody extends FilteredEntity {
 		else desc.angle = rotation * 0.0174532889f;
 
 		if ((connections & ROTATION) != 0)
-			target.setRotation(rotation);
+			((Transformable)target).setRotation(rotation);
 	}
 
 	@Override
@@ -515,48 +520,27 @@ public class PhysicalBody extends FilteredEntity {
 		scene.getPhysicsSimulator().detach(this);
 	}
 
-	@Override
-	public Effect getEffect() {
-		return target.getEffect();
-	}
-
-	@Override
-	public void setEffect(Effect effect) {
-		target.setEffect(effect);
-	}
-
-	/**
-	 * Calls {@code render} on the underlying entity, with specified flags.
-	 *
-	 * @param flags Rendering flags
-	 * @see com.annahid.libs.artenus.graphics.Renderable
-	 */
-	@Override
-	public void render(int flags) {
-		target.render(flags);
-	}
-
 	/**
 	 * Updates this physical body to its new state provided by the physics simulator. The underlying
 	 * entity may also be modified, depending on selected connections.
 	 *
 	 * @param elapsedTime Elapsed time in seconds since the last frame
-	 * @see com.annahid.libs.artenus.entities.physics.PhysicalBody#setConnections(int)
+	 * @see com.annahid.libs.artenus.physics.PhysicalBody#setConnections(int)
 	 */
 	@Override
 	public void advance(float elapsedTime) {
 		super.advance(elapsedTime);
-
 		final Vec2 pos = body.getPosition();
+		final Transformable trans = ((Transformable)target);
 
 		if ((connections & POSITION) != 0) {
-			target.setPosition(
+			trans.setPosition(
 					pos.x * PhysicsSimulator.pixelsPerMeter,
 					pos.y * PhysicsSimulator.pixelsPerMeter);
 		}
 
 		if ((connections & ROTATION) != 0)
-			target.setRotation(getRotation());
+			trans.setRotation(getRotation());
 
 	}
 

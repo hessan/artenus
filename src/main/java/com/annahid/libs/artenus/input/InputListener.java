@@ -14,5 +14,5 @@ public interface InputListener {
 	 * @param inputManager The calling input manager. Use this to retrieve
 	 *                     information about the event
 	 */
-	public void inputStatusChanged(InputManager inputManager);
+	void inputStatusChanged(InputManager inputManager);
 }

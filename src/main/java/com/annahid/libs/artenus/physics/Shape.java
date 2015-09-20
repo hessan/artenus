@@ -1,9 +1,9 @@
-package com.annahid.libs.artenus.entities.physics;
+package com.annahid.libs.artenus.physics;
 
 /**
  * The interface for 2-dimensional physical shapes.
  *
- * @see com.annahid.libs.artenus.entities.physics.PhysicalBody
+ * @see com.annahid.libs.artenus.physics.PhysicalBody
  * @author Hessan Feghhi
  */
 public interface Shape {

@@ -1,10 +1,8 @@
 package com.annahid.libs.artenus.input;
 
-import android.content.Context;
-import android.view.MotionEvent;
-
 import com.annahid.libs.artenus.data.Point2D;
-import com.annahid.libs.artenus.ui.Stage;
+import com.annahid.libs.artenus.entities.Entity;
+import com.annahid.libs.artenus.ui.Scene;
 
 /**
  * The base class for all input managers. An input manager maps inputs from a specific
@@ -15,7 +13,7 @@ import com.annahid.libs.artenus.ui.Stage;
  *
  */
 @SuppressWarnings("UnusedDeclaration")
-public abstract class InputManager {
+public abstract class InputManager implements Entity {
 	/**
 	 * Key identifier for the first action key.
 	 */
@@ -160,32 +158,23 @@ public abstract class InputManager {
 	public final Point2D getDirection() {
 		return direction;
 	}
-
-	/**
-	 * Handles a touch event. All input managers in this framework are informed of
-	 * touch events, regardless of the source of their input. Subclasses of
-	 * {@code InputManager} that need to handle touch events can override this method.
-	 * Calling the superclass method in this case is NOT necessary.
-	 * @param stage	The {@link com.annahid.libs.artenus.ui.Stage} this event originates from
-	 * @param event	The {@code MotionEvent} associated to this event. See Android
-	 * documentation for information about  {@code MotionEvent}.
-	 * @see com.annahid.libs.artenus.ui.Stage
-	 */
-	public void onTouchEvent(Stage stage, MotionEvent event) {}
 	
 	/**
-	 * Registers this {@code InputManager} with the given context. Some input
+	 * Registers this {@code InputManager} with the given scene. Some input
 	 * managers might need some initialization that needs context. This method is
 	 * where they should do those procedures. All input managers must implement
 	 * this method. This method is called internally and you must not invoke it
 	 * manually.
-	 * @param context	The application context for this input manager
+	 * @param scene	The scene that will use this input manager to handle inputs
 	 */
-	public abstract void register(Context context);
+	@Override
+	public abstract void onAttach(Scene scene);
 	
 	/**
 	 * Unregisters this {@code InputManager} and releases resources associated to
 	 * it. This method is called internally and you must not invoke it manually.
+	 * @param scene	The scene that will use this input manager to handle inputs
 	 */
-	public abstract void unregister();
+	@Override
+	public abstract void onDetach(Scene scene);
 }

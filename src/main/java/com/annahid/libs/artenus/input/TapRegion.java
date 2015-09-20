@@ -29,23 +29,7 @@ public final class TapRegion {
 	 * @param width  The width of the tap region
 	 * @param height The height of the tap region
 	 */
-	@SuppressWarnings("unused")
 	public TapRegion(TapRegion.Shape type, float width, float height) {
-		this(type, width, height, 0, 0);
-	}
-
-	/**
-	 * Constructs a tap region with the given parameters.
-	 *
-	 * @param type   The region type identifier, which can be one of
-	 *                {@link Shape#RECTANGLE} and {@link Shape#OVAL}
-	 * @param width  The width of the tap region
-	 * @param height The height of the tap region
-	 * @param cx     The x component of the position
-	 * @param cy     The y component of the position
-	 */
-	public TapRegion(TapRegion.Shape type, float width, float height, float cx, float cy) {
-		pos = new Point2D(cx, cy);
 		scale = new Point2D(1, 1);
 		w = width;
 		h = height;
@@ -53,17 +37,8 @@ public final class TapRegion {
 		rot = 0;
 	}
 
-	public void setPosition(float cx, float cy) {
-		pos.x = cx;
-		pos.y = cy;
-	}
-
 	public void setRotation(float rotation) {
 		rot = rotation;
-	}
-
-	public Point2D getPosition() {
-		return pos;
 	}
 
 	public float getRotation() {
@@ -91,30 +66,30 @@ public final class TapRegion {
 	/**
 	 * Checks whether the motion information provided falls into this {@code TapRegion}.
 	 *
-	 * @param eventX The x component of the motion location
-	 * @param eventY The y component of the motion location
+	 * @param posx The x component of the object location
+	 * @param posy The y component of the object location
+	 * @param x The x component of the motion location
+	 * @param y The y component of the motion location
 	 * @return    {@code true} if the location falls into the region or {@code false} otherwise
 	 */
-	public boolean hitTest(float eventX, float eventY) {
+	boolean hitTest(float posx, float posy, float x, float y) {
 		final float hw = w / 2 * scale.x, hh = h / 2 * scale.y;
-
-		float x = eventX, y = eventY;
 
 		if (rot != 0) {
 			final float c = (float) Math.cos(Math.toRadians(-rot));
 			final float s = (float) Math.sin(Math.toRadians(-rot));
 
 			// UN-rotate the point depending on the rotation of the rectangle
-			x = pos.x + c * (x - pos.x) - s * (y - pos.y);
-			y = pos.y + s * (x - pos.x) + c * (y - pos.y);
+			x = posx + c * (x - posx) - s * (y - posy);
+			y = posy + s * (x - posx) + c * (y - posy);
 		}
 
 		if (t == Shape.OVAL)
-			return Math.pow(x - pos.x, 2) / (hw * hw) + Math.pow(y - pos.y, 2) / (hh * hh) <= 1;
-		else return x > pos.x - hw && x < pos.x + hw && y > pos.y - hh && y < pos.y + hh;
+			return Math.pow(x - posx, 2) / (hw * hw) + Math.pow(y - posy, 2) / (hh * hh) <= 1;
+		else return x > posx - hw && x < posx + hw && y > posy - hh && y < posy + hh;
 	}
 
-	private Point2D pos, scale;
+	private Point2D scale;
 	private float rot, w, h;
 	private Shape t;
 }

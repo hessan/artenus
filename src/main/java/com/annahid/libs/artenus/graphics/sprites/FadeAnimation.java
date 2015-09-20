@@ -1,7 +1,7 @@
-package com.annahid.libs.artenus.entities.sprites;
+package com.annahid.libs.artenus.graphics.sprites;
 
 import com.annahid.libs.artenus.entities.AnimationHandler;
-import com.annahid.libs.artenus.entities.Entity;
+import com.annahid.libs.artenus.entities.behavior.Animatable;
 
 /**
  * Performs a fading effect animation for sprites. You can specify whether
@@ -26,13 +26,12 @@ public final class FadeAnimation implements AnimationHandler {
 	}
 
 	@Override
-	public void advance(Entity entity, float elapsedTime) {
+	public void advance(Animatable entity, float elapsedTime) {
 
 		if (!(entity instanceof SpriteEntity))
 			return;
 
-		SpriteEntity sprite = (SpriteEntity) entity;
-
+		final SpriteEntity sprite = (SpriteEntity) entity;
 		final float alpha = sprite.getAlpha();
 
 		if (fin) {

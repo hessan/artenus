@@ -1,5 +1,8 @@
 package com.annahid.libs.artenus.entities;
 
+import com.annahid.libs.artenus.entities.behavior.Animatable;
+import com.annahid.libs.artenus.entities.behavior.Transformable;
+
 /**
  * Performs a spring-like animation on an entity. This animation is NOT a complete
  * physical simulation of a spring, and is just a loose visual effect that can be used for various
@@ -126,7 +129,7 @@ public final class SpringAnimation implements AnimationHandler {
 	}
 
 	@Override
-	public final void advance(Entity entity, float elapsedTime) {
+	public final void advance(Animatable animatable, float elapsedTime) {
 		final float dx = (targetValue - currentValue) * k - s * decay;
 		s += dx * elapsedTime;
 		currentValue += s * elapsedTime;
@@ -137,13 +140,17 @@ public final class SpringAnimation implements AnimationHandler {
 			else currentValue = targetValue - maxDiff;
 		}
 
-		if (t == X)
-			entity.getPosition().x = currentValue;
-		else if (t == Y)
-			entity.getPosition().y = currentValue;
-		else if (t == SCALE)
-			entity.setScale(currentValue, currentValue);
-		else entity.setRotation(currentValue);
+		if(animatable instanceof Transformable) {
+			final Transformable entity = (Transformable)animatable;
+
+			if (t == X)
+				entity.getPosition().x = currentValue;
+			else if (t == Y)
+				entity.getPosition().y = currentValue;
+			else if (t == SCALE)
+				entity.setScale(currentValue, currentValue);
+			else entity.setRotation(currentValue);
+		}
 	}
 
 	private int t;

@@ -3,7 +3,7 @@ package com.annahid.libs.artenus.ui;
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.entities.Entity;
 import com.annahid.libs.artenus.entities.EntityCollection;
-import com.annahid.libs.artenus.entities.sprites.LineSprite;
+import com.annahid.libs.artenus.graphics.sprites.LineSprite;
 
 /**
  * The superclass for all dialogs. A dialog is an interface

@@ -1,13 +1,12 @@
 package com.annahid.libs.artenus.input;
 
-import android.content.Context;
-import android.view.MotionEvent;
-
 import com.annahid.libs.artenus.data.Point2D;
+import com.annahid.libs.artenus.entities.behavior.Touchable;
+import com.annahid.libs.artenus.ui.Scene;
 import com.annahid.libs.artenus.ui.Stage;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <p>A subclass of {@link InputManager} that uses slide motions
@@ -26,34 +25,57 @@ import java.util.List;
  *
  */
 @SuppressWarnings("unused")
-public final class GlideInput extends InputManager {
+public final class GlideInput extends InputManager implements Touchable {
 	private final Point2D reference = new Point2D(0, 0);
-	private final List<TapRegion> buttons = new ArrayList<>();
-	private final List<Integer> keyIds = new ArrayList<>();
+	private final Map<Integer, TouchButton> buttons = new HashMap<>();
 	private int startId;
 	private int threshold;
+	private boolean keysPressed;
+	private Stage stage;
 
 	/**
-	 * Adds a new action button defined by a {@link com.annahid.libs.artenus.input.TapRegion}. The buttons will be
-	 * assigned to the button indices in the order of addition. Buttons are effective
-	 * throughout the {@link com.annahid.libs.artenus.ui.Stage}, so you should be careful to clear the buttons
-	 * whenever they are no longer needed and add them back when they are needed again
-	 * (for example add them in the game scene and remove them when the game is over).
+	 * Assigns a touch button to an action key for this input manager.
 	 *
-	 * @param button The button to be added.
+	 * @param key The action key to associate with
+	 * @param button The touch button to be added (or null to disassociate)
 	 * @see com.annahid.libs.artenus.ui.Stage
 	 */
-	public void addButton(TapRegion button) {
-		buttons.add(button);
-		keyIds.add(-1);
-	}
+	public void setButton(final int key, TouchButton button) {
+		if(button == null) {
+			button = buttons.get(key);
 
-	/**
-	 * Clears all the buttons currently added to this input manager.
-	 */
-	public void clearButtons() {
-		buttons.clear();
-		keyIds.clear();
+			if(button != null) {
+				button.setListener(null);
+				buttons.remove(key);
+			}
+
+			return;
+		}
+
+		button.setListener(new TouchButton.Listener() {
+			@Override
+			public void onPress(float relativeX, float relativeY) {
+				holdKeyMap();
+				pressKeys(key);
+				releaseKeyMap();
+				keysPressed = true;
+			}
+
+			@Override
+			public void onClick(float relativeX, float relativeY) {
+				onRelease();
+			}
+
+			@Override
+			public void onRelease() {
+				holdKeyMap();
+				releaseKeys(key);
+				releaseKeyMap();
+				keysPressed = false;
+			}
+		});
+
+		buttons.put(key, button);
 	}
 
 	/**
@@ -82,80 +104,45 @@ public final class GlideInput extends InputManager {
 	 * Registers this {@code GlideInput} manager to the given context.
 	 */
 	@Override
-	public void register(Context context) {
-		threshold = (int) (10 * context.getResources().getDisplayMetrics().density + 0.5f);
+	public void onAttach(Scene scene) {
+		stage = scene.getStage();
+		threshold = (int) (10
+				* stage.getContext().getResources().getDisplayMetrics().density + 0.5f);
 	}
 
 	@Override
-	public void unregister() { }
+	public void onDetach(Scene scene) {
+		stage = null;
+	}
 
 	/**
 	 * Handles touch events for {@code GlideInput}.
 	 */
 	@Override
-	public void onTouchEvent(Stage stage, MotionEvent event) {
-		final int action = event.getAction() & MotionEvent.ACTION_MASK;
-
-		if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN) {
-			int pointerId;
-			float x, y;
-			boolean keysPressed = false;
-
-			if (action == MotionEvent.ACTION_DOWN) {
-				pointerId = event.getPointerId(0);
-				x = stage.screenToStageX(event.getX());
-				y = stage.screenToStageX(event.getY());
-			} else {
-
-				final int pointerIndex = event.getActionIndex();
-				pointerId = event.getPointerId(pointerIndex);
-				x = stage.screenToStageX(event.getX(pointerIndex));
-				y = stage.screenToStageY(event.getY(pointerIndex));
-			}
-
-			holdKeyMap();
-
-			for (int i = 0; i < buttons.size(); i++) {
-				final TapRegion rct = buttons.get(i);
-
-				if (rct.hitTest(x, y)) {
-					pressKeys(1 << (4 + i));
-					keyIds.set(i, pointerId);
-					keysPressed = true;
-					break;
-				}
-			}
-
-			releaseKeyMap();
-
+	public boolean handleTouch(int action, int pointerId, float x, float y) {
+		if (action == InputManager.EVENT_DOWN) {
 			if (startId < 0 && !keysPressed) {
 				startId = pointerId;
 				reference.x = x;
 				reference.y = y;
 			}
-		} else if (action == MotionEvent.ACTION_UP)
-			checkRelease(event.getPointerId(0));
-		else if (action == MotionEvent.ACTION_POINTER_UP)
-			checkRelease(event.getPointerId(event.getActionIndex()));
-		else {
+		} else if (action == InputManager.EVENT_UP) {
+			checkRelease(pointerId);
+		} else {
 			if (startId >= 0) {
-				final int pointerIndex = event.findPointerIndex(startId);
+				holdKeyMap();
+				direction.x = x - reference.x;
+				direction.y = y - reference.y;
+				if (Math.abs(direction.x) < threshold) direction.x = 0;
+				if (Math.abs(direction.y) < threshold) direction.y = 0;
 
-				if (pointerIndex >= 0) {
-					holdKeyMap();
-					direction.x = stage.screenToStageX(event.getX(pointerIndex)) - reference.x;
-					direction.y = stage.screenToStageY(event.getY(pointerIndex)) - reference.y;
-					if (Math.abs(direction.x) < threshold) direction.x = 0;
-					if (Math.abs(direction.y) < threshold) direction.y = 0;
-
-					if (direction.x != 0 || direction.y != 0) {
-						float size = (float) Math.sqrt(direction.x * direction.x + direction.y * direction.y);
-						direction.x /= size;
-						direction.y /= size;
-					}
-
-					releaseKeyMap();
+				if (direction.x != 0 || direction.y != 0) {
+					float size = (float)
+							Math.sqrt(direction.x * direction.x + direction.y * direction.y);
+					direction.x /= size;
+					direction.y /= size;
 				}
+				releaseKeyMap();
 			}
 		}
 
@@ -164,6 +151,8 @@ public final class GlideInput extends InputManager {
 		} catch (InterruptedException ex) {
 			// Do nothing
 		}
+
+		return false;
 	}
 
 	private void checkRelease(int pointerId) {
@@ -171,18 +160,6 @@ public final class GlideInput extends InputManager {
 			startId = -1;
 			holdKeyMap();
 			direction.setZero();
-			releaseKeyMap();
-		} else {
-			holdKeyMap();
-
-			for (int i = 0; i < buttons.size(); i++) {
-				if (keyIds.get(i) == pointerId) {
-					keyIds.set(i, -1);
-					releaseKeys(1 << (4 + i));
-					break;
-				}
-			}
-
 			releaseKeyMap();
 		}
 	}

@@ -1,4 +1,4 @@
-package com.annahid.libs.artenus.entities.physics;
+package com.annahid.libs.artenus.physics;
 
 import org.jbox2d.dynamics.joints.Joint;
 

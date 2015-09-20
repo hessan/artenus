@@ -1,30 +1,18 @@
 package com.annahid.libs.artenus.entities;
 
 import com.annahid.libs.artenus.data.Point2D;
-import com.annahid.libs.artenus.data.RGB;
-import com.annahid.libs.artenus.graphics.Effect;
+import com.annahid.libs.artenus.entities.behavior.Transformable;
 import com.annahid.libs.artenus.ui.Scene;
 
-class NullEntity implements Entity {
+class NullEntity implements Entity, Transformable {
 	private static final Entity instance = new NullEntity();
+	private static final Point2D dummyPoint = new Point2D(1, 1);
 
 	public static Entity getInstance() {
 		return instance;
 	}
 
-	private Point2D dummyPoint = new Point2D(1, 1);
-	private RGB dummyRGB = new RGB(0, 0, 0);
-
 	private NullEntity() {
-	}
-
-	@Override
-	public void setAnimation(AnimationHandler animation) {
-	}
-
-	@Override
-	public AnimationHandler getAnimation() {
-		return null;
 	}
 
 	@Override
@@ -71,40 +59,10 @@ class NullEntity implements Entity {
 	}
 
 	@Override
-	public void setColorFilter(float r, float g, float b) {
-	}
-
-	@Override
-	public void setColorFilter(RGB rgb) {
-	}
-
-	@Override
-	public RGB getColorFilter() {
-		return dummyRGB;
-	}
-
-	@Override
 	public void onAttach(Scene scene) {
 	}
 
 	@Override
 	public void onDetach(Scene scene) {
-	}
-
-	@Override
-	public Effect getEffect() {
-		return null;
-	}
-
-	@Override
-	public void setEffect(Effect effect) {
-	}
-
-	@Override
-	public void advance(float elapsedTime) {
-	}
-
-	@Override
-	public void render(int flags) {
 	}
 }

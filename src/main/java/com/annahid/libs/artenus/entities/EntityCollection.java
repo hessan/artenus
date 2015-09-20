@@ -6,8 +6,11 @@ import android.support.annotation.NonNull;
 import com.annahid.libs.artenus.data.ConcurrentCollection;
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.data.RGB;
+import com.annahid.libs.artenus.entities.behavior.Animatable;
+import com.annahid.libs.artenus.entities.behavior.Transformable;
 import com.annahid.libs.artenus.graphics.Effect;
-import com.annahid.libs.artenus.input.Touchable;
+import com.annahid.libs.artenus.entities.behavior.Touchable;
+import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.ui.Scene;
 
 import java.util.Iterator;
@@ -32,7 +35,7 @@ import java.util.Stack;
  */
 public class EntityCollection
 		extends ConcurrentCollection<Entity>
-		implements Entity, Touchable {
+		implements Entity, Animatable, Touchable, Transformable, Renderable {
 
 	private final class BasicIterator implements Iterator<Entity> {
 		BasicIterator(Iterator<Entity> it) {
@@ -196,6 +199,7 @@ public class EntityCollection
 	 *
 	 * @param entity The entity to bring to front
 	 */
+	@SuppressWarnings("unused")
 	public final boolean bringToFront(Entity entity) {
 		if(entity == getLast())
 			return true;
@@ -355,7 +359,8 @@ public class EntityCollection
 			GLES10.glScalef(scale.x, scale.y, 0);
 
 			for (Entity entity : this)
-				entity.render(flags);
+				if(entity instanceof Renderable)
+					((Renderable)entity).render(flags);
 
 			GLES10.glPopMatrix();
 		} catch (Exception ex) {
@@ -427,14 +432,15 @@ public class EntityCollection
 			anim.advance(this, elapsedTime);
 
 		for (Entity entity : this)
-			entity.advance(elapsedTime);
+			if(entity instanceof Animatable)
+				((Animatable)entity).advance(elapsedTime);
 	}
 
 	@Override
-	public boolean handleTouch(int action, float x, float y) {
+	public boolean handleTouch(int action, int pointerIndex, float x, float y) {
 		for (Entity entity : this)
 			if (entity instanceof Touchable &&
-					((Touchable) entity).handleTouch(action, x, y))
+					((Touchable) entity).handleTouch(action, pointerIndex, x, y))
 				return true;
 
 		return false;

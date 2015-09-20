@@ -1,11 +1,13 @@
-package com.annahid.libs.artenus.entities.sprites;
+package com.annahid.libs.artenus.graphics.sprites;
 
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.data.RGB;
 import com.annahid.libs.artenus.entities.Entity;
 import com.annahid.libs.artenus.entities.AnimationHandler;
+import com.annahid.libs.artenus.entities.behavior.Animatable;
+import com.annahid.libs.artenus.entities.behavior.Transformable;
 import com.annahid.libs.artenus.graphics.Effect;
-import com.annahid.libs.artenus.graphics.Renderable;
+import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.ui.Scene;
 
 /**
@@ -17,7 +19,8 @@ import com.annahid.libs.artenus.ui.Scene;
  * @see com.annahid.libs.artenus.ui.Scene
  */
 @SuppressWarnings("UnusedDeclaration")
-public abstract class SpriteEntity implements Entity, Renderable {
+public abstract class SpriteEntity
+		implements Entity, Animatable, Renderable, Transformable {
 	/**
 	 * Constructs a generic sprite. This method is called by subclasses to initialize the sprite.
 	 */
@@ -162,7 +165,7 @@ public abstract class SpriteEntity implements Entity, Renderable {
 	 * Gets the transparency value for this sprite.
 	 *
 	 * @return The alpha value for transparency
-	 * @see com.annahid.libs.artenus.entities.sprites.SpriteEntity#setAlpha(float)
+	 * @see com.annahid.libs.artenus.graphics.sprites.SpriteEntity#setAlpha(float)
 	 */
 	public final float getAlpha() {
 		return alpha;
