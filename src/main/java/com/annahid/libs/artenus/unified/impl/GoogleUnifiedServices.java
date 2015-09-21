@@ -10,7 +10,6 @@ import com.annahid.libs.artenus.unified.InventoryManager;
 import com.annahid.libs.artenus.security.LoginManager;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
-import com.google.android.gms.plus.Plus;
 
 public final class GoogleUnifiedServices extends UnifiedServices {
 	private static final int SERVICE_MASK = SERVICE_BILLING | SERVICE_GAMES | SERVICE_ADS;
@@ -59,7 +58,6 @@ public final class GoogleUnifiedServices extends UnifiedServices {
 		}
 
 		if (anyServices) {
-			builder.addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN);
 			GoogleApiClient apiClient = builder.build();
 
 			if (hasServices(SERVICE_GAMES)) {

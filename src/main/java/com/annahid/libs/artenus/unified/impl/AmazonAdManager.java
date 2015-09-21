@@ -1,6 +1,5 @@
 package com.annahid.libs.artenus.unified.impl;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
