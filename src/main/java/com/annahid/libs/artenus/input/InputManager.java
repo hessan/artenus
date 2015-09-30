@@ -2,7 +2,7 @@ package com.annahid.libs.artenus.input;
 
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.entities.Entity;
-import com.annahid.libs.artenus.ui.Scene;
+import com.annahid.libs.artenus.core.Scene;
 
 /**
  * The base class for all input managers. An input manager maps inputs from a specific
@@ -33,22 +33,8 @@ public abstract class InputManager implements Entity {
 	 * Key identifier for the fourth action key.
 	 */
 	public static final int KEY_ACTION4 = 128;
-    /**
-     * Indicates that a pressed gesture has just started.
-     */
-    public static final int EVENT_DOWN = 0;
-    /**
-	 * Indicates that a pressed gesture has finished.
-	 */
-	public static final int EVENT_UP = 1;
-    /**
-	 * Indicates that a change has happened during a press gesture (between
-	 * {@link com.annahid.libs.artenus.input.InputManager#EVENT_UP} and
-	 * {@link com.annahid.libs.artenus.input.InputManager#EVENT_DOWN}).
-	 */
-	public static final int EVENT_MOVE = 2;
 
-    private Point2D savedDirection;
+	private Point2D savedDirection;
 	private int keyMap, savedKeyMap;
 	private InputListener l = null; 
 	

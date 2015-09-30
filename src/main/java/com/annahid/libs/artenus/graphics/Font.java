@@ -1,10 +1,11 @@
 package com.annahid.libs.artenus.graphics;
 
 import android.content.res.Resources;
-import android.opengl.GLES10;
+import android.opengl.GLES20;
 import android.util.Pair;
 
 import com.annahid.libs.artenus.Artenus;
+import com.annahid.libs.artenus.core.RenderingContext;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,8 +14,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
-
-import javax.microedition.khronos.opengles.GL10;
+import java.util.Map;
 
 /**
  * A {@code Texture} that represents a font. A font is a special-purpose cut-out of
@@ -145,24 +145,29 @@ public final class Font extends Texture {
 	 * @param rtl {@code true} if the text should be drawn in right-to-left direction,
 	 *            and {@code false} otherwise
 	 */
-	public void draw(char[] ca, float sx, float sy, float h, float rot, boolean rtl) {
+	public void draw(
+			RenderingContext context,
+			char[] ca, float sx, float sy, float h, float rot, boolean rtl) {
 		if (textureBuffers == null)
 			buildTextureBuffers();
+
+		final TextureShaderProgram program =
+				(TextureShaderProgram) TextureManager.getShaderProgram();
+		context.setShader(program);
 
 		float y = 0;
 		float currentX = 0;
 
-		GLES10.glEnable(GL10.GL_TEXTURE_2D);
-		GLES10.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
-		GLES10.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+		GLES20.glEnable(GLES20.GL_TEXTURE_2D);
+		program.feed(textureId);
 
 		final float sz = h / charH;
 		final float hSpacing = horSpacing * sz, vSpacing = verSpacing * sz;
 		boolean firstLetter = true;
 
-		GLES10.glPushMatrix();
-		GLES10.glTranslatef(sx, sy, 0);
-		GLES10.glRotatef(rot, 0, 0, 1);
+		context.pushMatrix();
+		context.translate(sx, sy);
+		context.rotate(rot);
 
 		for (int i = 0; i < ca.length; i++) {
 			char c = ca[i];
@@ -185,12 +190,12 @@ public final class Font extends Texture {
 				firstLetter = false;
 			}
 
-			GLES10.glPushMatrix();
-			GLES10.glTranslatef(currentX + w / (rtl ? -2 : 2), y, 0);
-			GLES10.glScalef(w, h, 0);
-			GLES10.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffers[c]);
-			GLES10.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
-			GLES10.glPopMatrix();
+			context.pushMatrix();
+			context.translate(currentX + w / (rtl ? -2 : 2), y);
+			context.scale(w, h);
+			program.feedTexCoords(textureBuffers[c]);
+			context.rect();
+			context.popMatrix();
 
 			if (ca.length > i + 1)
 				if (ca[i + 1] == '\r') {
@@ -201,7 +206,7 @@ public final class Font extends Texture {
 			currentX += rtl ? (-w - hSpacing) : (w + hSpacing);
 		}
 
-		GLES10.glPopMatrix();
+		context.popMatrix();
 	}
 
 	/**
@@ -222,7 +227,7 @@ public final class Font extends Texture {
 		BufferedReader reader =
 				new BufferedReader(new InputStreamReader(res.openRawResource(resId)));
 
-		HashMap<Character, Pair<Float, Float>> map = new HashMap<>();
+		Map<Character, Pair<Float, Float>> map = new HashMap<>(32);
 
 		String line;
 		boolean isFont = false;

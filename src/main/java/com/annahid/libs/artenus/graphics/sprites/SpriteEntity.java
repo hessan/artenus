@@ -8,7 +8,7 @@ import com.annahid.libs.artenus.entities.behavior.Animatable;
 import com.annahid.libs.artenus.entities.behavior.Transformable;
 import com.annahid.libs.artenus.graphics.Effect;
 import com.annahid.libs.artenus.entities.behavior.Renderable;
-import com.annahid.libs.artenus.ui.Scene;
+import com.annahid.libs.artenus.core.Scene;
 
 /**
  * The base class for all sprites. A sprite is a mobile piece of graphic that can represent an
@@ -16,7 +16,7 @@ import com.annahid.libs.artenus.ui.Scene;
  * moved, rotated, scaled and animated according to their role in the game.
  *
  * @author Hessan Feghhi
- * @see com.annahid.libs.artenus.ui.Scene
+ * @see com.annahid.libs.artenus.core.Scene
  */
 @SuppressWarnings("UnusedDeclaration")
 public abstract class SpriteEntity
@@ -157,6 +157,7 @@ public abstract class SpriteEntity
 	 *
 	 * @param alphaValue The alpha value for transparency
 	 */
+	@Override
 	public final void setAlpha(float alphaValue) {
 		alpha = alphaValue;
 	}
@@ -167,6 +168,7 @@ public abstract class SpriteEntity
 	 * @return The alpha value for transparency
 	 * @see com.annahid.libs.artenus.graphics.sprites.SpriteEntity#setAlpha(float)
 	 */
+	@Override
 	public final float getAlpha() {
 		return alpha;
 	}

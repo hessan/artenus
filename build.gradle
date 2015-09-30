@@ -29,10 +29,10 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile files('libs/svg-android-1.1.jar', 'libs/jbox2d-library-2.2.1.1-with-dependencies.jar')
 
-    compile 'com.google.android.gms:play-services-identity:7.8.0'
-    compile 'com.google.android.gms:play-services-plus:7.8.0'
-    compile 'com.google.android.gms:play-services-games:7.8.0'
-    compile 'com.google.android.gms:play-services-ads:7.8.0'
+    compile 'com.google.android.gms:play-services-identity:8.1.0'
+    compile 'com.google.android.gms:play-services-plus:8.1.0'
+    compile 'com.google.android.gms:play-services-games:8.1.0'
+    compile 'com.google.android.gms:play-services-ads:8.1.0'
 
     compile files('libs/in-app-purchasing-2.0.61.jar')
     compile files('libs/amazon-ads-5.5.102.jar')

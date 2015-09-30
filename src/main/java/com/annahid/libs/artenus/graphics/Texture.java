@@ -5,17 +5,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Picture;
-import android.opengl.GLES10;
+import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
 import com.annahid.libs.artenus.Artenus;
-import com.annahid.libs.artenus.ui.Stage;
+import com.annahid.libs.artenus.core.RenderingContext;
+import com.annahid.libs.artenus.core.Stage;
 import com.larvalabs.svgandroid.SVG;
 import com.larvalabs.svgandroid.SVGParser;
 
 import java.nio.FloatBuffer;
-
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Represents a texture. A texture is an image that can be used in
@@ -38,20 +37,18 @@ public class Texture {
 
 	/**
 	 * Prepares the OpenGL context for rendering this {@code Texture}. This method must be
-	 * called before calling {@link #draw(float, float, float, float, float)} for
+	 * called before calling {@link #draw(RenderingContext, float, float, float, float, float)} for
 	 * correct rendering. However, it is recommended that you do not call any of these
 	 * methods directly. The framework handles low-level rendering.
 	 *
 	 * @param textureBuffer The texture buffer
-	 * @param wrap          OpenGL texture wrapping method
 	 */
-	public final void prepare(FloatBuffer textureBuffer, int wrap) {
-		GLES10.glEnable(GL10.GL_TEXTURE_2D);
-		GLES10.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
-		GLES10.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-		GLES10.glTexCoordPointer(2, GL10.GL_FLOAT, 0, textureBuffer);
-		GLES10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_S, wrap);
-		GLES10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_WRAP_T, wrap);
+	public final void prepare(FloatBuffer textureBuffer) {
+		final TextureShaderProgram program =
+				(TextureShaderProgram)TextureManager.getShaderProgram();
+
+		program.feed(textureId);
+		program.feedTexCoords(textureBuffer);
 	}
 
 	/**
@@ -64,13 +61,13 @@ public class Texture {
 	 * @param h   The height of the region to draw the texture
 	 * @param rot The rotation angle of the rectangular region
 	 */
-	public final void draw(float x, float y, float w, float h, float rot) {
-		GLES10.glPushMatrix();
-		GLES10.glTranslatef(x, y, 0);
-		GLES10.glRotatef(rot, 0, 0, 1);
-		GLES10.glScalef(w, h, 0);
-		GLES10.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
-		GLES10.glPopMatrix();
+	public final void draw(RenderingContext ctx, float x, float y, float w, float h, float rot) {
+		ctx.pushMatrix();
+		ctx.translate(x, y);
+		ctx.rotate(rot);
+		ctx.scale(w, h);
+		ctx.rect();
+		ctx.popMatrix();
 	}
 
 	/**
@@ -114,7 +111,7 @@ public class Texture {
 	 * @see TextureManager
 	 */
 	public final void destroy() {
-		GLES10.glDeleteTextures(1, new int[]{textureId}, 0);
+		GLES20.glDeleteTextures(1, new int[]{textureId}, 0);
 		textureId = -1;
 	}
 
@@ -145,20 +142,23 @@ public class Texture {
 		textureId = newTextureID();
 
 		try {
-			GLES10.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
-			GLES10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, GL10.GL_LINEAR);
-			GLES10.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, GL10.GL_LINEAR);
+			GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+			GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+			GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+			GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+			GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+			GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
 		} catch (Exception ex) {
 			textureId = -1;
 		}
 
 		if (textureId >= 0)
-			GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bmp, 0);
+			GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bmp, 0);
 
 		bmp.recycle();
 		bmp = null;
 
-		if (GLES10.glGetError() != GLES10.GL_NO_ERROR)
+		if (GLES20.glGetError() != GLES20.GL_NO_ERROR)
 			destroy();
 
 		return true;
@@ -170,7 +170,7 @@ public class Texture {
 		final Resources res = Artenus.getInstance().getResources();
 		final boolean isSVG = res.getResourceTypeName(resId).equalsIgnoreCase("raw");
 
-		final float texScale = Stage.getTextureScalingFactor();
+		final float texScale = TextureManager.getTextureScalingFactor();
 
 		if (isSVG) {
 			// Load the SVG file from the given resource.
@@ -232,7 +232,7 @@ public class Texture {
 	 */
 	private static int newTextureID() {
 		int[] temp = new int[1];
-		GLES10.glGenTextures(1, temp, 0);
+		GLES20.glGenTextures(1, temp, 0);
 		return temp[0];
 	}
 

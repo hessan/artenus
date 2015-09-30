@@ -4,7 +4,7 @@ import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.entities.Entity;
 import com.annahid.libs.artenus.entities.FilteredEntity;
 import com.annahid.libs.artenus.entities.behavior.Transformable;
-import com.annahid.libs.artenus.ui.Scene;
+import com.annahid.libs.artenus.core.Scene;
 
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;

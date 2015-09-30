@@ -28,388 +28,388 @@ import java.util.Iterator;
  * the iterator will not throw any exceptions, and will adapt to the new state of the collection.
  * </p>
  *
- * @param <T>	the type of the elements in this collection
+ * @param <T> the type of the elements in this collection
  * @author Hessan Feghhi
  */
 public class ConcurrentCollection<T> implements Collection<T> {
 
-	/**
-	 * Inserts an element to the front of the collection.
-	 *
-	 * @param object the element to be added
-	 */
-	public void prepend(@NonNull T object) {
-		final Element<T> newElement = new Element<>(object);
+    /**
+     * Inserts an element to the front of the collection.
+     *
+     * @param object the element to be added
+     */
+    public void prepend(@NonNull T object) {
+        final Element<T> newElement = new Element<>(object);
 
-		synchronized (this) {
-			if (first != null) {
-				newElement.next = first;
-				first.prev = newElement;
-			}
+        synchronized (this) {
+            if (first != null) {
+                newElement.next = first;
+                first.prev = newElement;
+            }
 
-			first = newElement;
-		}
-	}
+            first = newElement;
+        }
+    }
 
-	/**
-	 * Adds an element to the back of the collection.
-	 *
-	 * @param object the element to be added
-	 * @return {@code true}
-	 */
-	@Override
-	public boolean add(T object) {
-		final Element<T> newElement = new Element<>(object);
+    /**
+     * Adds an element to the back of the collection.
+     *
+     * @param object the element to be added
+     * @return {@code true}
+     */
+    @Override
+    public boolean add(T object) {
+        final Element<T> newElement = new Element<>(object);
 
-		if (size == 0) {
-			synchronized (this) {
-				first = last = newElement;
-				size = 1;
-			}
+        if (size == 0) {
+            synchronized (this) {
+                first = last = newElement;
+                size = 1;
+            }
 
-			return true;
-		}
+            return true;
+        }
 
-		synchronized (this) {
-			last.next = newElement;
-			newElement.prev = last;
-			last = newElement;
-			size++;
-		}
+        synchronized (this) {
+            last.next = newElement;
+            newElement.prev = last;
+            last = newElement;
+            size++;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Appends all of the elements in the specified collection to the end of this collection, in the
-	 * order that they are returned by the specified collection's Iterator. The behavior of this
-	 * operation is undefined if the specified collection is modified while the operation is in
-	 * progress. (This implies that the behavior of this call is undefined if the specified
-	 * collection is this list, and this list is nonempty.)
-	 *
-	 * @param collection collection of elements to be added to the collection
-	 * @return {@code true}
-	 */
-	@Override
-	public boolean addAll(Collection<? extends T> collection) {
-		for (T item : collection)
-			add(item);
+    /**
+     * Appends all of the elements in the specified collection to the end of this collection, in the
+     * order that they are returned by the specified collection's Iterator. The behavior of this
+     * operation is undefined if the specified collection is modified while the operation is in
+     * progress. (This implies that the behavior of this call is undefined if the specified
+     * collection is this list, and this list is nonempty.)
+     *
+     * @param collection collection of elements to be added to the collection
+     * @return {@code true}
+     */
+    @Override
+    public boolean addAll(Collection<? extends T> collection) {
+        for (T item : collection)
+            add(item);
 
-		return true;
-	}
+        return true;
+    }
 
-	/**
-	 * Removes all of the elements from this collection. The collection will be empty after this
-	 * call returns. However, existing iterators would not notice this change and would function
-	 * as they would before this call.
-	 */
-	@Override
-	public void clear() {
-		first = last = null;
-		size = 0;
-	}
+    /**
+     * Removes all of the elements from this collection. The collection will be empty after this
+     * call returns. However, existing iterators would not notice this change and would function
+     * as they would before this call.
+     */
+    @Override
+    public void clear() {
+        first = last = null;
+        size = 0;
+    }
 
-	/**
-	 * Returns true if this list contains the specified element. More formally, returns true if and
-	 * only if this list contains at least one element e such that
-	 * <tt>(o==null ? e==null : o.equals(e))</tt>.
-	 *
-	 * @param object element whose presence in this list is to be tested
-	 * @return {@code true} if this list contains the specified element
-	 */
-	@Override
-	public boolean contains(Object object) {
-		if (first == null)
-			return false;
+    /**
+     * Returns true if this list contains the specified element. More formally, returns true if and
+     * only if this list contains at least one element e such that
+     * <tt>(o==null ? e==null : o.equals(e))</tt>.
+     *
+     * @param object element whose presence in this list is to be tested
+     * @return {@code true} if this list contains the specified element
+     */
+    @Override
+    public boolean contains(Object object) {
+        if (first == null)
+            return false;
 
-		Element temp = first;
+        Element temp = first;
 
-		while (temp != null && !temp.equals(object))
-			temp = temp.next;
+        while (temp != null && !temp.equals(object))
+            temp = temp.next;
 
-		return temp != null;
-	}
+        return temp != null;
+    }
 
-	/**
-	 * <p>Returns {@code true} if this collection contains all of the elements in the specified
-	 * collection.</p>
-	 * <p>This implementation iterates over the specified collection, checking each element returned
-	 * by the iterator in turn to see if it's contained in this collection. If all elements are so
-	 * contained true is returned, otherwise false.</p>
-	 *
-	 * @param collection collection to be checked for containment in this collection
-	 * @return {@code true} if this collection contains all of the elements in the specified
-	 * collection
-	 */
-	@Override
-	public boolean containsAll(@NonNull Collection<?> collection) {
-		boolean ret = true;
+    /**
+     * <p>Returns {@code true} if this collection contains all of the elements in the specified
+     * collection.</p>
+     * <p>This implementation iterates over the specified collection, checking each element returned
+     * by the iterator in turn to see if it's contained in this collection. If all elements are so
+     * contained true is returned, otherwise false.</p>
+     *
+     * @param collection collection to be checked for containment in this collection
+     * @return {@code true} if this collection contains all of the elements in the specified
+     * collection
+     */
+    @Override
+    public boolean containsAll(@NonNull Collection<?> collection) {
+        boolean ret = true;
 
-		for (Object item : collection)
-			ret = ret && contains(item);
+        for (Object item : collection)
+            ret = ret && contains(item);
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Returns the element at the specified position in this list. Please note that this
-	 * implementation does not guarantee optimized behavior for this method.
-	 *
-	 * @param location index of the element to return
-	 * @return the element at the specified position in this list
-	 */
-	public T get(int location) {
-		if (location < 0 || location >= size)
-			throw new IndexOutOfBoundsException();
+    /**
+     * Returns the element at the specified position in this list. Please note that this
+     * implementation does not guarantee optimized behavior for this method.
+     *
+     * @param location index of the element to return
+     * @return the element at the specified position in this list
+     */
+    public T get(int location) {
+        if (location < 0 || location >= size)
+            throw new IndexOutOfBoundsException();
 
-		if (first == null)
-			return null;
+        if (first == null)
+            return null;
 
-		Element<T> temp = first;
-		int index = 0;
+        Element<T> temp = first;
+        int index = 0;
 
-		while (index < location) {
-			temp = temp.next;
-			index++;
-		}
+        while (index < location) {
+            temp = temp.next;
+            index++;
+        }
 
-		if (temp == null)
-			return last == null ? null : last.value;
+        if (temp == null)
+            return last == null ? null : last.value;
 
-		return temp.value;
-	}
+        return temp.value;
+    }
 
-	/**
-	 * Returns an iterator over the elements in this list in proper sequence. The returned iterator
-	 * supports removal, and will not fail in case of concurrent modification in the collection.
-	 *
-	 * @return an iterator over the elements in this list in proper sequence
-	 */
-	@NonNull
-	@Override
-	public Iterator<T> iterator() {
-		return new It(first);
-	}
+    /**
+     * Returns an iterator over the elements in this list in proper sequence. The returned iterator
+     * supports removal, and will not fail in case of concurrent modification in the collection.
+     *
+     * @return an iterator over the elements in this list in proper sequence
+     */
+    @NonNull
+    @Override
+    public Iterator<T> iterator() {
+        return new It(first);
+    }
 
-	/**
-	 * Removes the first occurrence of the specified element from this collection, if it is present.
-	 * If the list does not contain the element, it is unchanged. More formally, removes the element
-	 * with the lowest distance from the front of the collection such that (o==null ? get(i)==null :
-	 * o.equals(get(i))) (if such an element exists). Returns true if this list contained the
-	 * specified element (or equivalently, if this list changed as a result of the call).
-	 *
-	 * @param object element to be removed from this collection, if present
-	 * @return {@code true} if an element was removed as a result of this call
-	 */
-	@Override
-	public boolean remove(Object object) {
-		Iterator<T> it = iterator();
+    /**
+     * Removes the first occurrence of the specified element from this collection, if it is present.
+     * If the list does not contain the element, it is unchanged. More formally, removes the element
+     * with the lowest distance from the front of the collection such that (o==null ? get(i)==null :
+     * o.equals(get(i))) (if such an element exists). Returns true if this list contained the
+     * specified element (or equivalently, if this list changed as a result of the call).
+     *
+     * @param object element to be removed from this collection, if present
+     * @return {@code true} if an element was removed as a result of this call
+     */
+    @Override
+    public boolean remove(Object object) {
+        Iterator<T> it = iterator();
 
-		while(it.hasNext()) {
-			T item = it.next();
+        while (it.hasNext()) {
+            T item = it.next();
 
-			if(item.equals(object)) {
-				it.remove();
-				return true;
-			}
-		}
+            if (item.equals(object)) {
+                it.remove();
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	/**
-	 * Removes from this collection all of its elements that are contained in the specified
-	 * collection.
-	 *
-	 * @param collection collection containing elements to be removed from this list collection
-	 * @return {@code true} if this list changed as a result of the call
-	 */
-	@Override
-	public boolean removeAll(@NonNull Collection<?> collection) {
-		boolean ret = false;
+    /**
+     * Removes from this collection all of its elements that are contained in the specified
+     * collection.
+     *
+     * @param collection collection containing elements to be removed from this list collection
+     * @return {@code true} if this list changed as a result of the call
+     */
+    @Override
+    public boolean removeAll(@NonNull Collection<?> collection) {
+        boolean ret = false;
 
-		for (Object object : collection) {
-			ret = ret || remove(object);
-		}
+        for (Object object : collection) {
+            ret = ret || remove(object);
+        }
 
-		return ret;
-	}
+        return ret;
+    }
 
-	/**
-	 * Retains only the elements in this list that are contained in the specified collection. In
-	 * other words, removes from this list all of its elements that are not contained in the
-	 * specified collection.
-	 *
-	 * @param collection collection containing elements to be retained in this list
-	 * @return {@code true} if this list changed as a result of the call
-	 */
-	@Override
-	public boolean retainAll(@NonNull Collection<?> collection) {
-		Element<T> current = first;
-		boolean ret = false;
+    /**
+     * Retains only the elements in this list that are contained in the specified collection. In
+     * other words, removes from this list all of its elements that are not contained in the
+     * specified collection.
+     *
+     * @param collection collection containing elements to be retained in this list
+     * @return {@code true} if this list changed as a result of the call
+     */
+    @Override
+    public boolean retainAll(@NonNull Collection<?> collection) {
+        Element<T> current = first;
+        boolean ret = false;
 
-		while (current != null) {
-			if (!collection.contains(current.value)) {
-				synchronized (this) {
-					if (current.next != null)
-						current.next.prev = current.prev;
-					else last = current;
+        while (current != null) {
+            if (!collection.contains(current.value)) {
+                synchronized (this) {
+                    if (current.next != null)
+                        current.next.prev = current.prev;
+                    else last = current;
 
-					if (current.prev != null)
-						current.prev.next = current.next;
-					else first = current;
-				}
+                    if (current.prev != null)
+                        current.prev.next = current.next;
+                    else first = current;
+                }
 
-				ret = true;
-			}
+                ret = true;
+            }
 
-			current = current.next;
-		}
+            current = current.next;
+        }
 
-		return ret;
-	}
+        return ret;
+    }
 
-	/**
-	 * Returns the number of elements in this collection.
-	 *
-	 * @return the number of elements in this list
-	 */
-	@Override
-	public int size() {
-		return size;
-	}
+    /**
+     * Returns the number of elements in this collection.
+     *
+     * @return the number of elements in this list
+     */
+    @Override
+    public int size() {
+        return size;
+    }
 
-	/**
-	 * Returns true if this list contains no elements.
-	 *
-	 * @return {@code true} if this list contains no elements
-	 */
-	@Override
-	public boolean isEmpty() {
-		return size == 0;
-	}
+    /**
+     * Returns true if this list contains no elements.
+     *
+     * @return {@code true} if this list contains no elements
+     */
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
 
-	/**
-	 * Returns an array containing all of the elements in this collection in proper sequence (from
-	 * first to last element). The returned array will be "safe" in that no references to it are
-	 * maintained by this collection. (In other words, this method must allocate a new array). The
-	 * caller is thus free to modify the returned array. This method acts as bridge between
-	 * array-based and collection-based APIs.
-	 *
-	 * @return an array containing all of the elements in this list in proper sequence
-	 */
-	@NonNull
-	@Override
-	public Object[] toArray() {
-		Object[] array = new Object[size];
-		int index = 0;
+    /**
+     * Returns an array containing all of the elements in this collection in proper sequence (from
+     * first to last element). The returned array will be "safe" in that no references to it are
+     * maintained by this collection. (In other words, this method must allocate a new array). The
+     * caller is thus free to modify the returned array. This method acts as bridge between
+     * array-based and collection-based APIs.
+     *
+     * @return an array containing all of the elements in this list in proper sequence
+     */
+    @NonNull
+    @Override
+    public Object[] toArray() {
+        Object[] array = new Object[size];
+        int index = 0;
 
-		for (T obj : this)
-			array[index++] = obj;
+        for (T obj : this)
+            array[index++] = obj;
 
-		return array;
-	}
+        return array;
+    }
 
-	/**
-	 * This method is not implemented by this class, and should not be called.
-	 *
-	 * @param array This parameter is not used.
-	 * @param <T1>  This parameter is not used.
-	 * @return This method does not return. Instead, it throws a
-	 * {@code UnsupportedOperationException}.
-	 * @throws UnsupportedOperationException
-	 */
-	@NonNull
-	@Override
-	public <T1> T1[] toArray(@NonNull T1[] array) {
-		throw new UnsupportedOperationException();
-	}
+    /**
+     * This method is not implemented by this class, and should not be called.
+     *
+     * @param array This parameter is not used.
+     * @param <T1>  This parameter is not used.
+     * @return This method does not return. Instead, it throws a
+     * {@code UnsupportedOperationException}.
+     * @throws UnsupportedOperationException
+     */
+    @NonNull
+    @Override
+    public <T1> T1[] toArray(@NonNull T1[] array) {
+        throw new UnsupportedOperationException();
+    }
 
-	/**
-	 * Returns the first element in this collection (the element at the front of the collection).
-	 *
-	 * @return the first element of this collection
-	 */
-	public T getFirst() {
-		return first == null ? null : first.value;
-	}
+    /**
+     * Returns the first element in this collection (the element at the front of the collection).
+     *
+     * @return the first element of this collection
+     */
+    public T getFirst() {
+        return first == null ? null : first.value;
+    }
 
-	/**
-	 * Returns the last element in this collection (the element at the back of the collection).
-	 *
-	 * @return the last element of this collection
-	 */
-	public T getLast() {
-		return last == null ? null : last.value;
-	}
+    /**
+     * Returns the last element in this collection (the element at the back of the collection).
+     *
+     * @return the last element of this collection
+     */
+    public T getLast() {
+        return last == null ? null : last.value;
+    }
 
-	private Element<T> first, last;
-	private int size = 0;
+    private Element<T> first, last;
+    private int size = 0;
 
-	/**
-	 * Represents an iterator for a concurrent collection. An intance of this
-	 * iterator is returned by the {@link ConcurrentCollection#iterator()} method.
-	 */
-	private final class It implements Iterator<T> {
-		It(Element<T> start) {
-			current = start;
-		}
+    /**
+     * Represents an iterator for a concurrent collection. An intance of this
+     * iterator is returned by the {@link ConcurrentCollection#iterator()} method.
+     */
+    private final class It implements Iterator<T> {
+        It(Element<T> start) {
+            current = start;
+        }
 
-		@Override
-		public boolean hasNext() {
-			return current != null;
-		}
+        @Override
+        public boolean hasNext() {
+            return current != null;
+        }
 
-		@Override
-		public T next() {
-			recent = current;
-			current = current.next;
-			return recent.value;
-		}
+        @Override
+        public T next() {
+            recent = current;
+            current = current.next;
+            return recent.value;
+        }
 
-		@Override
-		public void remove() {
-			if (recent == null)
-				return;
+        @Override
+        public void remove() {
+            if (recent == null)
+                return;
 
-			synchronized (this) {
-				if (recent.prev == null)
-					first = recent.next;
-				else recent.prev.next = recent.next;
+            synchronized (this) {
+                if (recent.prev == null)
+                    first = recent.next;
+                else recent.prev.next = recent.next;
 
-				if (recent.next == null)
-					last = recent.prev;
-				else recent.next.prev = recent.prev;
+                if (recent.next == null)
+                    last = recent.prev;
+                else recent.next.prev = recent.prev;
 
-				if (first == recent)
-					first = recent.next;
+                if (first == recent)
+                    first = recent.next;
 
-				if (last == recent)
-					last = recent.prev;
+                if (last == recent)
+                    last = recent.prev;
 
-				size--;
-			}
+                size--;
+            }
 
-			current = recent.next;
-			recent = null;
-		}
+            current = recent.next;
+            recent = null;
+        }
 
-		Element<T> current, recent;
-	}
+        Element<T> current, recent;
+    }
 
-	/**
-	 * This class represents an element in the linked list. ConcurrentCollection
-	 * uses a linked list internally.
-	 *
-	 * @param <T>	The type of the element in the linked list
-	 */
-	private static final class Element<T> {
-		Element(T value) {
-			this.value = value;
-			prev = next = null;
-		}
+    /**
+     * This class represents an element in the linked list. ConcurrentCollection
+     * uses a linked list internally.
+     *
+     * @param <T> The type of the element in the linked list
+     */
+    private static final class Element<T> {
+        Element(T value) {
+            this.value = value;
+            prev = next = null;
+        }
 
-		T value;
-		Element<T> prev, next;
-	}
+        T value;
+        Element<T> prev, next;
+    }
 }

@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.util.SparseArray;
 
 import com.annahid.libs.artenus.Artenus;
+import com.annahid.libs.artenus.core.ShaderProgram;
 import com.annahid.libs.artenus.data.ConcurrentCollection;
 
 import java.util.Collection;
@@ -52,7 +53,13 @@ public final class TextureManager {
 
 	private static final Object texLock = new Object();
 
+	static TextureShaderProgram program = new TextureShaderProgram();
+
 	static int loadingTexW, loadingTexH;
+
+	public static ShaderProgram getShaderProgram() {
+		return program;
+	}
 
 	/**
 	 * Gets the texture displayed in the loading screen. The framework has a default loading texture,
@@ -87,7 +94,7 @@ public final class TextureManager {
 	 * method directly and use {@code Stage} attributes to set the loading texture.
 	 *
 	 * @param resId The resource identifier for the loading texture
-	 * @see com.annahid.libs.artenus.ui.Stage
+	 * @see com.annahid.libs.artenus.core.Stage
 	 */
 	public static void setLoadingTexture(int resId) {
 		loadingTexture = new Texture(resId);
@@ -103,7 +110,7 @@ public final class TextureManager {
 	 * local loading of those textures instead of globally loading them using this method.
 	 *
 	 * @param textureSet The set of resource identifiers for the textures and fonts to load
-	 * @see com.annahid.libs.artenus.ui.StageManager
+	 * @see com.annahid.libs.artenus.core.StageManager
 	 * @see #addLocal(int...)
 	 */
 	public static void add(int... textureSet) {
@@ -145,10 +152,10 @@ public final class TextureManager {
 
 	/**
 	 * Declares local textures for a scene. This method should be called within the
-	 * {@link com.annahid.libs.artenus.ui.Scene#onLocalLoad()} method of the {@code Scene} class.
+	 * {@link com.annahid.libs.artenus.core.Scene#onLocalLoad()} method of the {@code Scene} class.
 	 *
 	 * @param textureSet The set of resource identifier for the textures to load
-	 * @see com.annahid.libs.artenus.ui.Scene
+	 * @see com.annahid.libs.artenus.core.Scene
 	 */
 	public static void addLocal(int... textureSet) {
 		Texture tex;
@@ -166,7 +173,7 @@ public final class TextureManager {
 	}
 
 	/**
-	 * Unloads local textures previously loaded using {@link #addLocal(int[])}. This method is
+	 * Unloads local textures previously loaded using {@link #addLocal(int...)}. This method is
 	 * called internally and you do not need to manually handle the unloading of textures.
 	 */
 	public static void unloadLocal() {
@@ -311,4 +318,28 @@ public final class TextureManager {
 			state = STATE_FRESH;
 		}
 	}
+
+	/**
+	 * Retrieves the texture scaling factor. Normally the stage is assumed to have the smallest
+	 * dimension of 600. The smallest dimension means the the width in portrait mode and height in
+	 * landscape mode. If the real dimensions is larger that this, textures are scaled to maintain
+	 * this perception from the developer's point of view. This method yields the scaling factor
+	 * used.
+	 *
+	 * @return The texture scaling factor.
+	 */
+	public static float getTextureScalingFactor() {
+		return texScale;
+	}
+
+	/**
+	 * Called by the stage to set the scaling factor. You should not call this method manually.
+	 * @param factor	Texture scaling factor.
+	 * @see TextureManager#getTextureScalingFactor()
+	 */
+	public static void setTextureScalingFactor(float factor) {
+		texScale = factor;
+	}
+
+	private static float texScale = 1.0f;
 }

@@ -1,7 +1,6 @@
 package com.annahid.libs.artenus.graphics.sprites;
 
-import android.opengl.GLES10;
-
+import com.annahid.libs.artenus.core.RenderingContext;
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.graphics.Font;
 
@@ -127,15 +126,15 @@ public final class TextSprite extends SpriteEntity {
 	}
 
 	@Override
-	public final void render(int flags) {
+	public final void render(RenderingContext ctx, int flags) {
 		if (effect != null && (flags & FLAG_IGNORE_EFFECTS) == 0)
-			effect.render(this, alpha);
+			effect.render(ctx, this, alpha);
 		else if (alpha != 0) {
 
 			if ((flags & FLAG_IGNORE_COLOR_FILTER) == 0)
-				GLES10.glColor4f(alpha * cf.r, alpha * cf.g, alpha * cf.b, alpha);
+				ctx.setColorFilter(alpha * cf.r, alpha * cf.g, alpha * cf.b, alpha);
 
-			myFont.draw(ca, pos.x, pos.y, scale.x, rotation, rtl);
+			myFont.draw(ctx, ca, pos.x, pos.y, scale.x, rotation, rtl);
 		}
 	}
 }

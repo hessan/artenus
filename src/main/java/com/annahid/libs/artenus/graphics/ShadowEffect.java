@@ -1,8 +1,11 @@
 package com.annahid.libs.artenus.graphics;
 
-import android.opengl.GLES10;
+import android.opengl.GLES20;
 
+import com.annahid.libs.artenus.Artenus;
+import com.annahid.libs.artenus.core.ShaderProgram;
 import com.annahid.libs.artenus.entities.behavior.Renderable;
+import com.annahid.libs.artenus.core.RenderingContext;
 
 /**
  * A subclass of {@link com.annahid.libs.artenus.graphics.Effect} that represents a shadow effect.
@@ -24,20 +27,24 @@ public final class ShadowEffect extends Effect {
 	}
 
 	@Override
-	public void render(Renderable renderable, float alpha) {
-		GLES10.glPushMatrix();
-		GLES10.glTranslatef(dx, dy, 0);
-		GLES10.glColor4f(0, 0, 0, alpha * shadowAlpha);
+	public void render(RenderingContext context, Renderable renderable, float alpha) {
+		context.pushMatrix();
+		context.translate(dx, dy);
+		context.setColorFilter(0, 0, 0, alpha * shadowAlpha);
+
+		if (baseEffect == null) {
+			renderable.render(
+					context,
+					Renderable.FLAG_IGNORE_COLOR_FILTER | Renderable.FLAG_IGNORE_EFFECTS
+			);
+		}
+		else baseEffect.render(context, renderable, alpha);
+
+		context.popMatrix();
 
 		if (baseEffect == null)
-			renderable.render(Renderable.FLAG_IGNORE_COLOR_FILTER | Renderable.FLAG_IGNORE_EFFECTS);
-		else baseEffect.render(renderable, alpha);
-
-		GLES10.glPopMatrix();
-
-		if (baseEffect == null)
-			renderable.render(Renderable.FLAG_IGNORE_EFFECTS);
-		else baseEffect.render(renderable, alpha);
+			renderable.render(context, Renderable.FLAG_IGNORE_EFFECTS);
+		else baseEffect.render(context, renderable, alpha);
 	}
 
 	private float dx, dy, shadowAlpha;

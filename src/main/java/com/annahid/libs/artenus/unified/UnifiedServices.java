@@ -5,11 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.annahid.libs.artenus.Artenus;
-import com.annahid.libs.artenus.unified.impl.AmazonUnifiedServices;
-import com.annahid.libs.artenus.unified.impl.BazaarUnifiedServices;
-import com.annahid.libs.artenus.unified.impl.CandoUnifiedServices;
-import com.annahid.libs.artenus.unified.impl.DummyUnifiedServices;
-import com.annahid.libs.artenus.unified.impl.GoogleUnifiedServices;
+import com.annahid.libs.artenus.internal.unified.AmazonUnifiedServices;
+import com.annahid.libs.artenus.internal.unified.BazaarUnifiedServices;
+import com.annahid.libs.artenus.internal.unified.CandoUnifiedServices;
+import com.annahid.libs.artenus.internal.unified.DummyUnifiedServices;
+import com.annahid.libs.artenus.internal.unified.GoogleUnifiedServices;
 import com.annahid.libs.artenus.security.LoginManager;
 
 /**

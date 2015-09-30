@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.annahid.libs.artenus.ui.Stage
+    <com.annahid.libs.artenus.internal.core.StageImpl
         android:id="@+id/gameStage"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

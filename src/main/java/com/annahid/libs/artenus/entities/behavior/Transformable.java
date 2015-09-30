@@ -6,8 +6,8 @@ import com.annahid.libs.artenus.data.Point2D;
  * Interface for all entities that can be moved, rotated, and scaled. Sprites are good examples of
  * entities that have this behavior.
  *
- * @see com.annahid.libs.artenus.graphics.sprites.SpriteEntity
  * @author Hessan Feghhi
+ * @see com.annahid.libs.artenus.graphics.sprites.SpriteEntity
  */
 public interface Transformable {
     /**

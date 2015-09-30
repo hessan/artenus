@@ -1,10 +1,7 @@
 package com.annahid.libs.artenus.graphics.sprites;
 
-import android.opengl.GLES10;
-
+import com.annahid.libs.artenus.core.RenderingContext;
 import com.annahid.libs.artenus.data.Point2D;
-
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * A subclass of {@link SpriteEntity} that represents a line. It provides methods to control the
@@ -103,23 +100,25 @@ public final class LineSprite extends SpriteEntity {
 	}
 
 	@Override
-	public final void render(int flags) {
+	public final void render(RenderingContext context, int flags) {
 		if (effect != null && (flags & FLAG_IGNORE_EFFECTS) == 0) {
-			effect.render(this, alpha);
+			effect.render(context, this, alpha);
 			return;
 		}
 
-		GLES10.glDisable(GL10.GL_TEXTURE_2D);
-		GLES10.glPushMatrix();
-		GLES10.glTranslatef(pos.x, pos.y, 0);
-		GLES10.glRotatef(rotation, 0, 0, 1);
-		GLES10.glScalef(scale.x, scale.y, 0);
+		if((flags & FLAG_IGNORE_EFFECTS) == 0)
+			context.setShader(null);
+
+		context.pushMatrix();
+		context.translate(pos.x, pos.y);
+		context.rotate(rotation);
+		context.scale(scale.x, scale.y);
 
 		if ((flags & FLAG_IGNORE_COLOR_FILTER) == 0)
-			GLES10.glColor4f(cf.r * alpha, cf.g * alpha, cf.b * alpha, alpha);
+			context.setColorFilter(cf.r * alpha, cf.g * alpha, cf.b * alpha, alpha);
 
-		GLES10.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 4);
-		GLES10.glPopMatrix();
+		context.rect();
+		context.popMatrix();
 	}
 
 	/**

@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Performs physical simulation in the framework. It handles everything related to
  * physical bodies, joints and physical animation. It is highly recommended that you do not directly
- * instantiate this class. Each {@link com.annahid.libs.artenus.ui.Scene} internally contains a
+ * instantiate this class. Each {@link com.annahid.libs.artenus.core.Scene} internally contains a
  * {@code PhysicsSimulator} instance and it is recommended that you take advantage of that through
  * entities such as {@link PhysicalBody}.
  *

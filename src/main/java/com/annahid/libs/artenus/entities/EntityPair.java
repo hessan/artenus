@@ -1,7 +1,7 @@
 package com.annahid.libs.artenus.entities;
 
-import android.opengl.GLES10;
-
+import com.annahid.libs.artenus.core.RenderingContext;
+import com.annahid.libs.artenus.input.TouchEvent;
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.data.RGB;
 import com.annahid.libs.artenus.entities.behavior.Animatable;
@@ -9,7 +9,7 @@ import com.annahid.libs.artenus.entities.behavior.Transformable;
 import com.annahid.libs.artenus.graphics.Effect;
 import com.annahid.libs.artenus.entities.behavior.Touchable;
 import com.annahid.libs.artenus.entities.behavior.Renderable;
-import com.annahid.libs.artenus.ui.Scene;
+import com.annahid.libs.artenus.core.Scene;
 
 /**
  * <p>Represents a pair of connected entities. The visual difference between this class and an
@@ -24,199 +24,216 @@ import com.annahid.libs.artenus.ui.Scene;
  * </p>
  */
 public class EntityPair
-		implements Entity, Animatable, Touchable, Transformable, Renderable {
+        implements Entity, Animatable, Touchable, Transformable, Renderable {
 
-	/**
-	 * Constructs a new entity pair, with given entities.
-	 *
-	 * @param first The first entity in the pair
-	 * @param second The second entity in the pair
-	 */
-	public EntityPair(Entity first, Entity second) {
-		pos = new Point2D(0, 0);
-		scale = new Point2D(1, 1);
+    /**
+     * Constructs a new entity pair, with given entities.
+     *
+     * @param first  The first entity in the pair
+     * @param second The second entity in the pair
+     */
+    public EntityPair(Entity first, Entity second) {
+        pos = new Point2D(0, 0);
+        scale = new Point2D(1, 1);
 
-		this.first = first == null ? NullEntity.getInstance() : first;
-		this.second = second == null ? NullEntity.getInstance() : second;
-	}
+        this.first = first == null ? NullEntity.getInstance() : first;
+        this.second = second == null ? NullEntity.getInstance() : second;
+    }
 
-	/**
-	 * Gets the first entity in this pair.
-	 *
-	 * @return The first entity
-	 */
-	public final Entity getFirst() {
-		return first;
-	}
+    /**
+     * Gets the first entity in this pair.
+     *
+     * @return The first entity
+     */
+    public final Entity getFirst() {
+        return first;
+    }
 
-	/**
-	 * Gets the second entity in this pair.
-	 *
-	 * @return The second entity
-	 */
-	public final Entity getSecond() {
-		return second;
-	}
+    /**
+     * Gets the second entity in this pair.
+     *
+     * @return The second entity
+     */
+    public final Entity getSecond() {
+        return second;
+    }
 
-	@Override
-	public void setAnimation(AnimationHandler animation) {
-		anim = animation;
-	}
+    @Override
+    public void setAnimation(AnimationHandler animation) {
+        anim = animation;
+    }
 
-	@Override
-	public AnimationHandler getAnimation() {
-		return anim;
-	}
+    @Override
+    public AnimationHandler getAnimation() {
+        return anim;
+    }
 
-	@Override
-	public Point2D getPosition() {
-		return pos;
-	}
+    @Override
+    public Point2D getPosition() {
+        return pos;
+    }
 
-	@Override
-	public float getRotation() {
-		return rotation;
-	}
+    @Override
+    public float getRotation() {
+        return rotation;
+    }
 
-	@Override
-	public Point2D getScale() {
-		return scale;
-	}
+    @Override
+    public Point2D getScale() {
+        return scale;
+    }
 
-	@Override
-	public void setRotation(float angle) {
-		rotation = angle;
-	}
+    @Override
+    public void setRotation(float angle) {
+        rotation = angle;
+    }
 
-	@Override
-	public void setScale(float scaleValue) {
-		scale.x = scale.y = scaleValue;
-	}
+    @Override
+    public void setScale(float scaleValue) {
+        scale.x = scale.y = scaleValue;
+    }
 
-	@Override
-	public void setScale(float scaleX, float scaleY) {
-		scale.x = scaleX;
-		scale.y = scaleY;
-	}
+    @Override
+    public void setScale(float scaleX, float scaleY) {
+        scale.x = scaleX;
+        scale.y = scaleY;
+    }
 
-	@Override
-	public void rotate(float angle) {
-		rotation += angle;
-	}
+    @Override
+    public void rotate(float angle) {
+        rotation += angle;
+    }
 
-	@Override
-	public void move(float amountX, float amountY) {
-		pos.x += amountX;
-		pos.y += amountY;
-	}
+    @Override
+    public void move(float amountX, float amountY) {
+        pos.x += amountX;
+        pos.y += amountY;
+    }
 
-	@Override
-	public void setPosition(Point2D position) {
-		setPosition(position.x, position.y);
-	}
+    @Override
+    public void setPosition(Point2D position) {
+        setPosition(position.x, position.y);
+    }
 
-	@Override
-	public void setPosition(float x, float y) {
-		pos.x = x;
-		pos.y = y;
-	}
+    @Override
+    public void setPosition(float x, float y) {
+        pos.x = x;
+        pos.y = y;
+    }
 
-	@Override
-	public void setColorFilter(float r, float g, float b) {
-		if(first instanceof Renderable)
-			((Renderable)first).setColorFilter(r, g, b);
-		if(second instanceof Renderable)
-			((Renderable)second).setColorFilter(r, g, b);
-	}
+    @Override
+    public void setColorFilter(float r, float g, float b) {
+        if (first instanceof Renderable)
+            ((Renderable) first).setColorFilter(r, g, b);
+        if (second instanceof Renderable)
+            ((Renderable) second).setColorFilter(r, g, b);
+    }
 
-	@Override
-	public void setColorFilter(RGB rgb) {
-		setColorFilter(rgb.r, rgb.g, rgb.b);
-	}
+    @Override
+    public void setColorFilter(RGB rgb) {
+        setColorFilter(rgb.r, rgb.g, rgb.b);
+    }
 
-	@Override
-	public RGB getColorFilter() {
-		if(first instanceof Renderable)
-			return ((Renderable)first).getColorFilter();
-		else if(second instanceof Renderable)
-			return ((Renderable)second).getColorFilter();
-		else return new RGB(0, 0, 0);
-	}
+    @Override
+    public RGB getColorFilter() {
+        if (first instanceof Renderable)
+            return ((Renderable) first).getColorFilter();
+        else if (second instanceof Renderable)
+            return ((Renderable) second).getColorFilter();
+        else return new RGB(0, 0, 0);
+    }
 
-	@Override
-	public void onAttach(Scene scene) {
-		first.onAttach(scene);
-		second.onAttach(scene);
-	}
+    @Override
+    public void onAttach(Scene scene) {
+        first.onAttach(scene);
+        second.onAttach(scene);
+    }
 
-	@Override
-	public void onDetach(Scene scene) {
-		first.onDetach(scene);
-		second.onDetach(scene);
-	}
+    @Override
+    public void onDetach(Scene scene) {
+        first.onDetach(scene);
+        second.onDetach(scene);
+    }
 
-	/**
-	 * Renders both entities in the pair.
-	 *
-	 * @param flags Rendering flags
-	 */
-	@Override
-	public void render(int flags) {
-		GLES10.glPushMatrix();
-		GLES10.glTranslatef(pos.x, pos.y, 0);
-		GLES10.glRotatef(rotation, 0, 0, 1);
-		GLES10.glScalef(scale.x, scale.y, 0);
+    /**
+     * Renders both entities in the pair.
+     *
+     * @param flags Rendering flags
+     */
+    @Override
+    public void render(RenderingContext ctx, int flags) {
+        ctx.pushMatrix();
+        ctx.translate(pos.x, pos.y);
+        ctx.rotate(rotation);
+        ctx.scale(scale.x, scale.y);
 
-		if(first instanceof Renderable)
-			((Renderable)first).render(flags);
-		if(second instanceof Renderable)
-			((Renderable)second).render(flags);
+        if (first instanceof Renderable)
+            ((Renderable) first).render(ctx, flags);
+        if (second instanceof Renderable)
+            ((Renderable) second).render(ctx, flags);
 
-		GLES10.glPopMatrix();
-	}
+        ctx.popMatrix();
+    }
 
-	@Override
-	public void advance(float elapsedTime) {
-		if (anim != null)
-			anim.advance(this, elapsedTime);
+    @Override
+    public void advance(float elapsedTime) {
+        if (anim != null)
+            anim.advance(this, elapsedTime);
 
-		if(first instanceof Animatable)
-			((Animatable)first).advance(elapsedTime);
-		if(second instanceof Animatable)
-			((Animatable)second).advance(elapsedTime);
-	}
+        if (first instanceof Animatable)
+            ((Animatable) first).advance(elapsedTime);
+        if (second instanceof Animatable)
+            ((Animatable) second).advance(elapsedTime);
+    }
 
-	@Override
-	public boolean handleTouch(int action, int pointerIndex, float x, float y) {
-		return (
-						first instanceof Touchable
-								&& ((Touchable) first).handleTouch(action, pointerIndex, x, y)
-				) || (
-						second instanceof Touchable
-								&& ((Touchable) second).handleTouch(action, pointerIndex, x, y)
-				);
-	}
+    @Override
+    public boolean handleTouch(TouchEvent event) {
+        return (
+                first instanceof Touchable
+                        && ((Touchable) first).handleTouch(event)
+        ) || (
+                second instanceof Touchable
+                        && ((Touchable) second).handleTouch(event)
+        );
+    }
 
-	@Override
-	public Effect getEffect() {
-		if(first instanceof Renderable)
-			return ((Renderable)first).getEffect();
-		else if(second instanceof Renderable)
-			return ((Renderable)second).getEffect();
-		else return null;
-	}
+    @Override
+    public Effect getEffect() {
+        if (first instanceof Renderable)
+            return ((Renderable) first).getEffect();
+        if (second instanceof Renderable)
+            return ((Renderable) second).getEffect();
+        return null;
+    }
 
-	@Override
-	public void setEffect(Effect effect) {
-		if(first instanceof Renderable)
-			((Renderable)first).setEffect(effect);
-		if(second instanceof Renderable)
-			((Renderable)second).setEffect(effect);
-	}
+    @Override
+    public void setEffect(Effect effect) {
+        if (first instanceof Renderable)
+            ((Renderable) first).setEffect(effect);
+        if (second instanceof Renderable)
+            ((Renderable) second).setEffect(effect);
+    }
 
-	private Entity first, second;
-	private final Point2D pos, scale;
-	private float rotation;
+    @Override
+    public void setAlpha(float alpha) {
+        if (first instanceof Renderable)
+            ((Renderable) first).setAlpha(alpha);
+        if (second instanceof Renderable)
+            ((Renderable) second).setAlpha(alpha);
+    }
 
-	protected AnimationHandler anim;
+    @Override
+    public float getAlpha() {
+        if (first instanceof Renderable)
+            return ((Renderable) first).getAlpha();
+        if (second instanceof Renderable)
+            return ((Renderable) second).getAlpha();
+        return 0;
+    }
+
+    private Entity first, second;
+    private final Point2D pos, scale;
+    private float rotation;
+
+    protected AnimationHandler anim;
 }

@@ -1,15 +1,12 @@
 package com.annahid.libs.artenus.graphics.sprites;
 
-import android.opengl.GLES10;
-
 import com.annahid.libs.artenus.graphics.Texture;
 import com.annahid.libs.artenus.graphics.TextureManager;
+import com.annahid.libs.artenus.core.RenderingContext;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
-
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * A subclass of {@link SpriteEntity} that displays an image block on the screen. It provides tools
@@ -19,7 +16,7 @@ import javax.microedition.khronos.opengles.GL10;
  * @see SpriteEntity
  */
 @SuppressWarnings("UnusedDeclaration")
-public final class ImageSprite extends SpriteEntity {
+public class ImageSprite extends SpriteEntity {
 	/**
 	 * A cutout is a description of how a texture is divided into image blocks for
 	 * use in an {@code ImageSprite}. By introducing a {@code ImageSprite.Cutout}
@@ -188,7 +185,7 @@ public final class ImageSprite extends SpriteEntity {
 		return currentFrame;
 	}
 
-	public void render(int flags) {
+	public void render(RenderingContext context, int flags) {
 		if (frames == null) {
 			if (cutout == null) {
 				frames = TextureManager.getLoadingTexture();
@@ -199,20 +196,24 @@ public final class ImageSprite extends SpriteEntity {
 			return;
 		}
 
+		if((flags & FLAG_IGNORE_EFFECTS) == 0)
+			context.setShader(TextureManager.getShaderProgram());
+
 		if (alpha != 0) {
 			if (effect != null && (flags & FLAG_IGNORE_EFFECTS) == 0) {
-				effect.render(this, alpha);
+				effect.render(context, this, alpha);
 			} else {
 				if (!cutout.isGenerated())
 					cutout.generate(frames.getWidth(), frames.getHeight());
 
 				final float width = scale.x * cutout.fw, height = scale.y * cutout.fh;
 
-				if ((flags & FLAG_IGNORE_COLOR_FILTER) == 0)
-					GLES10.glColor4f(alpha * cf.r, alpha * cf.g, alpha * cf.b, alpha);
+				frames.prepare(cutout.textureBuffers[currentFrame]);
 
-				frames.prepare(cutout.textureBuffers[currentFrame], GL10.GL_CLAMP_TO_EDGE);
-				frames.draw(pos.x, pos.y, width, height, rotation);
+				if ((flags & FLAG_IGNORE_COLOR_FILTER) == 0)
+					context.setColorFilter(alpha * cf.r, alpha * cf.g, alpha * cf.b, alpha);
+
+				frames.draw(context, pos.x, pos.y, width, height, rotation);
 			}
 		}
 	}

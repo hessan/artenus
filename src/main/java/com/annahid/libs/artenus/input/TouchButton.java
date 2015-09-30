@@ -1,81 +1,121 @@
 package com.annahid.libs.artenus.input;
 
-import com.annahid.libs.artenus.data.Point2D;
+import com.annahid.libs.artenus.core.RenderingContext;
+import com.annahid.libs.artenus.core.Scene;
+import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.entities.Entity;
 import com.annahid.libs.artenus.entities.FilteredEntity;
 import com.annahid.libs.artenus.entities.behavior.Touchable;
 import com.annahid.libs.artenus.entities.behavior.Transformable;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Handles touch events for the underlying entity.
  */
-public class TouchButton extends FilteredEntity implements Touchable {
+public class TouchButton extends FilteredEntity implements Button, Touchable {
+    private static AtomicInteger idStore = new AtomicInteger(100);
 
-    public interface Listener {
-        void onPress(float relativeX, float relativeY);
-        void onClick(float relativeX, float relativeY);
-        void onRelease();
-    }
+    @SuppressWarnings("unused")
+    public static final int INVALID_ID = 0;
 
-    public TouchButton(Entity target, TapRegion tapRegion) {
+    public TouchButton(Entity target) {
         super(target);
-        this.tapRegion = tapRegion;
+        objectId = (int) (byte) (idStore.incrementAndGet() % 256);
 
-        if(!(target instanceof Transformable))
+        if (objectId == 0)
+            objectId++;
+
+        if (!(target instanceof Transformable))
             throw new IllegalArgumentException("Target entity is not transformable.");
+
+        if (!(target instanceof Renderable))
+            throw new IllegalArgumentException(
+                    "Target entity is not renderable. Artenus uses graphical" +
+                            "representations of objects to track touch events."
+            );
+
+        if (target instanceof TouchButton)
+            throw new IllegalArgumentException(
+                    "Nested touch buttons are not supported by the framework."
+            );
     }
 
     @Override
-    public boolean handleTouch(int action, int pointerId, float x, float y) {
-        if(action == InputManager.EVENT_DOWN) {
-            final Point2D trans = ((Transformable)target).getPosition();
+    public void onAttach(Scene scene) {
+        super.onAttach(scene);
+        scene.getTouchMap().registerButton(this);
+    }
 
-            if(!down && tapRegion.hitTest(trans.x, trans.y, x, y)) {
+    @Override
+    public void onDetach(Scene scene) {
+        super.onDetach(scene);
+        scene.getTouchMap().unregisterButton(this);
+    }
+
+    void internalTouch(int action, int pointerId) {
+        if (action == TouchEvent.EVENT_DOWN) {
+            if (!down) {
                 down = true;
                 downId = pointerId;
 
-                if(listener != null) {
-                    listener.onPress(x - trans.x, y - trans.y);
-                }
-
-                return true;
-            }
-        }
-        else if(action == InputManager.EVENT_UP) {
-            if(down) {
-                final Point2D trans = ((Transformable)target).getPosition();
-
-                if(tapRegion.hitTest(trans.x, trans.y, x, y) && pointerId == downId) {
-                    if(listener != null) {
-                        listener.onClick(x - trans.x, y - trans.y);
-                    }
-                }
-                else {
-                    if(listener != null) {
-                        listener.onRelease();
-                    }
-                }
-
-                if(pointerId == downId) {
-                    down = false;
-                    downId = -1;
+                if (listener != null) {
+                    listener.onPress(this);
                 }
             }
+        } else if(action != TouchEvent.EVENT_MOVE && down && pointerId == downId) {
+            if (listener != null) {
+                listener.onRelease(this, action == TouchEvent.EVENT_LEAVE);
+            }
+            down = false;
+            downId = -1;
         }
+    }
 
+    /**
+     * This methods always returns false. Touch buttons do not participate in the normal touch event
+     * pipeline. Their touch event is handled through the touch map associated with the scene.
+     *
+     * @param event Event information
+     * @return       {@code false}
+     */
+    @Override
+    public final boolean handleTouch(TouchEvent event) {
         return false;
     }
 
-    public void setListener(TouchButton.Listener listener) {
+    private float[] latestMatrix = null;
+
+    float[] popLatestMatrix() {
+        float[] ret = latestMatrix;
+        latestMatrix = null;
+        return ret;
+    }
+
+    @Override
+    public void render(RenderingContext ctx, int flags) {
+        latestMatrix = ctx.getMatrix();
+        if (target instanceof Renderable) {
+            ((Renderable) target).render(ctx, flags);
+        }
+    }
+
+    public int getId() {
+        return objectId;
+    }
+
+    @Override
+    public void setListener(ButtonListener listener) {
         this.listener = listener;
     }
 
-    public TouchButton.Listener getListener() {
+    @Override
+    public ButtonListener getListener() {
         return listener;
     }
 
-    private TapRegion tapRegion;
+    private int objectId;
     private boolean down = false;
     private int downId = -1;
-    private TouchButton.Listener listener = null;
+    private ButtonListener listener = null;
 }
