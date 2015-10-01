@@ -3,15 +3,13 @@ package com.annahid.libs.artenus.internal.core;
 import android.opengl.GLES20;
 
 import com.annahid.libs.artenus.core.RenderingContext;
-import com.annahid.libs.artenus.entities.behavior.Renderable;
-import com.annahid.libs.artenus.graphics.Effect;
 import com.annahid.libs.artenus.graphics.TextureManager;
 import com.annahid.libs.artenus.graphics.sprites.ImageSprite;
 import com.annahid.libs.artenus.graphics.sprites.LineSprite;
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.data.RGB;
 
-class LoadingGraphics implements Renderable {
+class LoadingGraphics {
     private final RGB clearColor = new RGB(0, 0, 0);
     private LineSprite loadingBarSprite;
     private ImageSprite loadingSprite;
@@ -26,8 +24,7 @@ class LoadingGraphics implements Renderable {
     /**
      * Renders the "loading" screen on the given rendering context.
      */
-    @Override
-    public void render(RenderingContext ctx, int flags) {
+    public void render(RenderingContext ctx) {
         float vw = ctx.getWidth(), vh = ctx.getHeight();
         GLES20.glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
@@ -59,56 +56,13 @@ class LoadingGraphics implements Renderable {
     }
 
     /**
-     * Gets the current background color of the loading screen.
-     *
-     * @return The background color
-     */
-    @Override
-    public RGB getColorFilter() {
-        return clearColor;
-    }
-
-    /**
      * Sets the background color of the loading screen.
      *
-     * @param r The red component
-     * @param g The green component
-     * @param b The blue component
+     * @param color The color
      */
-    @Override
-    public void setColorFilter(float r, float g, float b) {
-        clearColor.r = r;
-        clearColor.g = g;
-        clearColor.b = b;
-    }
-
-    /**
-     * Sets the background color of the loading screen.
-     *
-     * @param rgb The background color
-     */
-    @Override
-    public void setColorFilter(RGB rgb) {
-        setColorFilter(rgb.r, rgb.g, rgb.b);
-    }
-
-    @Override
-    public Effect getEffect() {
-        throw new UnsupportedOperationException("This method is not implemented.");
-    }
-
-    @Override
-    public void setEffect(Effect effect) {
-        throw new UnsupportedOperationException("This method is not implemented.");
-    }
-
-    @Override
-    public void setAlpha(float alpha) {
-        throw new UnsupportedOperationException("This method is not implemented.");
-    }
-
-    @Override
-    public float getAlpha() {
-        throw new UnsupportedOperationException("This method is not implemented.");
+    public void setBackColor(RGB color) {
+        clearColor.r = color.r;
+        clearColor.g = color.g;
+        clearColor.b = color.b;
     }
 }

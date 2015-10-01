@@ -10,25 +10,26 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p>A subclass of {@link InputManager} that uses slide motions
- * as the direction knob and {@link com.annahid.libs.artenus.input.TapRegion} objects as action buttons. Note that
- * {@link com.annahid.libs.artenus.input.TapRegion} is used in its isolated form in this class and is not attached
- * to the scene. The reason for this application is the flexibility {@code TapRegion}
- * objects provide for touch processing and their ease of use.</p>
- * <p>The way the directional knob works in {@code SlideInput} is that whenever the
- * user touches a point in the screen where there is no action button, that point
- * becomes the center of the knob, or the reference point. Now sliding away from the
- * reference point indicates the direction of choice. If the user slides their finger
- * to the left side of the reference point (the first point they touched), the knob
- * will report a left direction and same holds for every other direction. The knob
- * goes back to neutral as soon as the gesture is finished.</p>
+ * <p>A subclass of {@link GameInput} that uses slide motions as the direction knob and touch
+ * buttons as action keys. Note that you still need to add the touch buttons to the scene, and
+ * assigning them to action keys only manages event handling.</p>
+ * <p>The way the directional knob works in {@code SlideInput} is that whenever the user touches a
+ * point in the screen where there is no action button, that point becomes the center of the knob,
+ * or the reference point. Now sliding away from the reference point indicates the direction of
+ * choice. If the user slides their finger to the left side of the reference point (the first point
+ * they touched), the knob will report a left direction and same holds for every other direction.
+ * The knob goes back to neutral as soon as the gesture is finished.</p>
  *
  * @author Hessan Feghhi
+ * @see TouchButton
  */
 @SuppressWarnings("unused")
-public final class SlideInput extends InputManager implements Touchable {
-    private final Point2D reference = new Point2D(0, 0);
+public final class SlideInput extends GameInput implements Touchable {
+    /**
+     * Buttons currently assigned to different action keys.
+     */
     private final Map<Integer, Button> buttons = new HashMap<>(5);
+    private final Point2D reference = new Point2D(0, 0);
     private int startId = -1;
     private int threshold;
     private Stage stage;

@@ -5,7 +5,7 @@ import com.annahid.libs.artenus.input.TouchMap;
 import com.annahid.libs.artenus.data.RGB;
 import com.annahid.libs.artenus.entities.Entity;
 import com.annahid.libs.artenus.entities.EntityCollection;
-import com.annahid.libs.artenus.input.InputManager;
+import com.annahid.libs.artenus.input.GameInput;
 import com.annahid.libs.artenus.physics.PhysicsSimulator;
 import com.annahid.libs.artenus.entities.behavior.Touchable;
 
@@ -75,7 +75,7 @@ public class Scene implements Touchable {
         physics = null;
         loaded = false;
         haltStart = 0;
-        touchManager = new TouchMap(this);
+        touchManager = new TouchMap();
     }
 
     /**
@@ -262,7 +262,7 @@ public class Scene implements Touchable {
      *
      * @param inputManager The input manager that triggered the event
      */
-    public void handleInput(InputManager inputManager) {
+    public void handleInput(GameInput inputManager) {
     }
 
     /**

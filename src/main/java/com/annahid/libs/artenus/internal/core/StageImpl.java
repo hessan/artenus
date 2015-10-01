@@ -20,11 +20,7 @@ import com.annahid.libs.artenus.data.RGB;
 import com.annahid.libs.artenus.graphics.TextureManager;
 
 /**
- * <p>This class is one of the key components of this framework. {@code Stage} is
- * where everything actually happens. Each game has a stage on which different scenes appear.
- * Its instance is passed to the application through {@link com.annahid.libs.artenus.Artenus#init}.
- * The application needs to assign a {@link com.annahid.libs.artenus.core.StageManager} to the
- * stage in order to handle its important event.</p>
+ * The default implementation of the {@code Stage} interface.
  *
  * @author Hessan Feghhi
  * @see StageManager
@@ -82,12 +78,45 @@ public final class StageImpl extends GLSurfaceView implements Stage {
         }
     }
 
+    /**
+     * The stage manager currently handling stage events.
+     */
+    StageManager handler = null;
+
+    /**
+     * The current scene.
+     */
+    Scene currentScene;
+
+    /**
+     * The next scene to be displayed. This field only has a non-null value when a scene transition
+     * is in progress.
+     */
+    Scene nextScene;
+
+    /**
+     * Scene transition phase.
+     */
+    float stPhase;
+
+    /**
+     * The thread running the main animation loop.
+     */
+    private Thread advanceThread;
+
+    private float blur = 0;
+
+    private int advanceThreadId = 1000;
+
+    /**
+     * The renderer.
+     */
     private InternalRenderer mRenderer;
 
     /**
-     * Constructs a new stage on the given application context and with the given set
-     * of XML attributes. This method will be automatically called if you put the
-     * {@code Stage} tag in your layout XML.
+     * Creates a new stage on the given application context and with the given set of XML
+     * attributes. This method will be automatically called if you put the {@code Stage} tag in your
+     * layout XML.
      *
      * @param context The application context
      * @param attrs   The set of attributes
@@ -127,7 +156,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
      */
     @Override
     public void setLoadingBackColor(RGB bgColor) {
-        mRenderer.getLoadingGraphics().setColorFilter(bgColor);
+        mRenderer.getLoadingGraphics().setBackColor(bgColor);
     }
 
     /**
@@ -175,9 +204,8 @@ public final class StageImpl extends GLSurfaceView implements Stage {
     }
 
     /**
-     * Sets the next scene that should be shown on this {@code Stage}. The
-     * scene will not be shown immediately and will go through a transition
-     * effect and possibly a local loading procedure.
+     * Sets the next scene that should be shown on this {@code Stage}. The scene will not be shown
+     * immediately and will go through a transition effect and possibly a local loading procedure.
      *
      * @param scene The new scene
      */
@@ -190,8 +218,8 @@ public final class StageImpl extends GLSurfaceView implements Stage {
     }
 
     /**
-     * Gets the current scene. If a new scene has been set, but the transition
-     * is not yet complete, previous scene might be returned.
+     * Gets the current scene. If a new scene has been set, but the transition is not yet complete,
+     * previous scene might be returned.
      *
      * @return The current scene
      */
@@ -201,9 +229,8 @@ public final class StageImpl extends GLSurfaceView implements Stage {
     }
 
     /**
-     * Gets the width of the stage. If the device is in portrait mode, this
-     * value is always 600 and otherwise it is the scaled version of screen
-     * width to match the height of 600.
+     * Gets the width of the stage. If the device is in portrait mode, this value is always 600 and
+     * otherwise it is the scaled version of screen width to match the height of 600.
      *
      * @return Stage width
      */
@@ -213,9 +240,8 @@ public final class StageImpl extends GLSurfaceView implements Stage {
     }
 
     /**
-     * Gets the width of the stage. If the device is in landscape mode, this
-     * value is always 600 and otherwise it is the scaled version of screen
-     * height to match the width of 600.
+     * Gets the width of the stage. If the device is in landscape mode, this value is always 600 and
+     * otherwise it is the scaled version of screen height to match the width of 600.
      *
      * @return Stage width
      */
@@ -235,8 +261,8 @@ public final class StageImpl extends GLSurfaceView implements Stage {
     }
 
     /**
-     * Sets the amount of blur on this stage. This method needs the {@code supportES2}
-     * attribute to be set for this {@code Stage} and the device to support OpenGLES 2.
+     * Sets the amount of blur on this stage. This method needs the {@code supportES2} attribute to
+     * be set for this {@code Stage} and the device to support OpenGLES 2.
      *
      * @param blur The value of a blur in the range 0 to 1
      */
@@ -270,17 +296,30 @@ public final class StageImpl extends GLSurfaceView implements Stage {
         }
     }
 
+    /**
+     * Registers a shader program with this stage. The stage handles the lifecycle of all registered
+     * shader programs.
+     *
+     * @param shader The shader program to be registered
+     */
+    @Override
     public void registerShader(ShaderProgram shader) {
         mRenderer.registerShader(shader);
     }
 
+    /**
+     * Unregisters a shader from this stage.
+     *
+     * @param shader The shader to be disassociated
+     */
+    @Override
     public void unregisterShader(ShaderProgram shader) {
         mRenderer.unregisterShader(shader);
     }
 
     /**
-     * Gets the currently assigned stage manager. A stage manager handles basic events
-     * and functionality for this {@code Stage}.
+     * Gets the currently assigned stage manager. A stage manager handles basic events and
+     * functionality for this {@code Stage}.
      *
      * @return The stage manager for this stage
      */
@@ -289,8 +328,8 @@ public final class StageImpl extends GLSurfaceView implements Stage {
     }
 
     /**
-     * Appoints a stage manager to handle required functionality for this {@code Stage}.
-     * You MUST assign a stage manager before doing anything else with this {@code Stage}.
+     * Appoints a stage manager to handle required functionality for this {@code Stage}. You MUST
+     * assign a stage manager before doing anything else with this {@code Stage}.
      *
      * @param stageManager The stage manager
      */
@@ -299,8 +338,8 @@ public final class StageImpl extends GLSurfaceView implements Stage {
     }
 
     /**
-     * Handles motion events for this {@code Stage} and passes them on to the input manager
-     * and current scene or dialog.
+     * Handles motion events for this {@code Stage} and passes them on to the input manager and
+     * current scene or dialog.
      */
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
@@ -382,12 +421,4 @@ public final class StageImpl extends GLSurfaceView implements Stage {
             advanceThread.start();
         }
     }
-
-    StageManager handler = null;
-    Scene currentScene, nextScene;
-    float stPhase;
-
-    private Thread advanceThread;
-    private float blur = 0;
-    private int advanceThreadId = 1000;
 }

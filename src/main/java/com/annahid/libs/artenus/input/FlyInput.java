@@ -13,13 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>A subclass of {@link InputManager} that uses device tilting
+ * <p>A subclass of {@link GameInput} that uses device tilting
  * as the direction knob, and {@code TouchButton} objects as the the action buttons.</p>
  *
  * @author Hessan Feghhi
  */
 @SuppressWarnings("UnusedDeclaration")
-public class FlyInput extends InputManager {
+public class FlyInput extends GameInput {
     private static float vectorLength(float[] v) {
         return (float) Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
     }
@@ -75,7 +75,7 @@ public class FlyInput extends InputManager {
                 releaseKeys(0x10);
 
                 if (vectorLength(v) > 13)
-                    pressKeys(InputManager.KEY_ACTION1);
+                    pressKeys(GameInput.KEY_ACTION1);
             }
 
             releaseKeyMap();

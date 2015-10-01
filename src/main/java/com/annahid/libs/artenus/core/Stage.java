@@ -2,14 +2,22 @@ package com.annahid.libs.artenus.core;
 
 import com.annahid.libs.artenus.data.RGB;
 
-@SuppressWarnings("unused")
+/**
+ * <p>This interface is one of the key components of this framework. The {@code Stage} is where
+ * everything actually happens. Each game has a stage on which different scenes appear. Its instance
+ * is passed to the application through {@link com.annahid.libs.artenus.Artenus#init}. The
+ * application needs to assign a {@link com.annahid.libs.artenus.core.StageManager} to the stage in
+ * order to handle its important event.</p>
+ *
+ * @author Hessan Feghhi
+ * @see StageManager
+ */
 public interface Stage {
     /**
      * Sets the background color of the loading screen.
      *
      * @param bgColor Background color
      */
-
     void setLoadingBackColor(RGB bgColor);
 
     /**

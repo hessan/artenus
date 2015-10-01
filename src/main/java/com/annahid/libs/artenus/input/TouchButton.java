@@ -14,17 +14,32 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Handles touch events for the underlying entity.
  */
 public class TouchButton extends FilteredEntity implements Button, Touchable {
+    /**
+     * Button identifier assigned to this touch button.
+     */
+    int id;
+
+    /**
+     * State of the transformation matrix for the latest render call.
+     */
+    private float[] latestMatrix = null;
+
+    private boolean down = false;
+    private int downId = -1;
+    private ButtonListener listener = null;
     private static AtomicInteger idStore = new AtomicInteger(100);
 
-    @SuppressWarnings("unused")
-    public static final int INVALID_ID = 0;
-
+    /**
+     * Creates a new touch button that adds button behavior to the underlying entity.
+     *
+     * @param target The underlying entity
+     */
     public TouchButton(Entity target) {
         super(target);
-        objectId = (int) (byte) (idStore.incrementAndGet() % 256);
+        id = (int) (byte) (idStore.incrementAndGet() % 256);
 
-        if (objectId == 0)
-            objectId++;
+        if (id == 0)
+            id++;
 
         if (!(target instanceof Transformable))
             throw new IllegalArgumentException("Target entity is not transformable.");
@@ -53,6 +68,12 @@ public class TouchButton extends FilteredEntity implements Button, Touchable {
         scene.getTouchMap().unregisterButton(this);
     }
 
+    /**
+     * Handles touch events sent through the touch map pipeline.
+     *
+     * @param action    The action
+     * @param pointerId The pointer identifier associated with the action
+     */
     void internalTouch(int action, int pointerId) {
         if (action == TouchEvent.EVENT_DOWN) {
             if (!down) {
@@ -63,7 +84,7 @@ public class TouchButton extends FilteredEntity implements Button, Touchable {
                     listener.onPress(this);
                 }
             }
-        } else if(action != TouchEvent.EVENT_MOVE && down && pointerId == downId) {
+        } else if (action != TouchEvent.EVENT_MOVE && down && pointerId == downId) {
             if (listener != null) {
                 listener.onRelease(this, action == TouchEvent.EVENT_LEAVE);
             }
@@ -77,15 +98,19 @@ public class TouchButton extends FilteredEntity implements Button, Touchable {
      * pipeline. Their touch event is handled through the touch map associated with the scene.
      *
      * @param event Event information
-     * @return       {@code false}
+     * @return {@code false}
      */
     @Override
     public final boolean handleTouch(TouchEvent event) {
         return false;
     }
 
-    private float[] latestMatrix = null;
-
+    /**
+     * Returns the state of the transformation matrix for the last render call, and removes it
+     * from memory.
+     *
+     * @return Transformation matrix
+     */
     float[] popLatestMatrix() {
         float[] ret = latestMatrix;
         latestMatrix = null;
@@ -100,22 +125,23 @@ public class TouchButton extends FilteredEntity implements Button, Touchable {
         }
     }
 
-    public int getId() {
-        return objectId;
-    }
-
+    /**
+     * Sets the button listener for this touch button.
+     *
+     * @param listener The listener
+     */
     @Override
     public void setListener(ButtonListener listener) {
         this.listener = listener;
     }
 
+    /**
+     * Gets the button listener currently assigned to this touch button.
+     *
+     * @return The listener
+     */
     @Override
     public ButtonListener getListener() {
         return listener;
     }
-
-    private int objectId;
-    private boolean down = false;
-    private int downId = -1;
-    private ButtonListener listener = null;
 }

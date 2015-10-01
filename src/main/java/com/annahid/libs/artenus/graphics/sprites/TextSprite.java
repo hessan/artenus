@@ -15,126 +15,137 @@ import com.annahid.libs.artenus.graphics.Font;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class TextSprite extends SpriteEntity {
-	private Font myFont;
-	private char[] ca;
-	private boolean rtl = false;
+    /**
+     * The current font used to draw the text.
+     */
+    private Font myFont;
 
-	/**
-	 * Constructs a {@code TextSprite} using the given font and font size.
-	 *
-	 * @param font     The font for this text
-	 * @param fontSize The font size to use
-	 */
-	public TextSprite(Font font, int fontSize) {
-		this(font, fontSize, "");
-	}
+    /**
+     * The character array to be drawn.
+     */
+    private char[] ca;
 
-	/**
-	 * Constructs a {@code TextSprite} using the given font and font size. The text
-	 * initially displayed for the sprite is also specified.
-	 *
-	 * @param font        The font for this text
-	 * @param fontSize    The font size to use
-	 * @param initialText The initial text of the sprite
-	 */
-	public TextSprite(Font font, int fontSize, String initialText) {
-		super();
-		myFont = font;
-		setText(initialText);
-		setScale(fontSize, fontSize);
-	}
+    /**
+     * A value indicating whether the text should be rendered in right-to-left order.
+     */
+    private boolean rtl = false;
 
-	/**
-	 * Sets the right-to-left state of this {@code TextSprite}. If a text sprite is right-to-left,
-	 * its characters will flow from right to left.
-	 *
-	 * @param isRtl {@code true} will make this sprite right-to-left and {@code false} will make
-	 *              it left-to-right
-	 */
-	public void setRTL(boolean isRtl) {
-		rtl = isRtl;
-	}
+    /**
+     * Creates a {@code TextSprite} using the given font and font size.
+     *
+     * @param font     The font for this text
+     * @param fontSize The font size to use
+     */
+    public TextSprite(Font font, int fontSize) {
+        this(font, fontSize, "");
+    }
 
-	/**
-	 * Sets the position of the text sprite so that it is centered at the given point.
-	 *
-	 * @param p The center point
-	 */
-	public void centerAt(Point2D p) {
-		centerAt(p.x, p.y);
-	}
+    /**
+     * Creates a {@code TextSprite} using the given font and font size. The text
+     * initially displayed for the sprite is also specified.
+     *
+     * @param font        The font for this text
+     * @param fontSize    The font size to use
+     * @param initialText The initial text of the sprite
+     */
+    public TextSprite(Font font, int fontSize, String initialText) {
+        super();
+        myFont = font;
+        setText(initialText);
+        setScale(fontSize, fontSize);
+    }
 
-	/**
-	 * Sets the position of the text sprite so that it is centered at the given point.
-	 *
-	 * @param x The x coordinate of the center point
-	 * @param y The y coordinate of the center point
-	 */
-	public void centerAt(float x, float y) {
-		final float w = myFont.getTextWidth(ca, scale.x) / (rtl ? -2 : 2);
-		final double rot = Math.toRadians(rotation);
-		setPosition(x - w * (float) Math.cos(rot), y - w * (float) Math.sin(rot));
-	}
+    /**
+     * Sets the right-to-left state of this {@code TextSprite}. If a text sprite is right-to-left,
+     * its characters will flow from right to left.
+     *
+     * @param isRtl {@code true} will make this sprite right-to-left and {@code false} will make
+     *              it left-to-right
+     */
+    public void setRTL(boolean isRtl) {
+        rtl = isRtl;
+    }
 
-	/**
-	 * Gets the current font assigned to this {@code TextSprite}.
-	 *
-	 * @return The assigned font
-	 */
-	public final Font getFont() {
-		return myFont;
-	}
+    /**
+     * Sets the position of the text sprite so that it is centered at the given point.
+     *
+     * @param p The center point
+     */
+    public void centerAt(Point2D p) {
+        centerAt(p.x, p.y);
+    }
 
-	/**
-	 * Assigns a new font to this {@code TextSprite}.
-	 *
-	 * @param font The new font to be assigned
-	 */
-	public final void setFont(Font font) {
-		myFont = font;
-	}
+    /**
+     * Sets the position of the text sprite so that it is centered at the given point.
+     *
+     * @param x The x coordinate of the center point
+     * @param y The y coordinate of the center point
+     */
+    public void centerAt(float x, float y) {
+        final float w = myFont.getTextWidth(ca, scale.x) / (rtl ? -2 : 2);
+        final double rot = Math.toRadians(rotation);
+        setPosition(x - w * (float) Math.cos(rot), y - w * (float) Math.sin(rot));
+    }
 
-	/**
-	 * Sets the text on this {@code TextSprite}. Changes will take effect immediately.
-	 *
-	 * @param value The string representation of the new text
-	 */
-	public final void setText(String value) {
-		if (value != null)
-			ca = Font.processText(value).toCharArray();
-		else ca = new char[0];
-	}
+    /**
+     * Gets the current font assigned to this {@code TextSprite}.
+     *
+     * @return The assigned font
+     */
+    public final Font getFont() {
+        return myFont;
+    }
 
-	/**
-	 * Determines whether this {@code TextSprite} represents an empty text. This is a faster
-	 * method than to retrieve the text and examine it manually.
-	 *
-	 * @return {@code true} if the text is an empty string, and {@code false} otherwise
-	 */
-	public final boolean isTextEmpty() {
-		return ca.length == 0;
-	}
+    /**
+     * Assigns a new font to this {@code TextSprite}.
+     *
+     * @param font The new font to be assigned
+     */
+    public final void setFont(Font font) {
+        myFont = font;
+    }
 
-	/**
-	 * Gets the string representation of the text currently displayed for this {@code TextSprite}.
-	 * Keep in mind that this method returns a newly created String and can have memory overhead.
-	 *
-	 * @return The string representation of the current text
-	 */
-	public final String getText() {
-		return new String(ca);
-	}
+    /**
+     * Sets the text on this {@code TextSprite}. Changes will take effect immediately.
+     *
+     * @param value The string representation of the new text
+     */
+    public final void setText(String value) {
+        if (value != null)
+            ca = Font.processText(value).toCharArray();
+        else ca = new char[0];
+    }
 
-	@Override
-	public final void render(RenderingContext ctx, int flags) {
-		if (effect != null && (flags & FLAG_IGNORE_EFFECTS) == 0)
-			effect.render(ctx, this, alpha);
-		else if (alpha != 0) {
+    /**
+     * Determines whether this {@code TextSprite} represents an empty text. This is a faster
+     * method than to retrieve the text and examine it manually.
+     *
+     * @return {@code true} if the text is an empty string, and {@code false} otherwise
+     */
+    public final boolean isTextEmpty() {
+        return ca.length == 0;
+    }
 
-			if ((flags & FLAG_IGNORE_COLOR_FILTER) == 0)
-				ctx.setColorFilter(alpha * cf.r, alpha * cf.g, alpha * cf.b, alpha);
+    /**
+     * Gets the string representation of the text currently displayed for this {@code TextSprite}.
+     * Keep in mind that this method returns a newly created String and can have memory overhead.
+     *
+     * @return The string representation of the current text
+     */
+    public final String getText() {
+        return new String(ca);
+    }
 
-			myFont.draw(ctx, ca, pos.x, pos.y, scale.x, rotation, rtl);
-		}
-	}
+    @Override
+    public final void render(RenderingContext ctx, int flags) {
+        if (effect != null && (flags & FLAG_IGNORE_EFFECTS) == 0)
+            effect.render(ctx, this, alpha);
+        else if (alpha != 0) {
+
+            if ((flags & FLAG_IGNORE_COLOR_FILTER) == 0)
+                ctx.setColorFilter(alpha * cf.r, alpha * cf.g, alpha * cf.b, alpha);
+
+            myFont.draw(ctx, ca, pos.x, pos.y, scale.x, rotation, rtl);
+        }
+    }
 }

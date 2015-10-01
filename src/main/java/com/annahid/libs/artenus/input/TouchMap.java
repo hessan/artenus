@@ -6,9 +6,7 @@ import android.support.annotation.NonNull;
 
 import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.core.RenderingContext;
-import com.annahid.libs.artenus.core.Scene;
 import com.annahid.libs.artenus.core.ShaderProgram;
-import com.annahid.libs.artenus.core.Stage;
 import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.graphics.TextureManager;
 import com.annahid.libs.artenus.graphics.TextureShaderProgram;
@@ -22,20 +20,79 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * This class is used internally by the framework to handle bitmapped hit testing for touch buttons.
- * It is highly recommended not to call members of this class, as it might cause interference with
- * the rendering pipeline. The only member of this class that can be used from outside the framework
- * is {@link TouchMap#showMap(boolean)}.
+ * It is highly recommended not to use this class directly, as it might interfere with the default
+ * rendering pipeline. The only member of this class that can be used from outside the framework is
+ * {@link TouchMap#showMap(boolean)}.
  */
 public class TouchMap {
+    /**
+     * The buffer used to read pixels from the touch map.
+     */
+    private ByteBuffer pixelBuffer =
+            ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder());
 
-    public TouchMap(Scene scene) {
-        this.scene = scene;
-    }
+    /**
+     * Indicates whether to show the touch map.
+     */
+    private boolean show = true;
 
+    /**
+     * The touch event queue.
+     */
+    private Queue<TouchEvent> events = new ConcurrentLinkedQueue<>();
+
+    /**
+     * The buttons registered with this touch map.
+     */
+    private Map<Integer, TouchButton> buttons = new ConcurrentHashMap<>(24);
+
+    /**
+     * Holds the width of the frame buffer used for the touch map.
+     */
+    private static int width;
+
+    /**
+     * Holds the height of the frame buffer used for the touch map.
+     */
+    private static int height;
+
+    /**
+     * A value indicating whether this instance has been initialized.
+     */
+    private static boolean inited = false;
+
+    /**
+     * Holds the shader program used to draw the touch map from sprites.
+     */
+    private static TouchMapShaderProgram shader = null;
+
+    /**
+     * Holds the OpenGL ES handle to the texture on which the map is rendered.
+     */
+    private static int textureHandle;
+    /**
+     * Holds the OpenGL ES handle for the render buffer used to render the map.
+     */
+    private static int renderBufferHandle;
+    /**
+     * Holds the OpenGL ES handle for the frame buffer used to render the map.
+     */
+    private static int frameBufferHandle;
+
+    /**
+     * Called internally bu the stage to queue touch events.
+     *
+     * @param event The touch event to queue
+     */
     public void onTouchEvent(TouchEvent event) {
         events.offer(event);
     }
 
+    /**
+     * Processes a single touch event.
+     *
+     * @param event The touch event to handle
+     */
     private void handleTouchEvent(TouchEvent event) {
         pixelBuffer.position(0);
         GLES20.glReadPixels(
@@ -43,9 +100,9 @@ public class TouchMap {
                 GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, pixelBuffer
         );
 
-        TouchButton button = buttons.get((int)pixelBuffer.get(0));
+        TouchButton button = buttons.get((int) pixelBuffer.get(0));
 
-        if(button != null)
+        if (button != null)
             button.internalTouch(event.action, event.pointerId);
 
         if (event.action == TouchEvent.EVENT_UP) {
@@ -59,6 +116,11 @@ public class TouchMap {
         }
     }
 
+    /**
+     * Called internally by the stage to render the touch map and process queued touch events.
+     *
+     * @param context The rendering context
+     */
     public void process(RenderingContext context) {
         if (width == 0 || height == 0)
             return;
@@ -82,13 +144,13 @@ public class TouchMap {
             button.render(context, Renderable.FLAG_IGNORE_EFFECTS);
             context.popMatrix();
         }
-        while(!events.isEmpty()) {
+        while (!events.isEmpty()) {
             handleTouchEvent(events.poll());
         }
 
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
         if (show && Debug.isDebuggerConnected()) {
-            TextureShaderProgram program = (TextureShaderProgram)TextureManager.getShaderProgram();
+            TextureShaderProgram program = (TextureShaderProgram) TextureManager.getShaderProgram();
             context.setShader(program);
             context.setColorFilter(0.75f, 0.75f, 0.75f, 0.75f);
             context.pushMatrix();
@@ -105,15 +167,16 @@ public class TouchMap {
         context.setShader(shaderBackup);
     }
 
-    public void registerButton(TouchButton button) {
-        if(button == null)
+    /**
+     * Registers a button with this touch map.
+     *
+     * @param button The button
+     */
+    void registerButton(TouchButton button) {
+        if (button == null)
             throw new IllegalArgumentException("Button cannot be null.");
 
-        buttons.put(button.getId(), button);
-    }
-
-    public void unregisterButton(@NonNull TouchButton button) {
-        buttons.remove(button.getId());
+        buttons.put(button.id, button);
     }
 
     /**
@@ -129,22 +192,18 @@ public class TouchMap {
         show = visible;
     }
 
-    private Scene scene;
-    private ByteBuffer pixelBuffer =
-            ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder());
-
     /**
-     * Indicates whether to show the touch map.
+     * Removes a button from this touch map
+     *
+     * @param button The button
      */
-    private boolean show = true;
-
-    private Queue<TouchEvent> events = new ConcurrentLinkedQueue<>();
-
-    private Map<Integer, TouchButton> buttons = new ConcurrentHashMap<>(24);
+    void unregisterButton(@NonNull TouchButton button) {
+        buttons.remove(button.id);
+    }
 
     /**
-     * Initializes the touch map. If the touch map is already initialized, the old resources are
-     * freed first.
+     * Initializes the touch map and creates necessary resources. If the touch map is already
+     * initialized, the old resources are freed first.
      *
      * @param fboWidth  The logical width of the screen
      * @param fboHeight The logical height of the screen
@@ -223,34 +282,4 @@ public class TouchMap {
         Artenus.getInstance().getStage().registerShader(shader);
         shader.compile();
     }
-
-    /**
-     * Holds the width of the frame buffer used for the touch map.
-     */
-    private static int width;
-
-    /**
-     * Holds the height of the frame buffer used for the touch map.
-     */
-    private static int height;
-
-    private static boolean inited = false;
-
-    /**
-     * Holds the shader program used to draw the touch map from sprites.
-     */
-    private static TouchMapShaderProgram shader = null;
-
-    /**
-     * Holds the OpenGL ES handle to the texture on which the map is rendered.
-     */
-    private static int textureHandle;
-    /**
-     * Holds the OpenGL ES handle for the render buffer used to render the map.
-     */
-    private static int renderBufferHandle;
-    /**
-     * Holds the OpenGL ES handle for the frame buffer used to render the map.
-     */
-    private static int frameBufferHandle;
 }

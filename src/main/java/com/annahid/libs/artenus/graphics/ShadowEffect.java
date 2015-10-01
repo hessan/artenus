@@ -1,9 +1,5 @@
 package com.annahid.libs.artenus.graphics;
 
-import android.opengl.GLES20;
-
-import com.annahid.libs.artenus.Artenus;
-import com.annahid.libs.artenus.core.ShaderProgram;
 import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.core.RenderingContext;
 
@@ -13,39 +9,51 @@ import com.annahid.libs.artenus.core.RenderingContext;
  * @author Hessan Feghhi
  */
 public final class ShadowEffect extends Effect {
-	/**
-	 * Constructs a new shadow effect with specified properties.
-	 *
-	 * @param dx Horizontal distance of the shadow
-	 * @param dy Vertical distance of the shadow
-	 * @param shadowAlpha The transparency value of the shadow
-	 */
-	public ShadowEffect(float dx, float dy, float shadowAlpha) {
-		this.dx = dx;
-		this.dy = dy;
-		this.shadowAlpha = shadowAlpha;
-	}
+    /**
+     * The horizontal distance of the shadow from the renderable entity.
+     */
+    private float dx;
 
-	@Override
-	public void render(RenderingContext context, Renderable renderable, float alpha) {
-		context.pushMatrix();
-		context.translate(dx, dy);
-		context.setColorFilter(0, 0, 0, alpha * shadowAlpha);
+    /**
+     * The vertical distance of the shadow from the renderable entity.
+     */
+    private float dy;
 
-		if (baseEffect == null) {
-			renderable.render(
-					context,
-					Renderable.FLAG_IGNORE_COLOR_FILTER | Renderable.FLAG_IGNORE_EFFECTS
-			);
-		}
-		else baseEffect.render(context, renderable, alpha);
+    /**
+     * The alpha transparency value of the shadow.
+     */
+    private float shadowAlpha;
 
-		context.popMatrix();
+    /**
+     * Constructs a new shadow effect with specified properties.
+     *
+     * @param dx          Horizontal distance of the shadow
+     * @param dy          Vertical distance of the shadow
+     * @param shadowAlpha The transparency value of the shadow
+     */
+    public ShadowEffect(float dx, float dy, float shadowAlpha) {
+        this.dx = dx;
+        this.dy = dy;
+        this.shadowAlpha = shadowAlpha;
+    }
 
-		if (baseEffect == null)
-			renderable.render(context, Renderable.FLAG_IGNORE_EFFECTS);
-		else baseEffect.render(context, renderable, alpha);
-	}
+    @Override
+    public void render(RenderingContext context, Renderable renderable, float alpha) {
+        context.pushMatrix();
+        context.translate(dx, dy);
+        context.setColorFilter(0, 0, 0, alpha * shadowAlpha);
 
-	private float dx, dy, shadowAlpha;
+        if (baseEffect == null) {
+            renderable.render(
+                    context,
+                    Renderable.FLAG_IGNORE_COLOR_FILTER | Renderable.FLAG_IGNORE_EFFECTS
+            );
+        } else baseEffect.render(context, renderable, alpha);
+
+        context.popMatrix();
+
+        if (baseEffect == null)
+            renderable.render(context, Renderable.FLAG_IGNORE_EFFECTS);
+        else baseEffect.render(context, renderable, alpha);
+    }
 }

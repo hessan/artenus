@@ -23,6 +23,29 @@ import java.nio.FloatBuffer;
 @SuppressWarnings("unused")
 public final class GridSprite extends SpriteEntity {
     /**
+     * The texture atlas.
+     */
+    private Texture frames;
+
+    /**
+     * Atlas image indices for the grid blocks.
+     */
+    private int[][] blocks;
+
+    /**
+     * Alpha transparency values for the blocks.
+     */
+    private float[][] alphas;
+
+    /**
+     * Texture buffers for atlas images.
+     */
+    private FloatBuffer[] textureBuffers = null;
+
+    private float blkW, blkH, m;
+    private int vc1, vr1, vc2, vr2;
+
+    /**
      * Constructs a {@code GridSprite} using a image resource id and block parameters.
      * Like {@code Sprite}, this class supports SVG images with {@code raw} resource type
      * as well as images normally supported by the android platform. It is recommended to
@@ -158,8 +181,8 @@ public final class GridSprite extends SpriteEntity {
      * @param endY   The y coordinate of the region bottom-right corner
      */
     public void setVisibleRegion(float startX, float startY, float endX, float endY) {
-        this.vc1 = Math.min(blocks.length, Math.max(toGridX(startX), 0));
-        this.vr1 = Math.min(blocks[0].length, Math.max(toGridY(startY), 0));
+        this.vc1 = Math.min(blocks.length, Math.max(toGridX(startX) - 1, 0));
+        this.vr1 = Math.min(blocks[0].length, Math.max(toGridY(startY) - 1, 0));
         this.vc2 = Math.min(blocks.length, Math.max(toGridX(endX) + 1, 0));
         this.vr2 = Math.min(blocks[0].length, Math.max(toGridY(endY) + 1, 0));
     }
@@ -226,7 +249,7 @@ public final class GridSprite extends SpriteEntity {
      * @return The resulting column number
      */
     private int toGridX(float x) {
-        return (int) ((x - blkW / 2) / blkW + 0.5f);
+        return (int)Math.ceil(x / (blkW - m * 2) - 0.5);
     }
 
     /**
@@ -236,13 +259,6 @@ public final class GridSprite extends SpriteEntity {
      * @return The resulting row number
      */
     private int toGridY(float y) {
-        return (int) ((y - blkH / 2) / blkH + 0.5f);
+        return (int)Math.ceil(y / (blkH - m * 2) - 0.5);
     }
-
-    private Texture frames;
-    private int[][] blocks;
-    private float[][] alphas;
-    private float blkW, blkH, m;
-    private FloatBuffer[] textureBuffers = null;
-    private int vc1, vr1, vc2, vr2;
 }

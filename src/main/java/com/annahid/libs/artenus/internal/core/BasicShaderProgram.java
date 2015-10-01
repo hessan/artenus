@@ -6,6 +6,9 @@ import com.annahid.libs.artenus.core.ShaderProgram;
 
 import java.nio.FloatBuffer;
 
+/**
+ * The default shader program used when {@code null} is specified for the shader program.
+ */
 class BasicShaderProgram implements ShaderProgram {
     private static final String vertexShaderCode =
             "uniform mat4 uMVPMatrix;" +

@@ -17,7 +17,7 @@ public final class CircleShape implements Shape {
 	public static final int TYPE = 0;
 
 	/**
-	 * Constructs a {@code CircleShape} using the given radius.
+	 * Creates a {@code CircleShape} using the given radius.
 	 *
 	 * @param radius The radius of the circle
 	 */

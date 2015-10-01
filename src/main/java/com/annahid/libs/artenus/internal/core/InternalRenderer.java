@@ -175,7 +175,7 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
 
         if (ts != TextureManager.STATE_LOADED) {
             if (IntroScene.introShown)
-                loading.render(this, 0);
+                loading.render(this);
 
             if (lll == 0)
                 lll = System.currentTimeMillis();

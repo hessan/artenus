@@ -15,13 +15,14 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * A {@code Texture} that represents a font. A font is a special-purpose cut-out of
  * an image that divides that image into characters of different widths. Each font can represent
  * a limited set of characters out of the character space. Artenus fonts are normal SVG graphics
  * with a comment block describing extra information. Below is an example of the comment block:
- *
+ * <p/>
  * <pre>
  * &lt;!--
  * ARTENUS_FONT 80,-5,0
@@ -33,317 +34,338 @@ import java.util.Map;
  * </pre>
  * The above block introduces a font height of 80 pixels, horizontal spacing of -5, and vertical
  * spacing of 0. There are four letters defined in the font:
- *
+ * <p/>
  * <ul>
- *     <li>A starts from x=0 to x=67 in the first line of the graphics (y=0 to y=79).</li>
- *     <li>B starts from x=0 to x=67 in the first line of the graphics (y=0 to y=79).</li>
- *     <li>C starts from x=0 to x=67 in the first line of the graphics (y=0 to y=79).</li>
- *     <li>D starts from x=0 to x=67 in the second line of the graphics (y=80 to y=159). Whenever
- *      the first x value is less than the previous letter's <em>second</em> x, the interpreter
- *      jumps to the next line. Thus you don't need to specify y values at all.</li>
+ * <li>A starts from x=0 to x=67 in the first line of the graphics (y=0 to y=79).</li>
+ * <li>B starts from x=0 to x=67 in the first line of the graphics (y=0 to y=79).</li>
+ * <li>C starts from x=0 to x=67 in the first line of the graphics (y=0 to y=79).</li>
+ * <li>D starts from x=0 to x=67 in the second line of the graphics (y=80 to y=159). Whenever
+ * the first x value is less than the previous letter's <em>second</em> x, the interpreter
+ * jumps to the next line. Thus you don't need to specify y values at all.</li>
  * </ul>
- *
+ * <p/>
  * This comment block can be placed anywhere within the SVG file, but for best performance it is
  * recommended to appear as high as possible.
  *
  * @author Hessan Feghhi
- *
  */
 public final class Font extends Texture {
-	private static final char accentedLetters[] = { 'à', 'è', 'ì', 'ò', 'ù', 'á', 'é', 'í', 'ó', 'ú', 'â', 'ê', 'î', 'ô', 'û' };
-	private static final char basicLetters[] = {'a', 'e', 'i', 'o', 'u'};
+    private static final char accentedLetters[] =
+            {'à', 'è', 'ì', 'ò', 'ù', 'á', 'é', 'í', 'ó', 'ú', 'â', 'ê', 'î', 'ô', 'û'};
+    private static final char basicLetters[] = {'a', 'e', 'i', 'o', 'u'};
 
-	/**
-	 * Processes a text and conforms it to easily support accent-based characters in the framework
-	 * without the need to include accented letters in the actual font. You can use this method to
-	 * get the framework representation of latin strings with accented letters.
-	 *
-	 * @param text The text to be processed
-	 * @return The processed text
-	 */
-	public static String processText(String text) {
-		String ret = (text == null) ? "" : text;
+    /**
+     * The list of x coordinate offset values as defined in the SVG font file.
+     */
+    private float[] offsets;
 
-		for (int i = 0; i < 5; i++) {
-			ret = ret.replace(String.valueOf(accentedLetters[i]), "`\r" + basicLetters[i]);
-			ret = ret.replace(String.valueOf(accentedLetters[i + 5]), "'\r" + basicLetters[i]);
-			ret = ret.replace(String.valueOf(accentedLetters[i + 10]), "^\r" + basicLetters[i]);
-		}
+    /**
+     * First character defined in the font file.
+     */
+    private char firstChar;
 
-		return ret;
-	}
+    /**
+     * Horizontal spacing in pixels.
+     */
+    private int horSpacing = -10;
 
-	/**
-	 * Calculates the width of a text if drawn with this {@code Font}, based of the font size
-	 * specified.
-	 *
-	 * @param text The string representation of the text
-	 * @param h    The font height
-	 * @return The width of the text
-	 */
-	public final float getTextWidth(String text, float h) {
-		return getTextWidth(text.toCharArray(), h);
-	}
+    /**
+     * Vertical spacing in pixels.
+     */
+    private int verSpacing = 0;
 
-	/**
-	 * Calculates the width of a text if drawn with this {@code Font}, based of the font size
-	 * specified. This method is faster that {@link #getTextWidth(String, float)}.
-	 *
-	 * @param ca The character array representation of the text
-	 * @param h  The font height
-	 * @return The width of the text
-	 */
-	public final float getTextWidth(char[] ca, float h) {
-		final float sz = h / charH;
-		final float hSpacing = horSpacing * sz;
-		float maxWidth = 0, currentX = 0, w;
+    /**
+     * Texture buffers for characters.
+     */
+    private FloatBuffer[] textureBuffers;
 
-		boolean firstLetter = true;
+    /**
+     * Character height.
+     */
+    private float charH;
 
-		for (int i = 0; i < ca.length; i++) {
-			char c = ca[i];
+    /**
+     * Processes a text and conforms it to easily support accent-based characters in the framework
+     * without the need to include accented letters in the actual font. You can use this method to
+     * get the framework representation of latin strings with accented letters.
+     *
+     * @param text The text to be processed
+     * @return The processed text
+     */
+    public static String processText(String text) {
+        String ret = (text == null) ? "" : text;
 
-			if (c == '\n') {
-				maxWidth = Math.max(maxWidth, currentX);
-				currentX = 0;
-				firstLetter = true;
-				continue;
-			} else if (c == ' ') {
-				currentX += h / 3;
-				continue;
-			}
+        for (int i = 0; i < 5; i++) {
+            ret = ret.replace(String.valueOf(accentedLetters[i]), "`\r" + basicLetters[i]);
+            ret = ret.replace(String.valueOf(accentedLetters[i + 5]), "'\r" + basicLetters[i]);
+            ret = ret.replace(String.valueOf(accentedLetters[i + 10]), "^\r" + basicLetters[i]);
+        }
 
-			c -= firstChar;
+        return ret;
+    }
 
-			w = (offsets[c * 2 + 1] - offsets[c * 2]) * sz;
+    /**
+     * Calculates the width of a text if drawn with this {@code Font}, based of the font size
+     * specified.
+     *
+     * @param text The string representation of the text
+     * @param h    The font height
+     * @return The width of the text
+     */
+    public final float getTextWidth(String text, float h) {
+        return getTextWidth(text.toCharArray(), h);
+    }
 
-			if (firstLetter) {
-				firstLetter = false;
-			}
+    /**
+     * Calculates the width of a text if drawn with this {@code Font}, based of the font size
+     * specified. This method is faster that {@link #getTextWidth(String, float)}.
+     *
+     * @param ca The character array representation of the text
+     * @param h  The font height
+     * @return The width of the text
+     */
+    public final float getTextWidth(char[] ca, float h) {
+        final float sz = h / charH;
+        final float hSpacing = horSpacing * sz;
+        float maxWidth = 0, currentX = 0, w;
 
-			if (ca.length > i + 1)
-				if (ca[i + 1] == '\r') {
-					w = 0;
-					i++;
-				}
+        boolean firstLetter = true;
 
-			currentX += w + hSpacing;
-		}
+        for (int i = 0; i < ca.length; i++) {
+            char c = ca[i];
 
-		return Math.max(maxWidth, currentX);
-	}
+            if (c == '\n') {
+                maxWidth = Math.max(maxWidth, currentX);
+                currentX = 0;
+                firstLetter = true;
+                continue;
+            } else if (c == ' ') {
+                currentX += h / 3;
+                continue;
+            }
 
-	/**
-	 * Draws a text on the OpenGL context using the information provided. This method is internally
-	 * called by {@code TextSprite} to draw the text.
-	 *
-	 * @param ca  The character array representation of the text
-	 * @param sx  Starting x coordinate
-	 * @param sy  Starting y coordinate
-	 * @param h   The desired height of the text. This controls font size
-	 * @param rot Rotation angle of the text
-	 * @param rtl {@code true} if the text should be drawn in right-to-left direction,
-	 *            and {@code false} otherwise
-	 */
-	public void draw(
-			RenderingContext context,
-			char[] ca, float sx, float sy, float h, float rot, boolean rtl) {
-		if (textureBuffers == null)
-			buildTextureBuffers();
+            c -= firstChar;
 
-		final TextureShaderProgram program =
-				(TextureShaderProgram) TextureManager.getShaderProgram();
-		context.setShader(program);
+            w = (offsets[c * 2 + 1] - offsets[c * 2]) * sz;
 
-		float y = 0;
-		float currentX = 0;
+            if (firstLetter) {
+                firstLetter = false;
+            }
 
-		GLES20.glEnable(GLES20.GL_TEXTURE_2D);
-		program.feed(textureId);
+            if (ca.length > i + 1)
+                if (ca[i + 1] == '\r') {
+                    w = 0;
+                    i++;
+                }
 
-		final float sz = h / charH;
-		final float hSpacing = horSpacing * sz, vSpacing = verSpacing * sz;
-		boolean firstLetter = true;
+            currentX += w + hSpacing;
+        }
 
-		context.pushMatrix();
-		context.translate(sx, sy);
-		context.rotate(rot);
+        return Math.max(maxWidth, currentX);
+    }
 
-		for (int i = 0; i < ca.length; i++) {
-			char c = ca[i];
+    /**
+     * Draws a text on the OpenGL context using the information provided. This method is internally
+     * called by {@code TextSprite} to draw the text.
+     *
+     * @param ca  The character array representation of the text
+     * @param sx  Starting x coordinate
+     * @param sy  Starting y coordinate
+     * @param h   The desired height of the text. This controls font size
+     * @param rot Rotation angle of the text
+     * @param rtl {@code true} if the text should be drawn in right-to-left direction,
+     *            and {@code false} otherwise
+     */
+    public void draw(
+            RenderingContext context,
+            char[] ca, float sx, float sy, float h, float rot, boolean rtl) {
+        if (textureBuffers == null)
+            buildTextureBuffers();
 
-			if (c == '\n') {
-				currentX = 0;
-				y += (h + vSpacing);
-				firstLetter = true;
-				continue;
-			} else if (c == ' ') {
-				currentX += h / (rtl ? -3 : 3);
-				continue;
-			}
+        final TextureShaderProgram program =
+                (TextureShaderProgram) TextureManager.getShaderProgram();
+        context.setShader(program);
 
-			c -= firstChar;
+        float y = 0;
+        float currentX = 0;
 
-			float w = (offsets[c * 2 + 1] - offsets[c * 2]) * sz;
+        GLES20.glEnable(GLES20.GL_TEXTURE_2D);
+        program.feed(textureId);
 
-			if (firstLetter) {
-				firstLetter = false;
-			}
+        final float sz = h / charH;
+        final float hSpacing = horSpacing * sz, vSpacing = verSpacing * sz;
+        boolean firstLetter = true;
 
-			context.pushMatrix();
-			context.translate(currentX + w / (rtl ? -2 : 2), y);
-			context.scale(w, h);
-			program.feedTexCoords(textureBuffers[c]);
-			context.rect();
-			context.popMatrix();
+        context.pushMatrix();
+        context.translate(sx, sy);
+        context.rotate(rot);
 
-			if (ca.length > i + 1)
-				if (ca[i + 1] == '\r') {
-					i++;
-					continue;
-				}
+        for (int i = 0; i < ca.length; i++) {
+            char c = ca[i];
 
-			currentX += rtl ? (-w - hSpacing) : (w + hSpacing);
-		}
+            if (c == '\n') {
+                currentX = 0;
+                y += (h + vSpacing);
+                firstLetter = true;
+                continue;
+            } else if (c == ' ') {
+                currentX += h / (rtl ? -3 : 3);
+                continue;
+            }
 
-		context.popMatrix();
-	}
+            c -= firstChar;
 
-	/**
-	 * Constructs a font with the information provided.
-	 *
-	 * @param resourceId      The resource identifier of the SVG file containing font information
-	 */
-	Font(int resourceId) {
-		super(resourceId);
+            float w = (offsets[c * 2 + 1] - offsets[c * 2]) * sz;
 
-		/* Load commented font information from the SVG file. */
+            if (firstLetter) {
+                firstLetter = false;
+            }
 
-		final Resources res = Artenus.getInstance().getResources();
+            context.pushMatrix();
+            context.translate(currentX + w / (rtl ? -2 : 2), y);
+            context.scale(w, h);
+            program.feedTexCoords(textureBuffers[c]);
+            context.rect();
+            context.popMatrix();
 
-		if (!res.getResourceTypeName(resId).equalsIgnoreCase("raw"))
-			throw new IllegalStateException("Not a valid font resource");
+            if (ca.length > i + 1)
+                if (ca[i + 1] == '\r') {
+                    i++;
+                    continue;
+                }
 
-		BufferedReader reader =
-				new BufferedReader(new InputStreamReader(res.openRawResource(resId)));
+            currentX += rtl ? (-w - hSpacing) : (w + hSpacing);
+        }
 
-		Map<Character, Pair<Float, Float>> map = new HashMap<>(32);
+        context.popMatrix();
+    }
 
-		String line;
-		boolean isFont = false;
-		char first = Character.MAX_VALUE, last = Character.MIN_VALUE;
+    /**
+     * Creates a font with the information provided.
+     *
+     * @param resourceId The resource identifier of the SVG file containing font information
+     */
+    Font(int resourceId) {
+        super(resourceId);
+        final Resources res = Artenus.getInstance().getResources();
 
-		try {
-			while ((line = reader.readLine()) != null) {
-				int index = line.indexOf("ARTENUS_FONT");
+        if (!res.getResourceTypeName(resId).equalsIgnoreCase("raw"))
+            throw new IllegalStateException("Not a valid font resource");
 
-				if (index >= 0) {
-					String[] params = line.substring(index + 12).trim().split("\\s*,\\s*");
+        // Load commented font information from the SVG file.
 
-					isFont = true;
-					charH = Integer.parseInt(params[0]);
+        final Map<Character, Pair<Float, Float>> map = new HashMap<>(32);
+        String line;
+        boolean isFont = false;
+        char first = Character.MAX_VALUE, last = Character.MIN_VALUE;
+        final BufferedReader reader =
+                new BufferedReader(new InputStreamReader(res.openRawResource(resId)));
+        try {
+            final Pattern pattern = Pattern.compile("\\s*,\\s*");
 
-					if (params.length > 1) {
-						int hs = Integer.parseInt(params[1]), vs = 0;
+            while ((line = reader.readLine()) != null) {
+                int index = line.indexOf("ARTENUS_FONT");
 
-						if (params.length > 2)
-							vs = Integer.parseInt(params[2]);
+                if (index >= 0) {
+                    String[] params = pattern.split(line.substring(index + 12).trim());
 
-						horSpacing = hs;
-						verSpacing = vs;
-					}
+                    isFont = true;
+                    charH = Integer.parseInt(params[0]);
 
-					while ((line = reader.readLine()) != null) {
-						line = line.trim();
+                    if (params.length > 1) {
+                        int hs = Integer.parseInt(params[1]), vs = 0;
 
-						if (line.startsWith("@")) {
-							String[] coords = line.substring(2).trim().split("\\s*,\\s*");
+                        if (params.length > 2)
+                            vs = Integer.parseInt(params[2]);
 
-							if (coords.length > 1) {
-								char c = line.charAt(1);
+                        horSpacing = hs;
+                        verSpacing = vs;
+                    }
 
-								if(c > last)
-									last = c;
+                    while ((line = reader.readLine()) != null) {
+                        line = line.trim();
 
-								if(c < first)
-									first = c;
+                        if (line.startsWith("@")) {
+                            String[] coords = pattern.split(line.substring(2).trim());
 
-								map.put(c, new Pair<>(
-										Float.parseFloat(coords[0]), Float.parseFloat(coords[1])
-								));
-							}
-						}
-					}
+                            if (coords.length > 1) {
+                                char c = line.charAt(1);
 
-					break;
-				}
-			}
-		} catch (IOException ex) {
-			isFont = false;
-		}
+                                if (c > last)
+                                    last = c;
 
-		try {
-			reader.close();
-		}
-		catch (IOException ex) {
-			// Do nothing
-		}
+                                if (c < first)
+                                    first = c;
 
-		if (!isFont)
-			throw new IllegalStateException("Error reading font resource");
+                                map.put(c, new Pair<>(
+                                        Float.parseFloat(coords[0]), Float.parseFloat(coords[1])
+                                ));
+                            }
+                        }
+                    }
 
-		offsets = new float[(last - first + 1) << 1];
+                    break;
+                }
+            }
+        } catch (IOException ex) {
+            isFont = false;
+        }
 
-		for(char c = first; c <= last; c++) {
-			Pair<Float, Float> result = map.get(c);
+        try {
+            reader.close();
+        } catch (IOException ex) {
+            // Do nothing
+        }
 
-			if(result != null) {
-				int index = (c - first) << 1;
-				offsets[index] = result.first;
-				offsets[index + 1] = result.second;
-			}
-		}
+        if (!isFont)
+            throw new IllegalStateException("Error reading font resource");
 
-		firstChar = first;
-	}
+        offsets = new float[(last - first + 1) << 1];
 
-	/**
-	 * Builds the required OpenGL texture buffers for the characters.
-	 */
-	final void buildTextureBuffers() {
-		float y1 = 0, y2 = charH;
-		final float sw = width, sh = height;
+        for (char c = first; c <= last; c++) {
+            Pair<Float, Float> result = map.get(c);
 
-		textureBuffers = new FloatBuffer[offsets.length / 2];
+            if (result != null) {
+                int index = (c - first) << 1;
+                offsets[index] = result.first;
+                offsets[index + 1] = result.second;
+            }
+        }
 
-		for (int index = 0; index < textureBuffers.length; index++) {
-			final float x1 = offsets[index * 2] / sw;
-			final float x2 = (offsets[index * 2 + 1] - 1f) / sw;
+        firstChar = first;
+    }
 
-			if (index > 0)
-				if (offsets[index * 2] - (offsets[(index - 1) * 2]) < 0) {
-					y1 += charH;
-					y2 += charH;
-				}
+    /**
+     * Builds the required OpenGL texture buffers for the characters.
+     */
+    final void buildTextureBuffers() {
+        float y1 = 0, y2 = charH;
+        final float sw = width, sh = height;
 
-			final float texture[] = {
-					x1, y1 / sh,
-					x2, y1 / sh,
-					x1, y2 / sh,
-					x2, y2 / sh,
-			};
+        textureBuffers = new FloatBuffer[offsets.length / 2];
 
-			final ByteBuffer ibb = ByteBuffer.allocateDirect(texture.length * 4);
-			ibb.order(ByteOrder.nativeOrder());
-			textureBuffers[index] = ibb.asFloatBuffer();
-			textureBuffers[index].put(texture);
-			textureBuffers[index].position(0);
-		}
-	}
+        for (int index = 0; index < textureBuffers.length; index++) {
+            final float x1 = offsets[index * 2] / sw;
+            final float x2 = (offsets[index * 2 + 1] - 1f) / sw;
 
-	private float[] offsets;
-	private char firstChar;
-	private int horSpacing = -10, verSpacing = 0;
-	private FloatBuffer[] textureBuffers;
-	private float charH;
+            if (index > 0)
+                if (offsets[index * 2] - (offsets[(index - 1) * 2]) < 0) {
+                    y1 += charH;
+                    y2 += charH;
+                }
+
+            final float texture[] = {
+                    x1, y1 / sh,
+                    x2, y1 / sh,
+                    x1, y2 / sh,
+                    x2, y2 / sh,
+            };
+
+            final ByteBuffer ibb = ByteBuffer.allocateDirect(texture.length * 4);
+            ibb.order(ByteOrder.nativeOrder());
+            textureBuffers[index] = ibb.asFloatBuffer();
+            textureBuffers[index].put(texture);
+            textureBuffers[index].position(0);
+        }
+    }
 }

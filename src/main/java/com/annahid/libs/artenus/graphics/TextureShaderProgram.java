@@ -8,32 +8,71 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
+/**
+ * A shader program that is used by the Artenus framework to render textured entities.
+ */
 public class TextureShaderProgram implements ShaderProgram {
+    /**
+     * Vertex shader code.
+     */
     private static final String vertexShaderCode =
             "uniform mat4 uMVPMatrix;" +
-            "attribute vec4 vPosition;" +
-            "attribute vec2 aTexCoord;" +
-            "varying vec2 vTexCoord;" +
-            "void main() {" +
-            "  vTexCoord = aTexCoord;" +
-            "  gl_Position = uMVPMatrix * vPosition;" +
-            '}';
+                    "attribute vec4 vPosition;" +
+                    "attribute vec2 aTexCoord;" +
+                    "varying vec2 vTexCoord;" +
+                    "void main() {" +
+                    "  vTexCoord = aTexCoord;" +
+                    "  gl_Position = uMVPMatrix * vPosition;" +
+                    '}';
+    /**
+     * Fragment shader code, taking texture sampler as an argument.
+     */
     private static final String fragmentShaderCode =
             "precision mediump float;" +
-            "uniform vec4 vColor;" +
-            "uniform sampler2D uTex;" +
-            "varying vec2 vTexCoord;" +
-            "void main() {" +
-            "  gl_FragColor = vColor * texture2D( uTex, vTexCoord );" +
-            '}';
+                    "uniform vec4 vColor;" +
+                    "uniform sampler2D uTex;" +
+                    "varying vec2 vTexCoord;" +
+                    "void main() {" +
+                    "  gl_FragColor = vColor * texture2D( uTex, vTexCoord );" +
+                    '}';
+    /**
+     * The default texture buffer used if no other is specified.
+     */
     public static FloatBuffer defaultTextureBuffer;
+
+    /**
+     * OpenGL shader program handle.
+     */
     protected int mProgram;
+
+    /**
+     * Projection matrix.
+     */
     protected int mMVPMatrixHandle;
+
+    /**
+     * The handle to the color variable in the OpenGL ES fragment shader.
+     */
     protected int mColorHandle;
+
+    /**
+     * The handle to the position variable in the OpenGL ES vertex shader.
+     */
     protected int mPositionHandle;
+
+    /**
+     * The handle to the texture coordinates variable in the OpenGL ES vertex shader.
+     */
     protected int mTexCoordsHandle;
+
+    /**
+     * The handle to the sampler variable in the OpenGL ES fragment shader.
+     */
     protected int mSamplerHandle;
 
+    /**
+     * Creates a new instance o fthe texture shader program.
+     */
     public TextureShaderProgram() {
         final float texture[] = {
                 0.0f, 0.0f,
@@ -49,6 +88,9 @@ public class TextureShaderProgram implements ShaderProgram {
         defaultTextureBuffer.position(0);
     }
 
+    /**
+     * Compiles the shader program and sets up variables and handles.
+     */
     @Override
     public void compile() {
         final int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
@@ -107,6 +149,13 @@ public class TextureShaderProgram implements ShaderProgram {
         GLES20.glUniform1i(mSamplerHandle, 0);
     }
 
+    /**
+     * Loads a shader of the given type to attach to an OpenGL ES shader program.
+     *
+     * @param type       Shader type
+     * @param shaderCode Shader code in plain text
+     * @return
+     */
     protected int loadShader(int type, String shaderCode) {
         int shader = GLES20.glCreateShader(type);
         GLES20.glShaderSource(shader, shaderCode);
