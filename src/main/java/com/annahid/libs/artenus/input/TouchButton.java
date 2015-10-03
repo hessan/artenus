@@ -24,9 +24,24 @@ public class TouchButton extends FilteredEntity implements Button, Touchable {
      */
     private float[] latestMatrix = null;
 
+    /**
+     * A value indicating whether the button is currently in pressed state.
+     */
     private boolean down = false;
+
+    /**
+     * The identifier for the pointer currently pressing the button down.
+     */
     private int downId = -1;
+
+    /**
+     * Current event handler currently listening to events from this touch button.
+     */
     private ButtonListener listener = null;
+
+    /**
+     * A counter used to generate button identifiers for the touch map.
+     */
     private static AtomicInteger idStore = new AtomicInteger(100);
 
     /**
@@ -133,6 +148,16 @@ public class TouchButton extends FilteredEntity implements Button, Touchable {
     @Override
     public void setListener(ButtonListener listener) {
         this.listener = listener;
+    }
+
+    /**
+     * Returns a value indicating whether this touch button is currently in pressed state.
+     *
+     * @return {@code true} if pressed, {@code false} otherwise
+     */
+    @Override
+    public boolean isPressed() {
+        return down;
     }
 
     /**

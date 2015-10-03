@@ -16,13 +16,16 @@ import com.annahid.libs.artenus.graphics.TextureManager;
  * @author Hessan Feghhi
  */
 class IntroScene extends Scene {
+    /**
+     * A value indicating whether the intro scene has been displayed.
+     */
     static boolean introShown = false;
 
     private long startTime;
-    private ImageSprite annahid = null;
     private float whiteness = 0;
     private boolean gameRun = false;
     private boolean showIntro;
+    private ImageSprite annahid = null;
 
     public IntroScene(Stage parentStage) {
         super(parentStage);

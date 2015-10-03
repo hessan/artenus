@@ -94,7 +94,7 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
      * the loading screen appear before. It holds the start time
      * for delay calculation.
      */
-    private long lll = 0;
+    private long loadingDelay = 0;
 
     public InternalRenderer(StageImpl stage) {
         this.stage = stage;
@@ -177,16 +177,16 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
             if (IntroScene.introShown)
                 loading.render(this);
 
-            if (lll == 0)
-                lll = System.currentTimeMillis();
+            if (loadingDelay == 0)
+                loadingDelay = System.currentTimeMillis();
 
-            if (ts == TextureManager.STATE_FRESH && System.currentTimeMillis() - lll > 200)
+            if (ts == TextureManager.STATE_FRESH && System.currentTimeMillis() - loadingDelay > 200)
                 TextureManager.loadTextures();
 
             return;
         }
 
-        lll = 0;
+        loadingDelay = 0;
 
         final RGB clearColor = stage.currentScene == null ?
                 this.clearColor : stage.currentScene.getBackColor();

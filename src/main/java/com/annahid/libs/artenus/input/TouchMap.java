@@ -3,6 +3,7 @@ package com.annahid.libs.artenus.input;
 import android.opengl.GLES20;
 import android.os.Debug;
 import android.support.annotation.NonNull;
+import android.util.Pair;
 
 import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.core.RenderingContext;
@@ -24,7 +25,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * rendering pipeline. The only member of this class that can be used from outside the framework is
  * {@link TouchMap#showMap(boolean)}.
  */
-public class TouchMap {
+public final class TouchMap {
     /**
      * The buffer used to read pixels from the touch map.
      */
@@ -37,9 +38,14 @@ public class TouchMap {
     private boolean show = true;
 
     /**
-     * The touch event queue.
+     * Queue for events that need to be processed.
      */
-    private Queue<TouchEvent> events = new ConcurrentLinkedQueue<>();
+    private Queue<TouchEvent> processQueue = new ConcurrentLinkedQueue<>();
+
+    /**
+     * Queue for processed events that need to be dispatched.
+     */
+    private Queue<Pair<TouchButton, TouchEvent>> dispatchQueue = new ConcurrentLinkedQueue<>();
 
     /**
      * The buttons registered with this touch map.
@@ -78,128 +84,6 @@ public class TouchMap {
      * Holds the OpenGL ES handle for the frame buffer used to render the map.
      */
     private static int frameBufferHandle;
-
-    /**
-     * Called internally bu the stage to queue touch events.
-     *
-     * @param event The touch event to queue
-     */
-    public void onTouchEvent(TouchEvent event) {
-        events.offer(event);
-    }
-
-    /**
-     * Processes a single touch event.
-     *
-     * @param event The touch event to handle
-     */
-    private void handleTouchEvent(TouchEvent event) {
-        pixelBuffer.position(0);
-        GLES20.glReadPixels(
-                (int) event.x >> 1, height - ((int) event.y >> 1), 1, 1,
-                GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, pixelBuffer
-        );
-
-        TouchButton button = buttons.get((int) pixelBuffer.get(0));
-
-        if (button != null)
-            button.internalTouch(event.action, event.pointerId);
-
-        if (event.action == TouchEvent.EVENT_UP) {
-            for (Map.Entry<Integer, TouchButton> entry : buttons.entrySet()) {
-                final TouchButton item = entry.getValue();
-                entry.getValue().internalTouch(
-                        item == button ? TouchEvent.EVENT_UP : TouchEvent.EVENT_LEAVE,
-                        event.pointerId
-                );
-            }
-        }
-    }
-
-    /**
-     * Called internally by the stage to render the touch map and process queued touch events.
-     *
-     * @param context The rendering context
-     */
-    public void process(RenderingContext context) {
-        if (width == 0 || height == 0)
-            return;
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBufferHandle);
-        GLES20.glFramebufferTexture2D(
-                GLES20.GL_FRAMEBUFFER,
-                GLES20.GL_COLOR_ATTACHMENT0,
-                GLES20.GL_TEXTURE_2D,
-                textureHandle,
-                0
-        );
-        GLES20.glViewport(0, 0, width, height);
-        GLES20.glClearColor(0, 1, 1, 1);
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-        ShaderProgram shaderBackup = context.getShader();
-        context.setShader(shader);
-        for (Map.Entry<Integer, TouchButton> entry : buttons.entrySet()) {
-            final TouchButton button = entry.getValue();
-            shader.feedObjectId((entry.getKey() + 256) % 256);
-            context.pushMatrix(button.popLatestMatrix());
-            button.render(context, Renderable.FLAG_IGNORE_EFFECTS);
-            context.popMatrix();
-        }
-        while (!events.isEmpty()) {
-            handleTouchEvent(events.poll());
-        }
-
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
-        if (show && Debug.isDebuggerConnected()) {
-            TextureShaderProgram program = (TextureShaderProgram) TextureManager.getShaderProgram();
-            context.setShader(program);
-            context.setColorFilter(0.75f, 0.75f, 0.75f, 0.75f);
-            context.pushMatrix();
-            context.identity();
-            program.feed(textureHandle);
-            program.feedTexCoords(TextureShaderProgram.defaultTextureBuffer);
-            context.translate(520, 280);
-            context.rotate(0);
-            context.scale(1000, -600);
-            context.rect();
-            context.popMatrix();
-        }
-        GLES20.glViewport(0, 0, context.getScreenWidth(), context.getScreenHeight());
-        context.setShader(shaderBackup);
-    }
-
-    /**
-     * Registers a button with this touch map.
-     *
-     * @param button The button
-     */
-    void registerButton(TouchButton button) {
-        if (button == null)
-            throw new IllegalArgumentException("Button cannot be null.");
-
-        buttons.put(button.id, button);
-    }
-
-    /**
-     * Shows or hides the touch map. By default, Artenus shows the touch map on the corner of the
-     * screen when a debugger is attached. You can use this method to override this behavior. Note
-     * that the map is not displayed in the absence of a debugger session, even when running a debug
-     * build.
-     *
-     * @param visible A value indicating whether to show the touch map
-     */
-    @SuppressWarnings("unused")
-    public void showMap(boolean visible) {
-        show = visible;
-    }
-
-    /**
-     * Removes a button from this touch map
-     *
-     * @param button The button
-     */
-    void unregisterButton(@NonNull TouchButton button) {
-        buttons.remove(button.id);
-    }
 
     /**
      * Initializes the touch map and creates necessary resources. If the touch map is already
@@ -270,7 +154,6 @@ public class TouchMap {
                 GLES20.GL_RENDERBUFFER,
                 renderBufferHandle
         );
-
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
         GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, 0);
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
@@ -281,5 +164,127 @@ public class TouchMap {
         shader = new TouchMapShaderProgram();
         Artenus.getInstance().getStage().registerShader(shader);
         shader.compile();
+    }
+
+    /**
+     * Called internally by the stage to render the touch map and process queued touch events.
+     *
+     * @param context The rendering context
+     */
+    public void process(RenderingContext context) {
+        if (width == 0 || height == 0)
+            return;
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBufferHandle);
+        GLES20.glFramebufferTexture2D(
+                GLES20.GL_FRAMEBUFFER,
+                GLES20.GL_COLOR_ATTACHMENT0,
+                GLES20.GL_TEXTURE_2D,
+                textureHandle,
+                0
+        );
+        GLES20.glViewport(0, 0, width, height);
+        GLES20.glClearColor(0, 1, 1, 1);
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        ShaderProgram shaderBackup = context.getShader();
+        context.setShader(shader);
+        for (Map.Entry<Integer, TouchButton> entry : buttons.entrySet()) {
+            final TouchButton button = entry.getValue();
+            shader.feedObjectId((entry.getKey() + 256) % 256);
+            context.pushMatrix(button.popLatestMatrix());
+            button.render(context, Renderable.FLAG_IGNORE_EFFECTS);
+            context.popMatrix();
+        }
+        while (!processQueue.isEmpty()) {
+            final TouchEvent event = processQueue.poll();
+            pixelBuffer.position(0);
+            GLES20.glReadPixels(
+                    (int) event.x >> 1, height - ((int) event.y >> 1), 1, 1,
+                    GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, pixelBuffer
+            );
+            dispatchQueue.offer(new Pair<>(buttons.get((int) pixelBuffer.get(0)), event));
+        }
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+        if (show && Debug.isDebuggerConnected()) {
+            TextureShaderProgram program = (TextureShaderProgram) TextureManager.getShaderProgram();
+            context.setShader(program);
+            context.setColorFilter(0.75f, 0.75f, 0.75f, 0.75f);
+            context.pushMatrix();
+            context.identity();
+            program.feed(textureHandle);
+            program.feedTexCoords(TextureShaderProgram.defaultTextureBuffer);
+            context.translate(520, 280);
+            context.rotate(0);
+            context.scale(1000, -600);
+            context.rect();
+            context.popMatrix();
+        }
+        GLES20.glViewport(0, 0, context.getScreenWidth(), context.getScreenHeight());
+        context.setShader(shaderBackup);
+    }
+
+    /**
+     * Called internally to dispatch all processed touch events to their corresponding buttons.
+     */
+    public void dispatch() {
+        while (!dispatchQueue.isEmpty()) {
+            Pair<TouchButton, TouchEvent> item = dispatchQueue.poll();
+            TouchEvent event = item.second;
+
+            if (item.first != null)
+                item.first.internalTouch(event.action, event.pointerId);
+
+            if (event.action == TouchEvent.EVENT_UP) {
+                for (Map.Entry<Integer, TouchButton> entry : buttons.entrySet()) {
+                    final TouchButton btn = entry.getValue();
+                    entry.getValue().internalTouch(
+                            btn == item.first ? TouchEvent.EVENT_UP : TouchEvent.EVENT_LEAVE,
+                            event.pointerId
+                    );
+                }
+            }
+        }
+    }
+
+    /**
+     * Shows or hides the touch map. By default, Artenus shows the touch map on the corner of the
+     * screen when a debugger is attached. You can use this method to override this behavior. Note
+     * that the map is not displayed in the absence of a debugger session, even when running a debug
+     * build.
+     *
+     * @param visible A value indicating whether to show the touch map
+     */
+    @SuppressWarnings("unused")
+    public void showMap(boolean visible) {
+        show = visible;
+    }
+
+    /**
+     * Called internally to queue touch events.
+     *
+     * @param event The touch event to queue
+     */
+    public void onTouchEvent(TouchEvent event) {
+        processQueue.offer(event);
+    }
+
+    /**
+     * Registers a button with this touch map.
+     *
+     * @param button The button
+     */
+    void registerButton(TouchButton button) {
+        if (button == null)
+            throw new IllegalArgumentException("Button cannot be null.");
+
+        buttons.put(button.id, button);
+    }
+
+    /**
+     * Removes a button from this touch map
+     *
+     * @param button The button
+     */
+    void unregisterButton(@NonNull TouchButton button) {
+        buttons.remove(button.id);
     }
 }

@@ -17,14 +17,14 @@ class LoadingGraphics {
     /**
      * Renews loading screen assets after a system reset.
      */
-    public void renew() {
+    void renew() {
         loadingSprite = null;
     }
 
     /**
      * Renders the "loading" screen on the given rendering context.
      */
-    public void render(RenderingContext ctx) {
+    void render(RenderingContext ctx) {
         float vw = ctx.getWidth(), vh = ctx.getHeight();
         GLES20.glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
@@ -60,7 +60,7 @@ class LoadingGraphics {
      *
      * @param color The color
      */
-    public void setBackColor(RGB color) {
+    void setBackColor(RGB color) {
         clearColor.r = color.r;
         clearColor.g = color.g;
         clearColor.b = color.b;

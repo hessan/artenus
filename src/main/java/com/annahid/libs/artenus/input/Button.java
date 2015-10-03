@@ -16,4 +16,11 @@ public interface Button {
      * @param listener The listener
      */
     void setListener(ButtonListener listener);
+
+    /**
+     * Returns a value indicating whether the button is currently in pressed state.
+     *
+     * @return {@code true} if the button is pressed, {@code false} otherwise
+     */
+    boolean isPressed();
 }

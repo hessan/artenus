@@ -155,17 +155,18 @@ public class Scene implements Touchable {
      * @param elapsedTime The time elapsed since last frame
      */
     public void advance(float elapsedTime) {
+        if (dialog != null) {
+            dialog.advance(elapsedTime);
+        } else {
+            touchManager.dispatch();
+        }
         if (!isHalted()) {
             entities.advance(elapsedTime);
-
             if (physics != null) {
                 physics.step(elapsedTime, 6, 4);
                 physics.handleCollisions();
             }
         }
-
-        if (dialog != null)
-            dialog.advance(elapsedTime);
     }
 
     /**
@@ -310,9 +311,9 @@ public class Scene implements Touchable {
         }
 
         if (dialog != null) {
-            if (!dialog.isLoaded())
+            if (!dialog.isLoaded()) {
                 dialog.onLoaded();
-
+            }
             dialog.render(context);
         }
     }
