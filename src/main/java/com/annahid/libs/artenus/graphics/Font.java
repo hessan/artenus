@@ -91,7 +91,11 @@ public final class Font extends Texture {
      *
      * @param text The text to be processed
      * @return The processed text
+     * @deprecated Fonts can now be localized, which defeats the purpose of this method. It is still
+     * recommended to include definitions for `, ', and ^ characters in any font file to avoid
+     * compatibility issues. But this method will be removed from the framework soon.
      */
+    @Deprecated
     public static String processText(String text) {
         String ret = (text == null) ? "" : text;
 
