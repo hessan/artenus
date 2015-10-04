@@ -233,6 +233,12 @@ public abstract class Artenus extends Activity {
         UnifiedServices.getInstance().onStart();
     }
 
+    /**
+     * Initializes the game. Subclasses should use this method to load textures and other resources
+     * into the framework.
+     *
+     * @param stage The stage for the game
+     */
     protected abstract void init(Stage stage);
 
     private static Artenus instance;

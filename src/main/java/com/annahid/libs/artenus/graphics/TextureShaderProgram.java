@@ -2,7 +2,7 @@ package com.annahid.libs.artenus.graphics;
 
 import android.opengl.GLES20;
 
-import com.annahid.libs.artenus.core.ShaderProgram;
+import com.annahid.libs.artenus.graphics.rendering.ShaderProgram;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -10,6 +10,8 @@ import java.nio.FloatBuffer;
 
 /**
  * A shader program that is used by the Artenus framework to render textured entities.
+ *
+ * @author Hessan Feghhi
  */
 public class TextureShaderProgram implements ShaderProgram {
     /**
@@ -154,7 +156,7 @@ public class TextureShaderProgram implements ShaderProgram {
      *
      * @param type       Shader type
      * @param shaderCode Shader code in plain text
-     * @return
+     * @return The handle to the shader
      */
     protected int loadShader(int type, String shaderCode) {
         int shader = GLES20.glCreateShader(type);

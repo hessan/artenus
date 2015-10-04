@@ -1,7 +1,7 @@
 package com.annahid.libs.artenus.graphics;
 
 import com.annahid.libs.artenus.entities.behavior.Renderable;
-import com.annahid.libs.artenus.core.RenderingContext;
+import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 
 /**
  * A subclass of {@link com.annahid.libs.artenus.graphics.Effect} that represents a shadow effect.

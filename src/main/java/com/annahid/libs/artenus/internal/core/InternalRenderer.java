@@ -4,8 +4,12 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
-import com.annahid.libs.artenus.core.RenderingContext;
-import com.annahid.libs.artenus.core.ShaderProgram;
+import com.annahid.libs.artenus.graphics.TextureShaderProgram;
+import com.annahid.libs.artenus.graphics.filters.PostProcessingFilter;
+import com.annahid.libs.artenus.graphics.rendering.FrameSetup;
+import com.annahid.libs.artenus.graphics.rendering.RenderTarget;
+import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
+import com.annahid.libs.artenus.graphics.rendering.ShaderProgram;
 import com.annahid.libs.artenus.core.StageManager;
 import com.annahid.libs.artenus.graphics.TextureManager;
 import com.annahid.libs.artenus.input.TouchMap;
@@ -15,7 +19,9 @@ import com.annahid.libs.artenus.data.RGB;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Stack;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -23,6 +29,8 @@ import javax.microedition.khronos.opengles.GL10;
 
 /**
  * The internal stage renderer.
+ *
+ * @author Hessan Feghhi
  */
 class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
     /**
@@ -36,9 +44,9 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
     private final float[] mvpMatrix = new float[16];
 
     /**
-     * The default background color of the stage, if it is not defined by the current scene.
+     * The list of filters currently effective.
      */
-    private final RGB clearColor = new RGB(0, 0, 0);
+    List<PostProcessingFilter> filters = new ArrayList<>(10);
 
     /**
      * Calculated logical width.
@@ -88,6 +96,7 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
     private StageImpl stage;
     private Collection<ShaderProgram> registeredShaders = new ConcurrentCollection<>();
     private LoadingGraphics loading = new LoadingGraphics();
+    private RenderTarget[] targets = new RenderTarget[2];
 
     /**
      * This field is used to delay texture loading  a bit to let
@@ -129,7 +138,7 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        GLES20.glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
+        GLES20.glClearColor(0, 0, 0, 1.0f);
 
         for (ShaderProgram shader : registeredShaders)
             shader.compile();
@@ -158,7 +167,7 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
         }
 
         final RGB clearColor = stage.currentScene == null ?
-                this.clearColor : stage.currentScene.getBackColor();
+                new RGB(0, 0, 0) : stage.currentScene.getBackColor();
         GLES20.glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
         screenWidth = width;
         screenHeight = height;
@@ -166,13 +175,20 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
                 (float) Math.min(screenHeight, screenWidth) / 600.0f
         );
         onResize(vw, vh);
+
+        for (int i = 0; i < targets.length; i++) {
+            if(targets[i] != null) {
+                targets[i].dispose();
+            }
+            targets[i] = RenderTarget.create(width, height);
+        }
+
         TouchMap.update((int) vw, (int) vh);
     }
 
     @Override
     public void onDrawFrame(GL10 gl) {
         final int ts = TextureManager.getCurrentState();
-
         if (ts != TextureManager.STATE_LOADED) {
             if (IntroScene.introShown)
                 loading.render(this);
@@ -185,33 +201,51 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
 
             return;
         }
-
         loadingDelay = 0;
+        targets[0].reset();
+        targets[1].reset();
+        targets[0].begin();
+        renderRaw();
+        targets[0].end();
+        PostProcessingFilter[] filters =
+                this.filters.toArray(new PostProcessingFilter[this.filters.size()]);
+        RenderTarget renderTarget = targets[1], inputTarget = targets[0];
+        for (PostProcessingFilter filter : filters) {
+            boolean hasMorePasses = true;
+            int pass = 0;
+            while(hasMorePasses) {
+                FrameSetup setup = new FrameSetup(inputTarget.getFrameSetup());
+                renderTarget.begin();
+                hasMorePasses = filter.setup(pass, setup);
+                renderTarget.setFrameSetup(setup);
+                filter.render(pass, this, inputTarget);
+                renderTarget.end();
+                pass++;
+                if(renderTarget == targets[0]) {
+                    renderTarget = targets[1];
+                    inputTarget = targets[0];
+                } else {
+                    renderTarget = targets[0];
+                    inputTarget = targets[1];
+                }
+            }
+        }
 
-        final RGB clearColor = stage.currentScene == null ?
-                this.clearColor : stage.currentScene.getBackColor();
-        GLES20.glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+        GLES20.glViewport(0, 0, screenWidth, screenHeight);
+        GLES20.glClearColor(0, 0, 0, 1.0f);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-
-        if (stage.currentScene != null) {
-            if (!stage.currentScene.isLoaded())
-                stage.currentScene.onLoaded();
-
-            stage.currentScene.render(this);
-        }
-
-        shader.cleanup();
-        setShader(null);
-
-        if (stage.stPhase > 0) {
-            pushMatrix();
-            translate(vw / 2, vh / 2);
-            scale(vw, vh);
-            GLES20.glDisable(GLES20.GL_TEXTURE_2D);
-            setColorFilter(0, 0, 0, stage.stPhase);
-            rect();
-            popMatrix();
-        }
+        TextureShaderProgram program = (TextureShaderProgram) TextureManager.getShaderProgram();
+        setShader(program);
+        setColorFilter(1, 1, 1, 1);
+        pushMatrix();
+        identity();
+        program.feed(inputTarget.getTextureHandle());
+        program.feedTexCoords(inputTarget.getTextureCoords());
+        translate(vw / 2, vh / 2);
+        scale(vw, -vh);
+        rect();
+        popMatrix();
 
         if (stage.currentScene != null) {
             if (stage.currentScene.getDialog() != null)
@@ -219,8 +253,6 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
             else stage.currentScene.getTouchMap().process(this);
             shader.cleanup();
         }
-
-        setColorFilter(1, 1, 1, 1);
     }
 
     public void pushMatrix() {
@@ -308,13 +340,6 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
         return loading;
     }
 
-    void setClearColor(float r, float g, float b) {
-        this.clearColor.r = r;
-        this.clearColor.g = g;
-        this.clearColor.b = b;
-        GLES20.glClearColor(r, g, b, 1.0f);
-    }
-
     void onResize(float w, float h) {
         Matrix.orthoM(mvpMatrix, 0, 0, w, h, 0, -1, 1);
     }
@@ -325,5 +350,32 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
 
     void unregisterShader(ShaderProgram shader) {
         registeredShaders.remove(shader);
+    }
+
+    /**
+     * Renders the current frame on the first render target.
+     */
+    private void renderRaw() {
+        final RGB clearColor = stage.currentScene == null ?
+                new RGB(0, 0, 0) : stage.currentScene.getBackColor();
+        GLES20.glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        if (stage.currentScene != null) {
+            if (!stage.currentScene.isLoaded())
+                stage.currentScene.onLoaded();
+
+            stage.currentScene.render(this);
+        }
+        shader.cleanup();
+        setShader(null);
+        if (stage.stPhase > 0) {
+            pushMatrix();
+            translate(vw / 2, vh / 2);
+            scale(vw, vh);
+            setColorFilter(0, 0, 0, stage.stPhase);
+            rect();
+            popMatrix();
+        }
+        setColorFilter(1, 1, 1, 1);
     }
 }

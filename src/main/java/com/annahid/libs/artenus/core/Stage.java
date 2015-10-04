@@ -1,6 +1,8 @@
 package com.annahid.libs.artenus.core;
 
 import com.annahid.libs.artenus.data.RGB;
+import com.annahid.libs.artenus.graphics.filters.PostProcessingFilter;
+import com.annahid.libs.artenus.graphics.rendering.ShaderProgram;
 
 /**
  * <p>This interface is one of the key components of this framework. The {@code Stage} is where
@@ -86,29 +88,19 @@ public interface Stage {
     float getLogicalHeight();
 
     /**
-     * Sets the default background color for scenes that don't specify one.
+     * Adds a post-processing filter to the rendering pipeline. Filters will be applied in the order
+     * they are added to the stage.
      *
-     * @param rgb The default color
+     * @param filter The filter to be added
      */
-    void setDefaultBackColor(RGB rgb);
+    void addFilter(PostProcessingFilter filter);
 
     /**
-     * Sets the amount of blur on this stage.
+     * Removes a post-processing filter from the rendering pipeline.
      *
-     * @param blur The value of a blur in the range 0 to 1
-     * @deprecated This method will be removed in a later release, as blurring will be handled
-     * through effects.
+     * @param filter The filter to be removed
      */
-    void setBlur(float blur);
-
-    /**
-     * Gets the current value of blur specified for this {@code Stage}.
-     *
-     * @return The blur value in the range 0 to 1
-     * @deprecated This method will be removed in a later release, as blurring will be handled
-     * through effects.
-     */
-    float getBlur();
+    void removeFilter(PostProcessingFilter filter);
 
     /**
      * This method handles the physical back button for this {@code Stage}.

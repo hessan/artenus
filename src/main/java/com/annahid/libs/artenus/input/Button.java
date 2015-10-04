@@ -3,6 +3,8 @@ package com.annahid.libs.artenus.input;
 /**
  * Represents a button. This can be a visual touch button on the screen, a physical button on a
  * game-pad, or anything else that can produce or simulate press and release events.
+ *
+ * @author Hessan Feghhi
  */
 public interface Button {
     /**

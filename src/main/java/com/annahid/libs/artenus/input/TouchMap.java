@@ -2,12 +2,12 @@ package com.annahid.libs.artenus.input;
 
 import android.opengl.GLES20;
 import android.os.Debug;
-import android.support.annotation.NonNull;
 import android.util.Pair;
 
 import com.annahid.libs.artenus.Artenus;
-import com.annahid.libs.artenus.core.RenderingContext;
-import com.annahid.libs.artenus.core.ShaderProgram;
+import com.annahid.libs.artenus.graphics.rendering.RenderTarget;
+import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
+import com.annahid.libs.artenus.graphics.rendering.ShaderProgram;
 import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.graphics.TextureManager;
 import com.annahid.libs.artenus.graphics.TextureShaderProgram;
@@ -24,6 +24,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * It is highly recommended not to use this class directly, as it might interfere with the default
  * rendering pipeline. The only member of this class that can be used from outside the framework is
  * {@link TouchMap#showMap(boolean)}.
+ *
+ * @author Hessan Feghhi
  */
 public final class TouchMap {
     /**
@@ -53,37 +55,14 @@ public final class TouchMap {
     private Map<Integer, TouchButton> buttons = new ConcurrentHashMap<>(24);
 
     /**
-     * Holds the width of the frame buffer used for the touch map.
-     */
-    private static int width;
-
-    /**
-     * Holds the height of the frame buffer used for the touch map.
-     */
-    private static int height;
-
-    /**
-     * A value indicating whether this instance has been initialized.
-     */
-    private static boolean inited = false;
-
-    /**
      * Holds the shader program used to draw the touch map from sprites.
      */
     private static TouchMapShaderProgram shader = null;
 
     /**
-     * Holds the OpenGL ES handle to the texture on which the map is rendered.
+     * The render target for the touch map.
      */
-    private static int textureHandle;
-    /**
-     * Holds the OpenGL ES handle for the render buffer used to render the map.
-     */
-    private static int renderBufferHandle;
-    /**
-     * Holds the OpenGL ES handle for the frame buffer used to render the map.
-     */
-    private static int frameBufferHandle;
+    private static RenderTarget target;
 
     /**
      * Initializes the touch map and creates necessary resources. If the touch map is already
@@ -93,74 +72,10 @@ public final class TouchMap {
      * @param fboHeight The logical height of the screen
      */
     public static void update(int fboWidth, int fboHeight) {
-        fboWidth >>= 1;
-        fboHeight >>= 1;
-
-        if (inited) {
-            final int[] temp = new int[1];
-
-            temp[0] = renderBufferHandle;
-            GLES20.glDeleteRenderbuffers(1, temp, 0);
-
-            temp[0] = frameBufferHandle;
-            GLES20.glDeleteFramebuffers(1, temp, 0);
-
-            temp[0] = textureHandle;
-            GLES20.glDeleteTextures(1, temp, 0);
+        if (target != null) {
+            target.dispose();
         }
-
-        inited = true;
-
-        final int[] temp = new int[1];
-        GLES20.glGenFramebuffers(1, temp, 0);
-        frameBufferHandle = temp[0];
-
-        GLES20.glGenTextures(1, temp, 0);
-        textureHandle = temp[0];
-
-        GLES20.glGenRenderbuffers(1, temp, 0);
-        renderBufferHandle = temp[0];
-
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBufferHandle);
-
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle);
-        GLES20.glTexParameteri(
-                GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE
-        );
-        GLES20.glTexParameteri(
-                GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE
-        );
-        GLES20.glTexParameteri(
-                GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR
-        );
-        GLES20.glTexParameteri(
-                GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR
-        );
-        GLES20.glTexImage2D(
-                GLES20.GL_TEXTURE_2D,
-                0,
-                GLES20.GL_RGBA,
-                fboWidth,
-                fboHeight,
-                0,
-                GLES20.GL_RGBA,
-                GLES20.GL_UNSIGNED_BYTE,
-                null
-        );
-        GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, renderBufferHandle);
-        GLES20.glFramebufferRenderbuffer(
-                GLES20.GL_FRAMEBUFFER,
-                GLES20.GL_DEPTH_ATTACHMENT,
-                GLES20.GL_RENDERBUFFER,
-                renderBufferHandle
-        );
-        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, 0);
-        GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, 0);
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
-
-        width = fboWidth;
-        height = fboHeight;
-
+        target = RenderTarget.create(fboWidth >> 1, fboHeight >> 1);
         shader = new TouchMapShaderProgram();
         Artenus.getInstance().getStage().registerShader(shader);
         shader.compile();
@@ -172,17 +87,10 @@ public final class TouchMap {
      * @param context The rendering context
      */
     public void process(RenderingContext context) {
-        if (width == 0 || height == 0)
+        if (target == null) {
             return;
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBufferHandle);
-        GLES20.glFramebufferTexture2D(
-                GLES20.GL_FRAMEBUFFER,
-                GLES20.GL_COLOR_ATTACHMENT0,
-                GLES20.GL_TEXTURE_2D,
-                textureHandle,
-                0
-        );
-        GLES20.glViewport(0, 0, width, height);
+        }
+        target.begin();
         GLES20.glClearColor(0, 1, 1, 1);
         GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         ShaderProgram shaderBackup = context.getShader();
@@ -198,7 +106,7 @@ public final class TouchMap {
             final TouchEvent event = processQueue.poll();
             pixelBuffer.position(0);
             GLES20.glReadPixels(
-                    (int) event.x >> 1, height - ((int) event.y >> 1), 1, 1,
+                    (int) event.x >> 1, target.getMaxHeight() - ((int) event.y >> 1), 1, 1,
                     GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, pixelBuffer
             );
             dispatchQueue.offer(new Pair<>(buttons.get((int) pixelBuffer.get(0)), event));
@@ -210,7 +118,7 @@ public final class TouchMap {
             context.setColorFilter(0.75f, 0.75f, 0.75f, 0.75f);
             context.pushMatrix();
             context.identity();
-            program.feed(textureHandle);
+            program.feed(target.getTextureHandle());
             program.feedTexCoords(TextureShaderProgram.defaultTextureBuffer);
             context.translate(520, 280);
             context.rotate(0);
@@ -220,6 +128,7 @@ public final class TouchMap {
         }
         GLES20.glViewport(0, 0, context.getScreenWidth(), context.getScreenHeight());
         context.setShader(shaderBackup);
+        target.end();
     }
 
     /**
@@ -284,7 +193,8 @@ public final class TouchMap {
      *
      * @param button The button
      */
-    void unregisterButton(@NonNull TouchButton button) {
-        buttons.remove(button.id);
+    void unregisterButton(TouchButton button) {
+        if (button != null)
+            buttons.remove(button.id);
     }
 }

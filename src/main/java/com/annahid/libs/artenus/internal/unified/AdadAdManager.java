@@ -8,7 +8,7 @@ import com.annahid.libs.artenus.unified.AdManager;
 
 import ir.adad.AdView;
 
-public class AdadAdManager extends AdManager {
+final class AdadAdManager extends AdManager {
     @Override
     protected View getAdView() {
         int childCount = adLayout.getChildCount();

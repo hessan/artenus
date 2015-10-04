@@ -1,6 +1,6 @@
 package com.annahid.libs.artenus.input;
 
-import com.annahid.libs.artenus.core.RenderingContext;
+import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.core.Scene;
 import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.entities.Entity;
@@ -12,6 +12,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Handles touch events for the underlying entity.
+ *
+ * @author Hessan Feghhi
  */
 public class TouchButton extends FilteredEntity implements Button, Touchable {
     /**

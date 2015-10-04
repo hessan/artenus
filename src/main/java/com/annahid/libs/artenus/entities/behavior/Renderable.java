@@ -1,11 +1,13 @@
 package com.annahid.libs.artenus.entities.behavior;
 
-import com.annahid.libs.artenus.core.RenderingContext;
+import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.data.RGB;
 import com.annahid.libs.artenus.graphics.Effect;
 
 /**
  * Interface for all entities that support rendering of visual content.
+ *
+ * @author Hessan Feghhi
  */
 public interface Renderable {
     /**

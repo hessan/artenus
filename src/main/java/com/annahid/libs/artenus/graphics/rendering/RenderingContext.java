@@ -1,4 +1,4 @@
-package com.annahid.libs.artenus.core;
+package com.annahid.libs.artenus.graphics.rendering;
 
 import com.annahid.libs.artenus.entities.behavior.Renderable;
 
@@ -11,6 +11,8 @@ import com.annahid.libs.artenus.entities.behavior.Renderable;
  * developing a new type of sprite which is not provided by the framework. In such a scenario it is
  * necessary to use this class instead of calling OpenGL ES functions directly. This ensures that
  * your sprite implementation is compatible with the rest of the framework.</p>
+ *
+ * @author Hessan Feghhi
  */
 public interface RenderingContext {
     /**

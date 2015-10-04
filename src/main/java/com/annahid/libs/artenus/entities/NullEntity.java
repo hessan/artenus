@@ -6,6 +6,8 @@ import com.annahid.libs.artenus.core.Scene;
 
 /**
  * An entity that replaces {@code null} values where such value can be problematic.
+ *
+ * @author Hessan Feghhi
  */
 class NullEntity implements Entity, Transformable {
     private static final Entity instance = new NullEntity();

@@ -12,9 +12,10 @@ import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.R;
 import com.annahid.libs.artenus.core.Dialog;
 import com.annahid.libs.artenus.core.Scene;
-import com.annahid.libs.artenus.core.ShaderProgram;
+import com.annahid.libs.artenus.graphics.rendering.ShaderProgram;
 import com.annahid.libs.artenus.core.Stage;
 import com.annahid.libs.artenus.core.StageManager;
+import com.annahid.libs.artenus.graphics.filters.PostProcessingFilter;
 import com.annahid.libs.artenus.input.TouchEvent;
 import com.annahid.libs.artenus.data.RGB;
 import com.annahid.libs.artenus.graphics.TextureManager;
@@ -138,7 +139,6 @@ public final class StageImpl extends GLSurfaceView implements Stage {
 
         setEGLContextClientVersion(2);
         mRenderer = new InternalRenderer(this);
-        mRenderer.setClearColor(1, 1, 0);
         setRenderer(mRenderer);
         scheduleTimer();
 
@@ -251,32 +251,22 @@ public final class StageImpl extends GLSurfaceView implements Stage {
     }
 
     /**
-     * Sets the default background color for scenes that don't specify one.
+     * Adds a filter to this stage's rendering pipeline. If the filter is already added, it will be
+     * moved to the end of the pipeline.
      *
-     * @param rgb The default color
+     * @param filter The filter to be added
      */
     @Override
-    public void setDefaultBackColor(RGB rgb) {
-        mRenderer.setClearColor(rgb.r, rgb.g, rgb.b);
+    public void addFilter(PostProcessingFilter filter) {
+        if (mRenderer.filters.contains(filter)) {
+            mRenderer.filters.remove(filter);
+        }
+        mRenderer.filters.add(filter);
     }
 
-    /**
-     * Sets the amount of blur on this stage. This method needs the {@code supportES2} attribute to
-     * be set for this {@code Stage} and the device to support OpenGLES 2.
-     *
-     * @param blur The value of a blur in the range 0 to 1
-     */
-    public final void setBlur(float blur) {
-        this.blur = Math.max(blur, 0);
-    }
-
-    /**
-     * Gets the current value of blur specified for this {@code Stage}.
-     *
-     * @return The blur value in the range 0 to 1
-     */
-    public final float getBlur() {
-        return blur;
+    @Override
+    public void removeFilter(PostProcessingFilter filter) {
+        mRenderer.filters.remove(filter);
     }
 
     /**

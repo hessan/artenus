@@ -2,6 +2,8 @@ package com.annahid.libs.artenus.input;
 
 /**
  * The interface for all classes that handle push button events.
+ *
+ * @author Hessan Feghhi
  */
 public interface ButtonListener {
     /**

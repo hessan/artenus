@@ -2,6 +2,8 @@ package com.annahid.libs.artenus.input;
 
 /**
  * Represents a touch event in the Artenus framework.
+ *
+ * @author Hessan Feghhi
  */
 public class TouchEvent {
     /**

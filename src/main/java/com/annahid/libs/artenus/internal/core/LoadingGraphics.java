@@ -2,13 +2,18 @@ package com.annahid.libs.artenus.internal.core;
 
 import android.opengl.GLES20;
 
-import com.annahid.libs.artenus.core.RenderingContext;
+import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.graphics.TextureManager;
 import com.annahid.libs.artenus.graphics.sprites.ImageSprite;
 import com.annahid.libs.artenus.graphics.sprites.LineSprite;
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.data.RGB;
 
+/**
+ * This class renders the loading interface.
+ *
+ * @author Hessan Feghhi
+ */
 class LoadingGraphics {
     private final RGB clearColor = new RGB(0, 0, 0);
     private LineSprite loadingBarSprite;

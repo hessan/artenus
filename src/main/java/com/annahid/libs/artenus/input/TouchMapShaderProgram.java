@@ -6,6 +6,8 @@ import com.annahid.libs.artenus.graphics.TextureShaderProgram;
 
 /**
  * The shader program used by the touch map to render button hot (clickable) regions.
+ *
+ * @author Hessan Feghhi
  */
 class TouchMapShaderProgram extends TextureShaderProgram {
     private static final String vertexShaderCode =

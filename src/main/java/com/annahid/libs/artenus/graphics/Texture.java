@@ -9,7 +9,7 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 
 import com.annahid.libs.artenus.Artenus;
-import com.annahid.libs.artenus.core.RenderingContext;
+import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.larvalabs.svgandroid.SVG;
 import com.larvalabs.svgandroid.SVGParser;
 

@@ -1,5 +1,6 @@
 package com.annahid.libs.artenus.core;
 
+import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.input.TouchEvent;
 import com.annahid.libs.artenus.input.TouchMap;
 import com.annahid.libs.artenus.data.RGB;

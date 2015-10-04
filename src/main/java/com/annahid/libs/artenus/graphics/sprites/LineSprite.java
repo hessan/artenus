@@ -1,6 +1,6 @@
 package com.annahid.libs.artenus.graphics.sprites;
 
-import com.annahid.libs.artenus.core.RenderingContext;
+import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.data.Point2D;
 
 /**

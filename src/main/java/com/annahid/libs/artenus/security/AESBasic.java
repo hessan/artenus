@@ -29,75 +29,76 @@ import javax.crypto.spec.SecretKeySpec;
 
 /**
  * Provides AES encryption functionality.
- * @author Hessan Feghhi
  *
+ * @author Hessan Feghhi
  */
 @SuppressWarnings("UnusedDeclaration")
 public class AESBasic {
-	private static final String UTF8 = "UTF-8";
-	private static final String CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
-	private static final byte[] IV = {'1', '2', '4', '6', 'F', 'g', 'h', 'z', 'L', 'K', '6', 'd', 'b', 'N', '7', '3'};
+    private static final String UTF8 = "UTF-8";
+    private static final String CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
+    private static final byte[] IV =
+            {'1', '2', '4', '6', 'F', 'g', 'h', 'z', 'L', 'K', '6', 'd', 'b', 'N', '7', '3'};
 
-	private Cipher mEncryptor;
-	private Cipher mDecryptor;
+    private Cipher mEncryptor;
+    private Cipher mDecryptor;
 
-	/**
-	 * Creates a new instance of {@code AESBasic} with the given password.
-	 *
-	 * @param password The password for this instance
-	 */
-	public AESBasic(String password) {
-		byte[] secretKey = new byte[16];
+    /**
+     * Creates a new instance of {@code AESBasic} with the given password.
+     *
+     * @param password The password for this instance
+     */
+    public AESBasic(String password) {
+        byte[] secretKey = new byte[16];
 
-		for (int i = 0; i < Math.min(16, password.length()); i++)
-			secretKey[i] = (byte) password.charAt(i);
+        for (int i = 0; i < Math.min(16, password.length()); i++)
+            secretKey[i] = (byte) password.charAt(i);
 
-		SecretKey secret = new SecretKeySpec(secretKey, "AES");
+        SecretKey secret = new SecretKeySpec(secretKey, "AES");
 
-		try {
-			mEncryptor = Cipher.getInstance(CIPHER_ALGORITHM);
-			mEncryptor.init(Cipher.ENCRYPT_MODE, secret, new IvParameterSpec(IV));
-			mDecryptor = Cipher.getInstance(CIPHER_ALGORITHM);
-			mDecryptor.init(Cipher.DECRYPT_MODE, secret, new IvParameterSpec(IV));
-		} catch (GeneralSecurityException e) {
-			// Do nothing
-		}
-	}
+        try {
+            mEncryptor = Cipher.getInstance(CIPHER_ALGORITHM);
+            mEncryptor.init(Cipher.ENCRYPT_MODE, secret, new IvParameterSpec(IV));
+            mDecryptor = Cipher.getInstance(CIPHER_ALGORITHM);
+            mDecryptor.init(Cipher.DECRYPT_MODE, secret, new IvParameterSpec(IV));
+        } catch (GeneralSecurityException e) {
+            // Do nothing
+        }
+    }
 
-	/**
-	 * Encrypts a given string.
-	 *
-	 * @param original The string to be encrypted
-	 * @return The string representation of the encrypted value
-	 */
-	public String encrypt(String original) {
-		if (original == null)
-			return null;
+    /**
+     * Encrypts a given string.
+     *
+     * @param original The string to be encrypted
+     * @return The string representation of the encrypted value
+     */
+    public String encrypt(String original) {
+        if (original == null)
+            return null;
 
-		try {
-			return Base64.encode(mEncryptor.doFinal(original.getBytes(UTF8)));
-		} catch (UnsupportedEncodingException | GeneralSecurityException e) {
-			throw new RuntimeException("Invalid environment", e);
-		}
-	}
+        try {
+            return Base64.encode(mEncryptor.doFinal(original.getBytes(UTF8)));
+        } catch (UnsupportedEncodingException | GeneralSecurityException e) {
+            throw new RuntimeException("Invalid environment", e);
+        }
+    }
 
-	/**
-	 * Decrypts an encrypted string.
-	 *
-	 * @param encrypted The encrypted string.
-	 * @throws ValidationException
-	 * @return The original string.
-	 */
-	public String decrypt(String encrypted) throws ValidationException {
-		if (encrypted == null)
-			return null;
+    /**
+     * Decrypts an encrypted string.
+     *
+     * @param encrypted The encrypted string.
+     * @return The original string.
+     * @throws ValidationException
+     */
+    public String decrypt(String encrypted) throws ValidationException {
+        if (encrypted == null)
+            return null;
 
-		try {
-			return new String(mDecryptor.doFinal(Base64.decode(encrypted)), UTF8);
-		} catch (Base64DecoderException | IllegalBlockSizeException | BadPaddingException e) {
-			throw new ValidationException(e.getMessage() + ":" + encrypted);
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException("Invalid environment", e);
-		}
-	}
+        try {
+            return new String(mDecryptor.doFinal(Base64.decode(encrypted)), UTF8);
+        } catch (Base64DecoderException | IllegalBlockSizeException | BadPaddingException e) {
+            throw new ValidationException(e.getMessage() + ":" + encrypted);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("Invalid environment", e);
+        }
+    }
 }

@@ -1,6 +1,6 @@
 package com.annahid.libs.artenus.entities;
 
-import com.annahid.libs.artenus.core.RenderingContext;
+import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.data.RGB;
 import com.annahid.libs.artenus.entities.behavior.Animatable;
@@ -12,6 +12,8 @@ import com.annahid.libs.artenus.core.Scene;
 /**
  * An entity that applies all its methods on an underlying entity. This class is the superclass
  * of all classes that provide a modification on the behavior of other entities.
+ *
+ * @author Hessan Feghhi
  */
 public abstract class FilteredEntity
         implements Entity, Animatable, Transformable, Renderable {

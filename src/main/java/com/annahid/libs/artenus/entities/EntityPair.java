@@ -1,6 +1,6 @@
 package com.annahid.libs.artenus.entities;
 
-import com.annahid.libs.artenus.core.RenderingContext;
+import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.input.TouchEvent;
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.data.RGB;
@@ -22,6 +22,8 @@ import com.annahid.libs.artenus.core.Scene;
  * <p>
  * Performance-wise, this class is recommended whenever you want to encapsulate only two entities.
  * </p>
+ *
+ * @author Hessan Feghhi
  */
 public class EntityPair
         implements Entity, Animatable, Touchable, Transformable, Renderable {

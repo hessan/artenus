@@ -2,7 +2,7 @@ package com.annahid.libs.artenus.entities;
 
 import android.support.annotation.NonNull;
 
-import com.annahid.libs.artenus.core.RenderingContext;
+import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.input.TouchEvent;
 import com.annahid.libs.artenus.data.ConcurrentCollection;
 import com.annahid.libs.artenus.data.Point2D;
@@ -168,7 +168,7 @@ public class EntityCollection
     /**
      * Returns a basic iterator over the elements.
      *
-     * @return
+     * @return an iterator over only the direct children of this entity
      */
     @NonNull
     @Override

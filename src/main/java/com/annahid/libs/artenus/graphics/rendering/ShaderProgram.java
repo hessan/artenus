@@ -1,10 +1,12 @@
-package com.annahid.libs.artenus.core;
+package com.annahid.libs.artenus.graphics.rendering;
 
 import java.nio.FloatBuffer;
 
 /**
  * Interface for all shader programs. A shader program is a rendering component that instructs the
  * graphics hardware on how to draw elements on the screen.
+ *
+ * @author Hessan Feghhi
  */
 public interface ShaderProgram {
     /**

@@ -5,6 +5,7 @@ import com.annahid.libs.artenus.entities.AnimationHandler;
 /**
  * Interface for all entities that can be animated. Sprites all implement this behavior.
  *
+ * @author Hessan Feghhi
  * @see com.annahid.libs.artenus.graphics.sprites.SpriteEntity
  */
 public interface Animatable {

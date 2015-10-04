@@ -4,7 +4,7 @@ import android.content.res.Resources;
 import android.util.SparseArray;
 
 import com.annahid.libs.artenus.Artenus;
-import com.annahid.libs.artenus.core.ShaderProgram;
+import com.annahid.libs.artenus.graphics.rendering.ShaderProgram;
 import com.annahid.libs.artenus.data.ConcurrentCollection;
 
 import java.util.Collection;

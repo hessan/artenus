@@ -2,7 +2,7 @@ package com.annahid.libs.artenus.graphics.sprites;
 
 import com.annahid.libs.artenus.graphics.Texture;
 import com.annahid.libs.artenus.graphics.TextureManager;
-import com.annahid.libs.artenus.core.RenderingContext;
+import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.graphics.TextureShaderProgram;
 
 import java.nio.ByteBuffer;

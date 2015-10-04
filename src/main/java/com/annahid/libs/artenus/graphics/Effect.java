@@ -1,7 +1,7 @@
 package com.annahid.libs.artenus.graphics;
 
 import com.annahid.libs.artenus.entities.behavior.Renderable;
-import com.annahid.libs.artenus.core.RenderingContext;
+import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 
 /**
  * Superclass of all visual effects that can be added to a sprite. Currently there is only one

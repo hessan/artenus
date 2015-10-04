@@ -2,12 +2,14 @@ package com.annahid.libs.artenus.internal.core;
 
 import android.opengl.GLES20;
 
-import com.annahid.libs.artenus.core.ShaderProgram;
+import com.annahid.libs.artenus.graphics.rendering.ShaderProgram;
 
 import java.nio.FloatBuffer;
 
 /**
  * The default shader program used when {@code null} is specified for the shader program.
+ *
+ * @author Hessan Feghhi
  */
 class BasicShaderProgram implements ShaderProgram {
     private static final String vertexShaderCode =
