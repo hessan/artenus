@@ -31,8 +31,7 @@ class LoadingGraphics {
      */
     void render(RenderingContext ctx) {
         float vw = ctx.getWidth(), vh = ctx.getHeight();
-        GLES20.glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        ctx.clear(clearColor.r, clearColor.g, clearColor.b);
 
         if (!TextureManager.getLoadingTexture().isLoaded())
             TextureManager.getLoadingTexture().waitLoad();

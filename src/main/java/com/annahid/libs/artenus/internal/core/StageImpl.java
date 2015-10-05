@@ -20,6 +20,8 @@ import com.annahid.libs.artenus.input.TouchEvent;
 import com.annahid.libs.artenus.data.RGB;
 import com.annahid.libs.artenus.graphics.TextureManager;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * The default implementation of the {@code Stage} interface.
  *
@@ -28,57 +30,6 @@ import com.annahid.libs.artenus.graphics.TextureManager;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class StageImpl extends GLSurfaceView implements Stage {
-    private final class StageAdvanceTask extends Thread {
-        private long mLastTime;
-        private int tid;
-
-        private StageAdvanceTask() {
-            mLastTime = System.nanoTime();
-            tid = ++advanceThreadId;
-        }
-
-        @Override
-        public void run() {
-            while (true) {
-                if (advanceThread == null || tid != advanceThreadId)
-                    return;
-
-                final long time = System.nanoTime();
-                final long diff = time - mLastTime;
-
-                if (diff < 64000000) {
-                    if (nextScene != null) {
-                        stPhase = Math.min(1, stPhase + diff / 250000000.0f);
-
-                        if (stPhase == 1) {
-                            TextureManager.unloadLocal();
-                            nextScene.onLocalLoad();
-                            currentScene = nextScene;
-                            nextScene = null;
-                            mRenderer.getLoadingGraphics().renew();
-                        }
-                    } else if (stPhase > 0)
-                        stPhase = Math.max(0, stPhase - diff / 250000000.0f);
-
-                    if (currentScene != null)
-                        if (currentScene.isLoaded())
-                            currentScene.advance(diff / 1000000000.0f);
-
-                    requestRender();
-                }
-
-                mLastTime = time;
-
-                if (diff < 17000000)
-                    try {
-                        Thread.sleep(20 - diff / 1000000);
-                    } catch (InterruptedException e) {
-                        // Do nothing
-                    }
-            }
-        }
-    }
-
     /**
      * The stage manager currently handling stage events.
      */
@@ -105,9 +56,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
      */
     private Thread advanceThread;
 
-    private float blur = 0;
-
-    private int advanceThreadId = 1000;
+    private AtomicInteger advanceThreadId = new AtomicInteger(1000);
 
     /**
      * The renderer.
@@ -212,7 +161,6 @@ public final class StageImpl extends GLSurfaceView implements Stage {
     @Override
     public final void setScene(Scene scene) {
         if (!(currentScene instanceof IntroScene)) {
-            blur = 0;
             nextScene = scene;
         }
     }
@@ -398,7 +346,6 @@ public final class StageImpl extends GLSurfaceView implements Stage {
      * @param scene The new scene
      */
     final void forceScene(Scene scene) {
-        blur = 0;
         nextScene = scene;
     }
 
@@ -409,6 +356,60 @@ public final class StageImpl extends GLSurfaceView implements Stage {
         if (advanceThread == null) {
             advanceThread = new StageAdvanceTask();
             advanceThread.start();
+        }
+    }
+
+    /**
+     * Handles the main game loop.
+     */
+    private final class StageAdvanceTask extends Thread {
+        private long mLastTime;
+        private int tid;
+
+        private StageAdvanceTask() {
+            mLastTime = System.nanoTime();
+            tid = advanceThreadId.incrementAndGet();
+        }
+
+        @Override
+        public void run() {
+            while (true) {
+                if (advanceThread == null || tid != advanceThreadId.get())
+                    return;
+
+                final long time = System.nanoTime();
+                final long diff = time - mLastTime;
+
+                if (diff < 64000000) {
+                    if (nextScene != null) {
+                        stPhase = Math.min(1, stPhase + diff / 250000000.0f);
+
+                        if (stPhase == 1) {
+                            TextureManager.unloadLocal();
+                            nextScene.onLocalLoad();
+                            currentScene = nextScene;
+                            nextScene = null;
+                            mRenderer.getLoadingGraphics().renew();
+                        }
+                    } else if (stPhase > 0)
+                        stPhase = Math.max(0, stPhase - diff / 250000000.0f);
+
+                    if (currentScene != null)
+                        if (currentScene.isLoaded())
+                            currentScene.advance(diff / 1000000000.0f);
+
+                    requestRender();
+                }
+
+                mLastTime = time;
+
+                if (diff < 17000000)
+                    try {
+                        Thread.sleep(20 - diff / 1000000);
+                    } catch (InterruptedException e) {
+                        // Do nothing
+                    }
+            }
         }
     }
 }

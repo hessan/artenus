@@ -32,6 +32,9 @@ import java.util.Iterator;
  * @author Hessan Feghhi
  */
 public class ConcurrentCollection<T> implements Collection<T> {
+    private Element<T> first;
+    private Element<T> last;
+    private int size = 0;
 
     /**
      * Inserts an element to the front of the collection.
@@ -91,7 +94,7 @@ public class ConcurrentCollection<T> implements Collection<T> {
      * @return {@code true}
      */
     @Override
-    public boolean addAll(Collection<? extends T> collection) {
+    public boolean addAll(@NonNull Collection<? extends T> collection) {
         for (T item : collection)
             add(item);
 
@@ -143,40 +146,11 @@ public class ConcurrentCollection<T> implements Collection<T> {
      */
     @Override
     public boolean containsAll(@NonNull Collection<?> collection) {
-        boolean ret = true;
-
-        for (Object item : collection)
-            ret = ret && contains(item);
-
-        return false;
-    }
-
-    /**
-     * Returns the element at the specified position in this list. Please note that this
-     * implementation does not guarantee optimized behavior for this method.
-     *
-     * @param location index of the element to return
-     * @return the element at the specified position in this list
-     */
-    public T get(int location) {
-        if (location < 0 || location >= size)
-            throw new IndexOutOfBoundsException();
-
-        if (first == null)
-            return null;
-
-        Element<T> temp = first;
-        int index = 0;
-
-        while (index < location) {
-            temp = temp.next;
-            index++;
+        for (Object item : collection) {
+            if (!contains(item))
+                return false;
         }
-
-        if (temp == null)
-            return last == null ? null : last.value;
-
-        return temp.value;
+        return true;
     }
 
     /**
@@ -204,16 +178,13 @@ public class ConcurrentCollection<T> implements Collection<T> {
     @Override
     public boolean remove(Object object) {
         Iterator<T> it = iterator();
-
         while (it.hasNext()) {
             T item = it.next();
-
             if (item.equals(object)) {
                 it.remove();
                 return true;
             }
         }
-
         return false;
     }
 
@@ -343,9 +314,6 @@ public class ConcurrentCollection<T> implements Collection<T> {
         return last == null ? null : last.value;
     }
 
-    private Element<T> first, last;
-    private int size = 0;
-
     /**
      * Represents an iterator for a concurrent collection. An intance of this
      * iterator is returned by the {@link ConcurrentCollection#iterator()} method.
@@ -372,7 +340,7 @@ public class ConcurrentCollection<T> implements Collection<T> {
             if (recent == null)
                 return;
 
-            synchronized (this) {
+            synchronized (ConcurrentCollection.this) {
                 if (recent.prev == null)
                     first = recent.next;
                 else recent.prev.next = recent.next;

@@ -140,7 +140,6 @@ public class TextureShaderProgram implements ShaderProgram {
     public void feedTexCoords(FloatBuffer buffer) {
         if (buffer == null)
             buffer = defaultTextureBuffer;
-
         GLES20.glEnableVertexAttribArray(mTexCoordsHandle);
         GLES20.glVertexAttribPointer(mTexCoordsHandle, 2, GLES20.GL_FLOAT, false, 0, buffer);
     }

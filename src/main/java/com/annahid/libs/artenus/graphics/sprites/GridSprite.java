@@ -223,7 +223,7 @@ public final class GridSprite extends SpriteEntity {
         final TextureShaderProgram program =
                 (TextureShaderProgram) TextureManager.getShaderProgram();
 
-        program.feed(frames.getInternalTextureId());
+        program.feed(frames.getTextureHandle());
         context.pushMatrix();
         context.rotate(rotation);
 
@@ -249,7 +249,7 @@ public final class GridSprite extends SpriteEntity {
      * @return The resulting column number
      */
     private int toGridX(float x) {
-        return (int)Math.ceil(x / (blkW - m * 2) - 0.5);
+        return (int) Math.ceil(x / (blkW - m * 2) - 0.5);
     }
 
     /**
@@ -259,6 +259,6 @@ public final class GridSprite extends SpriteEntity {
      * @return The resulting row number
      */
     private int toGridY(float y) {
-        return (int)Math.ceil(y / (blkH - m * 2) - 0.5);
+        return (int) Math.ceil(y / (blkH - m * 2) - 0.5);
     }
 }

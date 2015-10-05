@@ -90,9 +90,8 @@ public final class TouchMap {
         if (target == null) {
             return;
         }
-        target.begin();
-        GLES20.glClearColor(0, 1, 1, 1);
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        context.bindTarget(target);
+        context.clear(0, 0, 1);
         ShaderProgram shaderBackup = context.getShader();
         context.setShader(shader);
         for (Map.Entry<Integer, TouchButton> entry : buttons.entrySet()) {
@@ -128,7 +127,7 @@ public final class TouchMap {
         }
         GLES20.glViewport(0, 0, context.getScreenWidth(), context.getScreenHeight());
         context.setShader(shaderBackup);
-        target.end();
+        context.unbindTarget();
     }
 
     /**

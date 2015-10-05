@@ -105,32 +105,20 @@ public class RenderTarget {
     }
 
     /**
-     * Binds this target to the rendering context. All drawing will then be done on this target.
+     * Gets the frame buffer handle. This handle is used internally to bind the target to the
+     * rendering context.
+     *
+     * @return Frame buffer handle
      */
-    public void begin() {
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, frameBufferHandle);
-        GLES20.glFramebufferTexture2D(
-                GLES20.GL_FRAMEBUFFER,
-                GLES20.GL_COLOR_ATTACHMENT0,
-                GLES20.GL_TEXTURE_2D,
-                textureHandle,
-                0
-        );
-        GLES20.glViewport(0, 0, setup.getWidth(), setup.getHeight());
-    }
-
-    /**
-     * Unbinds this target from the rendering context.
-     */
-    public void end() {
-        GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, 0);
+    public int getFrameBufferHandle() {
+        return frameBufferHandle;
     }
 
     /**
      * Gets the texture handle to the rendering result. This handle can then be fed to a shader
      * program to draw the result on another render target.
      *
-     * @return Texture image
+     * @return Texture image handle
      */
     public int getTextureHandle() {
         return textureHandle;
@@ -209,8 +197,8 @@ public class RenderTarget {
      * Generates texture coordinates to represent the active sub-image.
      */
     private void generateTextureCoords() {
-        final float x2 = (float) setup.getWidth() / (float) fboWidth;
-        final float y2 = (float) setup.getHeight() / (float) fboHeight;
+        final float x2 = setup.getWidth() / (float) fboWidth;
+        final float y2 = setup.getHeight() / (float) fboHeight;
         final float texture[] = {
                 0, 0,
                 x2, 0,

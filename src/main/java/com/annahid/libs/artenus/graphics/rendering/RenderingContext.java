@@ -159,4 +159,25 @@ public interface RenderingContext {
      * @param mat The new transformation matrix
      */
     void pushMatrix(float[] mat);
+
+    /**
+     * Clears the the current render target and fills it with the specified color.
+     *
+     * @param r Red component of the clear color
+     * @param g Green component of the clear color
+     * @param b Blue component of the clear color
+     */
+    void clear(float r, float g, float b);
+
+    /**
+     * Binds a render target to this context to receive the output image.
+     * @param target The render target
+     */
+    void bindTarget(RenderTarget target);
+
+    /**
+     * Unbinds the current render target and changes the target to the screen. If the target is
+     * already the screen, this method has no effect.
+     */
+    void unbindTarget();
 }

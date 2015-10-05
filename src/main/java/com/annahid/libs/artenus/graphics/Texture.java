@@ -149,7 +149,7 @@ public class Texture {
      *
      * @return The OpenGL texture identifier
      */
-    public final int getInternalTextureId() {
+    public final int getTextureHandle() {
         return textureId;
     }
 

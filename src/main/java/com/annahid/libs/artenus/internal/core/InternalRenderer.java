@@ -138,8 +138,6 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        GLES20.glClearColor(0, 0, 0, 1.0f);
-
         for (ShaderProgram shader : registeredShaders)
             shader.compile();
 
@@ -166,9 +164,6 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
             vh = height * vw / width;
         }
 
-        final RGB clearColor = stage.currentScene == null ?
-                new RGB(0, 0, 0) : stage.currentScene.getBackColor();
-        GLES20.glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
         screenWidth = width;
         screenHeight = height;
         TextureManager.setTextureScalingFactor(
@@ -204,9 +199,9 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
         loadingDelay = 0;
         targets[0].reset();
         targets[1].reset();
-        targets[0].begin();
+        bindTarget(targets[0]);
         renderRaw();
-        targets[0].end();
+        unbindTarget();
         PostProcessingFilter[] filters =
                 this.filters.toArray(new PostProcessingFilter[this.filters.size()]);
         RenderTarget renderTarget = targets[1], inputTarget = targets[0];
@@ -215,11 +210,11 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
             int pass = 0;
             while(hasMorePasses) {
                 FrameSetup setup = new FrameSetup(inputTarget.getFrameSetup());
-                renderTarget.begin();
+                bindTarget(renderTarget);
                 hasMorePasses = filter.setup(pass, setup);
                 renderTarget.setFrameSetup(setup);
                 filter.render(pass, this, inputTarget);
-                renderTarget.end();
+                unbindTarget();
                 pass++;
                 if(renderTarget == targets[0]) {
                     renderTarget = targets[1];
@@ -233,9 +228,8 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
 
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
         GLES20.glViewport(0, 0, screenWidth, screenHeight);
-        GLES20.glClearColor(0, 0, 0, 1.0f);
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
         TextureShaderProgram program = (TextureShaderProgram) TextureManager.getShaderProgram();
+        clear(0, 0, 0);
         setShader(program);
         setColorFilter(1, 1, 1, 1);
         pushMatrix();
@@ -336,6 +330,31 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
         currentMatrix = mat;
     }
 
+    @Override
+    public void clear(float r, float g, float b) {
+        GLES20.glClearColor(r, g, b, 1);
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+    }
+
+    @Override
+    public void bindTarget(RenderTarget target) {
+        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, target.getFrameBufferHandle());
+        GLES20.glFramebufferTexture2D(
+                GLES20.GL_FRAMEBUFFER,
+                GLES20.GL_COLOR_ATTACHMENT0,
+                GLES20.GL_TEXTURE_2D,
+                target.getTextureHandle(),
+                0
+        );
+        FrameSetup setup = target.getFrameSetup();
+        GLES20.glViewport(0, 0, setup.getWidth(), setup.getHeight());
+    }
+
+    @Override
+    public void unbindTarget() {
+        GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, 0);
+    }
+
     LoadingGraphics getLoadingGraphics() {
         return loading;
     }
@@ -358,16 +377,17 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
     private void renderRaw() {
         final RGB clearColor = stage.currentScene == null ?
                 new RGB(0, 0, 0) : stage.currentScene.getBackColor();
-        GLES20.glClearColor(clearColor.r, clearColor.g, clearColor.b, 1.0f);
-        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+        clear(clearColor.r, clearColor.g, clearColor.b);
+
         if (stage.currentScene != null) {
             if (!stage.currentScene.isLoaded())
                 stage.currentScene.onLoaded();
-
             stage.currentScene.render(this);
         }
+
         shader.cleanup();
         setShader(null);
+
         if (stage.stPhase > 0) {
             pushMatrix();
             translate(vw / 2, vh / 2);
@@ -376,6 +396,7 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
             rect();
             popMatrix();
         }
+
         setColorFilter(1, 1, 1, 1);
     }
 }
