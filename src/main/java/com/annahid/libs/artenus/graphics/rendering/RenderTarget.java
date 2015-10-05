@@ -7,7 +7,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 /**
- * An graphics output object used for rendering. Artenus does not render frames directly onto the
+ * A graphics output object used for rendering. Artenus does not render frames directly onto the
  * screen. Instead, it first draws them into intermediate objects, which are then used for
  * post-processing. The final render target is always the screen, which is handled internally.
  *

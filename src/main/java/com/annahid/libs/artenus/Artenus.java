@@ -28,24 +28,9 @@ import java.lang.ref.WeakReference;
  * @author Hessan Feghhi
  */
 public abstract class Artenus extends Activity {
-    /**
-     * Gets the currently running instance of {@code Artenus}.
-     *
-     * @return The running instance
-     */
-    public static Artenus getInstance() {
-        return instance;
-    }
-
-    /**
-     * Determines whether an intro screen should be displayed before the game.
-     *
-     * @return true if there should be an intro, false otherwise
-     */
-    public static boolean shouldHideIntro() {
-        return hideIntro;
-    }
-
+    private static Artenus instance;
+    private static boolean hideIntro;
+    private static UnifiedServices.Store manifestStore;
     private WeakReference<StageImpl> stage;
     private AudioManager audio;
     private boolean hasOutFocused = false;
@@ -66,8 +51,22 @@ public abstract class Artenus extends Activity {
         this(false);
     }
 
-    public Stage getStage() {
-        return stage.get();
+    /**
+     * Gets the currently running instance of {@code Artenus}.
+     *
+     * @return The running instance
+     */
+    public static Artenus getInstance() {
+        return instance;
+    }
+
+    /**
+     * Determines whether an intro screen should be displayed before the game.
+     *
+     * @return true if there should be an intro, false otherwise
+     */
+    public static boolean shouldHideIntro() {
+        return hideIntro;
     }
 
     /**
@@ -78,6 +77,14 @@ public abstract class Artenus extends Activity {
      */
     public static UnifiedServices.Store getManifestAppStore() {
         return manifestStore;
+    }
+
+    /**
+     * Gets the game stage. Each game has only one stage, where its different scenes are displayed.
+     * @return The stage
+     */
+    public Stage getStage() {
+        return stage.get();
     }
 
     @Override
@@ -240,8 +247,4 @@ public abstract class Artenus extends Activity {
      * @param stage The stage for the game
      */
     protected abstract void init(Stage stage);
-
-    private static Artenus instance;
-    private static boolean hideIntro;
-    private static UnifiedServices.Store manifestStore;
 }

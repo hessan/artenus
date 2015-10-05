@@ -177,7 +177,7 @@ public class Scene implements Touchable {
      * @see Dialog
      */
     public final void halt() {
-        if (!isDialog()) {
+        if (!(this instanceof Dialog)) {
             haltStart = System.currentTimeMillis();
             onHalted();
         }
@@ -196,7 +196,7 @@ public class Scene implements Touchable {
      * Un-halts a previously halted scene. All animation and physics will resume.
      */
     public final void unhalt() {
-        if (!isDialog()) {
+        if (!(this instanceof Dialog)) {
             final float delay = (float) (System.currentTimeMillis() - haltStart) / 1000.0f;
             haltStart = 0;
             onUnhalted(delay);
@@ -304,27 +304,17 @@ public class Scene implements Touchable {
     public final void render(RenderingContext context) {
         boolean skipRender = false;
 
-        if (dialog != null)
+        if (dialog != null) {
             skipRender = dialog.isFull();
-
+        }
         if (!skipRender) {
             entities.render(context, 0);
         }
-
         if (dialog != null) {
             if (!dialog.isLoaded()) {
                 dialog.onLoaded();
             }
             dialog.render(context);
         }
-    }
-
-    /**
-     * Indicates whether this scene is a dialog.
-     *
-     * @return {@code true} if this scene is a dialog, {@code false} otherwise
-     */
-    boolean isDialog() {
-        return false;
     }
 }

@@ -9,7 +9,7 @@ import com.annahid.libs.artenus.graphics.rendering.RenderTarget;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 
 /**
- * A post-processing filter that adds a ghosting effect.
+ * A post-processing filter that adds a ghosting effect to the rendered frame.
  *
  * @author Hessan Feghhi
  */

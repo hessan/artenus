@@ -9,7 +9,7 @@ import com.annahid.libs.artenus.graphics.rendering.RenderTarget;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 
 /**
- * A post-processing filter that overlays the output with a colored tint.
+ * A post-processing filter that overlays the rendered frame with a colored tint.
  *
  * @author Hessan Feghhi
  */

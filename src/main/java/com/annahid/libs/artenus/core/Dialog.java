@@ -202,11 +202,4 @@ public abstract class Dialog extends Scene {
     public boolean isFull() {
         return false;
     }
-
-    /**
-     * This method always returns {@code true}.
-     */
-    final boolean isDialog() {
-        return true;
-    }
 }
