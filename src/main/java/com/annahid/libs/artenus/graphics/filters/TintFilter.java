@@ -49,6 +49,13 @@ public class TintFilter implements PostProcessingFilter {
         this.a = a;
     }
 
+    /**
+     * Always returns {@code false} as this filter only has one pass.
+     *
+     * @param pass  Current pass number (starting at 0)
+     * @param setup The frame setup for the previous pass
+     * @return {@code false}
+     */
     @Override
     public boolean setup(int pass, FrameSetup setup) {
         return false;
@@ -56,10 +63,10 @@ public class TintFilter implements PostProcessingFilter {
 
     @Override
     public void render(int pass, RenderingContext context, RenderTarget renderedFrame) {
+        final float w = context.getWidth(), h = context.getHeight();
         FrameSetup fs = renderedFrame.getFrameSetup();
         final TextureShaderProgram program =
                 (TextureShaderProgram) TextureManager.getShaderProgram();
-        final float w = context.getWidth(), h = context.getHeight();
         context.setShader(program);
         GLES20.glViewport(0, 0, fs.getWidth(), fs.getHeight());
         context.setColorFilter(1, 1, 1, 1);

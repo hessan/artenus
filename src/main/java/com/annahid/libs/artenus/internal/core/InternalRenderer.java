@@ -93,7 +93,14 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
      */
     private ShaderProgram basicShader;
 
+    /**
+     * Parent stage.
+     */
     private StageImpl stage;
+
+    /**
+     * Shader programs currently registered with the stage.
+     */
     private Collection<ShaderProgram> registeredShaders = new ConcurrentCollection<>();
     private LoadingGraphics loading = new LoadingGraphics();
     private RenderTarget[] targets = new RenderTarget[2];
@@ -172,7 +179,7 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
         onResize(vw, vh);
 
         for (int i = 0; i < targets.length; i++) {
-            if(targets[i] != null) {
+            if (targets[i] != null) {
                 targets[i].dispose();
             }
             targets[i] = RenderTarget.create(width, height);
@@ -201,22 +208,22 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
         targets[1].reset();
         bindTarget(targets[0]);
         renderRaw();
-        unbindTarget();
+        bindTarget(null);
         PostProcessingFilter[] filters =
                 this.filters.toArray(new PostProcessingFilter[this.filters.size()]);
         RenderTarget renderTarget = targets[1], inputTarget = targets[0];
         for (PostProcessingFilter filter : filters) {
             boolean hasMorePasses = true;
             int pass = 0;
-            while(hasMorePasses) {
+            while (hasMorePasses) {
                 FrameSetup setup = new FrameSetup(inputTarget.getFrameSetup());
                 bindTarget(renderTarget);
                 hasMorePasses = filter.setup(pass, setup);
                 renderTarget.setFrameSetup(setup);
                 filter.render(pass, this, inputTarget);
-                unbindTarget();
+                bindTarget(null);
                 pass++;
-                if(renderTarget == targets[0]) {
+                if (renderTarget == targets[0]) {
                     renderTarget = targets[1];
                     inputTarget = targets[0];
                 } else {
@@ -338,6 +345,11 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
 
     @Override
     public void bindTarget(RenderTarget target) {
+        if (target == null) {
+            GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+            return;
+        }
+
         GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, target.getFrameBufferHandle());
         GLES20.glFramebufferTexture2D(
                 GLES20.GL_FRAMEBUFFER,
@@ -348,11 +360,6 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
         );
         FrameSetup setup = target.getFrameSetup();
         GLES20.glViewport(0, 0, setup.getWidth(), setup.getHeight());
-    }
-
-    @Override
-    public void unbindTarget() {
-        GLES20.glBindRenderbuffer(GLES20.GL_RENDERBUFFER, 0);
     }
 
     LoadingGraphics getLoadingGraphics() {

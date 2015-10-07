@@ -110,7 +110,7 @@ public final class TouchMap {
             );
             dispatchQueue.offer(new Pair<>(buttons.get((int) pixelBuffer.get(0)), event));
         }
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+        context.bindTarget(null);
         if (show && Debug.isDebuggerConnected()) {
             TextureShaderProgram program = (TextureShaderProgram) TextureManager.getShaderProgram();
             context.setShader(program);
@@ -118,7 +118,7 @@ public final class TouchMap {
             context.pushMatrix();
             context.identity();
             program.feed(target.getTextureHandle());
-            program.feedTexCoords(TextureShaderProgram.defaultTextureBuffer);
+            program.feedTexCoords(TextureShaderProgram.getDefaultTextureBuffer());
             context.translate(520, 280);
             context.rotate(0);
             context.scale(1000, -600);
@@ -127,7 +127,6 @@ public final class TouchMap {
         }
         GLES20.glViewport(0, 0, context.getScreenWidth(), context.getScreenHeight());
         context.setShader(shaderBackup);
-        context.unbindTarget();
     }
 
     /**

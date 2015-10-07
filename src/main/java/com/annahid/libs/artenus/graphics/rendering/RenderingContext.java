@@ -6,11 +6,13 @@ import com.annahid.libs.artenus.entities.behavior.Renderable;
  * <p>Interface for a rendering context. It provides methods to control the state of the graphics
  * engine, and draw sprites. Methods in this interface are meant for a 2-dimensional environment.
  * </p>
- * <p>This interface is used internally by entities and textures to render graphics. Game developers
- * usually do not need to make use of this interface unless in rare cases. An example usa-case is
- * developing a new type of sprite which is not provided by the framework. In such a scenario it is
- * necessary to use this class instead of calling OpenGL ES functions directly. This ensures that
- * your sprite implementation is compatible with the rest of the framework.</p>
+ * <p>This interface is used internally by entities and textures to render graphics. There are rare
+ * cases where game developers need to make use of this interface. These rare cases include
+ * developing a new type of sprite which is not provided by the framework, or a new post-processing
+ * filter. In such scenarios it is necessary to use this class instead of calling OpenGL ES
+ * functions directly. This ensures that your sprite implementation is compatible with the rest of
+ * the framework. Only call OpenGL functions if what you intend to do cannot be done using the
+ * methods in this class.</p>
  *
  * @author Hessan Feghhi
  */
@@ -81,7 +83,7 @@ public interface RenderingContext {
     void rect();
 
     /**
-     * <p></p>Sets the shader program for the rendering context. All graphical method calls after
+     * <p>Sets the shader program for the rendering context. All graphical method calls after
      * calling this method will work with the shader specified. Using this method correctly is
      * crucial to compatibility with the framework. The following are the rules that apply to all
      * renderables using this method:</p>
@@ -170,14 +172,11 @@ public interface RenderingContext {
     void clear(float r, float g, float b);
 
     /**
-     * Binds a render target to this context to receive the output image.
-     * @param target The render target
+     * Binds a render target to this context to receive the output image. If no render target is
+     * specified, the target will be set to the screen. Binding render targets is an advanced
+     * feature which is usually not needed in a game.
+     *
+     * @param target The render target, or {@code null} to switch to screen rendering
      */
     void bindTarget(RenderTarget target);
-
-    /**
-     * Unbinds the current render target and changes the target to the screen. If the target is
-     * already the screen, this method has no effect.
-     */
-    void unbindTarget();
 }

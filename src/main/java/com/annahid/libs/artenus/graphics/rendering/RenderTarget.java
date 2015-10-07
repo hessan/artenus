@@ -102,6 +102,7 @@ public class RenderTarget {
     public void reset() {
         this.setup.setWidth(fboWidth);
         this.setup.setHeight(fboHeight);
+        generateTextureCoords();
     }
 
     /**

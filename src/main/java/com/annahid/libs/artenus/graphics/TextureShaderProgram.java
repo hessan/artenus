@@ -40,7 +40,7 @@ public class TextureShaderProgram implements ShaderProgram {
     /**
      * The default texture buffer used if no other is specified.
      */
-    public static FloatBuffer defaultTextureBuffer;
+    private static FloatBuffer defaultTextureBuffer;
 
     /**
      * OpenGL shader program handle.
@@ -73,21 +73,26 @@ public class TextureShaderProgram implements ShaderProgram {
     protected int mSamplerHandle;
 
     /**
-     * Creates a new instance o fthe texture shader program.
+     * Gets the default texture coordinates buffer, which includes the whole area of the texture
+     * image.
+     *
+     * @return Default texture coordinates
      */
-    public TextureShaderProgram() {
-        final float texture[] = {
-                0.0f, 0.0f,
-                1.0f, 0.0f,
-                0.0f, 1.0f,
-                1.0f, 1.0f,
-        };
-
-        final ByteBuffer ibb = ByteBuffer.allocateDirect(texture.length * 4);
-        ibb.order(ByteOrder.nativeOrder());
-        defaultTextureBuffer = ibb.asFloatBuffer();
-        defaultTextureBuffer.put(texture);
-        defaultTextureBuffer.position(0);
+    public static FloatBuffer getDefaultTextureBuffer() {
+        if (defaultTextureBuffer == null) {
+            final float texture[] = {
+                    0.0f, 0.0f,
+                    1.0f, 0.0f,
+                    0.0f, 1.0f,
+                    1.0f, 1.0f,
+            };
+            final ByteBuffer ibb = ByteBuffer.allocateDirect(texture.length * 4);
+            ibb.order(ByteOrder.nativeOrder());
+            defaultTextureBuffer = ibb.asFloatBuffer();
+            defaultTextureBuffer.put(texture);
+            defaultTextureBuffer.position(0);
+        }
+        return defaultTextureBuffer;
     }
 
     /**

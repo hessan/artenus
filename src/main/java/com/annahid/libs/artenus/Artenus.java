@@ -12,6 +12,7 @@ import android.view.KeyEvent;
 import android.view.WindowManager;
 
 import com.annahid.libs.artenus.graphics.TextureManager;
+import com.annahid.libs.artenus.graphics.filters.BlurFilter;
 import com.annahid.libs.artenus.internal.core.StageImpl;
 import com.annahid.libs.artenus.sound.SoundManager;
 import com.annahid.libs.artenus.core.Stage;
@@ -137,6 +138,7 @@ public abstract class Artenus extends Activity {
         setContentView(R.layout.game_layout);
         stage = new WeakReference<>((StageImpl) findViewById(R.id.gameStage));
         stage.get().registerShader(TextureManager.getShaderProgram());
+        BlurFilter.init(stage.get());
         init(stage.get());
 
         UnifiedServices unified = UnifiedServices.getInstance();
