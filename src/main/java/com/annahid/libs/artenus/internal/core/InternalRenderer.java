@@ -5,8 +5,9 @@ import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
 import com.annahid.libs.artenus.graphics.TextureShaderProgram;
+import com.annahid.libs.artenus.graphics.filters.FilterPassSetup;
 import com.annahid.libs.artenus.graphics.filters.PostProcessingFilter;
-import com.annahid.libs.artenus.graphics.rendering.FrameSetup;
+import com.annahid.libs.artenus.graphics.rendering.Viewport;
 import com.annahid.libs.artenus.graphics.rendering.RenderTarget;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.graphics.rendering.ShaderProgram;
@@ -204,36 +205,41 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
             return;
         }
         loadingDelay = 0;
-        targets[0].reset();
-        targets[1].reset();
-        bindTarget(targets[0]);
+
+        final Viewport defaultViewport = new Viewport(screenWidth, screenHeight);
+        RenderTarget renderTarget = targets[0], inputTarget = targets[1];
+        renderTarget.setViewport(defaultViewport);
+        inputTarget.setViewport(defaultViewport);
+        bindTarget(renderTarget);
         renderRaw();
-        bindTarget(null);
         PostProcessingFilter[] filters =
                 this.filters.toArray(new PostProcessingFilter[this.filters.size()]);
-        RenderTarget renderTarget = targets[1], inputTarget = targets[0];
         for (PostProcessingFilter filter : filters) {
             boolean hasMorePasses = true;
             int pass = 0;
             while (hasMorePasses) {
-                FrameSetup setup = new FrameSetup(inputTarget.getFrameSetup());
-                bindTarget(renderTarget);
+                FilterPassSetup setup = new FilterPassSetup(renderTarget.getViewport());
                 hasMorePasses = filter.setup(pass, setup);
-                renderTarget.setFrameSetup(setup);
-                filter.render(pass, this, inputTarget);
-                bindTarget(null);
-                pass++;
-                if (renderTarget == targets[0]) {
-                    renderTarget = targets[1];
-                    inputTarget = targets[0];
-                } else {
-                    renderTarget = targets[0];
-                    inputTarget = targets[1];
+
+                if (!setup.isInPlace()) {
+                    if (renderTarget == targets[0]) {
+                        renderTarget = targets[1];
+                        inputTarget = targets[0];
+                    } else {
+                        renderTarget = targets[0];
+                        inputTarget = targets[1];
+                    }
+                    bindTarget(renderTarget);
+                    clear(0, 0, 0);
                 }
+
+                renderTarget.setViewport(setup);
+                filter.render(pass, this, inputTarget);
+                pass++;
             }
         }
 
-        GLES20.glBindFramebuffer(GLES20.GL_FRAMEBUFFER, 0);
+        bindTarget(null);
         GLES20.glViewport(0, 0, screenWidth, screenHeight);
         TextureShaderProgram program = (TextureShaderProgram) TextureManager.getShaderProgram();
         clear(0, 0, 0);
@@ -241,8 +247,8 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
         setColorFilter(1, 1, 1, 1);
         pushMatrix();
         identity();
-        program.feed(inputTarget.getTextureHandle());
-        program.feedTexCoords(inputTarget.getTextureCoords());
+        program.feed(renderTarget.getTextureHandle());
+        program.feedTexCoords(renderTarget.getTextureCoords());
         translate(vw / 2, vh / 2);
         scale(vw, -vh);
         rect();
@@ -358,7 +364,7 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
                 target.getTextureHandle(),
                 0
         );
-        FrameSetup setup = target.getFrameSetup();
+        Viewport setup = target.getViewport();
         GLES20.glViewport(0, 0, setup.getWidth(), setup.getHeight());
     }
 

@@ -1,6 +1,5 @@
 package com.annahid.libs.artenus.graphics.filters;
 
-import com.annahid.libs.artenus.graphics.rendering.FrameSetup;
 import com.annahid.libs.artenus.graphics.rendering.RenderTarget;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 
@@ -24,7 +23,7 @@ public interface PostProcessingFilter {
      * @return A value indicating whether another pass is required to complete this filter (other
      * than the current pass that is being set up)
      */
-    boolean setup(int pass, FrameSetup setup);
+    boolean setup(int pass, FilterPassSetup setup);
 
     /**
      * Renders the frame for the current pass. On pass 0 the raw rendering output is given to the

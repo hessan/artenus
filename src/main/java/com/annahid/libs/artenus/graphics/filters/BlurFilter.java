@@ -3,7 +3,7 @@ package com.annahid.libs.artenus.graphics.filters;
 import android.opengl.GLES20;
 
 import com.annahid.libs.artenus.core.Stage;
-import com.annahid.libs.artenus.graphics.rendering.FrameSetup;
+import com.annahid.libs.artenus.graphics.rendering.Viewport;
 import com.annahid.libs.artenus.graphics.rendering.RenderTarget;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 
@@ -26,10 +26,10 @@ public class BlurFilter implements PostProcessingFilter {
     private int lastPass = 1;
 
     /**
-     * Saved frame setup that carries information from {@link #setup(int, FrameSetup)} to
+     * Saved frame setup that carries information from {@link #setup(int, FilterPassSetup)} to
      * {@link #render(int, RenderingContext, RenderTarget)}.
      */
-    private FrameSetup savedSetup;
+    private Viewport savedSetup;
 
     public static void init(Stage stage) {
         stage.registerShader(program);
@@ -57,7 +57,7 @@ public class BlurFilter implements PostProcessingFilter {
     }
 
     @Override
-    public boolean setup(int pass, FrameSetup setup) {
+    public boolean setup(int pass, FilterPassSetup setup) {
         if (pass == 0) {
             if (amount > 5) {
                 setup.setWidth(setup.getWidth() / 2);
@@ -73,7 +73,6 @@ public class BlurFilter implements PostProcessingFilter {
         final float w = context.getWidth(), h = context.getHeight();
         float amount = (pass > lastPass - 2) ? this.amount % 5 : (pass < 2 ? 2.5f : 5);
         context.setShader(program);
-        context.clear(0, 0, 0);
         GLES20.glViewport(0, 0, savedSetup.getWidth(), savedSetup.getHeight());
         context.setColorFilter(1, 1, 1, 1);
         context.pushMatrix();

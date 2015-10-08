@@ -42,10 +42,11 @@ public abstract class Dialog extends Scene {
     public static final int RESULT_CANCEL = 4;
 
     /**
-     * The result of the dialog. Initially this field is {@code RESULT_NONE}.
-     * Setting a different value for this field will cause the dialog to be
-     * dismissed. The scene can then check the provided result and take an
-     * action accordingly.
+     * The result of the dialog. Initially this field is {@code RESULT_NONE}. Setting a different
+     * value for this field will cause the dialog to be dismissed. The scene can then check the
+     * provided result and take an action accordingly. Some general results are included as
+     * constants in this class. However, the developer can define their own result values, as long
+     * as they are not equal to 0.
      */
     protected int result;
 
@@ -99,8 +100,8 @@ public abstract class Dialog extends Scene {
     }
 
     /**
-     * Adds an entity to the dialog. Dialog entities only belong to their
-     * parent dialog, and are separate from the underlying scene.
+     * Adds an entity to the dialog. Dialog entities only belong to their parent dialog, and are
+     * separate from the underlying scene.
      *
      * @param entity The sprite to be added
      */
@@ -110,8 +111,8 @@ public abstract class Dialog extends Scene {
     }
 
     /**
-     * Gets the result of the dialog. If this method is called before the dialog
-     * is dismissed, it returns {@link Dialog#RESULT_NONE}.
+     * Gets the result of the dialog. If this method is called before the dialog is dismissed, it
+     * returns {@link Dialog#RESULT_NONE}.
      *
      * @return Dialog result code
      */
@@ -120,10 +121,9 @@ public abstract class Dialog extends Scene {
     }
 
     /**
-     * Cancels the dialog. The default implementation of this method sets the
-     * {@code result} to {@code RESULT_CANCEL}, and this is all this method
-     * does. But it can be overridden to change this behavior. Pressing the
-     * back button invokes this method by default.
+     * Cancels the dialog. The default implementation of this method sets the {@code result} to
+     * {@code RESULT_CANCEL}, and this is all this method does. But it can be overridden to change
+     * this behavior. Pressing the back button invokes this method by default.
      */
     public void cancel() {
         result = RESULT_CANCEL;
@@ -176,8 +176,8 @@ public abstract class Dialog extends Scene {
     protected abstract void advanceDialog(float elapsedTime);
 
     /**
-     * Advances animation for this dialog when it is fading in.
-     * The end of the fade-in process is determined by the return value.
+     * Advances animation for this dialog when it is fading in. The end of the fade-in process is
+     * determined by the return value.
      *
      * @param elapsedTime The time passed since the last frame
      * @return {@code true} if the dialog has completed fading in, {@code false} otherwise
@@ -185,8 +185,8 @@ public abstract class Dialog extends Scene {
     protected abstract boolean fadeIn(float elapsedTime);
 
     /**
-     * Advances animation for this dialog when it is fading out. The end
-     * of the fade-out process is determined by the return value.
+     * Advances animation for this dialog when it is fading out. The end of the fade-out process is
+     * determined by the return value.
      *
      * @param elapsedTime The time passed since the last frame
      * @return {@code true} if the dialog has completed fading out, {@code false} otherwise
@@ -194,8 +194,8 @@ public abstract class Dialog extends Scene {
     protected abstract boolean fadeOut(float elapsedTime);
 
     /**
-     * Indicates whether the underlying scene is fully covered by this dialog.
-     * In this case the underlying scene is not drawn for better performance.
+     * Indicates whether the underlying scene is fully covered by this dialog. In this case the
+     * underlying scene is not drawn for better performance.
      *
      * @return {@code true} if the dialog fully covers the parent scene, {@code false} otherwise
      */

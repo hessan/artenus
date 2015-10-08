@@ -105,7 +105,7 @@ public final class TouchMap {
             final TouchEvent event = processQueue.poll();
             pixelBuffer.position(0);
             GLES20.glReadPixels(
-                    (int) event.x >> 1, target.getMaxHeight() - ((int) event.y >> 1), 1, 1,
+                    (int) event.x >> 1, target.getHeight() - ((int) event.y >> 1), 1, 1,
                     GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, pixelBuffer
             );
             dispatchQueue.offer(new Pair<>(buttons.get((int) pixelBuffer.get(0)), event));

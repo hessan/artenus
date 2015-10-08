@@ -55,17 +55,16 @@ public interface Stage {
     float stageToScreenY(float y);
 
     /**
-     * Sets the next scene that should be shown on this {@code Stage}. The
-     * scene will not be shown immediately and will go through a transition
-     * effect and possibly a local loading procedure.
+     * Sets the next scene that should be shown on this {@code Stage}. The scene will not be shown
+     * immediately and will go through a transition effect and possibly a local loading procedure.
      *
      * @param scene The new scene
      */
     void setScene(Scene scene);
 
     /**
-     * Gets the current scene. If a new scene has been set, but the transition
-     * is not yet complete, previous scene might be returned.
+     * Gets the current scene. If a new scene has been set, but the transition is not yet complete,
+     * previous scene might be returned.
      *
      * @return The current scene
      */
@@ -103,15 +102,6 @@ public interface Stage {
     void removeFilter(PostProcessingFilter filter);
 
     /**
-     * This method handles the physical back button for this {@code Stage}.
-     *
-     * @return {@code true} if the back button has been handled by this {@code Stage} or the
-     * currently active {@code Scene}, {@code false} otherwise
-     * @see com.annahid.libs.artenus.core.Scene
-     */
-    boolean onBackButton();
-
-    /**
      * Registers a shader program with this stage, so the stage handles its lifecycle. All internal
      * shader programs are automatically registered.
      *
@@ -127,16 +117,16 @@ public interface Stage {
     void unregisterShader(ShaderProgram shader);
 
     /**
-     * Gets the currently assigned stage manager. A stage manager handles basic events
-     * and functionality for this {@code Stage}.
+     * Gets the currently assigned stage manager. A stage manager handles basic events and
+     * functionality for this {@code Stage}.
      *
      * @return The stage manager for this stage
      */
     StageManager getManager();
 
     /**
-     * Appoints a stage manager to handle required functionality for this {@code Stage}.
-     * You MUST assign a stage manager before doing anything else with this {@code Stage}.
+     * Appoints a stage manager to handle required functionality for this {@code Stage}. You MUST
+     * assign a stage manager before doing anything else with this {@code Stage}.
      *
      * @param stageManager The stage manager
      */

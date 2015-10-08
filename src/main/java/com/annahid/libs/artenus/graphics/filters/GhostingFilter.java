@@ -4,7 +4,7 @@ import android.opengl.GLES20;
 
 import com.annahid.libs.artenus.graphics.TextureManager;
 import com.annahid.libs.artenus.graphics.TextureShaderProgram;
-import com.annahid.libs.artenus.graphics.rendering.FrameSetup;
+import com.annahid.libs.artenus.graphics.rendering.Viewport;
 import com.annahid.libs.artenus.graphics.rendering.RenderTarget;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 
@@ -46,13 +46,13 @@ public class GhostingFilter implements PostProcessingFilter {
      * @return {@code false}
      */
     @Override
-    public boolean setup(int pass, FrameSetup setup) {
+    public boolean setup(int pass, FilterPassSetup setup) {
         return false;
     }
 
     @Override
     public void render(int pass, RenderingContext context, RenderTarget renderedFrame) {
-        FrameSetup fs = renderedFrame.getFrameSetup();
+        Viewport fs = renderedFrame.getViewport();
         final TextureShaderProgram program =
                 (TextureShaderProgram) TextureManager.getShaderProgram();
         final float w = context.getWidth(), h = context.getHeight();

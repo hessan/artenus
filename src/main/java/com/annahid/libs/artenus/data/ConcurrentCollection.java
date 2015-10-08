@@ -32,8 +32,19 @@ import java.util.Iterator;
  * @author Hessan Feghhi
  */
 public class ConcurrentCollection<T> implements Collection<T> {
+    /**
+     * The first element in the linked list.
+     */
     private Element<T> first;
+
+    /**
+     * The last element in the linked list.
+     */
     private Element<T> last;
+
+    /**
+     * Current collection size.
+     */
     private int size = 0;
 
     /**

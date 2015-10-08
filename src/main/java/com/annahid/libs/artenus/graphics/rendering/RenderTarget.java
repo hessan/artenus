@@ -19,7 +19,7 @@ public class RenderTarget {
     private int textureHandle;
     private int fboWidth;
     private int fboHeight;
-    private FrameSetup setup;
+    private Viewport viewport;
     private FloatBuffer frameTexCoords;
 
     /**
@@ -92,17 +92,7 @@ public class RenderTarget {
     private RenderTarget(int fboWidth, int fboHeight) {
         this.fboWidth = fboWidth;
         this.fboHeight = fboHeight;
-        this.setup = new FrameSetup();
-        reset();
-    }
-
-    /**
-     * Resets the rendering setup associated with this render target.
-     */
-    public void reset() {
-        this.setup.setWidth(fboWidth);
-        this.setup.setHeight(fboHeight);
-        generateTextureCoords();
+        this.viewport = new Viewport(fboWidth, fboHeight);
     }
 
     /**
@@ -137,27 +127,22 @@ public class RenderTarget {
     }
 
     /**
-     * Gets the frame setup associated with this render target. You should not modify the contents
-     * of this setup manually. The framework provides the frame setup directly wherever it can be
-     * modified.
+     * Gets the viewport associated with this render target.
      *
-     * @return The frame setup
+     * @return The viewport
      */
-    public FrameSetup getFrameSetup() {
-        return setup;
+    public Viewport getViewport() {
+        return viewport;
     }
 
     /**
-     * Sets the frame setup for this render target. The information in the argument will be copied
-     * locally, and future modifications to the argument instance will not affect the setup for this
-     * render target.
+     * Sets the viewport for this render target.
      *
-     * @param setup Frame setup
+     * @param viewport Frame setup
      */
-    public void setFrameSetup(FrameSetup setup) {
-        if (setup != null) {
-            this.setup.setWidth(setup.getWidth());
-            this.setup.setHeight(setup.getHeight());
+    public void setViewport(Viewport viewport) {
+        if (viewport != null) {
+            this.viewport = viewport;
             generateTextureCoords();
         }
     }
@@ -167,7 +152,7 @@ public class RenderTarget {
      *
      * @return Maximum width in pixels
      */
-    public int getMaxWidth() {
+    public int getWidth() {
         return fboWidth;
     }
 
@@ -176,7 +161,7 @@ public class RenderTarget {
      *
      * @return Maximum height in pixels
      */
-    public int getMaxHeight() {
+    public int getHeight() {
         return fboHeight;
     }
 
@@ -198,8 +183,8 @@ public class RenderTarget {
      * Generates texture coordinates to represent the active sub-image.
      */
     private void generateTextureCoords() {
-        final float x2 = setup.getWidth() / (float) fboWidth;
-        final float y2 = setup.getHeight() / (float) fboHeight;
+        final float x2 = viewport.getWidth() / (float) fboWidth;
+        final float y2 = viewport.getHeight() / (float) fboHeight;
         final float texture[] = {
                 0, 0,
                 x2, 0,
