@@ -5,10 +5,10 @@ import android.view.MotionEvent;
 
 import com.annahid.libs.artenus.entities.Entity;
 import com.annahid.libs.artenus.entities.EntityCollection;
+import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.input.TouchEvent;
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.entities.behavior.Transformable;
-import com.annahid.libs.artenus.graphics.sprites.SpriteEntity;
 
 import java.lang.ref.WeakReference;
 import java.util.Iterator;
@@ -24,9 +24,58 @@ import java.util.List;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class SlideMenu extends EntityCollection {
+
+    private float dotV[] = {0, 0};
+
+    private float dist, h, th;
+
+    /**
+     * The first touched x position that initiated sliding.
+     */
+    private float startX;
+
+    /**
+     * Location value when sliding began.
+     */
+    private float startPos;
+
+    /**
+     * Current scroll location.
+     */
+    private float currentLoc;
+
+    /**
+     * The center position for the selected item.
+     */
+    private float centerX;
+
+    /**
+     * Selected item index.
+     */
+    private int sel;
+
+    /**
+     * The list of event handlers currently listening to events from this slide menu.
+     */
+    private List<WeakReference<Listener>> itemChangeListeners = new LinkedList<>();
+
+    /**
+     * Interface for event handlers that listen to slide menu events.
+     */
     public interface Listener {
+        /**
+         * Called when an item has been clicked.
+         *
+         * @param itemIndex The zero-based index of the clicked item
+         */
         void onItemClicked(int itemIndex);
 
+        /**
+         * Called when a new item is slid into selection.
+         *
+         * @param newItem  Newly selected item
+         * @param prevItem Previously selected item
+         */
         void onItemChanged(int newItem, int prevItem);
     }
 
@@ -43,10 +92,10 @@ public final class SlideMenu extends EntityCollection {
         th = height;
         startX = -1;
         startPos = -1;
-        currentPos = 0;
-        sel = -1;
         centerX = center.x;
-        centerY = center.y;
+        currentLoc = 0;
+        sel = -1;
+        super.setPosition(0, center.y);
     }
 
     /**
@@ -99,13 +148,9 @@ public final class SlideMenu extends EntityCollection {
         final boolean ret = super.add(entity);
 
         if (ret) {
-            ((Transformable) entity).setPosition(
-                    centerX + currentPos + dist * (size() - 1), centerY
-            );
+            ((Transformable) entity).setPosition(centerX + currentLoc + dist * (size() - 1), 0);
 
-            if (sel < 0)
-                sel = 0;
-
+            if (sel < 0) sel = 0;
             if (dotV.length < size()) {
                 float[] newDotV = new float[size()];
                 System.arraycopy(dotV, 0, newDotV, 0, dotV.length);
@@ -122,9 +167,9 @@ public final class SlideMenu extends EntityCollection {
     @Override
     public void clear() {
         super.clear();
-
         sel = -1;
-        currentPos = 0;
+        currentLoc = 0;
+        super.setPosition(currentLoc, getPosition().y);
     }
 
     /**
@@ -138,23 +183,22 @@ public final class SlideMenu extends EntityCollection {
 
         float targetPos = -sel * dist;
 
-        if (currentPos != targetPos && startX < 0) {
-            float speed = targetPos - currentPos;
-            currentPos += speed * elapsedTime * 4;
+        if (currentLoc != targetPos && startX < 0) {
+            float speed = targetPos - currentLoc;
+            currentLoc += speed * elapsedTime * 4;
         }
 
+        super.setPosition(currentLoc, getPosition().y);
+
         int i = 0;
-
         for (Entity entity : this) {
-            final float alpha = ((SpriteEntity) entity).getAlpha();
-
-            ((Transformable) entity).setPosition(centerX + currentPos + dist * i, centerY);
+            final float alpha = ((Renderable) entity).getAlpha();
 
             if (i == sel) {
-                ((SpriteEntity) entity).setAlpha(Math.min(1, alpha + elapsedTime * 2));
+                ((Renderable) entity).setAlpha(Math.min(1, alpha + elapsedTime * 2));
                 dotV[i] = Math.min(1, dotV[i] + elapsedTime * 2);
             } else {
-                ((SpriteEntity) entity).setAlpha(Math.max(0.75f, alpha - elapsedTime * 2));
+                ((Renderable) entity).setAlpha(Math.max(0.75f, alpha - elapsedTime * 2));
                 dotV[i] = Math.max(0, dotV[i] - elapsedTime * 2);
             }
 
@@ -186,15 +230,16 @@ public final class SlideMenu extends EntityCollection {
     @Override
     public final boolean handleTouch(TouchEvent event) {
         final float x = event.getX(), y = event.getY();
+        final float centerY = getPosition().y;
 
         if (event.getAction() == TouchEvent.EVENT_DOWN) {
             if (y > centerY - h / 2 && y < centerY + h / 2) {
                 startX = x;
-                startPos = currentPos;
+                startPos = currentLoc;
             }
         } else if (event.getAction() == TouchEvent.EVENT_MOVE) {
             if (Math.abs(x - startX) > 12 && startX > 0)
-                currentPos = startPos + x - startX;
+                currentLoc = startPos + x - startX;
         } else if (event.getAction() == MotionEvent.ACTION_UP && startX > 0) {
             if (Math.abs(x - startX) < 18 && y > centerY - th / 2 && y < centerY + th / 2) {
                 publishItemClick(sel);
@@ -202,8 +247,9 @@ public final class SlideMenu extends EntityCollection {
             } else {
                 final int prevSel = sel;
 
-                sel = Math.min(size() - 1, Math.max(0,
-                                (int) (-currentPos + dist / 2) / (int) dist)
+                sel = Math.min(
+                        size() - 1,
+                        Math.max(0, (int) (-currentLoc + dist / 2) / (int) dist)
                 );
 
                 if (sel != prevSel)
@@ -234,6 +280,27 @@ public final class SlideMenu extends EntityCollection {
         return sel;
     }
 
+    /**
+     * Does nothing. Changing position is not supported by slide menu.
+     *
+     * @param position Position (not used)
+     */
+    @Override
+    public void setPosition(Point2D position) {
+        // Not supported
+    }
+
+    /**
+     * Does nothing. Changing position is not supported by slide menu.
+     *
+     * @param x x value (not used)
+     * @param y y value (not used)
+     */
+    @Override
+    public void setPosition(float x, float y) {
+        // Not supported
+    }
+
     private void publishItemChange(int newItem, int prevItem) {
         for (WeakReference<Listener> listener : itemChangeListeners)
             if (listener.get() != null)
@@ -245,12 +312,4 @@ public final class SlideMenu extends EntityCollection {
             if (listener.get() != null)
                 listener.get().onItemClicked(item);
     }
-
-    private float dotV[] = {0, 0};
-    private float centerX, centerY;
-    private float dist, h, th;
-    private float startX, startPos, currentPos;
-    private int sel;
-
-    private List<WeakReference<Listener>> itemChangeListeners = new LinkedList<>();
 }

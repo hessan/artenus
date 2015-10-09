@@ -3,6 +3,7 @@ package com.annahid.libs.artenus.graphics.filters;
 import android.opengl.GLES20;
 
 import com.annahid.libs.artenus.core.Stage;
+import com.annahid.libs.artenus.graphics.rendering.ShaderManager;
 import com.annahid.libs.artenus.graphics.rendering.Viewport;
 import com.annahid.libs.artenus.graphics.rendering.RenderTarget;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
@@ -31,8 +32,8 @@ public class BlurFilter implements PostProcessingFilter {
      */
     private Viewport savedSetup;
 
-    public static void init(Stage stage) {
-        stage.registerShader(program);
+    public static void init() {
+        ShaderManager.register(program);
     }
 
     /**

@@ -7,6 +7,7 @@ import android.util.Pair;
 import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.graphics.rendering.RenderTarget;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
+import com.annahid.libs.artenus.graphics.rendering.ShaderManager;
 import com.annahid.libs.artenus.graphics.rendering.ShaderProgram;
 import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.graphics.TextureManager;
@@ -77,7 +78,7 @@ public final class TouchMap {
         }
         target = RenderTarget.create(fboWidth >> 1, fboHeight >> 1);
         shader = new TouchMapShaderProgram();
-        Artenus.getInstance().getStage().registerShader(shader);
+        ShaderManager.register(shader);
         shader.compile();
     }
 

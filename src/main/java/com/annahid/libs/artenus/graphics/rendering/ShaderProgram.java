@@ -50,7 +50,15 @@ public interface ShaderProgram {
 
     /**
      * Removes any unused state created by this shader program from the rendering context. This
-     * method is normally called when the shader is no longer needed for the current frame.
+     * method is normally called when the shader program is no longer needed for the current frame.
+     * Note that the program may be needed for the next frame, so it should not deallocate its
+     * global resources.
      */
     void cleanup();
+
+    /**
+     * Destroys the shader program and frees all allocated resources. The shader will not be used
+     * after this method, unless the {@link #compile()} method is called again.
+     */
+    void destroy();
 }

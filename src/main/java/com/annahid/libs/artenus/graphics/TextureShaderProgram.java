@@ -53,24 +53,34 @@ public class TextureShaderProgram implements ShaderProgram {
     protected int mMVPMatrixHandle;
 
     /**
-     * The handle to the color variable in the OpenGL ES fragment shader.
+     * Handle to the color variable in the OpenGL ES fragment shader.
      */
     protected int mColorHandle;
 
     /**
-     * The handle to the position variable in the OpenGL ES vertex shader.
+     * Handle to the position variable in the OpenGL ES vertex shader.
      */
     protected int mPositionHandle;
 
     /**
-     * The handle to the texture coordinates variable in the OpenGL ES vertex shader.
+     * Handle to the texture coordinates variable in the OpenGL ES vertex shader.
      */
     protected int mTexCoordsHandle;
 
     /**
-     * The handle to the sampler variable in the OpenGL ES fragment shader.
+     * Handle to the sampler variable in the OpenGL ES fragment shader.
      */
     protected int mSamplerHandle;
+
+    /**
+     * Handle to the vertex shader.
+     */
+    private int mVertexShader;
+
+    /**
+     * Handle to the fragment shader.
+     */
+    private int mFragmentShader;
 
     /**
      * Gets the default texture coordinates buffer, which includes the whole area of the texture
@@ -100,17 +110,19 @@ public class TextureShaderProgram implements ShaderProgram {
      */
     @Override
     public void compile() {
-        final int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
-        final int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
-        mProgram = GLES20.glCreateProgram();
-        GLES20.glAttachShader(mProgram, vertexShader);
-        GLES20.glAttachShader(mProgram, fragmentShader);
-        GLES20.glLinkProgram(mProgram);
+        compile(vertexShaderCode, fragmentShaderCode);
         mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
         mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
         mTexCoordsHandle = GLES20.glGetAttribLocation(mProgram, "aTexCoord");
         mSamplerHandle = GLES20.glGetUniformLocation(mProgram, "uTex");
+    }
+
+    @Override
+    public void destroy() {
+        GLES20.glDeleteShader(mFragmentShader);
+        GLES20.glDeleteShader(mVertexShader);
+        GLES20.glDeleteProgram(mProgram);
     }
 
     @Override
@@ -134,6 +146,15 @@ public class TextureShaderProgram implements ShaderProgram {
     @Override
     public void activate() {
         GLES20.glUseProgram(mProgram);
+        GLES20.glEnableVertexAttribArray(mTexCoordsHandle);
+        GLES20.glVertexAttribPointer(
+                mTexCoordsHandle,
+                2,
+                GLES20.GL_FLOAT,
+                false,
+                0,
+                TextureShaderProgram.getDefaultTextureBuffer()
+        );
     }
 
     @Override
@@ -155,6 +176,15 @@ public class TextureShaderProgram implements ShaderProgram {
         GLES20.glUniform1i(mSamplerHandle, 0);
     }
 
+    protected void compile(String vertexShaderCode, String fragmentShaderCode) {
+        mVertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
+        mFragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
+        mProgram = GLES20.glCreateProgram();
+        GLES20.glAttachShader(mProgram, mVertexShader);
+        GLES20.glAttachShader(mProgram, mFragmentShader);
+        GLES20.glLinkProgram(mProgram);
+    }
+
     /**
      * Loads a shader of the given type to attach to an OpenGL ES shader program.
      *
@@ -162,7 +192,7 @@ public class TextureShaderProgram implements ShaderProgram {
      * @param shaderCode Shader code in plain text
      * @return The handle to the shader
      */
-    protected int loadShader(int type, String shaderCode) {
+    private int loadShader(int type, String shaderCode) {
         int shader = GLES20.glCreateShader(type);
         GLES20.glShaderSource(shader, shaderCode);
         GLES20.glCompileShader(shader);

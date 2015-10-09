@@ -102,21 +102,6 @@ public interface Stage {
     void removeFilter(PostProcessingFilter filter);
 
     /**
-     * Registers a shader program with this stage, so the stage handles its lifecycle. All internal
-     * shader programs are automatically registered.
-     *
-     * @param shader The shader program to be registered
-     */
-    void registerShader(ShaderProgram shader);
-
-    /**
-     * Unregisters a shader program from this stage.
-     *
-     * @param shader The shader to be unregisterd
-     */
-    void unregisterShader(ShaderProgram shader);
-
-    /**
      * Gets the currently assigned stage manager. A stage manager handles basic events and
      * functionality for this {@code Stage}.
      *

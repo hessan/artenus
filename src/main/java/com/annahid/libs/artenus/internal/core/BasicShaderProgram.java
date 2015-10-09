@@ -24,19 +24,35 @@ class BasicShaderProgram implements ShaderProgram {
             "void main() {" +
             "  gl_FragColor = vColor;" +
             '}';
-
+    /**
+     * OpenGL shader program handle.
+     */
     int mProgram;
+
+    /**
+     * Handle to the vertex shader.
+     */
+    private int mVertexShader;
+
+    /**
+     * Handle to the fragment shader.
+     */
+    private int mFragmentShader;
+
     int mMVPMatrixHandle;
     int mColorHandle;
     int mPositionHandle;
 
+    /**
+     * Compiles the shader program.
+     */
     @Override
     public void compile() {
-        final int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
-        final int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
+        mVertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
+        mFragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
         mProgram = GLES20.glCreateProgram();
-        GLES20.glAttachShader(mProgram, vertexShader);
-        GLES20.glAttachShader(mProgram, fragmentShader);
+        GLES20.glAttachShader(mProgram, mVertexShader);
+        GLES20.glAttachShader(mProgram, mFragmentShader);
         GLES20.glLinkProgram(mProgram);
 
         mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
@@ -70,6 +86,13 @@ class BasicShaderProgram implements ShaderProgram {
     @Override
     public void cleanup() {
         GLES20.glDisableVertexAttribArray(mPositionHandle);
+    }
+
+    @Override
+    public void destroy() {
+        GLES20.glDeleteShader(mFragmentShader);
+        GLES20.glDeleteShader(mVertexShader);
+        GLES20.glDeleteProgram(mProgram);
     }
 
     private int loadShader(int type, String shaderCode) {

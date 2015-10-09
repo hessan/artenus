@@ -7,6 +7,7 @@ import android.opengl.Matrix;
 import com.annahid.libs.artenus.graphics.TextureShaderProgram;
 import com.annahid.libs.artenus.graphics.filters.FilterPassSetup;
 import com.annahid.libs.artenus.graphics.filters.PostProcessingFilter;
+import com.annahid.libs.artenus.graphics.rendering.ShaderManager;
 import com.annahid.libs.artenus.graphics.rendering.Viewport;
 import com.annahid.libs.artenus.graphics.rendering.RenderTarget;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
@@ -14,14 +15,12 @@ import com.annahid.libs.artenus.graphics.rendering.ShaderProgram;
 import com.annahid.libs.artenus.core.StageManager;
 import com.annahid.libs.artenus.graphics.TextureManager;
 import com.annahid.libs.artenus.input.TouchMap;
-import com.annahid.libs.artenus.data.ConcurrentCollection;
 import com.annahid.libs.artenus.data.RGB;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Stack;
 
@@ -100,10 +99,13 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
     private StageImpl stage;
 
     /**
-     * Shader programs currently registered with the stage.
+     * Graphics shown when texture loading is in progress.
      */
-    private Collection<ShaderProgram> registeredShaders = new ConcurrentCollection<>();
     private LoadingGraphics loading = new LoadingGraphics();
+
+    /**
+     * The two back-buffers used for triple buffering.
+     */
     private RenderTarget[] targets = new RenderTarget[2];
 
     /**
@@ -140,15 +142,12 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
 
         scratch = new float[16];
         basicShader = new BasicShaderProgram();
+        ShaderManager.register(basicShader);
         shader = basicShader;
-        registerShader(shader);
     }
 
     @Override
     public void onSurfaceCreated(GL10 gl, EGLConfig config) {
-        for (ShaderProgram shader : registeredShaders)
-            shader.compile();
-
         GLES20.glEnable(GLES20.GL_ALPHA);
         GLES20.glEnable(GLES20.GL_BLEND);
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
@@ -157,6 +156,7 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
         if (stage.handler != null)
             stage.handler.onEvent(stage, StageManager.EVENT_DISPLAY);
 
+        ShaderManager.loadAll();
         TextureManager.unloadTextures();
     }
 
@@ -374,14 +374,6 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
 
     void onResize(float w, float h) {
         Matrix.orthoM(mvpMatrix, 0, 0, w, h, 0, -1, 1);
-    }
-
-    void registerShader(ShaderProgram shader) {
-        registeredShaders.add(shader);
-    }
-
-    void unregisterShader(ShaderProgram shader) {
-        registeredShaders.remove(shader);
     }
 
     /**

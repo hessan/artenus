@@ -235,27 +235,6 @@ public final class StageImpl extends GLSurfaceView implements Stage {
     }
 
     /**
-     * Registers a shader program with this stage. The stage handles the lifecycle of all registered
-     * shader programs.
-     *
-     * @param shader The shader program to be registered
-     */
-    @Override
-    public void registerShader(ShaderProgram shader) {
-        mRenderer.registerShader(shader);
-    }
-
-    /**
-     * Unregisters a shader from this stage.
-     *
-     * @param shader The shader to be disassociated
-     */
-    @Override
-    public void unregisterShader(ShaderProgram shader) {
-        mRenderer.unregisterShader(shader);
-    }
-
-    /**
      * Gets the currently assigned stage manager. A stage manager handles basic events and
      * functionality for this {@code Stage}.
      *

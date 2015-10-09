@@ -39,14 +39,7 @@ class TouchMapShaderProgram extends TextureShaderProgram {
 
     @Override
     public void compile() {
-        final int vertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
-        final int fragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
-        mProgram = GLES20.glCreateProgram();
-
-        GLES20.glAttachShader(mProgram, vertexShader);
-        GLES20.glAttachShader(mProgram, fragmentShader);
-        GLES20.glLinkProgram(mProgram);
-
+        super.compile(vertexShaderCode, fragmentShaderCode);
         mMVPMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uMVPMatrix");
         mColorHandle = GLES20.glGetUniformLocation(mProgram, "vColor");
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
