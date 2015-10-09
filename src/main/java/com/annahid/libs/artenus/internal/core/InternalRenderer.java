@@ -334,6 +334,9 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
 
     @Override
     public float[] getMatrix() {
+        if(currentMatrix == null)
+            return null;
+
         return currentMatrix.clone();
     }
 

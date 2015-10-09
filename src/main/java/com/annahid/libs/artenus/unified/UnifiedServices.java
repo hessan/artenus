@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.annahid.libs.artenus.Artenus;
-import com.annahid.libs.artenus.internal.unified.AmazonUnifiedServices;
 import com.annahid.libs.artenus.internal.unified.BazaarUnifiedServices;
 import com.annahid.libs.artenus.internal.unified.CandoUnifiedServices;
 import com.annahid.libs.artenus.internal.unified.DummyUnifiedServices;
@@ -86,7 +85,13 @@ public abstract class UnifiedServices {
                     instance = new GoogleUnifiedServices();
                     break;
                 case AMAZON:
-                    instance = new AmazonUnifiedServices();
+                    try {
+                        instance = (UnifiedServices) Class.forName(
+                                "com.annahid.libs.artenus.internal.unified.AmazonUnifiedServices"
+                        ).getConstructor().newInstance();
+                    } catch (Exception ex) {
+                        throw new RuntimeException("Amazon unified services not found.");
+                    }
                     break;
                 case BAZAAR:
                     instance = new BazaarUnifiedServices();
@@ -161,7 +166,7 @@ public abstract class UnifiedServices {
      * @param requestCode The integer request code
      * @param resultCode  The integer result code returned by the child activity
      * @param data        An Intent, which can return result data to the caller
-     * @return    {@code true} if handled, {@code false} otherwise
+     * @return {@code true} if handled, {@code false} otherwise
      */
     public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
         return false;

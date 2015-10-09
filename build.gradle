@@ -34,9 +34,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-games:8.1.0'
     compile 'com.google.android.gms:play-services-ads:8.1.0'
 
-    compile files('libs/in-app-purchasing-2.0.61.jar')
-    compile files('libs/amazon-ads-5.5.102.jar')
-    compile project(':gameCircle')
-
     compile files('libs/adad-2.9.jar')
 }
