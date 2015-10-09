@@ -83,6 +83,7 @@ public abstract class Artenus extends Activity {
 
     /**
      * Gets the game stage. Each game has only one stage, where its different scenes are displayed.
+     *
      * @return The stage
      */
     public Stage getStage() {
@@ -104,31 +105,27 @@ public abstract class Artenus extends Activity {
             ApplicationInfo ai = getPackageManager().getApplicationInfo(
                     getPackageName(), PackageManager.GET_META_DATA);
             final String store = ai.metaData.getString("com.annahid.libs.artenus.APP_STORE");
+            manifestStore = UnifiedServices.Store.NONE;
 
-            if (store == null)
-                throw new IllegalStateException("App store is not specified in the manifest.");
-
-            switch (store) {
-                case "google":
-                    manifestStore = UnifiedServices.Store.GOOGLE;
-                    break;
-                case "amazon":
-                    manifestStore = UnifiedServices.Store.AMAZON;
-                    break;
-                case "bazaar":
-                    manifestStore = UnifiedServices.Store.BAZAAR;
-                    break;
-                case "cando":
-                    manifestStore = UnifiedServices.Store.CANDO;
-                    break;
-                case "samsung":
-                    manifestStore = UnifiedServices.Store.SAMSUNG;
-                    break;
-                default:
-                    manifestStore = UnifiedServices.Store.NONE;
-                    break;
+            if (store != null) {
+                switch (store) {
+                    case "google":
+                        manifestStore = UnifiedServices.Store.GOOGLE;
+                        break;
+                    case "amazon":
+                        manifestStore = UnifiedServices.Store.AMAZON;
+                        break;
+                    case "bazaar":
+                        manifestStore = UnifiedServices.Store.BAZAAR;
+                        break;
+                    case "cando":
+                        manifestStore = UnifiedServices.Store.CANDO;
+                        break;
+                    case "samsung":
+                        manifestStore = UnifiedServices.Store.SAMSUNG;
+                        break;
+                }
             }
-
         } catch (PackageManager.NameNotFoundException | NullPointerException e) {
             manifestStore = UnifiedServices.Store.NONE;
         }
