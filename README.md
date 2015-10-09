@@ -22,7 +22,7 @@ Congratulations! You have now empowered your project with Artenus. Next step is 
 ## Getting Started
 After you add Artenus to your project, you need to have your main activity extend Arteuns. The simplest form of an Artenus application activity looks like this:
 
-```
+```java
 public class MainActivity extends Artenus implements StageManager {
     @Override
     protected void init(Stage stage) {
