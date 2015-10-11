@@ -51,9 +51,16 @@ public class MainActivity extends Artenus implements StageManager {
 }
 ```
 
-The game flow starts from your initial scene, and will continue from one scene to another. Don't forget to handle the back button on the initial scene, or any scene that lets the user exit your game! The stage automatically receives the back button event and passes it to the active scene. It is the scene's responsibility to exit the application when needed, by calling `Artenus.exit()`.
+The game flow starts from your initial scene, and will continue from one scene to another. Inside each scene, you may use `stage.setScene(newScene)` to change to another scene. It is recommended not to recycle scenes or keep them in memory for a later use, as this is not what the framework is designed to handle.
+
+Don't forget to handle the back button on the initial scene, or any scene that lets the user exit your game! The stage automatically receives back button events and passes them to the active scene. It is the scene's responsibility to exit the application when needed, by calling `Artenus.exit()`.
+
+If at any point you need to access the Android application context (such as when loading local scene textures), use `Artenus.getInstance()` instead of manually keeping an instance variable or using complicated logic. Always let the framework do the heavy lifting for you where it can.
 
 ## Reference
 
 [Artenus 2D Framework Reference](http://annahid.com/artenus-docs/)
 
+## Developed By
+
+Hessan Feghhi - hessan@annahid.com
