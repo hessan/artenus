@@ -28,7 +28,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * The internal stage renderer.
+ * The internal stage renderer, operating with OpenGL ES 2.0.
  *
  * @author Hessan Feghhi
  */
@@ -115,6 +115,11 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
      */
     private long loadingDelay = 0;
 
+    /**
+     * Creates a new internal renderer for the given internal stage implementation.
+     *
+     * @param stage Internal stage
+     */
     public InternalRenderer(StageImpl stage) {
         this.stage = stage;
 
@@ -165,10 +170,10 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
         GLES20.glViewport(0, 0, width, height);
 
         if (width > height) {
-            vh = 600f;
+            vh = 600.0f;
             vw = width * vh / height;
         } else {
-            vw = 600f;
+            vw = 600.0f;
             vh = height * vw / width;
         }
 
@@ -334,7 +339,7 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
 
     @Override
     public float[] getMatrix() {
-        if(currentMatrix == null)
+        if (currentMatrix == null)
             return null;
 
         return currentMatrix.clone();

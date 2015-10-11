@@ -19,6 +19,10 @@ class TouchMapShaderProgram extends TextureShaderProgram {
             "  vTexCoord = aTexCoord;" +
             "  gl_Position = uMVPMatrix * vPosition;" +
             '}';
+    /**
+     * Fragment shader code that converts the mapped texture to a mono-chrome image with boolean
+     * texel transparencies (0 or 1).
+     */
     private static final String fragmentShaderCode =
             "precision mediump float;" +
             "uniform vec4 vColor;" +

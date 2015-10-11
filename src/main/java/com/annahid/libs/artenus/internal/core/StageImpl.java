@@ -12,7 +12,6 @@ import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.R;
 import com.annahid.libs.artenus.core.Dialog;
 import com.annahid.libs.artenus.core.Scene;
-import com.annahid.libs.artenus.graphics.rendering.ShaderProgram;
 import com.annahid.libs.artenus.core.Stage;
 import com.annahid.libs.artenus.core.StageManager;
 import com.annahid.libs.artenus.graphics.filters.PostProcessingFilter;
@@ -56,6 +55,9 @@ public final class StageImpl extends GLSurfaceView implements Stage {
      */
     private Thread advanceThread;
 
+    /**
+     * An incremental thread identifier for the animation loop, used for controlling the thread.
+     */
     private AtomicInteger advanceThreadId = new AtomicInteger(1000);
 
     /**
@@ -115,7 +117,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
      * @return Stage x
      */
     @Override
-    public final float screenToStageX(float x) {
+    public final float screenToLogicalX(float x) {
         return x * mRenderer.vw / mRenderer.screenWidth;
     }
 
@@ -126,7 +128,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
      * @return Stage y
      */
     @Override
-    public final float screenToStageY(float y) {
+    public final float screenToLogicalY(float y) {
         return y * mRenderer.vh / mRenderer.screenHeight;
     }
 
@@ -137,7 +139,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
      * @return Screen x
      */
     @Override
-    public final float stageToScreenX(float x) {
+    public final float logicalToScreenX(float x) {
         return x * mRenderer.screenWidth / mRenderer.vw;
     }
 
@@ -148,7 +150,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
      * @return Screen y
      */
     @Override
-    public final float stageToScreenY(float y) {
+    public final float logicalToScreenY(float y) {
         return y * mRenderer.screenHeight / mRenderer.vh;
     }
 
@@ -262,8 +264,8 @@ public final class StageImpl extends GLSurfaceView implements Stage {
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         int action = event.getAction() & MotionEvent.ACTION_MASK;
         final int pointerIndex = event.getActionIndex();
-        final float x = screenToStageX(event.getX(pointerIndex));
-        final float y = screenToStageY(event.getY(pointerIndex));
+        final float x = screenToLogicalX(event.getX(pointerIndex));
+        final float y = screenToLogicalY(event.getY(pointerIndex));
         final int pointerId = event.getPointerId(pointerIndex);
 
         if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN)

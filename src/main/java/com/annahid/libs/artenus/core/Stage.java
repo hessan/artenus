@@ -28,7 +28,7 @@ public interface Stage {
      * @param x Screen x
      * @return Stage x
      */
-    float screenToStageX(float x);
+    float screenToLogicalX(float x);
 
     /**
      * Converts screen y to stage x coordination using the scaling factor.
@@ -36,7 +36,7 @@ public interface Stage {
      * @param y Screen y
      * @return Stage y
      */
-    float screenToStageY(float y);
+    float screenToLogicalY(float y);
 
     /**
      * Converts stage x to screen x coordination using the scaling factor.
@@ -44,7 +44,7 @@ public interface Stage {
      * @param x Stage x
      * @return Screen x
      */
-    float stageToScreenX(float x);
+    float logicalToScreenX(float x);
 
     /**
      * Converts stage y to screen y coordination using the scaling factor.
@@ -52,7 +52,7 @@ public interface Stage {
      * @param y Stage y
      * @return Screen y
      */
-    float stageToScreenY(float y);
+    float logicalToScreenY(float y);
 
     /**
      * Sets the next scene that should be shown on this {@code Stage}. The scene will not be shown

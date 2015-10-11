@@ -15,17 +15,28 @@ import com.annahid.libs.artenus.graphics.TextureManager;
  *
  * @author Hessan Feghhi
  */
-class IntroScene extends Scene {
+final class IntroScene extends Scene {
     /**
-     * A value indicating whether the intro scene has been displayed.
+     * A value indicating whether the intro scene has already been displayed.
      */
     static boolean introShown = false;
 
-    private long startTime;
+    /**
+     * The white intensity of the screen (used for the logo animation).
+     */
     private float whiteness = 0;
+
+    /**
+     * This variable is used to avoid creating multiple instances of the game.
+     */
     private boolean gameRun = false;
-    private boolean showIntro;
     private ImageSprite annahid = null;
+    private final boolean showIntro;
+
+    /**
+     * The timestamp for when the intro scene started to display.
+     */
+    private final long startTime;
 
     public IntroScene(Stage parentStage) {
         super(parentStage);

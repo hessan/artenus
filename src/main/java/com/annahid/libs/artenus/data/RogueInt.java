@@ -3,7 +3,7 @@ package com.annahid.libs.artenus.data;
 /**
  * <p>Represents an integer value which cannot be discovered or altered using game hacking software.
  * It is slower than int but more secure. It is recommended to use this class instead of the
- * primitive type int in your sensitive information.</p>
+ * primitive type int for sensitive information.</p>
  * <p>Android applications are programmed in java, which inherently enables malicious users with
  * reflection-based attacks. The variables used in the application are stored in memory and can be
  * easily read using some tools. What game "hackers" do is to use software to find variables with a
@@ -17,9 +17,9 @@ package com.annahid.libs.artenus.data;
  * this attack is widely available and does not require any special programming knowledge to
  * operate. For this reason you have to be careful how you keep your sensitive information in the
  * application. Encryption is a good idea for storage. For runtime attacks, this class provides a
- * secure way to store your variables such as scores and coins. The values queries with hacking
+ * secure way to store your variables such as scores and coins. The values queried with hacking
  * tools do not reveal the real values stored in this class. This class stores a randomly modified
- * version of the original value to keep it undetected by this software.</p>
+ * version of the original value to keep it undetected by such software.</p>
  *
  * @author Hessan Feghhi
  */
