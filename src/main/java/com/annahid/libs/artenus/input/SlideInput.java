@@ -2,6 +2,7 @@ package com.annahid.libs.artenus.input;
 
 import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.data.Point2D;
+import com.annahid.libs.artenus.entities.behavior.Behaviors;
 import com.annahid.libs.artenus.entities.behavior.Touchable;
 import com.annahid.libs.artenus.core.Scene;
 import com.annahid.libs.artenus.core.Stage;
@@ -112,6 +113,11 @@ public final class SlideInput extends GameInput implements Touchable {
         stage = null;
     }
 
+    @Override
+    public boolean hasBehavior(Behaviors behavior) {
+        return behavior == Behaviors.TOUCHABLE;
+    }
+
     /**
      * Handles touch events for {@code SlideInput}.
      */
@@ -144,12 +150,6 @@ public final class SlideInput extends GameInput implements Touchable {
                 }
                 releaseKeyMap();
             }
-        }
-
-        try {
-            Thread.sleep(5);
-        } catch (InterruptedException ex) {
-            // Do nothing
         }
 
         return false;

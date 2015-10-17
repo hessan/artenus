@@ -13,6 +13,7 @@ import com.annahid.libs.artenus.R;
 import com.annahid.libs.artenus.core.Dialog;
 import com.annahid.libs.artenus.core.Scene;
 import com.annahid.libs.artenus.core.Stage;
+import com.annahid.libs.artenus.core.StageEvents;
 import com.annahid.libs.artenus.core.StageManager;
 import com.annahid.libs.artenus.graphics.filters.PostProcessingFilter;
 import com.annahid.libs.artenus.input.TouchEvent;
@@ -97,7 +98,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
             setPreserveEGLContextOnPause(true);
 
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-        setScene(new IntroScene(this));
+        setScene(IntroScene.getInstance(this));
     }
 
     /**
@@ -162,7 +163,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
      */
     @Override
     public final void setScene(Scene scene) {
-        if (!(currentScene instanceof IntroScene)) {
+        if (currentScene != IntroScene.getInstance(this)) {
             nextScene = scene;
         }
     }
@@ -292,7 +293,12 @@ public final class StageImpl extends GLSurfaceView implements Stage {
                 currentScene.getDialog().getTouchMap().onTouchEvent(touchEvent);
             else currentScene.getTouchMap().onTouchEvent(touchEvent);
         }
-
+        try {
+            Thread.sleep(10);
+        }
+        catch(InterruptedException ex) {
+            // Do nothing
+        }
         return true;
     }
 
@@ -306,7 +312,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
         advanceThread = null;
 
         if (handler != null)
-            handler.onEvent(this, StageManager.EVENT_PAUSE);
+            handler.onEvent(this, StageEvents.PAUSE);
     }
 
     /**
@@ -318,7 +324,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
         scheduleTimer();
 
         if (handler != null)
-            handler.onEvent(this, StageManager.EVENT_RESUME);
+            handler.onEvent(this, StageEvents.RESUME);
     }
 
     /**

@@ -1,7 +1,8 @@
-package com.annahid.libs.artenus.utils;
+package com.annahid.libs.artenus.graphics;
 
 import com.annahid.libs.artenus.entities.AnimationHandler;
 import com.annahid.libs.artenus.entities.behavior.Animatable;
+import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.graphics.sprites.SpriteEntity;
 
 /**
@@ -28,20 +29,20 @@ public final class FadeAnimation implements AnimationHandler {
     @Override
     public void advance(Animatable entity, float elapsedTime) {
 
-        if (!(entity instanceof SpriteEntity))
+        if (!(entity instanceof Renderable))
             return;
 
-        final SpriteEntity sprite = (SpriteEntity) entity;
+        final Renderable sprite = (Renderable) entity;
         final float alpha = sprite.getAlpha();
 
         if (fin) {
             if (alpha < 1)
                 sprite.setAlpha(Math.min(1, alpha + elapsedTime * s));
-            else sprite.setAnimation(null);
+            else entity.setAnimation(null);
         } else {
             if (alpha > 0)
                 sprite.setAlpha(Math.max(0, alpha - elapsedTime * s));
-            else sprite.setAnimation(null);
+            else entity.setAnimation(null);
         }
     }
 

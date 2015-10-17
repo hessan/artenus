@@ -5,6 +5,7 @@ import android.view.MotionEvent;
 
 import com.annahid.libs.artenus.entities.Entity;
 import com.annahid.libs.artenus.entities.EntityCollection;
+import com.annahid.libs.artenus.entities.behavior.Behaviors;
 import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.input.TouchEvent;
 import com.annahid.libs.artenus.data.Point2D;
@@ -142,7 +143,7 @@ public final class SlideMenu extends EntityCollection {
      */
     @Override
     public final boolean add(Entity entity) {
-        if (!(entity instanceof Transformable))
+        if (!entity.hasBehavior(Behaviors.TRANSFORMABLE))
             throw new IllegalArgumentException("Menu items must be transformable.");
 
         final boolean ret = super.add(entity);

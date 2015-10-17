@@ -3,6 +3,7 @@ package com.annahid.libs.artenus.input;
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.entities.Entity;
 import com.annahid.libs.artenus.core.Scene;
+import com.annahid.libs.artenus.entities.behavior.Behaviors;
 
 /**
  * The base class for all game input controllers. A game input manager maps inputs from a specific
@@ -125,7 +126,7 @@ public abstract class GameInput implements Entity {
      * currently in the pressed state.
      *
      * @param keyCode The key identifier(s) to check
-     * @return    {@code true} if the key (or any of the keys} are pressed or {@code false} otherwise
+     * @return {@code true} if the key (or any of the keys} are pressed or {@code false} otherwise
      */
     public boolean isKeyPressed(int keyCode) {
         return (keyMap & keyCode) != 0;
@@ -172,4 +173,9 @@ public abstract class GameInput implements Entity {
      */
     @Override
     public abstract void onDetach(Scene scene);
+
+    @Override
+    public boolean hasBehavior(Behaviors behavior) {
+        return false;
+    }
 }

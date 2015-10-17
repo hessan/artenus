@@ -35,14 +35,14 @@ public final class SoundManager {
      * @param resourceIds raw resource identifiers
      */
     @SuppressWarnings("deprecation")
-    public static void addSounds(int... resourceIds) {
+    public static void add(int... resourceIds) {
         for (int resourceId : resourceIds)
             soundPoolMap.put(resourceId, soundPool.load(context, resourceId, 1));
     }
 
     /**
      * Plays a sound effect. The sound should be already added to the pool using
-     * {@link #addSounds(int...)}.
+     * {@link #add(int...)}.
      *
      * @param resourceId The raw resource identifier for the sound
      */

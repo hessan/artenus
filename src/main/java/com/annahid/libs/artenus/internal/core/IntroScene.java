@@ -8,6 +8,8 @@ import com.annahid.libs.artenus.core.StageManager;
 import com.annahid.libs.artenus.graphics.sprites.ImageSprite;
 import com.annahid.libs.artenus.graphics.TextureManager;
 
+import java.lang.ref.WeakReference;
+
 /**
  * This scene is displayed before the global loading screen. It splashes a logo
  * of the framework on the screen. This scene must not be in any way suppressed.
@@ -38,7 +40,19 @@ final class IntroScene extends Scene {
      */
     private final long startTime;
 
-    public IntroScene(Stage parentStage) {
+    /**
+     *
+     */
+    private static WeakReference<Scene> instance = null;
+
+    public static Scene getInstance(Stage stage) {
+        if (instance == null) {
+            instance = new WeakReference<Scene>(new IntroScene(stage));
+        }
+        return instance.get();
+    }
+
+    private IntroScene(Stage parentStage) {
         super(parentStage);
         startTime = System.currentTimeMillis();
         showIntro = !Artenus.shouldHideIntro();
@@ -92,7 +106,7 @@ final class IntroScene extends Scene {
                 throw new IllegalStateException("No stage manager is specified.");
 
             manager.onLoadStage(stage);
-            ((StageImpl)stage).forceScene(stage.getManager().createInitialScene(stage));
+            ((StageImpl) stage).forceScene(stage.getManager().createInitialScene(stage));
             gameRun = true;
         }
     }

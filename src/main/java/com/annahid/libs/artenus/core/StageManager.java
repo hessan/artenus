@@ -12,21 +12,6 @@ package com.annahid.libs.artenus.core;
  * @see com.annahid.libs.artenus.core.Stage
  */
 public interface StageManager {
-    /**
-     * Indicates that the stage has gone into a paused state. This event is triggered when the
-     * Artenus activity goes in the background.
-     */
-    int EVENT_PAUSE = 1;
-    /**
-     * Indicates that the stage has resumed from a paused state. This event is triggered when the
-     * Artenus activity resumes from a background state.
-     */
-    int EVENT_RESUME = 2;
-    /**
-     * Indicates that the stage has just allocated resources to display content. This event is
-     * triggered when the OpenGL view's {@code onSurfaceCreated} method is invoked.
-     */
-    int EVENT_DISPLAY = 3;
 
     /**
      * This method is called to load the required global resources for the stage. The "loading"
@@ -55,11 +40,8 @@ public interface StageManager {
      * This method is invoked whenever an external event is triggered. This event can be one of
      * "pause", "resume" or "display".
      *
-     * @param stage   The stage for which the event has occurred
-     * @param eventId The event identifier. The value is one of
-     *                {@link StageManager#EVENT_PAUSE},
-     *                {@link StageManager#EVENT_RESUME}, or
-     *                {@link StageManager#EVENT_DISPLAY}.
+     * @param stage The stage for which the event has occurred
+     * @param event The event
      */
-    void onEvent(Stage stage, int eventId);
+    void onEvent(Stage stage, StageEvents event);
 }

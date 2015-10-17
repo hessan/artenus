@@ -5,6 +5,7 @@ import com.annahid.libs.artenus.data.RGB;
 import com.annahid.libs.artenus.entities.Entity;
 import com.annahid.libs.artenus.entities.AnimationHandler;
 import com.annahid.libs.artenus.entities.behavior.Animatable;
+import com.annahid.libs.artenus.entities.behavior.Behaviors;
 import com.annahid.libs.artenus.entities.behavior.Transformable;
 import com.annahid.libs.artenus.graphics.Effect;
 import com.annahid.libs.artenus.entities.behavior.Renderable;
@@ -252,6 +253,13 @@ public abstract class SpriteEntity implements Entity, Animatable, Renderable, Tr
 
     @Override
     public void onDetach(Scene scene) {
+    }
+
+    @Override
+    public boolean hasBehavior(Behaviors behavior) {
+        return behavior == Behaviors.RENDERABLE
+                || behavior == Behaviors.ANIMATABLE
+                || behavior == Behaviors.TRANSFORMABLE;
     }
 
     @Override

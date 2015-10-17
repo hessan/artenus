@@ -1,6 +1,7 @@
 package com.annahid.libs.artenus.entities;
 
 import com.annahid.libs.artenus.data.Point2D;
+import com.annahid.libs.artenus.entities.behavior.Behaviors;
 import com.annahid.libs.artenus.entities.behavior.Transformable;
 import com.annahid.libs.artenus.core.Scene;
 
@@ -69,5 +70,10 @@ class NullEntity implements Entity, Transformable {
 
     @Override
     public void onDetach(Scene scene) {
+    }
+
+    @Override
+    public boolean hasBehavior(Behaviors behavior) {
+        return false;
     }
 }

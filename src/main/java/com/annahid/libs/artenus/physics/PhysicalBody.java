@@ -3,6 +3,7 @@ package com.annahid.libs.artenus.physics;
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.entities.Entity;
 import com.annahid.libs.artenus.entities.FilteredEntity;
+import com.annahid.libs.artenus.entities.behavior.Behaviors;
 import com.annahid.libs.artenus.entities.behavior.Transformable;
 import com.annahid.libs.artenus.core.Scene;
 
@@ -86,7 +87,7 @@ public class PhysicalBody extends FilteredEntity {
     public PhysicalBody(Entity target, Shape shapeDesc) {
         super(target);
 
-        if (!(this.target instanceof Transformable))
+        if (!target.hasBehavior(Behaviors.TRANSFORMABLE))
             throw new IllegalArgumentException(
                     "A physical body can only accept a transformable entity as target.");
 
@@ -571,9 +572,13 @@ public class PhysicalBody extends FilteredEntity {
         body.createFixture(def);
     }
 
+    /**
+     * Box2D body associated with this physical body.
+     */
     Body body;
+
     Descriptor desc;
-    List<JointDescriptor> joints = new ArrayList<>();
+    List<JointDescriptor> joints = new ArrayList<>(5);
 
     private Shape shape;
     private float density, friction, restitution;

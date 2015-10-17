@@ -14,7 +14,6 @@ import com.annahid.libs.artenus.graphics.sprites.LineSprite;
  *
  * @author Hessan Feghhi
  */
-
 public abstract class Dialog extends Scene {
     /**
      * Dialog result indicating the dialog is still active.
@@ -201,5 +200,15 @@ public abstract class Dialog extends Scene {
      */
     public boolean isFull() {
         return false;
+    }
+
+    /**
+     * Returns a value indicating whether this scene is a dialog.
+     *
+     * @return {@code true}
+     */
+    @Override
+    boolean isDialog() {
+        return true;
     }
 }

@@ -4,6 +4,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 
+import com.annahid.libs.artenus.core.StageEvents;
 import com.annahid.libs.artenus.graphics.TextureShaderProgram;
 import com.annahid.libs.artenus.graphics.filters.FilterPassSetup;
 import com.annahid.libs.artenus.graphics.filters.PostProcessingFilter;
@@ -12,7 +13,6 @@ import com.annahid.libs.artenus.graphics.rendering.Viewport;
 import com.annahid.libs.artenus.graphics.rendering.RenderTarget;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.graphics.rendering.ShaderProgram;
-import com.annahid.libs.artenus.core.StageManager;
 import com.annahid.libs.artenus.graphics.TextureManager;
 import com.annahid.libs.artenus.input.TouchMap;
 import com.annahid.libs.artenus.data.RGB;
@@ -159,7 +159,7 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
         GLES20.glBlendFunc(GLES20.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
         if (stage.handler != null)
-            stage.handler.onEvent(stage, StageManager.EVENT_DISPLAY);
+            stage.handler.onEvent(stage, StageEvents.DISPLAY);
 
         ShaderManager.loadAll();
         TextureManager.unloadTextures();

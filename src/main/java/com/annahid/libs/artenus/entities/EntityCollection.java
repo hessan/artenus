@@ -2,6 +2,7 @@ package com.annahid.libs.artenus.entities;
 
 import android.support.annotation.NonNull;
 
+import com.annahid.libs.artenus.entities.behavior.Behaviors;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.input.TouchEvent;
 import com.annahid.libs.artenus.data.ConcurrentCollection;
@@ -349,6 +350,11 @@ public class EntityCollection
         }
     }
 
+    @Override
+    public boolean hasBehavior(Behaviors behavior) {
+        return true;
+    }
+
     /**
      * Gets the scene this collection is currently attached to.
      *
@@ -372,7 +378,7 @@ public class EntityCollection
             ctx.scale(scale.x, scale.y);
 
             for (Entity entity : this)
-                if (entity instanceof Renderable)
+                if (entity.hasBehavior(Behaviors.RENDERABLE))
                     ((Renderable) entity).render(ctx, flags);
 
             ctx.popMatrix();
@@ -444,18 +450,18 @@ public class EntityCollection
         if (anim != null)
             anim.advance(this, elapsedTime);
 
-        for (Entity entity : this)
-            if (entity instanceof Animatable)
+        for (Entity entity : this) {
+            if (entity.hasBehavior(Behaviors.ANIMATABLE))
                 ((Animatable) entity).advance(elapsedTime);
+        }
     }
 
     @Override
     public boolean handleTouch(TouchEvent event) {
-        for (Entity entity : this)
-            if (entity instanceof Touchable &&
-                    ((Touchable) entity).handleTouch(event))
+        for (Entity entity : this) {
+            if (entity.hasBehavior(Behaviors.TOUCHABLE) && ((Touchable) entity).handleTouch(event))
                 return true;
-
+        }
         return false;
     }
 

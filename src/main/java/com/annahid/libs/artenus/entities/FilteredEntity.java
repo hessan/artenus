@@ -1,5 +1,6 @@
 package com.annahid.libs.artenus.entities;
 
+import com.annahid.libs.artenus.entities.behavior.Behaviors;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.data.RGB;
@@ -20,13 +21,13 @@ public abstract class FilteredEntity
 
     @Override
     public final void setAnimation(AnimationHandler animation) {
-        if (target instanceof Animatable)
+        if (target.hasBehavior(Behaviors.ANIMATABLE))
             ((Animatable) target).setAnimation(animation);
     }
 
     @Override
     public final AnimationHandler getAnimation() {
-        if (target instanceof Animatable)
+        if (target.hasBehavior(Behaviors.ANIMATABLE))
             return ((Animatable) target).getAnimation();
 
         return null;
@@ -34,7 +35,7 @@ public abstract class FilteredEntity
 
     @Override
     public Point2D getPosition() {
-        if (target instanceof Transformable)
+        if (target.hasBehavior(Behaviors.TRANSFORMABLE))
             return ((Transformable) target).getPosition();
 
         return null;
@@ -47,7 +48,7 @@ public abstract class FilteredEntity
 
     @Override
     public void setPosition(float x, float y) {
-        if (target instanceof Transformable)
+        if (target.hasBehavior(Behaviors.TRANSFORMABLE))
             ((Transformable) target).setPosition(x, y);
     }
 
@@ -59,7 +60,7 @@ public abstract class FilteredEntity
 
     @Override
     public float getRotation() {
-        if (target instanceof Transformable)
+        if (target.hasBehavior(Behaviors.TRANSFORMABLE))
             return ((Transformable) target).getRotation();
 
         return 0;
@@ -67,7 +68,7 @@ public abstract class FilteredEntity
 
     @Override
     public void setRotation(float angle) {
-        if (target instanceof Transformable)
+        if (target.hasBehavior(Behaviors.TRANSFORMABLE))
             ((Transformable) target).setRotation(angle);
     }
 
@@ -78,7 +79,7 @@ public abstract class FilteredEntity
 
     @Override
     public Point2D getScale() {
-        if (target instanceof Transformable)
+        if (target.hasBehavior(Behaviors.TRANSFORMABLE))
             return ((Transformable) target).getScale();
 
         return null;
@@ -91,13 +92,13 @@ public abstract class FilteredEntity
 
     @Override
     public void setScale(float scaleX, float scaleY) {
-        if (target instanceof Transformable)
+        if (target.hasBehavior(Behaviors.TRANSFORMABLE))
             ((Transformable) target).setScale(scaleX, scaleY);
     }
 
     @Override
     public void setColorFilter(float r, float g, float b) {
-        if (target instanceof Renderable)
+        if (target.hasBehavior(Behaviors.RENDERABLE))
             ((Renderable) target).setColorFilter(r, g, b);
     }
 
@@ -108,7 +109,7 @@ public abstract class FilteredEntity
 
     @Override
     public RGB getColorFilter() {
-        if (target instanceof Renderable)
+        if (target.hasBehavior(Behaviors.RENDERABLE))
             return ((Renderable) target).getColorFilter();
 
         return null;
@@ -116,7 +117,7 @@ public abstract class FilteredEntity
 
     @Override
     public Effect getEffect() {
-        if (target instanceof Renderable)
+        if (target.hasBehavior(Behaviors.RENDERABLE))
             return ((Renderable) target).getEffect();
 
         return null;
@@ -124,26 +125,26 @@ public abstract class FilteredEntity
 
     @Override
     public void setEffect(Effect effect) {
-        if (target instanceof Renderable)
+        if (target.hasBehavior(Behaviors.RENDERABLE))
             ((Renderable) target).setEffect(effect);
     }
 
     @Override
     public void setAlpha(float alpha) {
-        if (target instanceof Renderable)
+        if (target.hasBehavior(Behaviors.RENDERABLE))
             ((Renderable) target).setAlpha(alpha);
     }
 
     @Override
     public float getAlpha() {
-        if (target instanceof Renderable)
+        if (target.hasBehavior(Behaviors.RENDERABLE))
             return ((Renderable) target).getAlpha();
         return 0;
     }
 
     @Override
     public void advance(float elapsedTime) {
-        if (target instanceof Animatable)
+        if (target.hasBehavior(Behaviors.ANIMATABLE))
             ((Animatable) target).advance(elapsedTime);
     }
 
@@ -155,7 +156,7 @@ public abstract class FilteredEntity
      */
     @Override
     public void render(RenderingContext ctx, int flags) {
-        if (target instanceof Renderable)
+        if (target.hasBehavior(Behaviors.RENDERABLE))
             ((Renderable) target).render(ctx, flags);
     }
 
@@ -167,6 +168,17 @@ public abstract class FilteredEntity
     @Override
     public void onDetach(Scene scene) {
         target.onDetach(scene);
+    }
+
+    /**
+     * Determines whether the underlying entity has the specified behavior.
+     *
+     * @param behavior Behavior to be checked
+     * @return {@code true} if the underlying entity has the behavior, {@code false} otherwise
+     */
+    @Override
+    public boolean hasBehavior(Behaviors behavior) {
+        return target.hasBehavior(behavior);
     }
 
     public final Entity getUnderlyingEntity() {

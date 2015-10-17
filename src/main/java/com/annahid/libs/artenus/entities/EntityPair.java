@@ -1,5 +1,6 @@
 package com.annahid.libs.artenus.entities;
 
+import com.annahid.libs.artenus.entities.behavior.Behaviors;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.input.TouchEvent;
 import com.annahid.libs.artenus.data.Point2D;
@@ -37,7 +38,6 @@ public class EntityPair
     public EntityPair(Entity first, Entity second) {
         pos = new Point2D(0, 0);
         scale = new Point2D(1, 1);
-
         this.first = first == null ? NullEntity.getInstance() : first;
         this.second = second == null ? NullEntity.getInstance() : second;
     }
@@ -125,9 +125,9 @@ public class EntityPair
 
     @Override
     public void setColorFilter(float r, float g, float b) {
-        if (first instanceof Renderable)
+        if (first.hasBehavior(Behaviors.RENDERABLE))
             ((Renderable) first).setColorFilter(r, g, b);
-        if (second instanceof Renderable)
+        if (second.hasBehavior(Behaviors.RENDERABLE))
             ((Renderable) second).setColorFilter(r, g, b);
     }
 
@@ -138,9 +138,9 @@ public class EntityPair
 
     @Override
     public RGB getColorFilter() {
-        if (first instanceof Renderable)
+        if (first.hasBehavior(Behaviors.RENDERABLE))
             return ((Renderable) first).getColorFilter();
-        else if (second instanceof Renderable)
+        else if (second.hasBehavior(Behaviors.RENDERABLE))
             return ((Renderable) second).getColorFilter();
         else return new RGB(0, 0, 0);
     }
@@ -158,6 +158,19 @@ public class EntityPair
     }
 
     /**
+     * Determines whether this entity pair has the specified behavior.
+     *
+     * @param behavior Behavior to be checked
+     * @return {@code true} if this entity pair has the behavior, {@code false} otherwise
+     */
+    @Override
+    public boolean hasBehavior(Behaviors behavior) {
+        return behavior != Behaviors.RENDERABLE
+                || first.hasBehavior(behavior)
+                || second.hasBehavior(behavior);
+    }
+
+    /**
      * Renders both entities in the pair.
      *
      * @param flags Rendering flags
@@ -169,9 +182,9 @@ public class EntityPair
         ctx.rotate(rotation);
         ctx.scale(scale.x, scale.y);
 
-        if (first instanceof Renderable)
+        if (first.hasBehavior(Behaviors.RENDERABLE))
             ((Renderable) first).render(ctx, flags);
-        if (second instanceof Renderable)
+        if (second.hasBehavior(Behaviors.RENDERABLE))
             ((Renderable) second).render(ctx, flags);
 
         ctx.popMatrix();
@@ -182,53 +195,51 @@ public class EntityPair
         if (anim != null)
             anim.advance(this, elapsedTime);
 
-        if (first instanceof Animatable)
+        if (first.hasBehavior(Behaviors.ANIMATABLE))
             ((Animatable) first).advance(elapsedTime);
-        if (second instanceof Animatable)
+        if (second.hasBehavior(Behaviors.ANIMATABLE))
             ((Animatable) second).advance(elapsedTime);
     }
 
     @Override
     public boolean handleTouch(TouchEvent event) {
         return (
-                first instanceof Touchable
-                        && ((Touchable) first).handleTouch(event)
+                first.hasBehavior(Behaviors.TOUCHABLE) && ((Touchable) first).handleTouch(event)
         ) || (
-                second instanceof Touchable
-                        && ((Touchable) second).handleTouch(event)
+                second.hasBehavior(Behaviors.TOUCHABLE) && ((Touchable) second).handleTouch(event)
         );
     }
 
     @Override
     public Effect getEffect() {
-        if (first instanceof Renderable)
+        if (first.hasBehavior(Behaviors.RENDERABLE))
             return ((Renderable) first).getEffect();
-        if (second instanceof Renderable)
+        if (second.hasBehavior(Behaviors.RENDERABLE))
             return ((Renderable) second).getEffect();
         return null;
     }
 
     @Override
     public void setEffect(Effect effect) {
-        if (first instanceof Renderable)
+        if (first.hasBehavior(Behaviors.RENDERABLE))
             ((Renderable) first).setEffect(effect);
-        if (second instanceof Renderable)
+        if (second.hasBehavior(Behaviors.RENDERABLE))
             ((Renderable) second).setEffect(effect);
     }
 
     @Override
     public void setAlpha(float alpha) {
-        if (first instanceof Renderable)
+        if (first.hasBehavior(Behaviors.RENDERABLE))
             ((Renderable) first).setAlpha(alpha);
-        if (second instanceof Renderable)
+        if (second.hasBehavior(Behaviors.RENDERABLE))
             ((Renderable) second).setAlpha(alpha);
     }
 
     @Override
     public float getAlpha() {
-        if (first instanceof Renderable)
+        if (first.hasBehavior(Behaviors.RENDERABLE))
             return ((Renderable) first).getAlpha();
-        if (second instanceof Renderable)
+        if (second.hasBehavior(Behaviors.RENDERABLE))
             return ((Renderable) second).getAlpha();
         return 0;
     }

@@ -1,4 +1,4 @@
-package com.annahid.libs.artenus.utils;
+package com.annahid.libs.artenus.graphics;
 
 import com.annahid.libs.artenus.entities.AnimationHandler;
 import com.annahid.libs.artenus.entities.behavior.Animatable;

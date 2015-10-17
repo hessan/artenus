@@ -1,5 +1,6 @@
 package com.annahid.libs.artenus.input;
 
+import com.annahid.libs.artenus.entities.behavior.Behaviors;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.core.Scene;
 import com.annahid.libs.artenus.entities.behavior.Renderable;
@@ -58,19 +59,20 @@ public class TouchButton extends FilteredEntity implements Button, Touchable {
         if (id == 0)
             id++;
 
-        if (!(target instanceof Transformable))
+        if (!target.hasBehavior(Behaviors.TRANSFORMABLE)) {
             throw new IllegalArgumentException("Target entity is not transformable.");
-
-        if (!(target instanceof Renderable))
+        }
+        if (!target.hasBehavior(Behaviors.RENDERABLE)) {
             throw new IllegalArgumentException(
                     "Target entity is not renderable. Artenus uses graphical" +
                             "representations of objects to track touch events."
             );
-
-        if (target instanceof TouchButton)
+        }
+        if (target instanceof TouchButton) {
             throw new IllegalArgumentException(
                     "Nested touch buttons are not supported by the framework."
             );
+        }
     }
 
     @Override
@@ -83,6 +85,11 @@ public class TouchButton extends FilteredEntity implements Button, Touchable {
     public void onDetach(Scene scene) {
         super.onDetach(scene);
         scene.getTouchMap().unregisterButton(this);
+    }
+
+    @Override
+    public boolean hasBehavior(Behaviors behavior) {
+        return behavior == Behaviors.TOUCHABLE || super.hasBehavior(behavior);
     }
 
     /**
@@ -137,7 +144,7 @@ public class TouchButton extends FilteredEntity implements Button, Touchable {
     @Override
     public void render(RenderingContext ctx, int flags) {
         latestMatrix = ctx.getMatrix();
-        if (target instanceof Renderable) {
+        if (target.hasBehavior(Behaviors.RENDERABLE)) {
             ((Renderable) target).render(ctx, flags);
         }
     }
