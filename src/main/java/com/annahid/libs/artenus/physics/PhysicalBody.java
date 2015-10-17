@@ -87,7 +87,7 @@ public class PhysicalBody extends FilteredEntity {
     public PhysicalBody(Entity target, Shape shapeDesc) {
         super(target);
 
-        if (!target.hasBehavior(Behaviors.TRANSFORMABLE))
+        if (!this.target.hasBehavior(Behaviors.TRANSFORMABLE))
             throw new IllegalArgumentException(
                     "A physical body can only accept a transformable entity as target.");
 

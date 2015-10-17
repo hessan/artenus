@@ -74,6 +74,6 @@ class NullEntity implements Entity, Transformable {
 
     @Override
     public boolean hasBehavior(Behaviors behavior) {
-        return false;
+        return behavior == Behaviors.TRANSFORMABLE;
     }
 }

@@ -1,18 +1,18 @@
 # Artenus 2D Framework for Android Games
 
-This library fascilitates game development for the Android platform. It includes various
+This library facilitates game development for the Android platform. It includes various
 features, including graphics and animation, physics, store services, and ad management.
 
 If you have any questions regarding this library, or if you want to participate in the development of the project, please feel free to contact me.
 
 ## Installation
 
-Adding Artenus to your proeject is very simple. All you need to do is the following (with Android Studio):
+Adding Artenus to your project is very simple. All you need to do is the following (with Android Studio):
 
 1. Clone this project somewhere on your hard drive.
 2. Create a new project with a blank activity.
 3. Chose File > New > Import Module...
-4. Choose the source diretory to the `artenus' directory (that you cloned in step 1).
+4. Choose the source directory to the `artenus' directory (that you cloned in step 1).
 5. Click Finish.
 6. After the module is added to your project, modify the build.gradle of your main module and add the following to the dependencies:
     `compile project(':artenus')`
@@ -45,7 +45,7 @@ public class MainActivity extends Artenus implements StageManager {
     }
 
     @Override
-    public void onEvent(Stage stage, int eventId) {
+    public void onEvent(Stage stage, StageEvents event) {
         // Not interested!
     }
 }

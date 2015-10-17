@@ -178,7 +178,7 @@ public abstract class FilteredEntity
      */
     @Override
     public boolean hasBehavior(Behaviors behavior) {
-        return target.hasBehavior(behavior);
+        return behavior != Behaviors.TOUCHABLE && target.hasBehavior(behavior);
     }
 
     public final Entity getUnderlyingEntity() {
