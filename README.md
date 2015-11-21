@@ -3,24 +3,27 @@
 This library facilitates game development for the Android platform. It includes various
 features, including graphics and animation, physics, store services, and ad management.
 
-If you have any questions regarding this library, or if you want to participate in the development of the project, please feel free to contact me.
+If you have any questions regarding this library, or if you want to participate in the development
+of the project, please feel free to contact me.
 
 ## Installation
 
-Adding Artenus to your project is very simple. All you need to do is the following (with Android Studio):
+Adding Artenus to your project is very simple. All you need to do is the following (with Android
+Studio):
 
-1. Clone this project somewhere on your hard drive.
-2. Create a new project with a blank activity.
-3. Chose File > New > Import Module...
-4. Choose the source directory to the `artenus' directory (that you cloned in step 1).
-5. Click Finish.
-6. After the module is added to your project, modify the build.gradle of your main module and add the following to the dependencies:
-    `compile project(':artenus')`
+1. Create a new project with a blank activity (you will replace the code for the activity).
+2. Clone Artenus into your project directory (next to your main app module).
+3. Edit "settings.gradle" and add this line: `include ':artenus'`
+4. After the module is added to your project, modify "build.gradle" of your app module and add the
+   following to the dependencies: `compile project(':artenus')`
+5. Sync gradle
 
-Congratulations! You have now empowered your project with Artenus. Next step is to start developing your game!
+Congratulations! You have now empowered your project with Artenus. Next step is to start developing
+your game!
 
 ## Getting Started
-After you add Artenus to your project, you need to have your main activity extend Arteuns. The simplest form of an Artenus application activity looks like this:
+After you add Artenus to your project, you need to have your main activity extend Arteuns. The
+simplest form of an Artenus application activity looks like this:
 
 ```java
 public class MainActivity extends Artenus implements StageManager {
@@ -51,11 +54,18 @@ public class MainActivity extends Artenus implements StageManager {
 }
 ```
 
-The game flow starts from your initial scene, and will continue from one scene to another. Inside each scene, you may use `stage.setScene(newScene)` to change to another scene. It is recommended not to recycle scenes or keep them in memory for a later use, as this is not what the framework is designed to handle.
+The game flow starts from your initial scene, and will continue from one scene to another. Inside
+each scene, you may use `stage.setScene(newScene)` to change to another scene. It is recommended not
+to recycle scenes or keep them in memory for a later use, as this is not what the framework is
+designed to handle.
 
-Don't forget to handle the back button on the initial scene, or any scene that lets the user exit your game! The stage automatically receives back button events and passes them to the active scene. It is the scene's responsibility to exit the application when needed, by calling `Artenus.exit()`.
+Don't forget to handle the back button on the initial scene, or any scene that lets the user exit
+your game! The stage automatically receives back button events and passes them to the active scene.
+It is the scene's responsibility to exit the application when needed, by calling `Artenus.exit()`.
 
-If at any point you need to access the Android application context (such as when loading local scene textures), use `Artenus.getInstance()` instead of manually keeping an instance variable or using complicated logic. Always let the framework do the heavy lifting for you where it can.
+If at any point you need to access the Android application context (such as when loading local scene
+textures), use `Artenus.getInstance()` instead of manually keeping an instance variable or using
+complicated logic. Always let the framework do the heavy lifting for you where it can.
 
 ## Reference
 
