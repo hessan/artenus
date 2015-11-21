@@ -25,20 +25,38 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 /**
- * A graphics output object used for rendering. Artenus does not render frames directly onto the
- * screen. Instead, it first draws them into intermediate objects, which are then used for
+ * Represents a graphics output object used for rendering. Artenus does not render frames directly
+ * onto the screen. Instead, it first draws them into intermediate objects, which are then used for
  * post-processing. The final render target is always the screen, which is handled internally.
  *
  * @author Hessan Feghhi
  */
 public class RenderTarget {
     private int renderBufferHandle;
+
     private int frameBufferHandle;
+
     private int textureHandle;
+
     private int fboWidth;
+
     private int fboHeight;
+
     private Viewport viewport;
+
     private FloatBuffer frameTexCoords;
+
+    /**
+     * Creates a new instance of {@code RenderTarget}.
+     *
+     * @param fboWidth  Frame buffer width
+     * @param fboHeight Frame buffer height
+     */
+    private RenderTarget(int fboWidth, int fboHeight) {
+        this.fboWidth = fboWidth;
+        this.fboHeight = fboHeight;
+        this.viewport = new Viewport(fboWidth, fboHeight);
+    }
 
     /**
      * Creates a new render target with given width and height. Once created, these dimensions
@@ -46,6 +64,7 @@ public class RenderTarget {
      *
      * @param width  Image width
      * @param height Image height
+     *
      * @return The rendering target, or {@code null} in case of an error
      */
     public static RenderTarget create(int width, int height) {
@@ -102,18 +121,6 @@ public class RenderTarget {
     }
 
     /**
-     * Creates a new instance of {@code RenderTarget}.
-     *
-     * @param fboWidth  Frame buffer width
-     * @param fboHeight Frame buffer height
-     */
-    private RenderTarget(int fboWidth, int fboHeight) {
-        this.fboWidth = fboWidth;
-        this.fboHeight = fboHeight;
-        this.viewport = new Viewport(fboWidth, fboHeight);
-    }
-
-    /**
      * Gets the frame buffer handle. This handle is used internally to bind the target to the
      * rendering context.
      *
@@ -138,6 +145,7 @@ public class RenderTarget {
      * fed to the shader program along with the texture handle.
      *
      * @return Texture coordinates
+     *
      * @see #getTextureHandle()
      */
     public FloatBuffer getTextureCoords() {

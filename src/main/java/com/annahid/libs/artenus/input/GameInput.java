@@ -53,23 +53,24 @@ public abstract class GameInput implements Entity {
      */
     public static final int KEY_ACTION4 = 128;
 
-    private Point2D savedDirection;
-    private int keyMap, savedKeyMap;
-    private InputListener l = null;
-
     /**
-     * The current direction of the knob. Subclasses are allowed to adjust the
-     * coordinates of this field according to user input. However, this variable
-     * should never be set to {@code null} or it will cause application crash.
-     * To keep up with the standard operation of the framework's input system
-     * subclasses should normalize the direction (so the length of the direction
-     * vector is always 1 or zero).
+     * Holds the current direction of the knob. Subclasses are allowed to adjust the coordinates of
+     * this field according to user input. However, this variable should never be set to
+     * {@code null} or it will cause application crash. To keep up with the standard operation of
+     * the framework's input system subclasses should normalize the direction (so the length of the
+     * direction vector is always 1 or zero).
      */
     protected Point2D direction;
 
+    private Point2D savedDirection;
+
+    private int keyMap, savedKeyMap;
+
+    private InputListener l = null;
+
     /**
-     * Constructs an {@code GameInput} with all buttons unpressed and the
-     * directional knob at its rest (0).
+     * Creates an {@code GameInput} with all buttons unpressed and the directional knob at its rest
+     * (0).
      */
     protected GameInput() {
         keyMap = 0;
@@ -83,6 +84,7 @@ public abstract class GameInput implements Entity {
      * listener is signaled to process the event.
      *
      * @param listener The new listener to be appointed, or {@code null} to remove the listener
+     *
      * @see InputListener
      */
     public final void setListener(InputListener listener) {
@@ -90,11 +92,10 @@ public abstract class GameInput implements Entity {
     }
 
     /**
-     * This method holds the key map to process new input. Subclasses must call this
-     * method before processing input. Holding the key map helps determine whether
-     * the associated {@link InputListener} should be called back. This method
-     * should be followed by {@link #releaseKeyMap()} in order to complete the
-     * processing of input.
+     * Holds the key map to process new input. Subclasses must call this method before processing
+     * input. Holding the key map helps determine whether the associated {@link InputListener}
+     * should be called back. This method should be followed by {@link #releaseKeyMap()} in order to
+     * complete the processing of input.
      *
      * @see InputListener
      */
@@ -105,14 +106,15 @@ public abstract class GameInput implements Entity {
     }
 
     /**
-     * Releases the previously held key map. Once this method is called, the new
-     * key map and knob direction are compared to their corresponding values before
-     * holding. In case of any change, the associated {@link InputListener} will be
-     * called back to respond to the change.
+     * Releases the previously held key map. Once this method is called, the new key map and knob
+     * direction are compared to their corresponding values before holding. In case of any change,
+     * the associated {@link InputListener} will be called back to respond to the change.
      */
     protected void releaseKeyMap() {
-        if (l != null && (keyMap != savedKeyMap || direction.x != savedDirection.x || direction.y != savedDirection.y))
+        if (l != null && (keyMap != savedKeyMap
+                || direction.x != savedDirection.x || direction.y != savedDirection.y)) {
             l.inputStatusChanged(this);
+        }
     }
 
     /**
@@ -144,6 +146,7 @@ public abstract class GameInput implements Entity {
      * currently in the pressed state.
      *
      * @param keyCode The key identifier(s) to check
+     *
      * @return {@code true} if the key (or any of the keys} are pressed or {@code false} otherwise
      */
     public boolean isKeyPressed(int keyCode) {

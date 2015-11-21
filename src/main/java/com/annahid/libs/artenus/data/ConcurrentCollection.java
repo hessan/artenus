@@ -24,44 +24,39 @@ import java.util.Collection;
 import java.util.Iterator;
 
 /**
- * <p>
- * Thread-safe implementation of the {@code Collection} interface. Implements all collection
+ * <p> Thread-safe implementation of the {@code Collection} interface. Implements all collection
  * operations, but performance is optimized for iterator-based access and sequential addition (to,
  * both ends of the collection) as it is used as part of the entities and scene logic in Artenus.
- * </p>
- * <p>
- * Java's standard LinkedList implementation is not thread-safe and hence it is programmed to
- * through exceptions on concurrent modification and access scenarios. There are some alternatives
- * in the standard library, but Artenus uses this minimalistic collection implementation for its
- * internal use. You can use this class if you need a synchronized sequential-access collection.
- * </p>
- * <p>
- * The {@code size}, {@code isEmpty}, {@code iterator}, {@code add}, {@code prepend},
- * {@code getFirst}, and {@code getLast} operations are guaranteed to run in constant time. However,
- * no assumptions should be made about the running time of all the other operations, as this
- * implementation does not guarantee optimized behavior for them. </p>
- * <p>
+ * </p> <p> Java's standard LinkedList implementation is not thread-safe and hence it is programmed
+ * to through exceptions on concurrent modification and access scenarios. There are some
+ * alternatives in the standard library, but Artenus uses this minimalistic collection
+ * implementation for its internal use. You can use this class if you need a synchronized
+ * sequential-access collection. </p> <p> The {@code size}, {@code isEmpty}, {@code iterator},
+ * {@code add}, {@code prepend}, {@code getFirst}, and {@code getLast} operations are guaranteed to
+ * run in constant time. However, no assumptions should be made about the running time of all the
+ * other operations, as this implementation does not guarantee optimized behavior for them. </p> <p>
  * Unlike implementations like {@code LinkedList}, iterators returned by this class's iterator and
  * methods are not fail-fast: if the list is structurally modified after the iterator is created,
  * the iterator will not throw any exceptions, and will adapt to the new state of the collection.
  * </p>
  *
  * @param <T> the type of the elements in this collection
+ *
  * @author Hessan Feghhi
  */
 public class ConcurrentCollection<T> implements Collection<T> {
     /**
-     * The first element in the linked list.
+     * Holds the first element in the linked list.
      */
     private Element<T> first;
 
     /**
-     * The last element in the linked list.
+     * Holds the last element in the linked list.
      */
     private Element<T> last;
 
     /**
-     * Current collection size.
+     * Holds the current collection size.
      */
     private int size = 0;
 
@@ -87,6 +82,7 @@ public class ConcurrentCollection<T> implements Collection<T> {
      * Adds an element to the back of the collection.
      *
      * @param object the element to be added
+     *
      * @return {@code true}
      */
     @Override
@@ -120,6 +116,7 @@ public class ConcurrentCollection<T> implements Collection<T> {
      * collection is this list, and this list is nonempty.)
      *
      * @param collection collection of elements to be added to the collection
+     *
      * @return {@code true}
      */
     @Override
@@ -132,8 +129,8 @@ public class ConcurrentCollection<T> implements Collection<T> {
 
     /**
      * Removes all of the elements from this collection. The collection will be empty after this
-     * call returns. However, existing iterators would not notice this change and would function
-     * as they would before this call.
+     * call returns. However, existing iterators would not notice this change and would function as
+     * they would before this call.
      */
     @Override
     public void clear() {
@@ -143,10 +140,11 @@ public class ConcurrentCollection<T> implements Collection<T> {
 
     /**
      * Returns true if this list contains the specified element. More formally, returns true if and
-     * only if this list contains at least one element e such that
-     * <tt>(o==null ? e==null : o.equals(e))</tt>.
+     * only if this list contains at least one element e such that <tt>(o==null ? e==null :
+     * o.equals(e))</tt>.
      *
      * @param object element whose presence in this list is to be tested
+     *
      * @return {@code true} if this list contains the specified element
      */
     @Override
@@ -164,12 +162,12 @@ public class ConcurrentCollection<T> implements Collection<T> {
 
     /**
      * <p>Returns {@code true} if this collection contains all of the elements in the specified
-     * collection.</p>
-     * <p>This implementation iterates over the specified collection, checking each element returned
-     * by the iterator in turn to see if it's contained in this collection. If all elements are so
-     * contained true is returned, otherwise false.</p>
+     * collection.</p> <p>This implementation iterates over the specified collection, checking each
+     * element returned by the iterator in turn to see if it's contained in this collection. If all
+     * elements are so contained true is returned, otherwise false.</p>
      *
      * @param collection collection to be checked for containment in this collection
+     *
      * @return {@code true} if this collection contains all of the elements in the specified
      * collection
      */
@@ -202,6 +200,7 @@ public class ConcurrentCollection<T> implements Collection<T> {
      * specified element (or equivalently, if this list changed as a result of the call).
      *
      * @param object element to be removed from this collection, if present
+     *
      * @return {@code true} if an element was removed as a result of this call
      */
     @Override
@@ -222,6 +221,7 @@ public class ConcurrentCollection<T> implements Collection<T> {
      * collection.
      *
      * @param collection collection containing elements to be removed from this list collection
+     *
      * @return {@code true} if this list changed as a result of the call
      */
     @Override
@@ -241,6 +241,7 @@ public class ConcurrentCollection<T> implements Collection<T> {
      * specified collection.
      *
      * @param collection collection containing elements to be retained in this list
+     *
      * @return {@code true} if this list changed as a result of the call
      */
     @Override
@@ -315,8 +316,9 @@ public class ConcurrentCollection<T> implements Collection<T> {
      *
      * @param array This parameter is not used.
      * @param <T1>  This parameter is not used.
-     * @return This method does not return. Instead, it throws a
-     * {@code UnsupportedOperationException}.
+     *
+     * @return This method does not return. Instead, it throws a {@code UnsupportedOperationException}.
+     *
      * @throws UnsupportedOperationException
      */
     @NonNull
@@ -344,10 +346,29 @@ public class ConcurrentCollection<T> implements Collection<T> {
     }
 
     /**
-     * Represents an iterator for a concurrent collection. An intance of this
-     * iterator is returned by the {@link ConcurrentCollection#iterator()} method.
+     * Represents an element in the linked list. ConcurrentCollection uses a linked list
+     * internally.
+     *
+     * @param <T> The type of the element in the linked list
+     */
+    private static final class Element<T> {
+        T value;
+
+        Element<T> prev, next;
+
+        Element(T value) {
+            this.value = value;
+            prev = next = null;
+        }
+    }
+
+    /**
+     * Represents an iterator for a concurrent collection. An intance of this iterator is returned
+     * by the {@link ConcurrentCollection#iterator()} method.
      */
     private final class It implements Iterator<T> {
+        Element<T> current, recent;
+
         It(Element<T> start) {
             current = start;
         }
@@ -390,23 +411,5 @@ public class ConcurrentCollection<T> implements Collection<T> {
             current = recent.next;
             recent = null;
         }
-
-        Element<T> current, recent;
-    }
-
-    /**
-     * This class represents an element in the linked list. ConcurrentCollection
-     * uses a linked list internally.
-     *
-     * @param <T> The type of the element in the linked list
-     */
-    private static final class Element<T> {
-        Element(T value) {
-            this.value = value;
-            prev = next = null;
-        }
-
-        T value;
-        Element<T> prev, next;
     }
 }

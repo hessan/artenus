@@ -28,10 +28,9 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 /**
- * <p>A subclass of {@link SpriteEntity} that provides a grid of texture blocks.
- * It is intended for platform or map based games. You can create a large grid and add it to
- * the scene as a normal sprite. Only the portion of the grid that is visible will be rendered.
- * Use this sprite for level maps.</p>
+ * <p>Provides a grid of texture blocks. It is intended for platform or map based games. You can
+ * create a large grid and add it to the scene as a normal sprite. Only the portion of the grid that
+ * is visible will be rendered. Use this sprite for level maps.</p>
  * <p>Please note that this class is subject to revision or removal in the future. It is NOT
  * yet deprecated. Support for platform-based games is currently being revised and a faster and
  * more robust framework will be introduced in future versions.</p>
@@ -41,30 +40,59 @@ import java.nio.FloatBuffer;
 @SuppressWarnings("unused")
 public final class GridSprite extends SpriteEntity {
     /**
-     * The texture atlas.
+     * Holds texture atlas.
      */
     private Texture frames;
 
     /**
-     * Atlas image indices for the grid blocks.
+     * Contains atlas image indices for the grid blocks.
      */
     private int[][] blocks;
 
     /**
-     * Alpha transparency values for the blocks.
+     * Contains alpha transparency values for the blocks.
      */
     private float[][] alphas;
 
     /**
-     * Texture buffers for atlas images.
+     * Contains texture buffers for atlas images.
      */
     private FloatBuffer[] textureBuffers = null;
 
-    private float blkW, blkH, m;
-    private int vc1, vr1, vc2, vr2;
+    /**
+     * Holds block width.
+     */
+    private float blkW;
 
     /**
-     * Constructs a {@code GridSprite} using a image resource id and block parameters.
+     * Holds block height.
+     */
+    private float blkH;
+
+    private float m;
+
+    /**
+     * Holds column index of the top-left block in the visible region.
+     */
+    private int vc1;
+
+    /**
+     * Holds row index of the top-left block in the visible region.
+     */
+    private int vr1;
+
+    /**
+     * Holds column index of the bottom-right block in the visible region.
+     */
+    private int vc2;
+
+    /**
+     * Holds the row index of the bottom-right block in the visible region.
+     */
+    private int vr2;
+
+    /**
+     * Creates a {@code GridSprite} using a image resource id and block parameters.
      * Like {@code Sprite}, this class supports SVG images with {@code raw} resource type
      * as well as images normally supported by the android platform. It is recommended to
      * provide SVG images for better scaling in different screen resolutions. The image
@@ -101,6 +129,7 @@ public final class GridSprite extends SpriteEntity {
      *
      * @param col The column number of the block
      * @param row The row number of the block
+     *
      * @return The transparency (alpha) value
      */
     public float getAlpha(int col, int row) {
@@ -132,7 +161,9 @@ public final class GridSprite extends SpriteEntity {
      *
      * @param col The column number of the block
      * @param row The row number of the block
+     *
      * @return The current frame
+     *
      * @see SpriteEntity
      */
     public int getFrame(int col, int row) {
@@ -146,6 +177,7 @@ public final class GridSprite extends SpriteEntity {
      * @param col   The column number of the block
      * @param row   The row number of the block
      * @param frame The new frame number
+     *
      * @see SpriteEntity
      */
     public void setFrame(int col, int row, int frame) {
@@ -264,6 +296,7 @@ public final class GridSprite extends SpriteEntity {
      * Converts a pixel coordination into the corresponding column number on the grid.
      *
      * @param x The x coordination value
+     *
      * @return The resulting column number
      */
     private int toGridX(float x) {
@@ -274,6 +307,7 @@ public final class GridSprite extends SpriteEntity {
      * Converts a pixel coordination into the corresponding row number on the grid.
      *
      * @param y The y coordination value
+     *
      * @return The resulting row number
      */
     private int toGridY(float y) {

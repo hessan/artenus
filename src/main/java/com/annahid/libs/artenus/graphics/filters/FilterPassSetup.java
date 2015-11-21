@@ -29,7 +29,7 @@ import com.annahid.libs.artenus.graphics.rendering.Viewport;
  */
 public class FilterPassSetup extends Viewport {
     /**
-     * A value indicating whether the next pass is in-place.
+     * Indicates whether the next pass is in-place.
      */
     private boolean inPlace = false;
 

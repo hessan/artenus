@@ -34,7 +34,17 @@ public final class RectangleShape implements Shape {
     public static final int TYPE = 1;
 
     /**
-     * Constructs a {@code RectangleShape} with given dimensions.
+     * Holds rectangle width.
+     */
+    private float w;
+
+    /**
+     * Holds rectangle height.
+     */
+    private float h;
+
+    /**
+     * Creates a {@code RectangleShape} with given dimensions.
      *
      * @param width  The width of the rectangle
      * @param height The height of the rectangle
@@ -61,6 +71,4 @@ public final class RectangleShape implements Shape {
         shape.setAsBox(w / PhysicsSimulator.pixelsPerMeter, h / PhysicsSimulator.pixelsPerMeter);
         return shape;
     }
-
-    private float w, h;
 }

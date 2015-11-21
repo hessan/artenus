@@ -25,77 +25,77 @@ import com.annahid.libs.artenus.graphics.TextureShaderProgram;
 import java.nio.FloatBuffer;
 
 /**
- * A shader program used by the blur post-processing filter.
+ * Represents a shader program used by the blur post-processing filter.
  */
-class BlurShaderProgram extends TextureShaderProgram {
+final class BlurShaderProgram extends TextureShaderProgram {
     /**
-     * Vertex shader code for the blur program.
+     * Holds vertex shader code for the blur program.
      */
     private static final String vertexShaderCode =
             "uniform mat4 uMVPMatrix;" +
-                    "attribute vec4 vPosition;" +
-                    "attribute vec2 aTexCoord;" +
-                    "uniform float vx_offset;" +
-                    "varying vec2 vTexCoord;" +
-                    "uniform float rt_w;" +
-                    "uniform float rt_h;" +
-                    "uniform int pass;" +
-                    "varying vec2 v_blurTexCoords[6];" +
-                    "void main() {" +
-                    "  vTexCoord = aTexCoord;" +
-                    "  if ( pass == 0 ) {" +
-                    "    v_blurTexCoords[ 0] = vTexCoord + vec2(0.0, -3.0 / rt_h * vx_offset);" +
-                    "    v_blurTexCoords[ 1] = vTexCoord + vec2(0.0, -2.0 / rt_h * vx_offset);" +
-                    "    v_blurTexCoords[ 2] = vTexCoord + vec2(0.0, -1.0 / rt_h * vx_offset);" +
-                    "    v_blurTexCoords[ 3] = vTexCoord + vec2(0.0,  1.0 / rt_h * vx_offset);" +
-                    "    v_blurTexCoords[ 4] = vTexCoord + vec2(0.0,  2.0 / rt_h * vx_offset);" +
-                    "    v_blurTexCoords[ 5] = vTexCoord + vec2(0.0,  3.0 / rt_h * vx_offset);" +
-                    "  } else {" +
-                    "    v_blurTexCoords[ 0] = vTexCoord + vec2(-3.0 * vx_offset / rt_w, 0.0);" +
-                    "    v_blurTexCoords[ 1] = vTexCoord + vec2(-2.0 * vx_offset / rt_w, 0.0);" +
-                    "    v_blurTexCoords[ 2] = vTexCoord + vec2(-1.0 * vx_offset / rt_w, 0.0);" +
-                    "    v_blurTexCoords[ 3] = vTexCoord + vec2( 1.0 * vx_offset / rt_w, 0.0);" +
-                    "    v_blurTexCoords[ 4] = vTexCoord + vec2( 2.0 * vx_offset / rt_w, 0.0);" +
-                    "    v_blurTexCoords[ 5] = vTexCoord + vec2( 3.0 * vx_offset / rt_w, 0.0);" +
-                    "  }" +
-                    "  gl_Position = uMVPMatrix * vPosition;" +
-                    '}';
+            "attribute vec4 vPosition;" +
+            "attribute vec2 aTexCoord;" +
+            "uniform float vx_offset;" +
+            "varying vec2 vTexCoord;" +
+            "uniform float rt_w;" +
+            "uniform float rt_h;" +
+            "uniform int pass;" +
+            "varying vec2 v_blurTexCoords[6];" +
+            "void main() {" +
+            "  vTexCoord = aTexCoord;" +
+            "  if ( pass == 0 ) {" +
+            "    v_blurTexCoords[ 0] = vTexCoord + vec2(0.0, -3.0 / rt_h * vx_offset);" +
+            "    v_blurTexCoords[ 1] = vTexCoord + vec2(0.0, -2.0 / rt_h * vx_offset);" +
+            "    v_blurTexCoords[ 2] = vTexCoord + vec2(0.0, -1.0 / rt_h * vx_offset);" +
+            "    v_blurTexCoords[ 3] = vTexCoord + vec2(0.0,  1.0 / rt_h * vx_offset);" +
+            "    v_blurTexCoords[ 4] = vTexCoord + vec2(0.0,  2.0 / rt_h * vx_offset);" +
+            "    v_blurTexCoords[ 5] = vTexCoord + vec2(0.0,  3.0 / rt_h * vx_offset);" +
+            "  } else {" +
+            "    v_blurTexCoords[ 0] = vTexCoord + vec2(-3.0 * vx_offset / rt_w, 0.0);" +
+            "    v_blurTexCoords[ 1] = vTexCoord + vec2(-2.0 * vx_offset / rt_w, 0.0);" +
+            "    v_blurTexCoords[ 2] = vTexCoord + vec2(-1.0 * vx_offset / rt_w, 0.0);" +
+            "    v_blurTexCoords[ 3] = vTexCoord + vec2( 1.0 * vx_offset / rt_w, 0.0);" +
+            "    v_blurTexCoords[ 4] = vTexCoord + vec2( 2.0 * vx_offset / rt_w, 0.0);" +
+            "    v_blurTexCoords[ 5] = vTexCoord + vec2( 3.0 * vx_offset / rt_w, 0.0);" +
+            "  }" +
+            "  gl_Position = uMVPMatrix * vPosition;" +
+            '}';
 
     /**
-     * Fragment shader code for the program.
+     * Holds fragment shader code for the program.
      */
     private static final String fragmentShaderCode =
             "precision mediump float;" +
-                    "uniform sampler2D sceneTex;" +
-                    "varying vec2 vTexCoord;" +
-                    "varying vec2 v_blurTexCoords[6];" +
-                    "void main() {" +
-                    "  gl_FragColor = texture2D(sceneTex, vTexCoord)*0.383103" +
-                    "  + texture2D(sceneTex, v_blurTexCoords[ 0])*0.00598" +
-                    "  + texture2D(sceneTex, v_blurTexCoords[ 1])*0.060626" +
-                    "  + texture2D(sceneTex, v_blurTexCoords[ 2])*0.241843" +
-                    "  + texture2D(sceneTex, v_blurTexCoords[ 3])*0.241843" +
-                    "  + texture2D(sceneTex, v_blurTexCoords[ 4])*0.060626" +
-                    "  + texture2D(sceneTex, v_blurTexCoords[ 5])*0.00598;" +
-                    '}';
+            "uniform sampler2D sceneTex;" +
+            "varying vec2 vTexCoord;" +
+            "varying vec2 v_blurTexCoords[6];" +
+            "void main() {" +
+            "  gl_FragColor = texture2D(sceneTex, vTexCoord)*0.383103" +
+            "  + texture2D(sceneTex, v_blurTexCoords[ 0])*0.00598" +
+            "  + texture2D(sceneTex, v_blurTexCoords[ 1])*0.060626" +
+            "  + texture2D(sceneTex, v_blurTexCoords[ 2])*0.241843" +
+            "  + texture2D(sceneTex, v_blurTexCoords[ 3])*0.241843" +
+            "  + texture2D(sceneTex, v_blurTexCoords[ 4])*0.060626" +
+            "  + texture2D(sceneTex, v_blurTexCoords[ 5])*0.00598;" +
+            '}';
 
     /**
-     * The handle to the render target width variable in the OpenGL ES fragment shader.
+     * Holds the handle to the render target width variable in the OpenGL ES fragment shader.
      */
     private int mRTWidthHandle;
 
     /**
-     * The handle to the render target height variable in the OpenGL ES fragment shader.
+     * Holds the handle to the render target height variable in the OpenGL ES fragment shader.
      */
     private int mRTHeightHandle;
 
     /**
-     * The handle to the blur offset variable in the OpenGL ES fragment shader.
+     * Holds the handle to the blur offset variable in the OpenGL ES fragment shader.
      */
     private int mOffsetHandle;
 
     /**
-     * The handle to the pass variable in the OpenGL ES fragment shader.
+     * Holds the handle to the pass variable in the OpenGL ES fragment shader.
      */
     private int mPassHandle;
 
@@ -129,7 +129,7 @@ class BlurShaderProgram extends TextureShaderProgram {
     }
 
     /**
-     * This method does nothing. Blur shader program does not support color filtering.
+     * Does nothing. Blur shader program does not support color filtering.
      *
      * @param r The red component of the color
      * @param g The green component of the color

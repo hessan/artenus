@@ -24,15 +24,25 @@ import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.graphics.sprites.SpriteEntity;
 
 /**
- * Performs a fading effect animation for sprites. You can specify whether
- * you want the sprite to appear or disappear.
+ * Performs a fading effect animation for sprites. You can specify whether you want the sprite to
+ * appear or disappear.
  *
  * @author Hessan Feghhi
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class FadeAnimation implements AnimationHandler {
     /**
-     * Constructs a {@code FadeAnimation} with the specified behavior.
+     * Indicates whether this is a fade-in (and not a fade-out) animation.
+     */
+    private boolean fin;
+
+    /**
+     * Holds animation speed.
+     */
+    private float s;
+
+    /**
+     * Creates a {@code FadeAnimation} with the specified behavior.
      *
      * @param fadeIn Whether the handled sprite should appear (or fade in)
      * @param speed  The speed of fading in. Setting this value to 1 causes a fully hidden object
@@ -63,7 +73,4 @@ public final class FadeAnimation implements AnimationHandler {
             else entity.setAnimation(null);
         }
     }
-
-    private boolean fin;
-    private float s;
 }

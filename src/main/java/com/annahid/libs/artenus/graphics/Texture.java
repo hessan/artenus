@@ -34,42 +34,63 @@ import com.larvalabs.svgandroid.SVGParser;
 import java.nio.FloatBuffer;
 
 /**
- * Represents a texture. A texture is an image that can be used in
- * real-time graphics libraries. All images must be converted to instances of
- * this class before they can be used in this framework.
+ * Represents a texture. A texture is an image that can be used in real-time graphics libraries. All
+ * images must be converted to instances of this class before they can be used in this framework.
  *
  * @author Hessan Feghhi
  */
 public class Texture {
     /**
-     * The texture identifier associated with this {@code Texture}.
+     * Holds the texture identifier associated with this {@code Texture}.
      */
     protected int textureId;
 
     /**
-     * The width of this {@code Texture} in pixels.
+     * Holds the width of this {@code Texture} in pixels.
      */
     protected int width;
 
     /**
-     * The height of this {@code Texture} in pixels.
+     * Holds the height of this {@code Texture} in pixels.
      */
     protected int height;
 
     /**
-     * The resource identifier of the image to be loaded into this {@code Texture}.
+     * Holds the resource identifier of the image to be loaded into this {@code Texture}.
      */
     int resId;
 
-    /*
-     * Boolean indicating whether the image is being read.
+    /**
+     * Indicates whether the image is being read.
      */
     boolean loading;
 
     /**
-     * The temporary bitmap used to store the image before it is loaded into the EGL texture.
+     * Holds a temporary bitmap used to store the image before it is loaded into the EGL texture.
      */
     private Bitmap bmp = null;
+
+    /**
+     * Constructs a new {@code Texture} with the given image.
+     *
+     * @param resourceId The resource identifier of the image
+     */
+    Texture(int resourceId) {
+        resId = resourceId;
+        textureId = -1;
+    }
+
+    /**
+     * Creates a new OpenGL texture identifier. This identifier is required to load the texture in
+     * OpenGL ES.
+     *
+     * @return The texture identifier
+     */
+    private static int newTextureID() {
+        int[] temp = new int[1];
+        GLES20.glGenTextures(1, temp, 0);
+        return temp[0];
+    }
 
     /**
      * Loads the texture in the foreground. Use this method if you need a texture to load
@@ -157,7 +178,7 @@ public class Texture {
      * @see TextureManager
      */
     public final void destroy() {
-        GLES20.glDeleteTextures(1, new int[]{textureId}, 0);
+        GLES20.glDeleteTextures(1, new int[] { textureId }, 0);
         textureId = -1;
     }
 
@@ -172,15 +193,10 @@ public class Texture {
     }
 
     /**
-     * Constructs a new {@code Texture} with the given image.
+     * Performs the loading process on the OpenGL ES side.
      *
-     * @param resourceId The resource identifier of the image
+     * @return {@code true} if processing is possible, {@code false} otherwise
      */
-    Texture(int resourceId) {
-        resId = resourceId;
-        textureId = -1;
-    }
-
     boolean loadEGL() {
         if (bmp == null || bmp.isRecycled())
             return false;
@@ -190,10 +206,26 @@ public class Texture {
         try {
             GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
             GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
-            GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
-            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+            GLES20.glTexParameterf(
+                    GLES20.GL_TEXTURE_2D,
+                    GLES20.GL_TEXTURE_MIN_FILTER,
+                    GLES20.GL_LINEAR
+            );
+            GLES20.glTexParameterf(
+                    GLES20.GL_TEXTURE_2D,
+                    GLES20.GL_TEXTURE_MAG_FILTER,
+                    GLES20.GL_LINEAR
+            );
+            GLES20.glTexParameteri(
+                    GLES20.GL_TEXTURE_2D,
+                    GLES20.GL_TEXTURE_WRAP_S,
+                    GLES20.GL_CLAMP_TO_EDGE
+            );
+            GLES20.glTexParameteri(
+                    GLES20.GL_TEXTURE_2D,
+                    GLES20.GL_TEXTURE_WRAP_T,
+                    GLES20.GL_CLAMP_TO_EDGE
+            );
         } catch (Exception ex) {
             textureId = -1;
         }
@@ -210,6 +242,9 @@ public class Texture {
         return true;
     }
 
+    /**
+     * Loads the image resource and prepares the bitmap for {@link #loadEGL()}.
+     */
     void loadImage() {
         loading = true;
 
@@ -234,9 +269,12 @@ public class Texture {
                 TextureManager.loadingTexH = pic.getHeight();
             }
 
-            float scaledWidth = pic.getWidth() * texScale, scaledHeight = pic.getHeight() * texScale;
-            final float frWidth = (float) Math.pow(2, Math.ceil(Math.log(scaledWidth) / Math.log(2))) / scaledWidth;
-            final float frHeight = (float) Math.pow(2, Math.ceil(Math.log(scaledHeight) / Math.log(2))) / scaledHeight;
+            float scaledWidth =
+                    pic.getWidth() * texScale, scaledHeight = pic.getHeight() * texScale;
+            final float frWidth = (float)
+                    Math.pow(2, Math.ceil(Math.log(scaledWidth) / Math.log(2))) / scaledWidth;
+            final float frHeight = (float)
+                    Math.pow(2, Math.ceil(Math.log(scaledHeight) / Math.log(2))) / scaledHeight;
 
             scaledWidth *= frWidth;
             scaledHeight *= frHeight;
@@ -244,7 +282,8 @@ public class Texture {
             height = Math.round(scaledHeight / texScale);
 
             final Bitmap.Config conf = Bitmap.Config.ARGB_8888;
-            final Bitmap tempBmp = Bitmap.createBitmap(Math.round(scaledWidth), Math.round(scaledHeight), conf);
+            final Bitmap tempBmp =
+                    Bitmap.createBitmap(Math.round(scaledWidth), Math.round(scaledHeight), conf);
             final Canvas canvas = new Canvas(tempBmp);
             canvas.scale(texScale, texScale);
             canvas.drawPicture(pic);
@@ -268,17 +307,5 @@ public class Texture {
         }
 
         loading = false;
-    }
-
-    /**
-     * Creates a new OpenGL texture identifier. This identifier is required to
-     * load the texture in OpenGL.
-     *
-     * @return The texture identifier
-     */
-    private static int newTextureID() {
-        int[] temp = new int[1];
-        GLES20.glGenTextures(1, temp, 0);
-        return temp[0];
     }
 }

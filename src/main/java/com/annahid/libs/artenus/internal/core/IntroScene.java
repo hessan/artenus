@@ -29,51 +29,52 @@ import com.annahid.libs.artenus.graphics.TextureManager;
 import java.lang.ref.WeakReference;
 
 /**
- * This scene is displayed before the global loading screen. It splashes a logo
- * of the framework on the screen. This scene must not be in any way suppressed.
- * Doing so is against the terms of use of this framework.
+ * Represents the splash screen that is displayed before the global loading screen. It splashes a
+ * logo of the framework on the screen. It is recommended that you do not suppress this scene.
  *
  * @author Hessan Feghhi
  */
 final class IntroScene extends Scene {
     /**
-     * A value indicating whether the intro scene has already been displayed.
+     * Indicates whether the intro scene has already been displayed.
      */
     static boolean introShown = false;
 
     /**
-     * The white intensity of the screen (used for the logo animation).
+     * Holds the singleton instance.
+     */
+    private static WeakReference<Scene> instance = null;
+
+    /**
+     * Holds the white intensity of the screen (used for the logo animation).
      */
     private float whiteness = 0;
 
     /**
-     * This variable is used to avoid creating multiple instances of the game.
+     * Used to avoid creating multiple instances of the game.
      */
     private boolean gameRun = false;
+
     private ImageSprite annahid = null;
+
     private final boolean showIntro;
 
     /**
-     * The timestamp for when the intro scene started to display.
+     * Holds the timestamp for when the intro scene started to display.
      */
     private final long startTime;
 
-    /**
-     *
-     */
-    private static WeakReference<Scene> instance = null;
+    private IntroScene(Stage parentStage) {
+        super(parentStage);
+        startTime = System.currentTimeMillis();
+        showIntro = !Artenus.shouldHideIntro();
+    }
 
     public static Scene getInstance(Stage stage) {
         if (instance == null) {
             instance = new WeakReference<Scene>(new IntroScene(stage));
         }
         return instance.get();
-    }
-
-    private IntroScene(Stage parentStage) {
-        super(parentStage);
-        startTime = System.currentTimeMillis();
-        showIntro = !Artenus.shouldHideIntro();
     }
 
     @Override

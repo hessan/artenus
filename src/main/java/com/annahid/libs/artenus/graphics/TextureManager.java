@@ -62,30 +62,54 @@ public final class TextureManager {
      */
     public static final int STATE_LOADED = 3;
 
-    private static SparseArray<Texture> texMap = new SparseArray<>();
-    private static Collection<Texture> texList = new ConcurrentCollection<>();
-    private static int state;
-    private static int[] localTex = null;
-    private static Texture loadingTexture;
-    private static int loadedCount = 0; // For displaying purposes only
-    private static float texScale = 1.0f;
+    /**
+     * Used for mutual exclusion.
+     */
     private static final Object texLock = new Object();
 
     /**
-     * The shader program used to draw textured entities in the framework.
+     * Holds the shader program used to draw textured entities in the framework.
      */
     static TextureShaderProgram program = new TextureShaderProgram();
 
     /**
-     * The width of the loading texture image.
+     * Holds the width of the loading texture image.
      */
     static int loadingTexW;
 
     /**
-     * The height of the loading texture image.
+     * Holds the height of the loading texture image.
      */
     static int loadingTexH;
 
+    /**
+     * Maps resource identifiers to texture objects.
+     */
+    private static SparseArray<Texture> texMap = new SparseArray<>();
+
+    /**
+     * Contains textures currently managed by the texture manager.
+     */
+    private static Collection<Texture> texList = new ConcurrentCollection<>();
+
+    /**
+     * Holds loading status.
+     */
+    private static int state;
+
+    private static int[] localTex = null;
+
+    private static Texture loadingTexture;
+
+    private static int loadedCount = 0; // For displaying purposes only
+
+    private static float texScale = 1.0f;
+
+    /**
+     * Gets the shader program used to draw textured entities in the framework.
+     *
+     * @return The shader program
+     */
     public static ShaderProgram getShaderProgram() {
         return program;
     }
@@ -98,6 +122,18 @@ public final class TextureManager {
      */
     public static Texture getLoadingTexture() {
         return loadingTexture;
+    }
+
+    /**
+     * Sets the texture displayed in the loading screen. It is recommended that you don't call this
+     * method directly and use {@code Stage} attributes to set the loading texture.
+     *
+     * @param resId The resource identifier for the loading texture
+     *
+     * @see com.annahid.libs.artenus.core.Stage
+     */
+    public static void setLoadingTexture(int resId) {
+        loadingTexture = new Texture(resId);
     }
 
     /**
@@ -119,17 +155,6 @@ public final class TextureManager {
     }
 
     /**
-     * Sets the texture displayed in the loading screen. It is recommended that you don't call this
-     * method directly and use {@code Stage} attributes to set the loading texture.
-     *
-     * @param resId The resource identifier for the loading texture
-     * @see com.annahid.libs.artenus.core.Stage
-     */
-    public static void setLoadingTexture(int resId) {
-        loadingTexture = new Texture(resId);
-    }
-
-    /**
      * Declares textures for the current context. This method is one of the building blocks of the
      * "loading" procedure in the game. It should be called from the {@code onLoadStage(Stage)}
      * method of {@code StageManager}. All textures used widely throughout the game should be
@@ -139,6 +164,7 @@ public final class TextureManager {
      * local loading of those textures instead of globally loading them using this method.
      *
      * @param textureSet The set of resource identifiers for the textures and fonts to load
+     *
      * @see com.annahid.libs.artenus.core.StageManager
      * @see #addLocal(int...)
      */
@@ -182,6 +208,7 @@ public final class TextureManager {
      * {@link com.annahid.libs.artenus.core.Scene#onLocalLoad()} method of the {@code Scene} class.
      *
      * @param textureSet The set of resource identifier for the textures to load
+     *
      * @see com.annahid.libs.artenus.core.Scene
      */
     public static void addLocal(int... textureSet) {
@@ -223,8 +250,10 @@ public final class TextureManager {
      * Gets the {@code Texture} associated with the given resource identifier.
      *
      * @param resourceId The resource identifier
+     *
      * @return The {@code Texture} corresponding to the resource identifier or {@code null} if
      * the texture has not been set up in the texture manager
+     *
      * @see com.annahid.libs.artenus.graphics.Texture
      */
     public static Texture getTexture(int resourceId) {
@@ -236,8 +265,10 @@ public final class TextureManager {
      * identifier does not represent a font this method might throw an exception.
      *
      * @param resourceId The resource identifier
+     *
      * @return The {@code Font} corresponding to the resource identifier or {@code null} if the
      * font has not been set up in the texture manager
+     *
      * @see com.annahid.libs.artenus.graphics.Font
      */
     public static Font getFont(int resourceId) {
@@ -305,10 +336,20 @@ public final class TextureManager {
         state = ret;
     }
 
+    /**
+     * Gets the number of textures that are loaded and ready to be displayed.
+     *
+     * @return Number of textures
+     */
     public static int getLoadedCount() {
         return loadedCount;
     }
 
+    /**
+     * Gets the number of textures currently managed by the texture manager.
+     *
+     * @return Number of textures
+     */
     public static int getTextureCount() {
         return texList.size();
     }
@@ -363,6 +404,7 @@ public final class TextureManager {
      * Called by the stage to set the scaling factor. You should not call this method manually.
      *
      * @param factor Texture scaling factor.
+     *
      * @see TextureManager#getTextureScalingFactor()
      */
     public static void setTextureScalingFactor(float factor) {

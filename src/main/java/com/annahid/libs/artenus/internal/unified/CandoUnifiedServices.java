@@ -29,60 +29,61 @@ import com.annahid.libs.artenus.security.LoginManager;
 import com.annahid.libs.artenus.security.NullLoginManager;
 
 public final class CandoUnifiedServices extends UnifiedServices {
-	private CandoInventoryManager inventoryManager = null;
-	private LoginManager loginManager = null;
+    private CandoInventoryManager inventoryManager = null;
 
-	@Override
-	protected int init(int inputServices) {
-		loginManager = new NullLoginManager();
+    private LoginManager loginManager = null;
 
-		if (hasServices(SERVICE_BILLING))
-			inventoryManager = new CandoInventoryManager();
+    @Override
+    protected int init(int inputServices) {
+        loginManager = new NullLoginManager();
 
-		return inputServices & (SERVICE_BILLING);
-	}
+        if (hasServices(SERVICE_BILLING))
+            inventoryManager = new CandoInventoryManager();
 
-	@Override
-	public void onCreate(Context context) {
-		if (inventoryManager != null)
-			inventoryManager.onCreate(context);
-	}
+        return inputServices & (SERVICE_BILLING);
+    }
 
-	@Override
-	public void onDestroy(Context context) {
-		if (inventoryManager != null)
-			inventoryManager.onDestroy(context);
-	}
+    @Override
+    public void onCreate(Context context) {
+        if (inventoryManager != null)
+            inventoryManager.onCreate(context);
+    }
 
-	@Override
-	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-		return
-				inventoryManager != null &&
-						inventoryManager.onActivityResult(requestCode, resultCode, data);
-	}
+    @Override
+    public void onDestroy(Context context) {
+        if (inventoryManager != null)
+            inventoryManager.onDestroy(context);
+    }
 
-	@Override
-	public Store getStore() {
-		return Store.CANDO;
-	}
+    @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+        return
+                inventoryManager != null &&
+                        inventoryManager.onActivityResult(requestCode, resultCode, data);
+    }
 
-	@Override
-	public AdManager getAdManager() {
-		return null;
-	}
+    @Override
+    public Store getStore() {
+        return Store.CANDO;
+    }
 
-	@Override
-	public GameServices getGameServices() {
-		return null;
-	}
+    @Override
+    public AdManager getAdManager() {
+        return null;
+    }
 
-	@Override
-	public LoginManager getLoginManager() {
-		return loginManager;
-	}
+    @Override
+    public GameServices getGameServices() {
+        return null;
+    }
 
-	@Override
-	public InventoryManager getInventoryManager() {
-		return inventoryManager;
-	}
+    @Override
+    public LoginManager getLoginManager() {
+        return loginManager;
+    }
+
+    @Override
+    public InventoryManager getInventoryManager() {
+        return inventoryManager;
+    }
 }

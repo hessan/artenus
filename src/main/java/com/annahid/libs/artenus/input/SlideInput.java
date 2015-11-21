@@ -29,9 +29,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <p>A subclass of {@link GameInput} that uses slide motions as the direction knob and touch
- * buttons as action keys. Note that you still need to add the touch buttons to the scene, and
- * assigning them to action keys only manages event handling.</p>
+ * <p>Manages game input, using slide gestures as the direction knob and touch buttons as action
+ * keys. Note that you still need to add the touch buttons to the scene, and assigning them to
+ * action keys only manages event handling.</p>
  * <p>The way the directional knob works in {@code SlideInput} is that whenever the user touches a
  * point in the screen where there is no action button, that point becomes the center of the knob,
  * or the reference point. Now sliding away from the reference point indicates the direction of
@@ -48,17 +48,29 @@ public final class SlideInput extends GameInput implements Touchable {
      * Buttons currently assigned to different action keys.
      */
     private final Map<Integer, Button> buttons = new HashMap<>(5);
+
     private final Point2D reference = new Point2D(0, 0);
+
     private int startId = -1;
+
     private int threshold;
+
     private Stage stage;
-    private float x1, y1, x2, y2;
+
+    private float x1;
+
+    private float y1;
+
+    private float x2;
+
+    private float y2;
 
     /**
      * Assigns a touch button to an action key for this input manager.
      *
      * @param key    The action key to associate with
      * @param button The touch button to be added (or null to disassociate)
+     *
      * @see com.annahid.libs.artenus.core.Stage
      */
     public void setButton(final int key, Button button) {
@@ -173,6 +185,14 @@ public final class SlideInput extends GameInput implements Touchable {
         return false;
     }
 
+    /**
+     * Sets the rectangular region on the screen where the knob input is captured.
+     *
+     * @param x      x coordinate of the top-left corner of the region
+     * @param y      y coordinate of the top-left corner of the region
+     * @param width  Width of the region
+     * @param height Height of the region
+     */
     public void setEffectiveArea(float x, float y, float width, float height) {
         x1 = x;
         y1 = y;
@@ -180,6 +200,11 @@ public final class SlideInput extends GameInput implements Touchable {
         y2 = y + height;
     }
 
+    /**
+     * Called every time a touch gesture is lifted.
+     *
+     * @param pointerId Identifier of the pointer involved
+     */
     private void checkRelease(int pointerId) {
         if (pointerId == startId) {
             startId = -1;

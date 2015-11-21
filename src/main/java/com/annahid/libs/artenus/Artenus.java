@@ -124,6 +124,7 @@ public abstract class Artenus extends Activity {
      * Gets the store preference specified in the application manifest for unified services.
      *
      * @return Store identifier
+     *
      * @see com.annahid.libs.artenus.unified.UnifiedServices
      */
     public static UnifiedServices.Store getManifestAppStore() {

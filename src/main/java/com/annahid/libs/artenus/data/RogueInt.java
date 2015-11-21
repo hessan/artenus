@@ -43,16 +43,33 @@ package com.annahid.libs.artenus.data;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class RogueInt {
-    private int value, seed;
+    /**
+     * Holds the modified value.
+     */
+    private int value;
 
     /**
-     * Constructs a {@code RougeInt} with the given initial value.
+     * Holds the seed used to modify the value (or to get it back).
+     */
+    private int seed;
+
+    /**
+     * Creates a {@code RougeInt} with the given initial value.
      *
      * @param initialValue The initial value to be stored
      */
     public RogueInt(int initialValue) {
         seed = (int) (100 * Math.random()) + 10;
         setValue(initialValue);
+    }
+
+    /**
+     * Returns the value represented by this {@code RougeInt} instance.
+     *
+     * @return Stored value
+     */
+    public int getValue() {
+        return (value - seed) / (seed > 60 ? 3 : 2);
     }
 
     /**
@@ -65,18 +82,9 @@ public class RogueInt {
     }
 
     /**
-     * Returns the value represented by this {@code RougeInt} instance.
-     *
-     * @return The stored value
-     */
-    public int getValue() {
-        return (value - seed) / (seed > 60 ? 3 : 2);
-    }
-
-    /**
      * Returns the string representation of the value represented by this {@code RougeInt} instance.
      *
-     * @return The string representation of the {@code int} value this {@code RogueInt} represents
+     * @return String representation of the {@code int} value this {@code RogueInt} represents
      */
     @Override
     public String toString() {

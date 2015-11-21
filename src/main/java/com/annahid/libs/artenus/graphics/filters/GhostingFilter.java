@@ -27,13 +27,13 @@ import com.annahid.libs.artenus.graphics.rendering.RenderTarget;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 
 /**
- * A post-processing filter that adds a ghosting effect to the rendered frame.
+ * Represents a post-processing filter that adds a ghosting effect to the rendered frame.
  *
  * @author Hessan Feghhi
  */
 public class GhostingFilter implements PostProcessingFilter {
     /**
-     * Scale of the ghost image.
+     * Holds the scale of the ghost image.
      */
     private float amount;
 
@@ -61,6 +61,7 @@ public class GhostingFilter implements PostProcessingFilter {
      *
      * @param pass  Current pass number (starting at 0)
      * @param setup The frame setup for the previous pass
+     *
      * @return {@code false}
      */
     @Override

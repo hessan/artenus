@@ -27,28 +27,28 @@ import com.annahid.libs.artenus.graphics.rendering.RenderTarget;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 
 /**
- * A post-processing filter that overlays the rendered frame with a colored tint.
+ * Represents a post-processing filter that overlays the rendered frame with a colored tint.
  *
  * @author Hessan Feghhi
  */
 public class TintFilter implements PostProcessingFilter {
     /**
-     * The red component of the color filter.
+     * Holds the red component of the color filter.
      */
     private float r = 0.0f;
 
     /**
-     * The green component of the color filter.
+     * Holds the green component of the color filter.
      */
     private float g = 0.0f;
 
     /**
-     * The blue component of the color filter.
+     * Holds the blue component of the color filter.
      */
     private float b = 0.0f;
 
     /**
-     * The alpha transparency component of the color filter.
+     * Holds the alpha transparency component of the color filter.
      */
     private float a = 0.0f;
 
@@ -72,6 +72,7 @@ public class TintFilter implements PostProcessingFilter {
      *
      * @param pass  Current pass number (starting at 0)
      * @param setup The frame setup for the previous pass
+     *
      * @return {@code false}
      */
     @Override

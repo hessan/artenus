@@ -31,172 +31,173 @@ import com.annahid.libs.artenus.unified.ProductReceipt;
 
 final class CandoInventoryManager extends InventoryManager {
 
-	@Override
-	public void onCreate(Context context) {
-		String base64EncodedPublicKey;
+    private static final int RC_REQUEST = 10002;
 
-		try {
-			base64EncodedPublicKey = Security.getLicenseKey(context, UnifiedServices.Store.CANDO);
-		} catch (Exception ex) {
-			return;
-		}
+    private IabHelper mHelper;
 
-		// Create the helper, passing it our context and the public key to verify signatures with
-		mHelper = new CandoIabHelper(context, base64EncodedPublicKey);
+    // Listener that's called when we finish querying the items and subscriptions we own
+    IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+        public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+            // Have we been disposed of in the meantime? If so, quit.
+            if (mHelper == null) return;
 
-		// enable debug logging (for a production application, you should set this to false).
-		mHelper.enableDebugLogging(true);
+            InventoryListener listener = getListener();
 
-		// Start setup. This is asynchronous and the specified listener
-		// will be called once setup completes.
-		mHelper.startSetup(new CandoIabHelper.OnIabSetupFinishedListener() {
-			public void onIabSetupFinished(IabResult result) {
+            if (listener == null)
+                return;
 
-				if (!result.isSuccess()) {
+            // Is it a failure?
+            if (result.isFailure()) {
+                listener.onInventoryFailure();
+                return;
+            }
 
-					if (mHelper != null)
-						mHelper.dispose();
+            ProductList list = new ProductList();
 
-					mHelper = null;
-					return;
-				}
+            for (String sku : getSKUs()) {
+                if (inventory.hasDetails(sku)) {
+                    IabSkuDetails details = inventory.getSkuDetails(sku);
 
-				// Have we been disposed of in the meantime? If so, quit.
-				if (mHelper == null) return;
+                    Product product = new Product(
+                            sku,
+                            details.getTitle(),
+                            details.getDescription(),
+                            details.getPrice(),
+                            details.getType().equals(CandoIabHelper.ITEM_TYPE_SUBS) ?
+                                    Product.SUBSCRIPTION : Product.CONSUMABLE
+                    );
 
-				// IAB is fully set up. Now, let's get an inventory of stuff we own.
-				mHelper.queryInventoryAsync(mGotInventoryListener);
-			}
-		});
-	}
+                    if (inventory.hasPurchase(sku)) {
+                        product.setReceipt(new CommonProductReceipt(inventory.getPurchase(sku)));
+                    }
+                }
+            }
 
-	@Override
-	public void onDestroy(Context context) {
-		if (mHelper != null) {
-			mHelper.dispose();
-			mHelper = null;
-		}
-	}
+            listener.onInventoryLoaded(list);
+        }
+    };
 
-	@Override
-	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-		return mHelper != null && mHelper.handleActivityResult(requestCode, resultCode, data);
-	}
+    // Callback for when a purchase is finished
+    CandoIabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new CandoIabHelper.OnIabPurchaseFinishedListener() {
+        public void onIabPurchaseFinished(IabResult result, IabPurchase purchase) {
 
-	@Override
-	public boolean isBillingSupported() {
-		return mHelper != null;
-	}
+            // if we were disposed of in the meantime, quit.
+            if (mHelper == null) return;
 
-	@Override
-	public void subscribe(String sku) {
-		mHelper.launchPurchaseFlow(Artenus.getInstance(),
-				sku, CandoIabHelper.ITEM_TYPE_SUBS,
-				RC_REQUEST, mPurchaseFinishedListener, "");
-	}
+            InventoryListener listener = getListener();
 
-	@Override
-	public void purchase(String sku) {
-		mHelper.launchPurchaseFlow(Artenus.getInstance(),
-				sku, RC_REQUEST, mPurchaseFinishedListener, "");
-	}
+            if (listener == null)
+                return;
 
-	@Override
-	public void consume(ProductReceipt receipt) {
-		mHelper.consumeAsync(((CommonProductReceipt) receipt).receipt, mConsumeFinishedListener);
-	}
+            if (result.isFailure()) {
+                listener.onPurchaseFailure(new CommonProductReceipt(purchase));
+                return;
+            }
 
-	@SuppressWarnings("UnusedDeclaration")
-	private boolean verifyDeveloperPayload(IabPurchase p) {
-		return true;
-	}
+            if (!verifyDeveloperPayload(purchase)) {
+                listener.onPurchaseFailure(new CommonProductReceipt(purchase));
+                return;
+            }
 
-	// Listener that's called when we finish querying the items and subscriptions we own
-	IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
-		public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
-			// Have we been disposed of in the meantime? If so, quit.
-			if (mHelper == null) return;
+            listener.onPurchased(new CommonProductReceipt(purchase));
+        }
+    };
 
-			InventoryListener listener = getListener();
+    // Called when consumption is complete
+    CandoIabHelper.OnConsumeFinishedListener mConsumeFinishedListener = new CandoIabHelper.OnConsumeFinishedListener() {
+        public void onConsumeFinished(IabPurchase purchase, IabResult result) {
 
-			if (listener == null)
-				return;
+            // if we were disposed of in the meantime, quit.
+            if (mHelper == null) return;
 
-			// Is it a failure?
-			if (result.isFailure()) {
-				listener.onInventoryFailure();
-				return;
-			}
+            InventoryListener listener = getListener();
 
-			ProductList list = new ProductList();
+            if (listener == null)
+                return;
 
-			for (String sku : getSKUs()) {
-				if (inventory.hasDetails(sku)) {
-					IabSkuDetails details = inventory.getSkuDetails(sku);
+            if (result.isSuccess()) {
+                listener.onConsumed(new CommonProductReceipt(purchase));
+            }
+        }
+    };
 
-					Product product = new Product(
-							sku,
-							details.getTitle(),
-							details.getDescription(),
-							details.getPrice(),
-							details.getType().equals(CandoIabHelper.ITEM_TYPE_SUBS) ?
-									Product.SUBSCRIPTION : Product.CONSUMABLE
-					);
+    @Override
+    public void onCreate(Context context) {
+        String base64EncodedPublicKey;
 
-					if (inventory.hasPurchase(sku)) {
-						product.setReceipt(new CommonProductReceipt(inventory.getPurchase(sku)));
-					}
-				}
-			}
+        try {
+            base64EncodedPublicKey = Security.getLicenseKey(context, UnifiedServices.Store.CANDO);
+        } catch (Exception ex) {
+            return;
+        }
 
-			listener.onInventoryLoaded(list);
-		}
-	};
+        // Create the helper, passing it our context and the public key to verify signatures with
+        mHelper = new CandoIabHelper(context, base64EncodedPublicKey);
 
-	// Callback for when a purchase is finished
-	CandoIabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new CandoIabHelper.OnIabPurchaseFinishedListener() {
-		public void onIabPurchaseFinished(IabResult result, IabPurchase purchase) {
+        // enable debug logging (for a production application, you should set this to false).
+        mHelper.enableDebugLogging(true);
 
-			// if we were disposed of in the meantime, quit.
-			if (mHelper == null) return;
+        // Start setup. This is asynchronous and the specified listener
+        // will be called once setup completes.
+        mHelper.startSetup(new CandoIabHelper.OnIabSetupFinishedListener() {
+            public void onIabSetupFinished(IabResult result) {
 
-			InventoryListener listener = getListener();
+                if (!result.isSuccess()) {
 
-			if (listener == null)
-				return;
+                    if (mHelper != null)
+                        mHelper.dispose();
 
-			if (result.isFailure()) {
-				listener.onPurchaseFailure(new CommonProductReceipt(purchase));
-				return;
-			}
+                    mHelper = null;
+                    return;
+                }
 
-			if (!verifyDeveloperPayload(purchase)) {
-				listener.onPurchaseFailure(new CommonProductReceipt(purchase));
-				return;
-			}
+                // Have we been disposed of in the meantime? If so, quit.
+                if (mHelper == null) return;
 
-			listener.onPurchased(new CommonProductReceipt(purchase));
-		}
-	};
+                // IAB is fully set up. Now, let's get an inventory of stuff we own.
+                mHelper.queryInventoryAsync(mGotInventoryListener);
+            }
+        });
+    }
 
-	// Called when consumption is complete
-	CandoIabHelper.OnConsumeFinishedListener mConsumeFinishedListener = new CandoIabHelper.OnConsumeFinishedListener() {
-		public void onConsumeFinished(IabPurchase purchase, IabResult result) {
+    @Override
+    public void onDestroy(Context context) {
+        if (mHelper != null) {
+            mHelper.dispose();
+            mHelper = null;
+        }
+    }
 
-			// if we were disposed of in the meantime, quit.
-			if (mHelper == null) return;
+    @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+        return mHelper != null && mHelper.handleActivityResult(requestCode, resultCode, data);
+    }
 
-			InventoryListener listener = getListener();
+    @Override
+    public boolean isBillingSupported() {
+        return mHelper != null;
+    }
 
-			if (listener == null)
-				return;
+    @Override
+    public void subscribe(String sku) {
+        mHelper.launchPurchaseFlow(Artenus.getInstance(),
+                sku, CandoIabHelper.ITEM_TYPE_SUBS,
+                RC_REQUEST, mPurchaseFinishedListener, "");
+    }
 
-			if (result.isSuccess()) {
-				listener.onConsumed(new CommonProductReceipt(purchase));
-			}
-		}
-	};
+    @Override
+    public void purchase(String sku) {
+        mHelper.launchPurchaseFlow(Artenus.getInstance(),
+                sku, RC_REQUEST, mPurchaseFinishedListener, "");
+    }
 
-	private IabHelper mHelper;
-	private static final int RC_REQUEST = 10002;
+    @Override
+    public void consume(ProductReceipt receipt) {
+        mHelper.consumeAsync(((CommonProductReceipt) receipt).receipt, mConsumeFinishedListener);
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    private boolean verifyDeveloperPayload(IabPurchase p) {
+        return true;
+    }
 }

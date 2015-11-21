@@ -32,53 +32,32 @@ import com.annahid.libs.artenus.entities.behavior.Animatable;
 @SuppressWarnings("UnusedDeclaration")
 public final class ImageAnimation implements AnimationHandler {
     /**
-     * The Trend specifies how the animation frames are repeated. The default is LOOP.
-     */
-    public enum Trend {
-        /**
-         * Animation trend that involves playing frames in a loop
-         */
-        LOOP,
-        /**
-         * Animation trend that involves playing frames only once. Once the
-         * animation reaches the final frame, it stops at that frame.
-         */
-        ONCE,
-        /**
-         * Animation trend that plays frames backwards after it reaches the
-         * final frame and goes into a forward trend when it reaches the first
-         * frame and plays this way in a loop.
-         */
-        PING_PONG
-    }
-
-    /**
-     * The list of frames that will be displayed for the animation.
+     * Contains frames that will be displayed for the animation, in order of appearance.
      */
     private int[] frames;
 
     /**
-     * Animation trend.
+     * Holds animation trend.
      */
     private Trend trend;
 
     /**
-     * Array index to the currently displayed frame.
+     * Holds array index to the currently displayed frame.
      */
     private int currentFrame;
 
     /**
-     * The sign of the increment.
+     * Holds the sign of the increment.
      */
     private int delta;
 
     /**
-     * The delay in milliseconds between frames.
+     * Holds the delay in milliseconds between frames.
      */
     private int frameDelay = 33;
 
     /**
-     * The timestamp for the previous frame.
+     * Holds the timestamp for the previous frame.
      */
     private long lastFrame = 0;
 
@@ -86,6 +65,7 @@ public final class ImageAnimation implements AnimationHandler {
      * Creates an {@code ImageAnimation} with the given set of frames and a loop trend.
      *
      * @param animationFrames The array of frames from the cutout to animate through
+     *
      * @see Trend#LOOP
      */
     public ImageAnimation(int[] animationFrames) {
@@ -97,6 +77,7 @@ public final class ImageAnimation implements AnimationHandler {
      *
      * @param animationFrames The array of frames from the cutout to animate through
      * @param trend           The trend at which the frames will be animated
+     *
      * @see Trend
      */
     public ImageAnimation(int[] animationFrames, Trend trend) {
@@ -112,6 +93,7 @@ public final class ImageAnimation implements AnimationHandler {
      * @param startIndex      The frame index at which the animation should start. This index
      *                        determines the item in the frame array and not the frame index
      *                        belonging to the sprite's cutout.
+     *
      * @see Trend
      * @see com.annahid.libs.artenus.graphics.sprites.ImageSprite.Cutout
      */
@@ -128,6 +110,7 @@ public final class ImageAnimation implements AnimationHandler {
      * be deprecated in future versions.
      *
      * @param delay The interval between frames in milliseconds
+     *
      * @see #setFrameDelay(float)
      */
     public void setFrameDelay(int delay) {
@@ -141,6 +124,7 @@ public final class ImageAnimation implements AnimationHandler {
      * point format, which is compatible with the rest of the framework.
      *
      * @param delay The interval between frames in seconds
+     *
      * @see #setFrameDelay(int)
      */
     public void setFrameDelay(float delay) {
@@ -153,6 +137,7 @@ public final class ImageAnimation implements AnimationHandler {
      *
      * @return The current frame of the animation. This value indicates the index in the frame
      * array, and not the frame index belonging to the sprite's cutout.
+     *
      * @see com.annahid.libs.artenus.graphics.sprites.ImageSprite.Cutout
      */
     public int getFrame() {
@@ -164,6 +149,7 @@ public final class ImageAnimation implements AnimationHandler {
      * {@link Trend#ONCE} or {@link Trend#PING_PONG}.
      *
      * @return The animation trend
+     *
      * @see Trend
      */
     public Trend getTrend() {
@@ -199,5 +185,26 @@ public final class ImageAnimation implements AnimationHandler {
         }
 
         ((ImageSprite) sprite).gotoFrame(frames[currentFrame]);
+    }
+
+    /**
+     * The Trend specifies how the animation frames are repeated. The default is LOOP.
+     */
+    public enum Trend {
+        /**
+         * Animation trend that involves playing frames in a loop
+         */
+        LOOP,
+        /**
+         * Animation trend that involves playing frames only once. Once the
+         * animation reaches the final frame, it stops at that frame.
+         */
+        ONCE,
+        /**
+         * Animation trend that plays frames backwards after it reaches the
+         * final frame and goes into a forward trend when it reaches the first
+         * frame and plays this way in a loop.
+         */
+        PING_PONG
     }
 }

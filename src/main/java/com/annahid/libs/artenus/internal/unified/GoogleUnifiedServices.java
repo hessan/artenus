@@ -30,110 +30,113 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 
 public final class GoogleUnifiedServices extends UnifiedServices {
-	private static final int SERVICE_MASK = SERVICE_BILLING | SERVICE_GAMES | SERVICE_ADS;
+    private static final int SERVICE_MASK = SERVICE_BILLING | SERVICE_GAMES | SERVICE_ADS;
 
-	GoogleInventoryManager inventoryManager = null;
-	GoogleGameServices gameServices = null;
-	GoogleLoginManager loginManager = null;
-	GoogleAdManager adManager = null;
+    GoogleInventoryManager inventoryManager = null;
 
-	@Override
-	public int init(int inputServices) {
-		loginManager = new GoogleLoginManager();
+    GoogleGameServices gameServices = null;
 
-		if (hasServices(SERVICE_BILLING))
-			inventoryManager = new GoogleInventoryManager();
+    GoogleLoginManager loginManager = null;
 
-		if (hasServices(SERVICE_GAMES)) {
-			gameServices = new GoogleGameServices();
-		}
+    GoogleAdManager adManager = null;
 
-		if (hasServices(SERVICE_ADS)) {
-			adManager = new GoogleAdManager();
-		}
+    @Override
+    public int init(int inputServices) {
+        loginManager = new GoogleLoginManager();
 
-		return inputServices & SERVICE_MASK;
-	}
+        if (hasServices(SERVICE_BILLING))
+            inventoryManager = new GoogleInventoryManager();
 
-	@Override
-	public void onCreate(Context context) {
-		if (inventoryManager != null)
-			inventoryManager.onCreate(context);
+        if (hasServices(SERVICE_GAMES)) {
+            gameServices = new GoogleGameServices();
+        }
 
-		GoogleApiClient.Builder builder = new GoogleApiClient.Builder(context)
-				.addConnectionCallbacks(loginManager)
-				.addOnConnectionFailedListener(loginManager);
+        if (hasServices(SERVICE_ADS)) {
+            adManager = new GoogleAdManager();
+        }
 
-		boolean anyServices = false;
+        return inputServices & SERVICE_MASK;
+    }
 
-		if (hasServices(SERVICE_GAMES)) {
-			builder.addApi(Games.API).addScope(Games.SCOPE_GAMES);
-			anyServices = true;
-		}
+    @Override
+    public void onCreate(Context context) {
+        if (inventoryManager != null)
+            inventoryManager.onCreate(context);
 
-		if (hasServices(SERVICE_ADS)) {
-			adManager.onCreate();
-		}
+        GoogleApiClient.Builder builder = new GoogleApiClient.Builder(context)
+                .addConnectionCallbacks(loginManager)
+                .addOnConnectionFailedListener(loginManager);
 
-		if (anyServices) {
-			GoogleApiClient apiClient = builder.build();
+        boolean anyServices = false;
 
-			if (hasServices(SERVICE_GAMES)) {
-				loginManager.setGoogleApiClient(apiClient);
-				gameServices.setGoogleApiClient(apiClient);
-			}
+        if (hasServices(SERVICE_GAMES)) {
+            builder.addApi(Games.API).addScope(Games.SCOPE_GAMES);
+            anyServices = true;
+        }
 
-			loginManager.setGoogleApiClient(apiClient);
-		}
+        if (hasServices(SERVICE_ADS)) {
+            adManager.onCreate();
+        }
 
-		loginManager.onCreate(context);
-	}
+        if (anyServices) {
+            GoogleApiClient apiClient = builder.build();
 
-	@Override
-	public final void onDestroy(Context context) {
-		if (inventoryManager != null)
-			inventoryManager.onDestroy(context);
-	}
+            if (hasServices(SERVICE_GAMES)) {
+                loginManager.setGoogleApiClient(apiClient);
+                gameServices.setGoogleApiClient(apiClient);
+            }
 
-	@Override
-	public void onStart() {
-		loginManager.onStart();
-	}
+            loginManager.setGoogleApiClient(apiClient);
+        }
 
-	@Override
-	public void onStop() {
-		loginManager.onStop();
-	}
+        loginManager.onCreate(context);
+    }
 
-	@Override
-	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-		return loginManager.onActivityResult(requestCode, resultCode, data) ||
-				(inventoryManager != null &&
-						inventoryManager.onActivityResult(requestCode, resultCode, data));
-	}
+    @Override
+    public final void onDestroy(Context context) {
+        if (inventoryManager != null)
+            inventoryManager.onDestroy(context);
+    }
 
-	@Override
-	public Store getStore() {
-		return Store.GOOGLE;
-	}
+    @Override
+    public void onStart() {
+        loginManager.onStart();
+    }
 
-	@Override
-	public AdManager getAdManager() {
-		return adManager;
-	}
+    @Override
+    public void onStop() {
+        loginManager.onStop();
+    }
 
-	@Override
-	public GameServices getGameServices() {
-		return gameServices;
-	}
+    @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+        return loginManager.onActivityResult(requestCode, resultCode, data) ||
+                (inventoryManager != null &&
+                        inventoryManager.onActivityResult(requestCode, resultCode, data));
+    }
 
-	@Override
-	public LoginManager getLoginManager() {
-		return loginManager;
-	}
+    @Override
+    public Store getStore() {
+        return Store.GOOGLE;
+    }
 
-	@Override
-	public InventoryManager getInventoryManager() {
-		return inventoryManager;
-	}
+    @Override
+    public AdManager getAdManager() {
+        return adManager;
+    }
+
+    @Override
+    public GameServices getGameServices() {
+        return gameServices;
+    }
+
+    @Override
+    public LoginManager getLoginManager() {
+        return loginManager;
+    }
+
+    @Override
+    public InventoryManager getInventoryManager() {
+        return inventoryManager;
+    }
 }

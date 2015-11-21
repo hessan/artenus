@@ -29,62 +29,64 @@ import com.annahid.libs.artenus.physics.PhysicsSimulator;
 import com.annahid.libs.artenus.entities.behavior.Touchable;
 
 /**
- * Represents a single scene in a game. If you view the whole game as a play, the terms for
- * {@link Stage} and {@code Scene} will make complete sense to you, as they are intentionally named
- * this way in the framework. A game can have several scenes based on its nature. For example, a
- * simple game consists of a menu scene, a game scene and a game over scene where scores and
- * rankings are shown. Scenes methods provide the means to manipulate stage properties and navigate
- * between scenes.
+ * Represents a single scene in a game. If you view the whole game as a play, the terms for {@link
+ * Stage} and {@code Scene} will make complete sense to you, as they are intentionally named this
+ * way in the framework. A game can have several scenes based on its nature. For example, a simple
+ * game consists of a menu scene, a game scene and a game over scene where scores and rankings are
+ * shown. Scenes methods provide the means to manipulate stage properties and navigate between
+ * scenes.
  *
  * @author Hessan Feghhi
  */
 @SuppressWarnings("UnusedDeclaration")
 public class Scene implements Touchable {
     /**
-     * The parent stage for this scene. You MUST NOT modify the value of this field from within
-     * subclasses, as this might cause inconsistency in the scene-stage relation.
+     * Holds the parent stage for this scene. You MUST NOT modify the value of this field from
+     * within subclasses, as this might cause inconsistency in the scene-stage relation.
      */
     protected Stage stage;
 
     /**
-     * The background color of the scene.
+     * Holds the current dialog being displayed over the scene. It is {@code null} if there is no
+     * dialog present.
+     */
+    Dialog dialog = null;
+
+    /**
+     * Holds the background color of the scene.
      */
     private RGB bgColor = new RGB(0, 0, 0);
 
     /**
-     * The collection of entities that make up the scene.
+     * Holds the collection of entities that make up the scene.
      */
     private final EntityCollection entities;
 
     /**
-     * The physics simulator responsible for this scene. This value can be {@code null}.
+     * Holds the physics simulator responsible for this scene. This value can be {@code null}.
      */
     private PhysicsSimulator physics;
 
     /**
-     * The touch map responsible for this scene.
+     * Holds the touch map responsible for this scene.
      */
     private TouchMap touchManager;
 
     /**
-     * A value indicating whether the scene is in a loaded state.
+     * Indicates whether the scene is in a loaded state.
      */
     private boolean loaded;
 
     /**
-     * The timestamp of the instant the scene went to a halt (e.g. to show a dialog).
+     * Holds the timestamp of the instant the scene went to a halt (e.g. to show a dialog).
      */
     private long haltStart;
-
-    /**
-     * The current dialog being displayed above the scene.
-     */
-    Dialog dialog = null;
 
     /**
      * Creates a new scene belonging to the given {@code Stage}.
      *
      * @param parentStage The parent stage
+     *
      * @see Stage
      */
     public Scene(Stage parentStage) {
@@ -99,10 +101,11 @@ public class Scene implements Touchable {
 
     /**
      * Gets the default physics simulator for this {@code Scene}. The physics simulator is
-     * originally {@code null}, but it is allocated on the first access, including the invocation
-     * of this method.
+     * originally {@code null}, but it is allocated on the first access, including the invocation of
+     * this method.
      *
      * @return The physics simulator
+     *
      * @see PhysicsSimulator
      */
     public final PhysicsSimulator getPhysicsSimulator() {
@@ -226,6 +229,7 @@ public class Scene implements Touchable {
      * they are dismissed.
      *
      * @return The current dialog
+     *
      * @see Dialog
      */
     public final Dialog getDialog() {
@@ -261,7 +265,7 @@ public class Scene implements Touchable {
     }
 
     /**
-     * This method is called when all resources for the scene are safely in place. It is a good
+     * Called by the framework when all resources for the scene are safely in place. It is a good
      * entry point for subclasses to create their objects and entities. Remember to call the
      * superclass method.
      */
@@ -270,9 +274,10 @@ public class Scene implements Touchable {
     }
 
     /**
-     * If a scene has local resources, it should implement this method to load those resources.
-     * Inside this method you can call the {@code addLocal} method from {@code TextureManager} to
-     * load your resources.
+     * Called by the framework to load scene-local resources. If a scene has local resources, it
+     * should implement this method to load them. Within this method you can call the {@code
+     * addLocal} method from {@code TextureManager} to load your resources. Local resources are
+     * automatically unloaded when the scene changes.
      */
     public void onLocalLoad() {
     }
@@ -286,15 +291,15 @@ public class Scene implements Touchable {
     }
 
     /**
-     * This method is called after this scene goes to a halted state. You can override this method
+     * Called by the framework after this scene goes to a halted state. You can override this method
      * for example to pause your game timers.
      */
     protected void onHalted() {
     }
 
     /**
-     * This method is called after this scene goes out of a halted state. You can use this method to
-     * resume your game timers.
+     * Called by the framework after this scene goes out of a halted state. You can use this method
+     * to resume your game timers.
      *
      * @param delay The time passed, in seconds, in the halted state
      */
@@ -302,10 +307,11 @@ public class Scene implements Touchable {
     }
 
     /**
-     * This method is called whenever a dialog is dismissed from the scene. Dialogs always invoke
+     * Called by the framework whenever a dialog is dismissed from the scene. Dialogs always invoke
      * this method on their parent scene when they are dismissed.
      *
      * @param dialog The dismissed dialog
+     *
      * @see Dialog
      */
     protected void onDialogDismissed(Dialog dialog) {

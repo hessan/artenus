@@ -43,18 +43,24 @@ import java.util.List;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class PhysicalBody extends FilteredEntity {
-    static final class Descriptor {
-        Behavior type = Behavior.DYNAMIC;
-        float angularVelocity = 0;
-        float linearDamping = 0;
-        Point2D linearVelocity = new Point2D(0, 0);
-        boolean active = true;
-        float angularDamping = 0;
-        Point2D position = new Point2D(0, 0);
-        float angle = 0;
-        boolean bullet = false;
-        boolean fixedRotation = false;
-    }
+    /**
+     * Holds the Box2D body associated with this physical body.
+     */
+    Body body;
+
+    Descriptor desc;
+
+    List<JointDescriptor> joints = new ArrayList<>(5);
+
+    private Shape shape;
+
+    private float density;
+
+    private float friction;
+
+    private float restitution;
+
+    private int connections = POSITION | ROTATION;
 
     /**
      * Defines position connection. If this connection is set, the {@code PhysicalBody} will lock
@@ -590,15 +596,16 @@ public class PhysicalBody extends FilteredEntity {
         body.createFixture(def);
     }
 
-    /**
-     * Box2D body associated with this physical body.
-     */
-    Body body;
-
-    Descriptor desc;
-    List<JointDescriptor> joints = new ArrayList<>(5);
-
-    private Shape shape;
-    private float density, friction, restitution;
-    private int connections = POSITION | ROTATION;
+    static final class Descriptor {
+        Behavior type = Behavior.DYNAMIC;
+        float angularVelocity = 0;
+        float linearDamping = 0;
+        Point2D linearVelocity = new Point2D(0, 0);
+        boolean active = true;
+        float angularDamping = 0;
+        Point2D position = new Point2D(0, 0);
+        float angle = 0;
+        boolean bullet = false;
+        boolean fixedRotation = false;
+    }
 }

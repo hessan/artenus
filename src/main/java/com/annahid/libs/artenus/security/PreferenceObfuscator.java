@@ -22,69 +22,72 @@ import android.content.SharedPreferences;
  * A wrapper for SharedPreferences that transparently performs data obfuscation.
  */
 public class PreferenceObfuscator {
-	private final SharedPreferences mPreferences;
-	private final Obfuscator mObfuscator;
-	private SharedPreferences.Editor mEditor;
+    private final SharedPreferences mPreferences;
 
-	/**
-	 * Constructors a new instance of {@code PreferenceObfuscator}.
-	 *
-	 * @param sp A SharedPreferences instance provided by the system
-	 * @param o  The Obfuscator to use when reading or writing data
-	 */
-	public PreferenceObfuscator(SharedPreferences sp, Obfuscator o) {
-		mPreferences = sp;
-		mObfuscator = o;
-		mEditor = null;
-	}
+    private final Obfuscator mObfuscator;
 
-	/**
-	 * Sets the value for the specified setting.
-	 *
-	 * @param key Key to the setting
-	 * @param value	String representation of the value
-	 */
-	public void putString(String key, String value) {
-		if (mEditor == null) {
-			mEditor = mPreferences.edit();
-		}
+    private SharedPreferences.Editor mEditor;
 
-		String obfuscatedValue = mObfuscator.obfuscate(value, key);
-		mEditor.putString(key, obfuscatedValue);
-	}
+    /**
+     * Constructors a new instance of {@code PreferenceObfuscator}.
+     *
+     * @param sp A SharedPreferences instance provided by the system
+     * @param o  The Obfuscator to use when reading or writing data
+     */
+    public PreferenceObfuscator(SharedPreferences sp, Obfuscator o) {
+        mPreferences = sp;
+        mObfuscator = o;
+        mEditor = null;
+    }
 
-	/**
-	 * Gets the value of the specified setting.
-	 *
-	 * @param key	Key to the setting
-	 * @param defValue String representation of the default value
-	 * @return String representation of the value
-	 */
-	public String getString(String key, String defValue) {
-		final String value = mPreferences.getString(key, null);
-		String result;
+    /**
+     * Sets the value for the specified setting.
+     *
+     * @param key   Key to the setting
+     * @param value String representation of the value
+     */
+    public void putString(String key, String value) {
+        if (mEditor == null) {
+            mEditor = mPreferences.edit();
+        }
 
-		if (value != null) {
-			try {
-				result = mObfuscator.unobfuscate(value, key);
-			} catch (ValidationException e) {
-				// Unable to unobfuscate, data corrupt or tampered
-				result = defValue;
-			}
-		} else {
-			// Preference not found
-			result = defValue;
-		}
-		return result;
-	}
+        String obfuscatedValue = mObfuscator.obfuscate(value, key);
+        mEditor.putString(key, obfuscatedValue);
+    }
 
-	/**
-	 * Commits changes to settings.
-	 */
-	public void commit() {
-		if (mEditor != null) {
-			mEditor.commit();
-			mEditor = null;
-		}
-	}
+    /**
+     * Gets the value of the specified setting.
+     *
+     * @param key      Key to the setting
+     * @param defValue String representation of the default value
+     *
+     * @return String representation of the value
+     */
+    public String getString(String key, String defValue) {
+        final String value = mPreferences.getString(key, null);
+        String result;
+
+        if (value != null) {
+            try {
+                result = mObfuscator.unobfuscate(value, key);
+            } catch (ValidationException e) {
+                // Unable to unobfuscate, data corrupt or tampered
+                result = defValue;
+            }
+        } else {
+            // Preference not found
+            result = defValue;
+        }
+        return result;
+    }
+
+    /**
+     * Commits changes to settings.
+     */
+    public void commit() {
+        if (mEditor != null) {
+            mEditor.commit();
+            mEditor = null;
+        }
+    }
 }

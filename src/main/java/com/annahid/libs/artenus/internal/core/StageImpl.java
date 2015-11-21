@@ -41,7 +41,7 @@ import com.annahid.libs.artenus.graphics.TextureManager;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * The default implementation of the {@code Stage} interface.
+ * Provides the default implementation of the {@code Stage} interface.
  *
  * @author Hessan Feghhi
  * @see StageManager
@@ -49,12 +49,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 @SuppressWarnings("UnusedDeclaration")
 public final class StageImpl extends GLSurfaceView implements Stage {
     /**
-     * The stage manager currently handling stage events.
+     * Holds the stage manager currently handling stage events.
      */
     StageManager handler = null;
 
     /**
-     * The current scene.
+     * Holds the current scene.
      */
     Scene currentScene;
 
@@ -70,12 +70,13 @@ public final class StageImpl extends GLSurfaceView implements Stage {
     float stPhase;
 
     /**
-     * The thread running the main animation loop.
+     * Holds the thread running the main animation loop.
      */
     private Thread advanceThread;
 
     /**
-     * An incremental thread identifier for the animation loop, used for controlling the thread.
+     * Holds an incremental thread identifier for the animation loop, used for controlling the
+     * thread.
      */
     private AtomicInteger advanceThreadId = new AtomicInteger(1000);
 
@@ -133,6 +134,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
      * Converts screen x to stage x coordination considering the scaling factor.
      *
      * @param x Screen x
+     *
      * @return Stage x
      */
     @Override
@@ -144,6 +146,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
      * Converts screen y to stage x coordination considering the scaling factor.
      *
      * @param y Screen y
+     *
      * @return Stage y
      */
     @Override
@@ -155,6 +158,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
      * Converts stage x to screen x coordination considering the scaling factor.
      *
      * @param x Stage x
+     *
      * @return Screen x
      */
     @Override
@@ -166,11 +170,23 @@ public final class StageImpl extends GLSurfaceView implements Stage {
      * Converts stage y to screen y coordination considering the scaling factor.
      *
      * @param y Stage y
+     *
      * @return Screen y
      */
     @Override
     public final float logicalToScreenY(float y) {
         return y * mRenderer.screenHeight / mRenderer.vh;
+    }
+
+    /**
+     * Gets the current scene. If a new scene has been set, but the transition is not yet complete,
+     * previous scene might be returned.
+     *
+     * @return The current scene
+     */
+    @Override
+    public final Scene getScene() {
+        return currentScene;
     }
 
     /**
@@ -184,17 +200,6 @@ public final class StageImpl extends GLSurfaceView implements Stage {
         if (currentScene != IntroScene.getInstance(this)) {
             nextScene = scene;
         }
-    }
-
-    /**
-     * Gets the current scene. If a new scene has been set, but the transition is not yet complete,
-     * previous scene might be returned.
-     *
-     * @return The current scene
-     */
-    @Override
-    public final Scene getScene() {
-        return currentScene;
     }
 
     /**
@@ -243,6 +248,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
      *
      * @return {@code true} if the back button has been handled by this {@code Stage} or the
      * currently active {@code Scene}, {@code false} otherwise
+     *
      * @see com.annahid.libs.artenus.core.Scene
      */
     public boolean onBackButton() {
@@ -313,8 +319,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
         }
         try {
             Thread.sleep(10);
-        }
-        catch(InterruptedException ex) {
+        } catch (InterruptedException ex) {
             // Do nothing
         }
         return true;
@@ -369,6 +374,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
      */
     private final class StageAdvanceTask extends Thread {
         private long mLastTime;
+
         private int tid;
 
         private StageAdvanceTask() {

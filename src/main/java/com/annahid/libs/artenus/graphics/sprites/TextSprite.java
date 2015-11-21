@@ -34,17 +34,17 @@ import com.annahid.libs.artenus.graphics.Font;
 @SuppressWarnings("UnusedDeclaration")
 public final class TextSprite extends SpriteEntity {
     /**
-     * The current font used to draw the text.
+     * Holds the current font used to draw the text.
      */
     private Font myFont;
 
     /**
-     * The character array to be drawn.
+     * Contains characters to be drawn.
      */
     private char[] ca;
 
     /**
-     * A value indicating whether the text should be rendered in right-to-left order.
+     * Indicates whether the text should be rendered in right-to-left order.
      */
     private boolean rtl = false;
 
@@ -124,17 +124,6 @@ public final class TextSprite extends SpriteEntity {
     }
 
     /**
-     * Sets the text on this {@code TextSprite}. Changes will take effect immediately.
-     *
-     * @param value The string representation of the new text
-     */
-    public final void setText(String value) {
-        if (value != null)
-            ca = Font.processText(value).toCharArray();
-        else ca = new char[0];
-    }
-
-    /**
      * Determines whether this {@code TextSprite} represents an empty text. This is a faster
      * method than to retrieve the text and examine it manually.
      *
@@ -152,6 +141,17 @@ public final class TextSprite extends SpriteEntity {
      */
     public final String getText() {
         return new String(ca);
+    }
+
+    /**
+     * Sets the text on this {@code TextSprite}. Changes will take effect immediately.
+     *
+     * @param value The string representation of the new text
+     */
+    public final void setText(String value) {
+        if (value != null)
+            ca = Font.processText(value).toCharArray();
+        else ca = new char[0];
     }
 
     @Override

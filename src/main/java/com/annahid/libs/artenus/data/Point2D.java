@@ -26,12 +26,13 @@ package com.annahid.libs.artenus.data;
  */
 public final class Point2D {
     /**
-     * The x component of the point represented by this {@code Point2D} instance.
+     * Represents the horizontal component of the point represented by this {@code Point2D}
+     * instance.
      */
     public float x;
 
     /**
-     * The y component of the point represented by this {@code Point2D} instance.
+     * Represents the vertical component of the point represented by this {@code Point2D} instance.
      */
     public float y;
 
@@ -54,11 +55,12 @@ public final class Point2D {
     }
 
     /**
-     * Multiplies a scalar value by both x and y components of this object and
-     * returns the result. The values in the original {@code Point2D} object are
-     * not modified and the result is a new {@code Point2D} instance.
+     * Multiplies a scalar value by both x and y components of this object and returns the result.
+     * The values in the original {@code Point2D} object are not modified and the result is a new
+     * {@code Point2D} instance.
      *
      * @param scalar The scalar to multiply
+     *
      * @return The resulting {@code Point2D} object which represents the new values
      */
     public Point2D multiply(float scalar) {

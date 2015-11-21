@@ -25,41 +25,51 @@ import com.annahid.libs.artenus.graphics.rendering.ShaderProgram;
 import java.nio.FloatBuffer;
 
 /**
- * The default shader program used when {@code null} is specified for the shader program.
+ * Represents the default shader program used when {@code null} is specified for the shader program.
  *
  * @author Hessan Feghhi
  */
 class BasicShaderProgram implements ShaderProgram {
+    /**
+     * Holds vertex shader program.
+     */
     private static final String vertexShaderCode =
             "uniform mat4 uMVPMatrix;" +
             "attribute vec4 vPosition;" +
             "void main() {" +
             "  gl_Position = uMVPMatrix * vPosition;" +
             '}';
+
+    /**
+     * Hold fragment shader program.
+     */
     private static final String fragmentShaderCode =
             "precision mediump float;" +
             "uniform vec4 vColor;" +
             "void main() {" +
             "  gl_FragColor = vColor;" +
             '}';
+
     /**
-     * OpenGL shader program handle.
+     * Holds OpenGL shader program handle.
      */
     int mProgram;
 
+    int mMVPMatrixHandle;
+
+    int mColorHandle;
+
+    int mPositionHandle;
+
     /**
-     * Handle to the vertex shader.
+     * Holds the handle to the vertex shader.
      */
     private int mVertexShader;
 
     /**
-     * Handle to the fragment shader.
+     * Holds the handle to the fragment shader.
      */
     private int mFragmentShader;
-
-    int mMVPMatrixHandle;
-    int mColorHandle;
-    int mPositionHandle;
 
     /**
      * Compiles the shader program.

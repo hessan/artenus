@@ -25,55 +25,137 @@ import android.view.View;
 import java.lang.ref.WeakReference;
 
 /**
- * The superclasses of unified ad managers. If a {@code UnifiedServices}
- * implementation supports ads, it should provide a sub-class of this class.
+ * The superclass of unified ad managers. If a {@code UnifiedServices} implementation supports ads,
+ * it should provide a sub-class of this class.
  *
  * @author Hessan Feghhi
  */
-@SuppressWarnings({"UnusedDeclaration"})
+@SuppressWarnings({ "UnusedDeclaration" })
 public abstract class AdManager {
     /**
      * Signal identifier used to show/hide ad.
      */
     private static final int MESSAGE_SHOW_AD = 113;
+
     /**
      * Signal identifier used to destroy ad.
      */
     private static final int MESSAGE_DESTROY_AD = 114;
 
-    private static class MyHandler extends Handler {
-        private WeakReference<AdManager> admRef;
+    /**
+     * Holds the handler for IPC messaging with this {@code AdManager} instance.
+     */
+    public MyHandler handler = null;
 
-        public MyHandler(AdManager adm) {
-            admRef = new WeakReference<>(adm);
-        }
+    protected AdLayout adLayout = null;
 
-        public void handleMessage(Message msg) {
-            final AdManager adm = admRef.get();
+    private AdPlacementListener listener;
 
-            if (adm.adLayout == null)
-                return;
+    private String adUnitId = null;
 
-            if (msg.what == MESSAGE_SHOW_AD) {
-                View adView = adm.getAdView();
+    /**
+     * Sets the game layout on which ads should be placed.
+     *
+     * @param adLayout Target layout
+     */
+    public final void setAdLayout(AdLayout adLayout) {
+        this.adLayout = adLayout;
+        handler = new MyHandler(this);
+    }
 
-                if (adView == null)
-                    return;
+    /**
+     * Hides or displays the ad unit at a specified location.
+     *
+     * @param show Value indicating ad placement options
+     */
+    public final void showAd(Show show) {
+        sendSignalToMainThread(MESSAGE_SHOW_AD, show.ordinal());
+    }
 
-                Show show = Show.values()[msg.arg1];
+    /**
+     * Hides the ad unit. This is the same as calling {@link AdManager#showAd(Show)} with the
+     * {@link Show#HIDDEN} option.
+     */
+    public final void hideAd() {
+        showAd(Show.HIDDEN);
+    }
 
-                adm.adLayout.showAd(show);
+    /**
+     * Releases resources associated with the ad unit when it is no longer needed. An example of
+     * a situation where this method needs to be called is when the user buys the full version of
+     * the app using IAP, and ads need to be removed.
+     */
+    public final void destroyAd() {
+        sendSignalToMainThread(MESSAGE_DESTROY_AD, 0);
+    }
 
-                if (adm.listener != null)
-                    adm.listener.onAdVisibilityChange(show != Show.HIDDEN);
-            } else if (msg.what == MESSAGE_DESTROY_AD) {
-                final View adView = adm.getAdView();
+    /**
+     * Gets the height of the ad unit currently displayed.
+     *
+     * @return The height of the ad unit in pixels, or 0 if it is not present
+     */
+    public final int getAdHeight() {
+        if (adLayout == null)
+            return 0;
 
-                if (adView != null) {
-                    adm.adLayout.removeView(adView);
-                    adm.destroyAdView(adView);
-                }
-            }
+        return adLayout.getAdHeight();
+    }
+
+    /**
+     * Gets the currently assigned ad unit identifier.
+     *
+     * @return Ad unit identifier
+     */
+    protected String getAdUnitId() {
+        return adUnitId;
+    }
+
+    /**
+     * Sets the identifier for the ad unit that should be displayed over the stage by this ad
+     * manager. The format of the identifier depends on the specific implementation.
+     *
+     * @param adUnitId Ad unit identifier
+     */
+    public void setAdUnitId(String adUnitId) {
+        this.adUnitId = adUnitId;
+    }
+
+    /**
+     * Implemented by subclasses to return a view corresponding to the ad unit overlay. The exact
+     * sub-type of the returned {@code View} depends on the specific implementation.
+     *
+     * @return The ad view
+     */
+    protected abstract View getAdView();
+
+    /**
+     * Implemented by subclasses to destroy a view corresponding to an ad unit. Subclasses usually
+     * do not need to do type checking, as the framework only passes ad units created by the same
+     * instance as the argument.
+     *
+     * @param adView The ad view previously created by this ad manager
+     */
+    protected abstract void destroyAdView(View adView);
+
+    AdPlacementListener getAdPlacementListener() {
+        return listener;
+    }
+
+    /**
+     * Sets the listener that is responsible for handling ad placement events.
+     *
+     * @param listener Ad placement listener, or {@code null} to remove the current listener
+     */
+    public final void setAdPlacementListener(AdPlacementListener listener) {
+        this.listener = listener;
+    }
+
+    void sendSignalToMainThread(int msgId, int param) {
+        if (handler != null) {
+            final Message msg = new Message();
+            msg.what = msgId;
+            msg.arg1 = param;
+            handler.sendMessage(msg);
         }
     }
 
@@ -117,121 +199,39 @@ public abstract class AdManager {
         BOTTOM_RIGHT
     }
 
-    protected AdLayout adLayout = null;
+    private static class MyHandler extends Handler {
+        private WeakReference<AdManager> admRef;
 
-    /**
-     * The handler for IPC messaging with this {@code AdManager} instance.
-     */
-    public MyHandler handler = null;
+        public MyHandler(AdManager adm) {
+            admRef = new WeakReference<>(adm);
+        }
 
-    private AdPlacementListener listener;
-    private String adUnitId = null;
+        public void handleMessage(Message msg) {
+            final AdManager adm = admRef.get();
 
-    /**
-     * Sets the game layout on which ads should be placed.
-     *
-     * @param adLayout Target layout
-     */
-    public final void setAdLayout(AdLayout adLayout) {
-        this.adLayout = adLayout;
-        handler = new MyHandler(this);
-    }
+            if (adm.adLayout == null)
+                return;
 
-    /**
-     * Hides or displays the ad unit at a specified location.
-     *
-     * @param show Value indicating ad placement options
-     */
-    public final void showAd(Show show) {
-        sendSignalToMainThread(MESSAGE_SHOW_AD, show.ordinal());
-    }
+            if (msg.what == MESSAGE_SHOW_AD) {
+                View adView = adm.getAdView();
 
-    /**
-     * Hides the ad unit. This is the same as calling {@link AdManager#showAd(Show)} with the
-     * {@link Show#HIDDEN} option.
-     */
-    public final void hideAd() {
-        showAd(Show.HIDDEN);
-    }
+                if (adView == null)
+                    return;
 
-    /**
-     * This method should be called to release resources associated with the ad unit when it is
-     * no longer needed. An example of such situation is that the user buys the full version of the
-     * app using IAP, and ads need to be removed.
-     */
-    public final void destroyAd() {
-        sendSignalToMainThread(MESSAGE_DESTROY_AD, 0);
-    }
+                Show show = Show.values()[msg.arg1];
 
-    /**
-     * Gets the height of the ad unit currently displayed.
-     *
-     * @return The height of the ad unit in pixels, or 0 if it is not present
-     */
-    public final int getAdHeight() {
-        if (adLayout == null)
-            return 0;
+                adm.adLayout.showAd(show);
 
-        return adLayout.getAdHeight();
-    }
+                if (adm.listener != null)
+                    adm.listener.onAdVisibilityChange(show != Show.HIDDEN);
+            } else if (msg.what == MESSAGE_DESTROY_AD) {
+                final View adView = adm.getAdView();
 
-    /**
-     * Sets the listener that is responsible for handling ad placement events.
-     *
-     * @param listener Ad placement listener, or {@code null} to remove the current listener
-     */
-    public final void setAdPlacementListener(AdPlacementListener listener) {
-        this.listener = listener;
-    }
-
-    /**
-     * Sets the identifier for the ad unit that should be displayed over the stage by this ad
-     * manager. The format of the identifier depends on the specific implementation.
-     *
-     * @param adUnitId Ad unit identifier
-     */
-    public void setAdUnitId(String adUnitId) {
-        this.adUnitId = adUnitId;
-    }
-
-    /**
-     * Gets the currently assigned ad unit identifier.
-     *
-     * @return Ad unit identifier
-     */
-    protected String getAdUnitId() {
-        return adUnitId;
-    }
-
-    /**
-     * This method should be implemented by subclasses to return a view corresponding to the ad unit
-     * overlay. The exact sub-type of the returned {@code View} depends on the specific
-     * implementation.
-     *
-     * @return The ad view
-     */
-    protected abstract View getAdView();
-
-    /**
-     * This method should be implemented by subclasses to destroy a view corresponding to an ad
-     * unit. Subclasses usually do not need to do type checking, as the framework only passes ad
-     * units created by the same instance as the argument.
-     *
-     * @param adView The ad view previously created by this ad manager
-     */
-    protected abstract void destroyAdView(View adView);
-
-    AdPlacementListener getAdPlacementListener() {
-        return listener;
-    }
-
-    void sendSignalToMainThread(int msgId, int param) {
-        if (handler != null) {
-            final Message msg = new Message();
-            msg.what = msgId;
-            msg.arg1 = param;
-            handler.sendMessage(msg);
+                if (adView != null) {
+                    adm.adLayout.removeView(adView);
+                    adm.destroyAdView(adView);
+                }
+            }
         }
     }
-
 }

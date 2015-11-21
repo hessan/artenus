@@ -63,6 +63,14 @@ public final class PhysicsSimulator {
      */
     public float timeScale = 1;
 
+    private World world;
+
+    private List<CollisionInfo> collisions = new ArrayList<>();
+
+    private CollisionListener collisionListener = null;
+
+    private boolean paused = false;
+
     /**
      * Constructs a {@code PhysicsSimulator}.
      */
@@ -119,24 +127,26 @@ public final class PhysicsSimulator {
     }
 
     /**
-     * Appoints a collision listener to this physics simulator to handle collisions.
-     *
-     * @param listener The collision listener. Setting this value to {@code null}
-     *                 removes the listener
-     * @see CollisionListener
-     */
-    public void setCollisionListener(CollisionListener listener) {
-        collisionListener = listener;
-    }
-
-    /**
      * Gets the collision listener currently appointed for handling collisions.
      *
      * @return The collision listener or {@code null} if none assigned
+     *
      * @see CollisionListener
      */
     public CollisionListener getCollisionListener() {
         return collisionListener;
+    }
+
+    /**
+     * Appoints a collision listener to this physics simulator to handle collisions.
+     *
+     * @param listener The collision listener. Setting this value to {@code null}
+     *                 removes the listener
+     *
+     * @see CollisionListener
+     */
+    public void setCollisionListener(CollisionListener listener) {
+        collisionListener = listener;
     }
 
     /**
@@ -169,6 +179,15 @@ public final class PhysicsSimulator {
     }
 
     /**
+     * Gets whether the simulator is paused.
+     *
+     * @return {@code true} if paused or {@code false} otherwise
+     */
+    public boolean isPaused() {
+        return paused;
+    }
+
+    /**
      * Changes the paused state of the simulator. Physical bodies in a paused simulator
      * remain halted until the simulator is resumed.
      *
@@ -179,19 +198,11 @@ public final class PhysicsSimulator {
     }
 
     /**
-     * Gets whether the simulator is paused.
-     *
-     * @return {@code true} if paused or {@code false} otherwise
-     */
-    public boolean isPaused() {
-        return paused;
-    }
-
-    /**
      * Attaches a physical body to the simulator. You do not need to call this method
      * directly if you are using physics simulation through a scene.
      *
      * @param body The new physical body
+     *
      * @see com.annahid.libs.artenus.physics.PhysicalBody
      */
     public void attach(PhysicalBody body) {
@@ -250,6 +261,7 @@ public final class PhysicsSimulator {
      * the scene are NOT reusable.
      *
      * @param body The physical body to remove
+     *
      * @see com.annahid.libs.artenus.physics.PhysicalBody
      */
     public void detach(PhysicalBody body) {
@@ -265,9 +277,4 @@ public final class PhysicsSimulator {
             world.destroyBody(body.body);
         }
     }
-
-    private World world;
-    private List<CollisionInfo> collisions = new ArrayList<>();
-    private CollisionListener collisionListener = null;
-    private boolean paused = false;
 }

@@ -39,7 +39,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
- * This class is used internally by the framework to handle bitmapped hit testing for touch buttons.
+ * Used internally by the framework to handle bitmapped hit testing for touch buttons.
  * It is highly recommended not to use this class directly, as it might interfere with the default
  * rendering pipeline. The only member of this class that can be used from outside the framework is
  * {@link TouchMap#showMap(boolean)}.
@@ -48,7 +48,17 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public final class TouchMap {
     /**
-     * The buffer used to read pixels from the touch map.
+     * Holds the shader program used to draw the touch map from sprites.
+     */
+    private static TouchMapShaderProgram shader = null;
+
+    /**
+     * Holds the render target for the touch map.
+     */
+    private static RenderTarget target;
+
+    /**
+     * Holds the buffer used to read pixels from the touch map.
      */
     private ByteBuffer pixelBuffer =
             ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder());
@@ -59,29 +69,19 @@ public final class TouchMap {
     private boolean show = true;
 
     /**
-     * Queue for events that need to be processed.
+     * Queues events that need to be processed.
      */
     private Queue<TouchEvent> processQueue = new ConcurrentLinkedQueue<>();
 
     /**
-     * Queue for processed events that need to be dispatched.
+     * Queues processed events that need to be dispatched.
      */
     private Queue<Pair<TouchButton, TouchEvent>> dispatchQueue = new ConcurrentLinkedQueue<>();
 
     /**
-     * The buttons registered with this touch map.
+     * Contains buttons registered with this touch map.
      */
     private Map<Integer, TouchButton> buttons = new ConcurrentHashMap<>(24);
-
-    /**
-     * Holds the shader program used to draw the touch map from sprites.
-     */
-    private static TouchMapShaderProgram shader = null;
-
-    /**
-     * The render target for the touch map.
-     */
-    private static RenderTarget target;
 
     /**
      * Initializes the touch map and creates necessary resources. If the touch map is already

@@ -19,29 +19,29 @@
 package com.annahid.libs.artenus.data;
 
 /**
- * Represents a color with red, green, and blue components. This class does not
- * provide transparency since it is not to be used for that purpose.
+ * Represents a color with red, green, and blue components. This class does not provide transparency
+ * since it is not to be used for that purpose.
  *
  * @author Hessan Feghhi
  */
 public final class RGB {
     /**
-     * The red component of the color represented by this {@code RGB} instance.
+     * Represents the red component of the color represented by this {@code RGB} instance.
      */
     public float r;
 
     /**
-     * The red component of the color represented by this {@code RGB} instance.
+     * Represents the green component of the color represented by this {@code RGB} instance.
      */
     public float g;
 
     /**
-     * The red component of the color represented by this {@code RGB} instance.
+     * Represents the blue component of the color represented by this {@code RGB} instance.
      */
     public float b;
 
     /**
-     * Constructs a new {@code RGB} using the give red, green and blue components.
+     * Creates a new {@code RGB} using the give red, green and blue components.
      *
      * @param cr The red component of the color
      * @param cg The green component of the color
@@ -54,7 +54,7 @@ public final class RGB {
     }
 
     /**
-     * Constructs a new {@code RGB} using the color's string representation.
+     * Creates a new {@code RGB} using the color's string representation.
      *
      * @param rgb A hexadecimal string of the form rrggbb or RRGGBB
      */

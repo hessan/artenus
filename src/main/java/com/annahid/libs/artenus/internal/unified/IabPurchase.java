@@ -23,73 +23,82 @@ import org.json.JSONObject;
  */
 @SuppressWarnings("UnusedDeclaration")
 final class IabPurchase {
-	String mItemType;  // ITEM_TYPE_INAPP or ITEM_TYPE_SUBS
-	String mOrderId;
-	String mPackageName;
-	String mSku;
-	long mPurchaseTime;
-	int mPurchaseState;
-	String mDeveloperPayload;
-	String mToken;
-	String mOriginalJson;
-	String mSignature;
+    String mItemType;  // ITEM_TYPE_INAPP or ITEM_TYPE_SUBS
 
-	public IabPurchase(String itemType, String jsonPurchaseInfo, String signature) throws JSONException {
-		mItemType = itemType;
-		mOriginalJson = jsonPurchaseInfo;
-		JSONObject o = new JSONObject(mOriginalJson);
-		mOrderId = o.optString("orderId");
-		mPackageName = o.optString("packageName");
-		mSku = o.optString("productId");
-		mPurchaseTime = o.optLong("purchaseTime");
-		mPurchaseState = o.optInt("purchaseState");
-		mDeveloperPayload = o.optString("developerPayload");
-		mToken = o.optString("token", o.optString("purchaseToken"));
-		mSignature = signature;
-	}
+    String mOrderId;
 
-	public String getItemType() {
-		return mItemType;
-	}
+    String mPackageName;
 
-	public String getOrderId() {
-		return mOrderId;
-	}
+    String mSku;
 
-	public String getPackageName() {
-		return mPackageName;
-	}
+    long mPurchaseTime;
 
-	public String getSku() {
-		return mSku;
-	}
+    int mPurchaseState;
 
-	public long getPurchaseTime() {
-		return mPurchaseTime;
-	}
+    String mDeveloperPayload;
 
-	public int getPurchaseState() {
-		return mPurchaseState;
-	}
+    String mToken;
 
-	public String getDeveloperPayload() {
-		return mDeveloperPayload;
-	}
+    String mOriginalJson;
 
-	public String getToken() {
-		return mToken;
-	}
+    String mSignature;
 
-	public String getOriginalJson() {
-		return mOriginalJson;
-	}
+    public IabPurchase(String itemType, String jsonPurchaseInfo, String signature) throws JSONException {
+        mItemType = itemType;
+        mOriginalJson = jsonPurchaseInfo;
+        JSONObject o = new JSONObject(mOriginalJson);
+        mOrderId = o.optString("orderId");
+        mPackageName = o.optString("packageName");
+        mSku = o.optString("productId");
+        mPurchaseTime = o.optLong("purchaseTime");
+        mPurchaseState = o.optInt("purchaseState");
+        mDeveloperPayload = o.optString("developerPayload");
+        mToken = o.optString("token", o.optString("purchaseToken"));
+        mSignature = signature;
+    }
 
-	public String getSignature() {
-		return mSignature;
-	}
+    public String getItemType() {
+        return mItemType;
+    }
 
-	@Override
-	public String toString() {
-		return "PurchaseInfo(type:" + mItemType + "):" + mOriginalJson;
-	}
+    public String getOrderId() {
+        return mOrderId;
+    }
+
+    public String getPackageName() {
+        return mPackageName;
+    }
+
+    public String getSku() {
+        return mSku;
+    }
+
+    public long getPurchaseTime() {
+        return mPurchaseTime;
+    }
+
+    public int getPurchaseState() {
+        return mPurchaseState;
+    }
+
+    public String getDeveloperPayload() {
+        return mDeveloperPayload;
+    }
+
+    public String getToken() {
+        return mToken;
+    }
+
+    public String getOriginalJson() {
+        return mOriginalJson;
+    }
+
+    public String getSignature() {
+        return mSignature;
+    }
+
+    @Override
+    public String toString() {
+        return "PurchaseInfo(type:" + mItemType + "):" + mOriginalJson;
+    }
 }

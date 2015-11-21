@@ -36,34 +36,34 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class TouchButton extends FilteredEntity implements Button, Touchable {
     /**
-     * Button identifier assigned to this touch button.
+     * Holds a counter used to generate button identifiers for the touch map.
+     */
+    private static AtomicInteger idStore = new AtomicInteger(100);
+
+    /**
+     * Holds button identifier assigned to this touch button.
      */
     int id;
 
     /**
-     * State of the transformation matrix for the latest render call.
+     * Holds the state of the transformation matrix for the latest render call.
      */
     private float[] latestMatrix = null;
 
     /**
-     * A value indicating whether the button is currently in pressed state.
+     * Indicates whether the button is currently in pressed state.
      */
     private boolean down = false;
 
     /**
-     * The identifier for the pointer currently pressing the button down.
+     * Holds the identifier for the pointer currently pressing the button down.
      */
     private int downId = -1;
 
     /**
-     * Current event handler currently listening to events from this touch button.
+     * Holds the event handler currently listening to events from this touch button.
      */
     private ButtonListener listener = null;
-
-    /**
-     * A counter used to generate button identifiers for the touch map.
-     */
-    private static AtomicInteger idStore = new AtomicInteger(100);
 
     /**
      * Creates a new touch button that adds button behavior to the underlying entity.
@@ -136,10 +136,11 @@ public class TouchButton extends FilteredEntity implements Button, Touchable {
     }
 
     /**
-     * This methods always returns false. Touch buttons do not participate in the normal touch event
-     * pipeline. Their touch event is handled through the touch map associated with the scene.
+     * Always returns false. Touch buttons do not participate in the normal touch event pipeline.
+     * Their touch event is handled through the touch map associated with the scene.
      *
      * @param event Event information
+     *
      * @return {@code false}
      */
     @Override
@@ -168,16 +169,6 @@ public class TouchButton extends FilteredEntity implements Button, Touchable {
     }
 
     /**
-     * Sets the button listener for this touch button.
-     *
-     * @param listener The listener
-     */
-    @Override
-    public void setListener(ButtonListener listener) {
-        this.listener = listener;
-    }
-
-    /**
      * Returns a value indicating whether this touch button is currently in pressed state.
      *
      * @return {@code true} if pressed, {@code false} otherwise
@@ -195,5 +186,15 @@ public class TouchButton extends FilteredEntity implements Button, Touchable {
     @Override
     public ButtonListener getListener() {
         return listener;
+    }
+
+    /**
+     * Sets the button listener for this touch button.
+     *
+     * @param listener The listener
+     */
+    @Override
+    public void setListener(ButtonListener listener) {
+        this.listener = listener;
     }
 }

@@ -36,10 +36,10 @@ import com.annahid.libs.artenus.core.Scene;
 public abstract class FilteredEntity
         implements Entity, Animatable, Transformable, Renderable {
 
-    @Override
-    public final void setAnimation(AnimationHandler animation) {
-        if (target.hasBehavior(Behaviors.ANIMATABLE))
-            ((Animatable) target).setAnimation(animation);
+    protected Entity target;
+
+    protected FilteredEntity(Entity e) {
+        target = e == null ? NullEntity.getInstance() : e;
     }
 
     @Override
@@ -48,6 +48,12 @@ public abstract class FilteredEntity
             return ((Animatable) target).getAnimation();
 
         return null;
+    }
+
+    @Override
+    public final void setAnimation(AnimationHandler animation) {
+        if (target.hasBehavior(Behaviors.ANIMATABLE))
+            ((Animatable) target).setAnimation(animation);
     }
 
     @Override
@@ -120,16 +126,16 @@ public abstract class FilteredEntity
     }
 
     @Override
-    public final void setColorFilter(RGB rgb) {
-        setColorFilter(rgb.r, rgb.g, rgb.b);
-    }
-
-    @Override
     public RGB getColorFilter() {
         if (target.hasBehavior(Behaviors.RENDERABLE))
             return ((Renderable) target).getColorFilter();
 
         return null;
+    }
+
+    @Override
+    public final void setColorFilter(RGB rgb) {
+        setColorFilter(rgb.r, rgb.g, rgb.b);
     }
 
     @Override
@@ -147,16 +153,16 @@ public abstract class FilteredEntity
     }
 
     @Override
-    public void setAlpha(float alpha) {
-        if (target.hasBehavior(Behaviors.RENDERABLE))
-            ((Renderable) target).setAlpha(alpha);
-    }
-
-    @Override
     public float getAlpha() {
         if (target.hasBehavior(Behaviors.RENDERABLE))
             return ((Renderable) target).getAlpha();
         return 0;
+    }
+
+    @Override
+    public void setAlpha(float alpha) {
+        if (target.hasBehavior(Behaviors.RENDERABLE))
+            ((Renderable) target).setAlpha(alpha);
     }
 
     @Override
@@ -169,6 +175,7 @@ public abstract class FilteredEntity
      * Calls {@code render} on the underlying entity, with specified flags.
      *
      * @param flags Rendering flags
+     *
      * @see Renderable
      */
     @Override
@@ -191,6 +198,7 @@ public abstract class FilteredEntity
      * Determines whether the underlying entity has the specified behavior.
      *
      * @param behavior Behavior to be checked
+     *
      * @return {@code true} if the underlying entity has the behavior, {@code false} otherwise
      */
     @Override
@@ -201,10 +209,4 @@ public abstract class FilteredEntity
     public final Entity getUnderlyingEntity() {
         return target;
     }
-
-    protected FilteredEntity(Entity e) {
-        target = e == null ? NullEntity.getInstance() : e;
-    }
-
-    protected Entity target;
 }

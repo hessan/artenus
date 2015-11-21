@@ -22,28 +22,28 @@ import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 
 /**
- * A subclass of {@link com.annahid.libs.artenus.graphics.Effect} that represents a shadow effect.
+ * Represents a shadow effect.
  *
  * @author Hessan Feghhi
  */
 public final class ShadowEffect extends Effect {
     /**
-     * The horizontal distance of the shadow from the renderable entity.
+     * Holds the horizontal distance of the shadow from the renderable entity.
      */
     private float dx;
 
     /**
-     * The vertical distance of the shadow from the renderable entity.
+     * Holds the vertical distance of the shadow from the renderable entity.
      */
     private float dy;
 
     /**
-     * The alpha transparency value of the shadow.
+     * Holds the alpha transparency value of the shadow.
      */
     private float shadowAlpha;
 
     /**
-     * Constructs a new shadow effect with specified properties.
+     * Creates a new shadow effect with specified properties.
      *
      * @param dx          Horizontal distance of the shadow
      * @param dy          Vertical distance of the shadow

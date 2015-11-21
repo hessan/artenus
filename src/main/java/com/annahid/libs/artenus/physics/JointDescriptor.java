@@ -26,26 +26,37 @@ import org.jbox2d.dynamics.joints.Joint;
  * the nature of the joint.
  *
  * @author Hessan Feghhi
- *
  */
 public abstract class JointDescriptor {
-	/**
-	 * Constructs a joint with a given type. This constructor is called from all subclasses to
-	 * identify the type identifier of the joint.
-	 *
-	 * @param type type of the joint. Each joint defines its own type value, which is stored as the
-	 *             constant {@code TYPE} within the corresponding class.
-	 */
-	protected JointDescriptor(int type) {
-		jointType = type;
-	}
+    /**
+     * Holds joint type. Each joint defines its own type value, which is stored as the constant
+     * {@code TYPE} within the corresponding class.
+     */
+    int jointType;
 
-	/**
-	 * Type of the joint. Each joint defines its own type value, which is stored as the constant
-	 * {@code TYPE} within the corresponding class.
-	 */
-	int jointType;
+    /**
+     * Holds the physical body at the first end of the joint.
+     */
+    PhysicalBody body1;
 
-	PhysicalBody body1, body2;
-	Joint jointObject = null;
+    /**
+     * Holds the physical body at the second end of the joint.
+     */
+    PhysicalBody body2;
+
+    /**
+     * Holds the JBox2D joint object associated with this joint.
+     */
+    Joint jointObject = null;
+
+    /**
+     * Creates a joint with a given type. This constructor is called from all subclasses to
+     * identify the type identifier of the joint.
+     *
+     * @param type type of the joint. Each joint defines its own type value, which is stored as the
+     *             constant {@code TYPE} within the corresponding class.
+     */
+    protected JointDescriptor(int type) {
+        jointType = type;
+    }
 }

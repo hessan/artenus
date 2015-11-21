@@ -22,7 +22,7 @@ import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 
 /**
- * Superclass of all visual effects that can be added to a sprite. Currently there is only one
+ * Superclass for all visual effects that can be added to a sprite. Currently there is only one
  * effect available, but there will be more added in the future. Each entity can only have a
  * single effect assigned to it through the
  * {@link com.annahid.libs.artenus.entities.behavior.Renderable#setEffect(Effect)} method. Multiple
@@ -34,10 +34,16 @@ import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
  */
 public abstract class Effect {
     /**
+     * Holds the base effect that should be applied before this effect.
+     */
+    protected Effect baseEffect;
+
+    /**
      * Chains another effect with this effect. The renderer will process this effect after it is
      * done processing the chained effect.
      *
      * @param effect The effect to be chained
+     *
      * @return The chained effect, which is normally the same as the argument
      */
     @SuppressWarnings("unused")
@@ -54,6 +60,4 @@ public abstract class Effect {
      * @param alpha      preferred alpha value
      */
     public abstract void render(RenderingContext context, Renderable renderable, float alpha);
-
-    protected Effect baseEffect;
 }

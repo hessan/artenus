@@ -53,14 +53,6 @@ public interface Renderable {
     void setColorFilter(float r, float g, float b);
 
     /**
-     * Sets the color filter for this entity. The original colors should be multiplied by this color
-     * when rendering.
-     *
-     * @param rgb The color multipliers
-     */
-    void setColorFilter(RGB rgb);
-
-    /**
      * Gets the color filter for this entity. Modifying the fields in the returned value affects
      * the color filter.
      *
@@ -70,10 +62,19 @@ public interface Renderable {
     RGB getColorFilter();
 
     /**
+     * Sets the color filter for this entity. The original colors should be multiplied by this color
+     * when rendering.
+     *
+     * @param rgb The color multipliers
+     */
+    void setColorFilter(RGB rgb);
+
+    /**
      * Gets the effect currently assigned to this entity. Multiple effects can be chained together
      * to create a single effect.
      *
      * @return The effect chain currently assigned to this entity
+     *
      * @see com.annahid.libs.artenus.graphics.Effect
      */
     Effect getEffect();
@@ -87,6 +88,13 @@ public interface Renderable {
     void setEffect(Effect effect);
 
     /**
+     * Gets the transparency value for this renderable.
+     *
+     * @return The alpha value for transparency
+     */
+    float getAlpha();
+
+    /**
      * Sets the transparency value for this renderable. An alpha value of 1 indicates a fully opaque
      * renderable and a value of 0 is an invisible sprite. Any value in between can be specified to
      * achieve transparency.
@@ -94,13 +102,6 @@ public interface Renderable {
      * @param alpha The alpha value for transparency
      */
     void setAlpha(float alpha);
-
-    /**
-     * Gets the transparency value for this renderable.
-     *
-     * @return The alpha value for transparency
-     */
-    float getAlpha();
 
     /**
      * Renders the visual content.

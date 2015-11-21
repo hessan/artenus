@@ -36,39 +36,6 @@ import com.annahid.libs.artenus.security.LoginManager;
 @SuppressWarnings("UnusedDeclaration")
 public abstract class UnifiedServices {
     /**
-     * The Store defines the app store the unified services operate in
-     */
-    public enum Store {
-        /**
-         * Undefined app-store
-         */
-        NONE,
-        /**
-         * Google Play
-         */
-        GOOGLE,
-        /**
-         * Amazon Appstore
-         */
-        AMAZON,
-
-        /**
-         * Cafe Bazaar (local Iranian app-store)
-         */
-        BAZAAR,
-
-        /**
-         * Samsung Apps
-         */
-        SAMSUNG,
-
-        /**
-         * Cando (local Iranian app-store)
-         */
-        CANDO
-    }
-
-    /**
      * Service flag for in-app billing
      *
      * @see #getInstance
@@ -90,10 +57,24 @@ public abstract class UnifiedServices {
     public static final int SERVICE_ADS = 32;
 
     /**
+     * Holds the singleton instance.
+     */
+    private static UnifiedServices instance = null;
+
+    private int services;
+
+    /**
+     * Called by subclasses to construct an empty instance of {@code UnifiedServices}.
+     */
+    protected UnifiedServices() {
+    }
+
+    /**
      * Gets the current instance of {@code UnifiedServices}. If no such instance exists, a new
      * instance will be created, supporting services specified.
      *
      * @param services The bit-masked list of services.
+     *
      * @return Current instance
      */
     public static UnifiedServices getInstance(int services) {
@@ -139,51 +120,52 @@ public abstract class UnifiedServices {
     }
 
     /**
-     * This method is internally called as part of {@link Artenus#onCreate(Bundle)}.
+     * Called internally as part of {@link Artenus#onCreate(Bundle)}.
      *
      * @param context Artenus context
      */
     public abstract void onCreate(Context context);
 
     /**
-     * This method is internally called as part of {@link Artenus#onCreate(Bundle)}.
+     * Called internally as part of {@link Artenus#onCreate(Bundle)}.
      *
      * @param context Artenus context
      */
     public abstract void onDestroy(Context context);
 
     /**
-     * This method is internally called as part of {@link Artenus#onPause()}.
+     * Called internally as part of {@link Artenus#onPause()}.
      */
     public void onPause() {
     }
 
     /**
-     * This method is internally called as part of {@link Artenus#onResume()}.
+     * Called internally as part of {@link Artenus#onResume()}.
      */
     public void onResume() {
     }
 
     /**
-     * This method is internally called as part of {@link Artenus#onStart()}.
+     * Called internally as part of {@link Artenus#onStart()}.
      */
     public void onStart() {
     }
 
     /**
-     * This method is internally called as part of {@link Artenus#onStop()}.
+     * Called internally as part of {@link Artenus#onStop()}.
      */
     public void onStop() {
     }
 
     /**
-     * This method is internally called by {@link Artenus#onActivityResult(int, int, Intent)}.
+     * Called internally by {@link Artenus#onActivityResult(int, int, Intent)}.
      * Unified services implementations direct it to their sub-services to handle their own
      * activity requests.
      *
      * @param requestCode The integer request code
      * @param resultCode  The integer result code returned by the child activity
      * @param data        An Intent, which can return result data to the caller
+     *
      * @return {@code true} if handled, {@code false} otherwise
      */
     public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -196,6 +178,7 @@ public abstract class UnifiedServices {
      * support.
      *
      * @param servicesMask Bit-masked list of services
+     *
      * @return {@code true} if specified services are available, {@code false} otherwise
      */
     public final boolean hasServices(int servicesMask) {
@@ -206,6 +189,7 @@ public abstract class UnifiedServices {
      * Gets the app-store this instance operates in
      *
      * @return The store
+     *
      * @see com.annahid.libs.artenus.unified.UnifiedServices.Store
      */
     public abstract Store getStore();
@@ -243,16 +227,41 @@ public abstract class UnifiedServices {
      * Called on sub-classes to initialize the services, and mask out those they don't support.
      *
      * @param inputServices Bit-masked list of requested services
+     *
      * @return Bit-masked list of requested services supported by the specific implementation
      */
     protected abstract int init(int inputServices);
 
     /**
-     * Called by subclasses to construct an empty instance of {@code UnifiedServices}.
+     * The Store defines the app store the unified services operate in
      */
-    protected UnifiedServices() {
-    }
+    public enum Store {
+        /**
+         * Undefined app-store
+         */
+        NONE,
+        /**
+         * Google Play
+         */
+        GOOGLE,
+        /**
+         * Amazon Appstore
+         */
+        AMAZON,
 
-    private int services;
-    private static UnifiedServices instance = null;
+        /**
+         * Cafe Bazaar (local Iranian app-store)
+         */
+        BAZAAR,
+
+        /**
+         * Samsung Apps
+         */
+        SAMSUNG,
+
+        /**
+         * Cando (local Iranian app-store)
+         */
+        CANDO
+    }
 }

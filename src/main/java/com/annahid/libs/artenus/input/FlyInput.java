@@ -31,21 +31,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * <p>A subclass of {@link GameInput} that uses device tilting
- * as the direction knob, and {@code TouchButton} objects as the the action buttons.</p>
+ * Manages game input, using device tilting as the direction knob, and {@code TouchButton} objects
+ * as the the action buttons.
  *
  * @author Hessan Feghhi
  */
 @SuppressWarnings("UnusedDeclaration")
 public class FlyInput extends GameInput {
-    private static float vectorLength(float[] v) {
-        return (float) Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
-    }
+    private float[] angle = new float[] { 0, 0, 0 };
 
-    private float[] angle = new float[]{0, 0, 0};
     private SensorManager sensorManager;
+
     private double lastTime;
+
     private int startId;
+
     private final List<Integer> keyIds = new ArrayList<>(5);
 
     private final SensorEventListener myListener = new SensorEventListener() {
@@ -99,6 +99,10 @@ public class FlyInput extends GameInput {
             releaseKeyMap();
         }
     };
+
+    private static float vectorLength(float[] v) {
+        return (float) Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+    }
 
     /**
      * Registers this {@code FlyInput} manager to the given context and begins listening for sensor data.

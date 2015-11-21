@@ -30,12 +30,18 @@ import org.jbox2d.common.Vec2;
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class PolygonShape implements Shape {
+
     /**
      * Type value representing a polygonal shape.
      *
      * @see Shape#getType()
      */
     public static final int TYPE = 2;
+
+    /**
+     * Contains corners of the polygon.
+     */
+    private Point2D[] pts;
 
     /**
      * Constructs a {@code PolygonShape} using the convex hull of the given points.
@@ -70,6 +76,4 @@ public final class PolygonShape implements Shape {
         shape.set(points, pts.length);
         return shape;
     }
-
-    private Point2D[] pts;
 }

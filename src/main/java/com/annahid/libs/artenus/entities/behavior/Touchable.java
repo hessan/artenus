@@ -27,9 +27,10 @@ import com.annahid.libs.artenus.input.TouchEvent;
  */
 public interface Touchable {
     /**
-     * This method is called whenever a touch event arrives.
+     * Called whenever a touch event arrives.
      *
      * @param event Event information
+     *
      * @return {@code true} if handled, {@code false} otherwise
      */
     boolean handleTouch(TouchEvent event);

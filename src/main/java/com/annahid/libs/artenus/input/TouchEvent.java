@@ -28,14 +28,15 @@ public class TouchEvent {
      * Indicates that a pressed gesture has just started.
      */
     public static final int EVENT_DOWN = 0;
+
     /**
      * Indicates that a pressed gesture has finished.
      */
     public static final int EVENT_UP = 1;
+
     /**
      * Indicates that a change has happened during a press gesture (between
-     * {@link TouchEvent#EVENT_UP} and
-     * {@link TouchEvent#EVENT_DOWN}).
+     * {@link TouchEvent#EVENT_UP} and {@link TouchEvent#EVENT_DOWN}).
      */
     public static final int EVENT_MOVE = 2;
 
@@ -47,22 +48,22 @@ public class TouchEvent {
     public static final int EVENT_LEAVE = 3;
 
     /**
-     * The x coordinate of the touch event.
+     * Holds the x coordinate of the touch event.
      */
     float x;
 
     /**
-     * The y coordinate of the touch event.
+     * Holds the y coordinate of the touch event.
      */
     float y;
 
     /**
-     * The action type of the touch event.
+     * Holds the action type of the touch event.
      */
     int action;
 
     /**
-     * The pointer identifier associated to the touch event (for multi-touch systems).
+     * Holds the pointer identifier associated to the touch event (for multi-touch systems).
      */
     int pointerId;
 

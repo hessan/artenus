@@ -25,28 +25,25 @@ import android.os.Bundle;
 import com.annahid.libs.artenus.Artenus;
 
 /**
- * Super-class for are in-app billing managers. A unified services implementation should return an
+ * Super-class for all in-app billing managers. A unified services implementation should return an
  * instance of this class if it handles in-app products and subscriptions.
  */
 @SuppressWarnings("UnusedDeclaration")
 public abstract class InventoryManager {
     /**
-     * Sets the list of SKUs of interest. In order for the system to load SKUs at startup, they
-     * should all be included for this call.
-     *
-     * @param inventorySKUs List of product SKUs
+     * Event handler responsible for inventory events.
      */
-    public final void setSKUs(String[] inventorySKUs) {
-        this.inventorySKUs = inventorySKUs;
-    }
+    private InventoryListener listener;
 
     /**
-     * Appoints a new listener to handle in-app billing events for this instance.
-     *
-     * @param listener The new inventory listener, or {@code null} to remove the listener
+     * List of SKUs this inventory tracks.
      */
-    public final void setListener(InventoryListener listener) {
-        this.listener = listener;
+    private String[] inventorySKUs;
+
+    /**
+     * Constructs an empty instance of {@code InventoryManager}.
+     */
+    protected InventoryManager() {
     }
 
     /**
@@ -70,14 +67,15 @@ public abstract class InventoryManager {
      * @param requestCode The integer request code
      * @param resultCode  The integer result code returned by the child activity
      * @param data        An Intent, which can return result data to the caller
-     * @return    {@code true} if handled by inventory manager, {@code false} otherwise
+     *
+     * @return {@code true} if handled by inventory manager, {@code false} otherwise
      */
     public abstract boolean onActivityResult(int requestCode, int resultCode, Intent data);
 
     /**
      * Determines whether the store supports in-app billing.
      *
-     * @return    {@code true} if in-app billing is supported, {@code false} otherwise
+     * @return {@code true} if in-app billing is supported, {@code false} otherwise
      */
     public abstract boolean isBillingSupported();
 
@@ -93,6 +91,7 @@ public abstract class InventoryManager {
      * inventory listener associated with this instance.
      *
      * @param sku Product SKU
+     *
      * @see InventoryListener
      */
     public abstract void purchase(String sku);
@@ -101,15 +100,10 @@ public abstract class InventoryManager {
      * Consumes a previously purchased product.
      *
      * @param receipt The receipt corresponding to the purchased product
+     *
      * @see InventoryListener
      */
     public abstract void consume(ProductReceipt receipt);
-
-    /**
-     * Constructs an empty instance of {@code InventoryManager}.
-     */
-    protected InventoryManager() {
-    }
 
     /**
      * Gets the list of SKUs currently handled by this instance.
@@ -121,6 +115,16 @@ public abstract class InventoryManager {
     }
 
     /**
+     * Sets the list of SKUs of interest. In order for the system to load SKUs at startup, they
+     * should all be included for this call.
+     *
+     * @param inventorySKUs List of product SKUs
+     */
+    public final void setSKUs(String[] inventorySKUs) {
+        this.inventorySKUs = inventorySKUs;
+    }
+
+    /**
      * Gets the current inventory listener responsible for this instance.
      *
      * @return Current inventory listener, or {@code null} if non-existent
@@ -129,6 +133,12 @@ public abstract class InventoryManager {
         return listener;
     }
 
-    private InventoryListener listener;
-    private String[] inventorySKUs;
+    /**
+     * Appoints a new listener to handle in-app billing events for this instance.
+     *
+     * @param listener The new inventory listener, or {@code null} to remove the listener
+     */
+    public final void setListener(InventoryListener listener) {
+        this.listener = listener;
+    }
 }

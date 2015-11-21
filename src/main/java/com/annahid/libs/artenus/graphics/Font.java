@@ -36,10 +36,10 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * A {@code Texture} that represents a font. A font is a special-purpose cut-out of
- * an image that divides that image into characters of different widths. Each font can represent
- * a limited set of characters out of the character space. Artenus fonts are normal SVG graphics
- * with a comment block describing extra information. Below is an example of the comment block:
+ * Represents a font. A font is a special-purpose cut-out of an image that divides that image into
+ * characters of different widths. Each font can represent a limited set of characters out of the
+ * character space. Artenus fonts are normal SVG graphics with a comment block describing extra
+ * information. Below is an example of the comment block:
  * <p/>
  * <pre>
  * &lt;!--
@@ -69,38 +69,134 @@ import java.util.regex.Pattern;
  */
 public final class Font extends Texture {
     private static final char accentedLetters[] =
-            {'à', 'è', 'ì', 'ò', 'ù', 'á', 'é', 'í', 'ó', 'ú', 'â', 'ê', 'î', 'ô', 'û'};
-    private static final char basicLetters[] = {'a', 'e', 'i', 'o', 'u'};
+            { 'à', 'è', 'ì', 'ò', 'ù', 'á', 'é', 'í', 'ó', 'ú', 'â', 'ê', 'î', 'ô', 'û' };
+
+    private static final char basicLetters[] = { 'a', 'e', 'i', 'o', 'u' };
 
     /**
-     * The list of x coordinate offset values as defined in the SVG font file.
+     * Contains x coordinate offset values in the order defined in the SVG font file.
      */
     private float[] offsets;
 
     /**
-     * First character defined in the font file.
+     * Holds the first character defined in the font file.
      */
     private char firstChar;
 
     /**
-     * Horizontal spacing in pixels.
+     * Holds horizontal spacing in pixels.
      */
     private int horSpacing = -10;
 
     /**
-     * Vertical spacing in pixels.
+     * Holds vertical spacing in pixels.
      */
     private int verSpacing = 0;
 
     /**
-     * Texture buffers for characters.
+     * Contains texture buffers for characters.
      */
     private FloatBuffer[] textureBuffers;
 
     /**
-     * Character height.
+     * Holds character height.
      */
     private float charH;
+
+    /**
+     * Creates a font with the information provided.
+     *
+     * @param resourceId Resource identifier of the SVG file containing font information
+     */
+    Font(int resourceId) {
+        super(resourceId);
+        final Resources res = Artenus.getInstance().getResources();
+
+        if (!res.getResourceTypeName(resId).equalsIgnoreCase("raw"))
+            throw new IllegalStateException("Not a valid font resource");
+
+        // Load commented font information from the SVG file.
+
+        final Map<Character, Pair<Float, Float>> map = new HashMap<>(32);
+        String line;
+        boolean isFont = false;
+        char first = Character.MAX_VALUE, last = Character.MIN_VALUE;
+        final BufferedReader reader =
+                new BufferedReader(new InputStreamReader(res.openRawResource(resId)));
+        try {
+            final Pattern pattern = Pattern.compile("\\s*,\\s*");
+
+            while ((line = reader.readLine()) != null) {
+                int index = line.indexOf("ARTENUS_FONT");
+
+                if (index >= 0) {
+                    String[] params = pattern.split(line.substring(index + 12).trim());
+
+                    isFont = true;
+                    charH = Integer.parseInt(params[0]);
+
+                    if (params.length > 1) {
+                        int hs = Integer.parseInt(params[1]), vs = 0;
+
+                        if (params.length > 2)
+                            vs = Integer.parseInt(params[2]);
+
+                        horSpacing = hs;
+                        verSpacing = vs;
+                    }
+
+                    while ((line = reader.readLine()) != null) {
+                        line = line.trim();
+
+                        if (line.startsWith("@")) {
+                            String[] coords = pattern.split(line.substring(2).trim());
+
+                            if (coords.length > 1) {
+                                char c = line.charAt(1);
+
+                                if (c > last)
+                                    last = c;
+
+                                if (c < first)
+                                    first = c;
+
+                                map.put(c, new Pair<>(
+                                        Float.parseFloat(coords[0]), Float.parseFloat(coords[1])
+                                ));
+                            }
+                        }
+                    }
+
+                    break;
+                }
+            }
+        } catch (IOException ex) {
+            isFont = false;
+        }
+
+        try {
+            reader.close();
+        } catch (IOException ex) {
+            // Do nothing
+        }
+
+        if (!isFont)
+            throw new IllegalStateException("Error reading font resource");
+
+        offsets = new float[(last - first + 1) << 1];
+
+        for (char c = first; c <= last; c++) {
+            Pair<Float, Float> result = map.get(c);
+
+            if (result != null) {
+                int index = (c - first) << 1;
+                offsets[index] = result.first;
+                offsets[index + 1] = result.second;
+            }
+        }
+
+        firstChar = first;
+    }
 
     /**
      * Processes a text and conforms it to easily support accent-based characters in the framework
@@ -108,7 +204,9 @@ public final class Font extends Texture {
      * get the framework representation of latin strings with accented letters.
      *
      * @param text The text to be processed
+     *
      * @return The processed text
+     *
      * @deprecated Fonts can now be localized, which defeats the purpose of this method. It is still
      * recommended to include definitions for `, ', and ^ characters in any font file to avoid
      * compatibility issues. But this method will be removed from the framework soon.
@@ -132,6 +230,7 @@ public final class Font extends Texture {
      *
      * @param text The string representation of the text
      * @param h    The font height
+     *
      * @return The width of the text
      */
     public final float getTextWidth(String text, float h) {
@@ -144,6 +243,7 @@ public final class Font extends Texture {
      *
      * @param ca The character array representation of the text
      * @param h  The font height
+     *
      * @return The width of the text
      */
     public final float getTextWidth(char[] ca, float h) {
@@ -260,101 +360,6 @@ public final class Font extends Texture {
         }
 
         context.popMatrix();
-    }
-
-    /**
-     * Creates a font with the information provided.
-     *
-     * @param resourceId The resource identifier of the SVG file containing font information
-     */
-    Font(int resourceId) {
-        super(resourceId);
-        final Resources res = Artenus.getInstance().getResources();
-
-        if (!res.getResourceTypeName(resId).equalsIgnoreCase("raw"))
-            throw new IllegalStateException("Not a valid font resource");
-
-        // Load commented font information from the SVG file.
-
-        final Map<Character, Pair<Float, Float>> map = new HashMap<>(32);
-        String line;
-        boolean isFont = false;
-        char first = Character.MAX_VALUE, last = Character.MIN_VALUE;
-        final BufferedReader reader =
-                new BufferedReader(new InputStreamReader(res.openRawResource(resId)));
-        try {
-            final Pattern pattern = Pattern.compile("\\s*,\\s*");
-
-            while ((line = reader.readLine()) != null) {
-                int index = line.indexOf("ARTENUS_FONT");
-
-                if (index >= 0) {
-                    String[] params = pattern.split(line.substring(index + 12).trim());
-
-                    isFont = true;
-                    charH = Integer.parseInt(params[0]);
-
-                    if (params.length > 1) {
-                        int hs = Integer.parseInt(params[1]), vs = 0;
-
-                        if (params.length > 2)
-                            vs = Integer.parseInt(params[2]);
-
-                        horSpacing = hs;
-                        verSpacing = vs;
-                    }
-
-                    while ((line = reader.readLine()) != null) {
-                        line = line.trim();
-
-                        if (line.startsWith("@")) {
-                            String[] coords = pattern.split(line.substring(2).trim());
-
-                            if (coords.length > 1) {
-                                char c = line.charAt(1);
-
-                                if (c > last)
-                                    last = c;
-
-                                if (c < first)
-                                    first = c;
-
-                                map.put(c, new Pair<>(
-                                        Float.parseFloat(coords[0]), Float.parseFloat(coords[1])
-                                ));
-                            }
-                        }
-                    }
-
-                    break;
-                }
-            }
-        } catch (IOException ex) {
-            isFont = false;
-        }
-
-        try {
-            reader.close();
-        } catch (IOException ex) {
-            // Do nothing
-        }
-
-        if (!isFont)
-            throw new IllegalStateException("Error reading font resource");
-
-        offsets = new float[(last - first + 1) << 1];
-
-        for (char c = first; c <= last; c++) {
-            Pair<Float, Float> result = map.get(c);
-
-            if (result != null) {
-                int index = (c - first) << 1;
-                offsets[index] = result.first;
-                offsets[index + 1] = result.second;
-            }
-        }
-
-        firstChar = first;
     }
 
     /**

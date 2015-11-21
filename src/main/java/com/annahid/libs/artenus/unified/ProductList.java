@@ -30,6 +30,11 @@ import java.util.Map;
 @SuppressWarnings("UnusedDeclaration")
 public class ProductList {
     /**
+     * Used to retrieve products through their SKUs.
+     */
+    private Map<String, Product> mSkuMap = new HashMap<>(8);
+
+    /**
      * Adds a new product to the group.
      *
      * @param product The new product
@@ -42,6 +47,7 @@ public class ProductList {
      * Retrieves a product from the group.
      *
      * @param sku SKU of the desired product
+     *
      * @return The desired product, or {@code null} if it doesn't exist in the group
      */
     public Product get(String sku) {
@@ -59,6 +65,4 @@ public class ProductList {
     public Collection<Product> getAllProducts() {
         return mSkuMap.values();
     }
-
-    private Map<String, Product> mSkuMap = new HashMap<>(8);
 }

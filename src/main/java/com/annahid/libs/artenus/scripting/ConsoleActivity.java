@@ -29,23 +29,29 @@ import android.view.View;
 import com.annahid.libs.artenus.R;
 
 /**
- * Provides a scripting console interface. You can type in commands
- * and request execution. The request will be passed to the {@code ScriptHost}
- * object for processing. To use this interface, you must declare
- * {@code ConsoleActivity} as an activity in {@code AndroidManifest.xml}.
+ * Provides a scripting console interface. You can type in commands and request execution. The
+ * request will be passed to the {@code ScriptHost} object for processing. To use this interface,
+ * you must declare {@code ConsoleActivity} as an activity in {@code AndroidManifest.xml}.
  *
  * @author Hessan Feghhi
  */
 public class ConsoleActivity extends Activity {
     private static ConsoleActivity instance = null;
+
     private static ScriptHost host;
+
     private static String code = "";
+
+    private EditText txtCommand;
+
+    private Button btnExecute;
 
     /**
      * Opens a console window with the given script host.
      *
      * @param context The application context
      * @param host    The script host interpreting scripts
+     *
      * @see ScriptHost
      */
     public static void openConsole(Context context, ScriptHost host) {
@@ -58,21 +64,21 @@ public class ConsoleActivity extends Activity {
     }
 
     /**
-     * Sets the script showing on the editor.
-     *
-     * @param script The script code
-     */
-    public static void setScript(String script) {
-        code = script;
-    }
-
-    /**
      * Retrieves the scripts currently showing on the editor.
      *
      * @return The script text
      */
     public static String getScript() {
         return code;
+    }
+
+    /**
+     * Sets the script showing on the editor.
+     *
+     * @param script The script code
+     */
+    public static void setScript(String script) {
+        code = script;
     }
 
     /**
@@ -84,9 +90,6 @@ public class ConsoleActivity extends Activity {
             instance = null;
         }
     }
-
-    private EditText txtCommand;
-    private Button btnExecute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

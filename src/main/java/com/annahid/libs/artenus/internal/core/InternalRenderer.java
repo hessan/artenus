@@ -52,16 +52,6 @@ import javax.microedition.khronos.opengles.GL10;
  */
 class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
     /**
-     * The transformation matrix stack used to comply with rendering context requirement.
-     */
-    private final Stack<float[]> matrixStack = new Stack<>();
-
-    /**
-     * The projection matrix, which will be multipled with the transformation matrix.
-     */
-    private final float[] mvpMatrix = new float[16];
-
-    /**
      * The list of filters currently effective.
      */
     List<PostProcessingFilter> filters = new ArrayList<>(10);
@@ -85,6 +75,16 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
      * The real height of the rendering area.
      */
     int screenHeight;
+
+    /**
+     * The transformation matrix stack used to comply with rendering context requirement.
+     */
+    private final Stack<float[]> matrixStack = new Stack<>();
+
+    /**
+     * The projection matrix, which will be multipled with the transformation matrix.
+     */
+    private final float[] mvpMatrix = new float[16];
 
     /**
      * Current transformation matrix.
@@ -156,7 +156,7 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
             vertexBuffer.position(0);
         }
 
-        currentMatrix = new float[]{
+        currentMatrix = new float[] {
                 1, 0, 0, 0,
                 0, 1, 0, 0,
                 0, 0, 1, 0,

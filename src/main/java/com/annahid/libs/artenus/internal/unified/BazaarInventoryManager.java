@@ -35,167 +35,168 @@ import java.util.List;
 
 final class BazaarInventoryManager extends InventoryManager {
 
-	@Override
-	public void onCreate(Context context) {
-		String base64EncodedPublicKey;
+    private static final int RC_REQUEST = 10002;
 
-		try {
-			base64EncodedPublicKey = Security.getLicenseKey(context, UnifiedServices.Store.BAZAAR);
-		} catch (Exception ex) {
-			return;
-		}
+    private IabHelper mHelper;
 
-		mHelper = new BazaarIabHelper(context, base64EncodedPublicKey);
+    // Listener that's called when we finish querying the items and subscriptions we own
+    IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+        public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
 
-		mHelper.startSetup(new BazaarIabHelper.OnIabSetupFinishedListener() {
-			public void onIabSetupFinished(IabResult result) {
+            // Have we been disposed of in the meantime? If so, quit.
+            if (mHelper == null) return;
 
-				if (!result.isSuccess()) {
+            InventoryListener listener = getListener();
 
-					if (mHelper != null)
-						mHelper.dispose();
+            if (listener == null)
+                return;
 
-					mHelper = null;
-					return;
-				}
+            // Is it a failure?
+            if (result.isFailure()) {
+                listener.onInventoryFailure();
+                return;
+            }
 
-				// Have we been disposed of in the meantime? If so, quit.
-				if (mHelper == null) return;
+            ProductList list = new ProductList();
 
-				final List<String> skuList = new ArrayList<>();
-				Collections.addAll(skuList, getSKUs());
-				mHelper.queryInventoryAsync(true, skuList, mGotInventoryListener);
-			}
-		});
-	}
+            for (String sku : getSKUs()) {
+                if (inventory.hasDetails(sku)) {
+                    IabSkuDetails details = inventory.getSkuDetails(sku);
 
-	@Override
-	public void onDestroy(Context context) {
-		if (mHelper != null) {
-			mHelper.dispose();
-			mHelper = null;
-		}
-	}
+                    Product product = new Product(
+                            sku,
+                            details.getTitle(),
+                            details.getDescription(),
+                            details.getPrice(),
+                            details.getType().equals(BazaarIabHelper.ITEM_TYPE_SUBS) ?
+                                    Product.SUBSCRIPTION : Product.CONSUMABLE
+                    );
 
-	@Override
-	public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
-		return mHelper != null && mHelper.handleActivityResult(requestCode, resultCode, data);
-	}
+                    if (inventory.hasPurchase(sku)) {
+                        product.setReceipt(new CommonProductReceipt(inventory.getPurchase(sku)));
+                    }
+                }
+            }
 
-	@Override
-	public boolean isBillingSupported() {
-		return mHelper != null;
-	}
+            listener.onInventoryLoaded(list);
+        }
+    };
 
-	@Override
-	public void subscribe(String sku) {
-		mHelper.launchPurchaseFlow(Artenus.getInstance(),
-				sku, BazaarIabHelper.ITEM_TYPE_SUBS,
-				RC_REQUEST, mPurchaseFinishedListener, "");
-	}
+    // Callback for when a purchase is finished
+    BazaarIabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new BazaarIabHelper.OnIabPurchaseFinishedListener() {
+        public void onIabPurchaseFinished(IabResult result, IabPurchase purchase) {
+            // if we were disposed of in the meantime, quit.
+            if (mHelper == null) return;
 
-	@Override
-	public void purchase(String sku) {
-		mHelper.launchPurchaseFlow(Artenus.getInstance(),
-				sku, RC_REQUEST, mPurchaseFinishedListener, "");
-	}
+            InventoryListener listener = getListener();
 
-	@Override
-	public void consume(ProductReceipt receipt) {
-		mHelper.consumeAsync(((CommonProductReceipt) receipt).receipt, mConsumeFinishedListener);
-	}
+            if (listener == null)
+                return;
 
-	@SuppressWarnings("UnusedDeclaration")
-	private boolean verifyDeveloperPayload(IabPurchase p) {
-		return true;
-	}
+            if (result.isFailure()) {
+                listener.onPurchaseFailure(new CommonProductReceipt(purchase));
+                return;
+            }
 
-	// Listener that's called when we finish querying the items and subscriptions we own
-	IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
-		public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+            if (!verifyDeveloperPayload(purchase)) {
+                listener.onPurchaseFailure(new CommonProductReceipt(purchase));
+                return;
+            }
 
-			// Have we been disposed of in the meantime? If so, quit.
-			if (mHelper == null) return;
+            listener.onPurchased(new CommonProductReceipt(purchase));
+        }
+    };
 
-			InventoryListener listener = getListener();
+    // Called when consumption is complete
+    IabHelper.OnConsumeFinishedListener mConsumeFinishedListener = new IabHelper.OnConsumeFinishedListener() {
+        public void onConsumeFinished(IabPurchase purchase, IabResult result) {
 
-			if (listener == null)
-				return;
+            // if we were disposed of in the meantime, quit.
+            if (mHelper == null) return;
 
-			// Is it a failure?
-			if (result.isFailure()) {
-				listener.onInventoryFailure();
-				return;
-			}
+            InventoryListener listener = getListener();
 
-			ProductList list = new ProductList();
+            if (listener == null)
+                return;
 
-			for (String sku : getSKUs()) {
-				if (inventory.hasDetails(sku)) {
-					IabSkuDetails details = inventory.getSkuDetails(sku);
+            if (result.isSuccess()) {
+                listener.onConsumed(new CommonProductReceipt(purchase));
+            }
+        }
+    };
 
-					Product product = new Product(
-							sku,
-							details.getTitle(),
-							details.getDescription(),
-							details.getPrice(),
-							details.getType().equals(BazaarIabHelper.ITEM_TYPE_SUBS) ?
-									Product.SUBSCRIPTION : Product.CONSUMABLE
-					);
+    @Override
+    public void onCreate(Context context) {
+        String base64EncodedPublicKey;
 
-					if (inventory.hasPurchase(sku)) {
-						product.setReceipt(new CommonProductReceipt(inventory.getPurchase(sku)));
-					}
-				}
-			}
+        try {
+            base64EncodedPublicKey = Security.getLicenseKey(context, UnifiedServices.Store.BAZAAR);
+        } catch (Exception ex) {
+            return;
+        }
 
-			listener.onInventoryLoaded(list);
-		}
-	};
+        mHelper = new BazaarIabHelper(context, base64EncodedPublicKey);
 
-	// Callback for when a purchase is finished
-	BazaarIabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new BazaarIabHelper.OnIabPurchaseFinishedListener() {
-		public void onIabPurchaseFinished(IabResult result, IabPurchase purchase) {
-			// if we were disposed of in the meantime, quit.
-			if (mHelper == null) return;
+        mHelper.startSetup(new BazaarIabHelper.OnIabSetupFinishedListener() {
+            public void onIabSetupFinished(IabResult result) {
 
-			InventoryListener listener = getListener();
+                if (!result.isSuccess()) {
 
-			if (listener == null)
-				return;
+                    if (mHelper != null)
+                        mHelper.dispose();
 
-			if (result.isFailure()) {
-				listener.onPurchaseFailure(new CommonProductReceipt(purchase));
-				return;
-			}
+                    mHelper = null;
+                    return;
+                }
 
-			if (!verifyDeveloperPayload(purchase)) {
-				listener.onPurchaseFailure(new CommonProductReceipt(purchase));
-				return;
-			}
+                // Have we been disposed of in the meantime? If so, quit.
+                if (mHelper == null) return;
 
-			listener.onPurchased(new CommonProductReceipt(purchase));
-		}
-	};
+                final List<String> skuList = new ArrayList<>();
+                Collections.addAll(skuList, getSKUs());
+                mHelper.queryInventoryAsync(true, skuList, mGotInventoryListener);
+            }
+        });
+    }
 
-	// Called when consumption is complete
-	IabHelper.OnConsumeFinishedListener mConsumeFinishedListener = new IabHelper.OnConsumeFinishedListener() {
-		public void onConsumeFinished(IabPurchase purchase, IabResult result) {
+    @Override
+    public void onDestroy(Context context) {
+        if (mHelper != null) {
+            mHelper.dispose();
+            mHelper = null;
+        }
+    }
 
-			// if we were disposed of in the meantime, quit.
-			if (mHelper == null) return;
+    @Override
+    public boolean onActivityResult(int requestCode, int resultCode, Intent data) {
+        return mHelper != null && mHelper.handleActivityResult(requestCode, resultCode, data);
+    }
 
-			InventoryListener listener = getListener();
+    @Override
+    public boolean isBillingSupported() {
+        return mHelper != null;
+    }
 
-			if (listener == null)
-				return;
+    @Override
+    public void subscribe(String sku) {
+        mHelper.launchPurchaseFlow(Artenus.getInstance(),
+                sku, BazaarIabHelper.ITEM_TYPE_SUBS,
+                RC_REQUEST, mPurchaseFinishedListener, "");
+    }
 
-			if (result.isSuccess()) {
-				listener.onConsumed(new CommonProductReceipt(purchase));
-			}
-		}
-	};
+    @Override
+    public void purchase(String sku) {
+        mHelper.launchPurchaseFlow(Artenus.getInstance(),
+                sku, RC_REQUEST, mPurchaseFinishedListener, "");
+    }
 
-	private IabHelper mHelper;
-	private static final int RC_REQUEST = 10002;
+    @Override
+    public void consume(ProductReceipt receipt) {
+        mHelper.consumeAsync(((CommonProductReceipt) receipt).receipt, mConsumeFinishedListener);
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    private boolean verifyDeveloperPayload(IabPurchase p) {
+        return true;
+    }
 }

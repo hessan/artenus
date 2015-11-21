@@ -31,19 +31,25 @@ import android.util.SparseIntArray;
 import java.io.IOException;
 
 /**
- * Provides audio functionality for games. You can handle sound effects
- * and music play-back easily through static methods provided by this class.
+ * Provides audio functionality for games. You can handle sound effects and music play-back easily
+ * through static methods provided by this class.
  *
  * @author Hessan Feghhi
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class SoundManager {
     private static final SparseIntArray soundPoolMap = new SparseIntArray();
+
     private static SoundPool soundPool;
+
     private static Context context = null;
+
     private static MediaPlayer bgPlayer = null;
+
     private static int bgLength = 0;
+
     private static String currentMusic = null;
+
     private static float generalVolume = 1.0f;
 
     /**
@@ -95,6 +101,16 @@ public final class SoundManager {
     }
 
     /**
+     * Gets the general volume of the sound manager.
+     *
+     * @return A number between 0 and 1. Number 0 means the sound is mute
+     * and 1 is the loudest sound.
+     */
+    public static float getGeneralVolume() {
+        return generalVolume;
+    }
+
+    /**
      * Sets the general volume of the sound manager.
      *
      * @param volume The new volume which is a number between 0 and 1
@@ -106,16 +122,6 @@ public final class SoundManager {
             if (bgPlayer.isPlaying())
                 bgPlayer.setVolume(generalVolume, generalVolume);
         }
-    }
-
-    /**
-     * Gets the general volume of the sound manager.
-     *
-     * @return A number between 0 and 1. Number 0 means the sound is mute
-     * and 1 is the loudest sound.
-     */
-    public static float getGeneralVolume() {
-        return generalVolume;
     }
 
     /**

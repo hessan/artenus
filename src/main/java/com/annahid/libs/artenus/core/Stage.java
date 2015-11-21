@@ -44,6 +44,7 @@ public interface Stage {
      * Converts screen x to stage x coordination using the scaling factor.
      *
      * @param x Screen x
+     *
      * @return Stage x
      */
     float screenToLogicalX(float x);
@@ -52,6 +53,7 @@ public interface Stage {
      * Converts screen y to stage x coordination using the scaling factor.
      *
      * @param y Screen y
+     *
      * @return Stage y
      */
     float screenToLogicalY(float y);
@@ -60,6 +62,7 @@ public interface Stage {
      * Converts stage x to screen x coordination using the scaling factor.
      *
      * @param x Stage x
+     *
      * @return Screen x
      */
     float logicalToScreenX(float x);
@@ -68,17 +71,10 @@ public interface Stage {
      * Converts stage y to screen y coordination using the scaling factor.
      *
      * @param y Stage y
+     *
      * @return Screen y
      */
     float logicalToScreenY(float y);
-
-    /**
-     * Sets the next scene that should be shown on this {@code Stage}. The scene will not be shown
-     * immediately and will go through a transition effect and possibly a local loading procedure.
-     *
-     * @param scene The new scene
-     */
-    void setScene(Scene scene);
 
     /**
      * Gets the current scene. If a new scene has been set, but the transition is not yet complete,
@@ -87,6 +83,14 @@ public interface Stage {
      * @return The current scene
      */
     Scene getScene();
+
+    /**
+     * Sets the next scene that should be shown on this {@code Stage}. The scene will not be shown
+     * immediately and will go through a transition effect and possibly a local loading procedure.
+     *
+     * @param scene The new scene
+     */
+    void setScene(Scene scene);
 
     /**
      * Gets the logical width of the stage. If the device is in portrait mode, this value is always
@@ -98,7 +102,8 @@ public interface Stage {
 
     /**
      * Gets the logical height of the stage. If the device is in landscape mode, this value is
-     * always 600 and otherwise it is the scaled version of screen height to match the width of 600.
+     * always 600 and otherwise it is the scaled version of screen height to match the width of
+     * 600.
      *
      * @return Logical height in texels
      */

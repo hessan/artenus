@@ -27,8 +27,8 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 /**
- * A subclass of {@link SpriteEntity} that displays an image block on the screen. It provides tools
- * for retrieving portions of a atlas texture and handling frames for animations.
+ * Displays an image block on the screen. It provides tools for retrieving portions of a atlas
+ * texture and handling frames for animations.
  *
  * @author Hessan Feghhi
  * @see SpriteEntity
@@ -36,126 +36,23 @@ import java.nio.FloatBuffer;
 @SuppressWarnings("UnusedDeclaration")
 public class ImageSprite extends SpriteEntity {
     /**
-     * A cutout is a description of how a texture is divided into image blocks for
-     * use in an {@code ImageSprite}. By introducing a {@code ImageSprite.Cutout}
-     * object to an {@code ImageSprite}, you instruct it how to build its frames
-     * based on the texture you provide.
-     *
-     * @author Hessan Feghhi
+     * Holds current atlas frame being displayed by the image sprite.
      */
-    public static final class Cutout {
-        private FloatBuffer[] textureBuffers;
-        private float fw, fh;
-        private int fc, fch, sx, sy;
-
-        /**
-         * Constructs a cutout that divides the texture into blocks of the given
-         * dimensions and takes out the given number of blocks horizontally from
-         * the texture. The remainder of the texture will remain unused.
-         *
-         * @param frameWidth  The width of each block
-         * @param frameHeight The height of each block
-         * @param frameCount  The number of blocks to cut out of the image
-         */
-        public Cutout(float frameWidth, float frameHeight, int frameCount) {
-            this(frameWidth, frameHeight, frameCount, 1, 0, 0);
-        }
-
-        /**
-         * Constructs a cutout that divides the texture into blocks of the given
-         * dimensions. You can specify the number of columns and rows and it will
-         * cut out a grid of blocks from the texture with the given information.
-         * The remainder of the texture will remain unused.
-         *
-         * @param frameWidth  The width of each block
-         * @param frameHeight The height of each block
-         * @param frameCountW The number of horizontal blocks
-         * @param frameCountH The number of vertical blocks
-         */
-        public Cutout(float frameWidth, float frameHeight, int frameCountW, int frameCountH) {
-            this(frameWidth, frameHeight, frameCountW, frameCountH, 0, 0);
-        }
-
-        /**
-         * Constructs a cutout with the information given. This constructor is an
-         * extension to the {@code Cutout(float, float, int, int)} constructor
-         * that gives you the option to start at a given point in the texture.
-         * This can be useful if you are using large atlas textures.
-         *
-         * @param frameWidth  The width of each block
-         * @param frameHeight The height of each block
-         * @param frameCountW The number of horizontal blocks
-         * @param frameCountH The number of vertical blocks
-         * @param startX      The x coordination of the starting pixel
-         * @param startY      The y coordination of the starting pixel
-         */
-        public Cutout(float frameWidth, float frameHeight, int frameCountW, int frameCountH, int startX, int startY) {
-            fw = frameWidth;
-            fh = frameHeight;
-            fc = frameCountW;
-            fch = frameCountH;
-            sx = startX;
-            sy = startY;
-        }
-
-        /**
-         * Gets the frame (block) width associated with this cutout.
-         *
-         * @return The frame width
-         */
-        public float getFrameWidth() {
-            return fw;
-        }
-
-        /**
-         * Gets the frame (block) height associated with this cutout.
-         *
-         * @return The frame height
-         */
-        public float getFrameHeight() {
-            return fh;
-        }
-
-        /**
-         * Determines whether the texture buffers for this cutout have already
-         * been generated.
-         *
-         * @return {@code true} if buffers are generated or {@code false} otherwise
-         */
-        boolean isGenerated() {
-            return textureBuffers != null;
-        }
-
-        void generate(int w, int h) {
-            textureBuffers = new FloatBuffer[fc * fch];
-
-            for (int indexh = 0; indexh < fch; indexh++)
-                for (int index = 0; index < fc; index++) {
-                    final float x1 = (sx + fw * (float) index) / (float) w;
-                    final float x2 = (sx + fw * (float) (index + 1)) / (float) w;
-                    final float y1 = (sy + fh * (float) indexh) / (float) h;
-                    final float y2 = (sy + fh * (float) (indexh + 1)) / (float) h;
-
-                    final float texture[] = {
-                            x1, y1,
-                            x2, y1,
-                            x1, y2,
-                            x2, y2,
-                    };
-
-                    final ByteBuffer ibb = ByteBuffer.allocateDirect(texture.length * 4);
-                    ibb.order(ByteOrder.nativeOrder());
-                    final FloatBuffer textureBuffer = ibb.asFloatBuffer();
-                    textureBuffer.put(texture);
-                    textureBuffer.position(0);
-                    textureBuffers[indexh * fc + index] = textureBuffer;
-                }
-        }
-    }
-
     private int currentFrame;
+
+    /**
+     * Holds the resource identifier of the atlas texture.
+     */
     private int resId = -1;
+
+    /**
+     * Holds the atlas texture.
+     */
     private Texture frames = null;
+
+    /**
+     * Holds the cutout.
+     */
     private Cutout cutout = null;
 
     /**
@@ -166,6 +63,7 @@ public class ImageSprite extends SpriteEntity {
      * @param resourceId The resource identifier for the texture. This can be for an
      *                   ordinary image (png, jpeg, etc.) or an SVG file.
      * @param co         The cutout instructor to generate frames
+     *
      * @see TextureManager
      */
     public ImageSprite(int resourceId, Cutout co) {
@@ -235,6 +133,140 @@ public class ImageSprite extends SpriteEntity {
 
                 frames.draw(context, pos.x, pos.y, width, height, rotation);
             }
+        }
+    }
+
+    /**
+     * Describes how a texture is divided into image blocks for use in an {@code ImageSprite}. By
+     * introducing a {@code ImageSprite.Cutout} object to an {@code ImageSprite}, you instruct it
+     * how to build its frames based on the texture you provide.
+     *
+     * @author Hessan Feghhi
+     */
+    public static final class Cutout {
+        /**
+         * Contains generated texture coordinate buffers.
+         */
+        private FloatBuffer[] textureBuffers;
+
+        private float fw;
+
+        private float fh;
+
+        private int fc;
+
+        private int fch;
+
+        private int sx;
+
+        private int sy;
+
+        /**
+         * Creates a cutout that divides the texture into blocks of the given dimensions and takes
+         * out the given number of blocks horizontally from the texture. The remainder of the
+         * texture will remain unused.
+         *
+         * @param frameWidth  The width of each block
+         * @param frameHeight The height of each block
+         * @param frameCount  The number of blocks to cut out of the image
+         */
+        public Cutout(float frameWidth, float frameHeight, int frameCount) {
+            this(frameWidth, frameHeight, frameCount, 1, 0, 0);
+        }
+
+        /**
+         * Creates a cutout that divides the texture into blocks of the given dimensions. You can
+         * specify the number of columns and rows and it will cut out a grid of blocks from the
+         * texture with the given information. The remainder of the texture will remain unused.
+         *
+         * @param frameWidth  Width of each block
+         * @param frameHeight Height of each block
+         * @param frameCountW Number of horizontal blocks
+         * @param frameCountH Number of vertical blocks
+         */
+        public Cutout(float frameWidth, float frameHeight, int frameCountW, int frameCountH) {
+            this(frameWidth, frameHeight, frameCountW, frameCountH, 0, 0);
+        }
+
+        /**
+         * Creates a cutout with the information given. This constructor is an extension to the
+         * {@code Cutout(float, float, int, int)} constructor that gives you the option to start at
+         * a given point in the texture. This can be useful if you are using large atlas textures.
+         *
+         * @param frameWidth  Width of each block
+         * @param frameHeight Height of each block
+         * @param frameCountW Number of horizontal blocks
+         * @param frameCountH Number of vertical blocks
+         * @param startX      x coordinate of the starting pixel
+         * @param startY      y coordinate of the starting pixel
+         */
+        public Cutout(float frameWidth, float frameHeight, int frameCountW, int frameCountH, int startX, int startY) {
+            fw = frameWidth;
+            fh = frameHeight;
+            fc = frameCountW;
+            fch = frameCountH;
+            sx = startX;
+            sy = startY;
+        }
+
+        /**
+         * Gets the frame (block) width associated with this cutout.
+         *
+         * @return The frame width
+         */
+        public float getFrameWidth() {
+            return fw;
+        }
+
+        /**
+         * Gets the frame (block) height associated with this cutout.
+         *
+         * @return The frame height
+         */
+        public float getFrameHeight() {
+            return fh;
+        }
+
+        /**
+         * Determines whether the texture buffers for this cutout have already
+         * been generated.
+         *
+         * @return {@code true} if buffers are generated or {@code false} otherwise
+         */
+        boolean isGenerated() {
+            return textureBuffers != null;
+        }
+
+        /**
+         * Generates texture coordinate buffers.
+         *
+         * @param w Perceived texture width
+         * @param h Perceived texture height
+         */
+        void generate(int w, int h) {
+            textureBuffers = new FloatBuffer[fc * fch];
+
+            for (int indexh = 0; indexh < fch; indexh++)
+                for (int index = 0; index < fc; index++) {
+                    final float x1 = (sx + fw * (float) index) / (float) w;
+                    final float x2 = (sx + fw * (float) (index + 1)) / (float) w;
+                    final float y1 = (sy + fh * (float) indexh) / (float) h;
+                    final float y2 = (sy + fh * (float) (indexh + 1)) / (float) h;
+
+                    final float texture[] = {
+                            x1, y1,
+                            x2, y1,
+                            x1, y2,
+                            x2, y2,
+                    };
+
+                    final ByteBuffer ibb = ByteBuffer.allocateDirect(texture.length * 4);
+                    ibb.order(ByteOrder.nativeOrder());
+                    final FloatBuffer textureBuffer = ibb.asFloatBuffer();
+                    textureBuffer.put(texture);
+                    textureBuffer.position(0);
+                    textureBuffers[indexh * fc + index] = textureBuffer;
+                }
         }
     }
 }

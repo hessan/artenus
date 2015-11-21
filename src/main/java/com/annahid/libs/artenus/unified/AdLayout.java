@@ -25,18 +25,25 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * A view group for an ad-driven game. It takes two {@code View} objects as children. The first one
- * will be the main view and will take up the entire region, and the second one will be considered
- * as an ad unit, and will be placed accordingly.
+ * Provides a view group for an ad-driven game. It takes two {@code View} objects as children. The
+ * first one will be the main view and will take up the entire region, and the second one will be
+ * considered as an ad unit, and will be placed accordingly.
  *
  * @author Hessan Feghhi
  */
 public final class AdLayout extends ViewGroup {
+    /**
+     * Indicates how the ad is currently displayed.
+     */
     private AdManager.Show adShown = AdManager.Show.HIDDEN;
+
+    /**
+     * Holds the visible height of the banner ad.
+     */
     private int adHeight = 0;
 
     /**
-     * Constructs an {@code AdLayout} for the given application context.
+     * Creates an {@code AdLayout} for the given application context.
      *
      * @param context The application context
      */
@@ -45,16 +52,24 @@ public final class AdLayout extends ViewGroup {
     }
 
     /**
-     * Constructs an {@code AdLayout} for the given application context
-     * with the given set of XML attributes.
+     * Creates an {@code AdLayout} for the given application context with the given set of XML
+     * attributes.
      *
-     * @param context The application context
-     * @param attrs   The set of attributes
+     * @param context Application context
+     * @param attrs   Set of attributes
      */
     public AdLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
+    /**
+     * Creates an {@code AdLayout} for the given application context with the given set of
+     * XML attributes.
+     *
+     * @param context  Application context
+     * @param attrs    Set of attributes
+     * @param defStyle Default style for the
+     */
     public AdLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }

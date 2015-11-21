@@ -22,25 +22,24 @@ import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.data.Point2D;
 
 /**
- * A subclass of {@link SpriteEntity} that represents a line. It provides methods to control the
- * appearance of the line.
+ * Represents a line, and provides methods to control the appearance of the line.
  *
  * @author Hessan Feghhi
  */
 @SuppressWarnings("UnusedDeclaration")
 public final class LineSprite extends SpriteEntity {
     /**
-     * Coordinates of the first point.
+     * Holds the first point.
      */
     private Point2D startPoint;
 
     /**
-     * Coordinates of the second point.
+     * Holds the second point.
      */
     private Point2D endPoint;
 
     /**
-     * Line thickness in pixels.
+     * Holds line thickness in pixels.
      */
     private float thickness;
 

@@ -27,7 +27,7 @@ import com.annahid.libs.artenus.graphics.rendering.RenderTarget;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 
 /**
- * A post-processing filter that adds a blur effect to the rendered frame.
+ * Represents a post-processing filter that adds a blur effect to the rendered frame.
  *
  * @author Hessan Feghhi
  */
@@ -35,17 +35,17 @@ public class BlurFilter implements PostProcessingFilter {
     private static BlurShaderProgram program = new BlurShaderProgram();
 
     /**
-     * Blur amount.
+     * Holds blur amount.
      */
     private float amount;
 
     /**
-     * The index of the last pass required to apply the given amount of blur.
+     * Holds the index of the last pass required to apply the given amount of blur.
      */
     private int lastPass = 1;
 
     /**
-     * Saved frame setup that carries information from {@link #setup(int, FilterPassSetup)} to
+     * Holds saved frame setup that carries information from {@link #setup(int, FilterPassSetup)} to
      * {@link #render(int, RenderingContext, RenderTarget)}.
      */
     private Viewport savedSetup;

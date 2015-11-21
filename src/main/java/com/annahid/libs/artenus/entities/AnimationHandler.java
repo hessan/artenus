@@ -33,6 +33,7 @@ public interface AnimationHandler {
      *
      * @param animatable  The {@link Animatable} object to be updated
      * @param elapsedTime Elapsed time in seconds since the last frame
+     *
      * @see Entity
      */
     void advance(Animatable animatable, float elapsedTime);

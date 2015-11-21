@@ -27,44 +27,44 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
 final class GoogleAdManager extends AdManager {
-	@Override
-	protected View getAdView() {
-		int childCount = adLayout.getChildCount();
+    @Override
+    protected View getAdView() {
+        int childCount = adLayout.getChildCount();
 
-		for (int i = 0; i < childCount; i++) {
-			final View view = adLayout.getChildAt(i);
+        for (int i = 0; i < childCount; i++) {
+            final View view = adLayout.getChildAt(i);
 
-			if (view instanceof AdView)
-				return view;
-		}
+            if (view instanceof AdView)
+                return view;
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	public void onCreate() {
-		final String adUnitId = getAdUnitId();
+    public void onCreate() {
+        final String adUnitId = getAdUnitId();
 
-		if (adUnitId == null)
-			return;
+        if (adUnitId == null)
+            return;
 
-		AdView adView = (AdView) getAdView();
+        AdView adView = (AdView) getAdView();
 
-		if (adView == null) {
-			adView = new AdView(Artenus.getInstance());
-			adView.setAdUnitId(adUnitId);
-			adView.setAdSize(AdSize.BANNER);
-			adLayout.addView(adView);
-			adLayout.requestLayout();
-		}
+        if (adView == null) {
+            adView = new AdView(Artenus.getInstance());
+            adView.setAdUnitId(adUnitId);
+            adView.setAdSize(AdSize.BANNER);
+            adLayout.addView(adView);
+            adLayout.requestLayout();
+        }
 
-		final AdRequest adRequest = new AdRequest.Builder()
-				.addTestDevice("C8BEB91DC39D5DE1381F8BFB8FDCE45F")
-				.build();
-		adView.loadAd(adRequest);
-	}
+        final AdRequest adRequest = new AdRequest.Builder()
+                .addTestDevice("C8BEB91DC39D5DE1381F8BFB8FDCE45F")
+                .build();
+        adView.loadAd(adRequest);
+    }
 
-	@Override
-	protected void destroyAdView(View adView) {
-		((AdView) adView).destroy();
-	}
+    @Override
+    protected void destroyAdView(View adView) {
+        ((AdView) adView).destroy();
+    }
 }

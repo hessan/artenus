@@ -24,18 +24,19 @@ package com.annahid.libs.artenus.graphics.rendering;
  */
 public class Viewport {
     /**
-     * Viewport width.
+     * Holds viewport width.
      */
     protected int width;
 
     /**
-     * Viewport height.
+     * Holds viewport height.
      */
     protected int height;
 
     /**
      * Creates a new viewport with given width and height.
-     * @param width Viewport width
+     *
+     * @param width  Viewport width
      * @param height Viewport height
      */
     public Viewport(int width, int height) {

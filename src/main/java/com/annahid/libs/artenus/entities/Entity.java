@@ -50,7 +50,9 @@ public interface Entity {
      * for a behavior is not guaranteed by the framework.
      *
      * @param behavior Behavior to be checked
+     *
      * @return {@code true} if this entity has the behavior, {@code false} otherwise
+     *
      * @see Behaviors
      */
     boolean hasBehavior(Behaviors behavior);

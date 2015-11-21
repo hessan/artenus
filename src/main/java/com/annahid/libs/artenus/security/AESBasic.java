@@ -16,7 +16,6 @@
 
 package com.annahid.libs.artenus.security;
 
-
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 
@@ -35,11 +34,14 @@ import javax.crypto.spec.SecretKeySpec;
 @SuppressWarnings("UnusedDeclaration")
 public class AESBasic {
     private static final String UTF8 = "UTF-8";
+
     private static final String CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
+
     private static final byte[] IV =
-            {'1', '2', '4', '6', 'F', 'g', 'h', 'z', 'L', 'K', '6', 'd', 'b', 'N', '7', '3'};
+            { '1', '2', '4', '6', 'F', 'g', 'h', 'z', 'L', 'K', '6', 'd', 'b', 'N', '7', '3' };
 
     private Cipher mEncryptor;
+
     private Cipher mDecryptor;
 
     /**
@@ -69,6 +71,7 @@ public class AESBasic {
      * Encrypts a given string.
      *
      * @param original The string to be encrypted
+     *
      * @return The string representation of the encrypted value
      */
     public String encrypt(String original) {
@@ -86,7 +89,9 @@ public class AESBasic {
      * Decrypts an encrypted string.
      *
      * @param encrypted The encrypted string.
+     *
      * @return The original string.
+     *
      * @throws ValidationException
      */
     public String decrypt(String encrypted) throws ValidationException {

@@ -26,13 +26,15 @@ import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.data.RGB;
 
 /**
- * This class renders the loading interface.
+ * Renders the loading interface.
  *
  * @author Hessan Feghhi
  */
 final class LoadingGraphics {
     private final RGB clearColor = new RGB(0, 0, 0);
+
     private LineSprite loadingBarSprite;
+
     private ImageSprite loadingSprite;
 
     /**

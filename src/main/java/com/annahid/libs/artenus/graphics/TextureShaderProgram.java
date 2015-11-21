@@ -27,76 +27,78 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
 /**
- * A shader program that is used by the Artenus framework to render textured entities.
+ * Used by the Artenus framework to render textured entities.
  *
  * @author Hessan Feghhi
  */
 public class TextureShaderProgram implements ShaderProgram {
     /**
-     * Vertex shader code.
+     * Holds vertex shader code.
      */
     private static final String vertexShaderCode =
             "uniform mat4 uMVPMatrix;" +
-                    "attribute vec4 vPosition;" +
-                    "attribute vec2 aTexCoord;" +
-                    "varying vec2 vTexCoord;" +
-                    "void main() {" +
-                    "  vTexCoord = aTexCoord;" +
-                    "  gl_Position = uMVPMatrix * vPosition;" +
-                    '}';
+            "attribute vec4 vPosition;" +
+            "attribute vec2 aTexCoord;" +
+            "varying vec2 vTexCoord;" +
+            "void main() {" +
+            "  vTexCoord = aTexCoord;" +
+            "  gl_Position = uMVPMatrix * vPosition;" +
+            '}';
+
     /**
-     * Fragment shader code, taking texture sampler as an argument.
+     * Holds fragment shader code, taking texture sampler as an argument.
      */
     private static final String fragmentShaderCode =
             "precision mediump float;" +
-                    "uniform vec4 vColor;" +
-                    "uniform sampler2D uTex;" +
-                    "varying vec2 vTexCoord;" +
-                    "void main() {" +
-                    "  gl_FragColor = vColor * texture2D( uTex, vTexCoord );" +
-                    '}';
+            "uniform vec4 vColor;" +
+            "uniform sampler2D uTex;" +
+            "varying vec2 vTexCoord;" +
+            "void main() {" +
+            "  gl_FragColor = vColor * texture2D( uTex, vTexCoord );" +
+            '}';
+
     /**
-     * The default texture buffer used if no other is specified.
+     * Holds the default texture buffer used if no other is specified.
      */
     private static FloatBuffer defaultTextureBuffer;
 
     /**
-     * OpenGL shader program handle.
+     * Holds OpenGL shader program handle.
      */
     protected int mProgram;
 
     /**
-     * Projection matrix.
+     * Holds projection matrix.
      */
     protected int mMVPMatrixHandle;
 
     /**
-     * Handle to the color variable in the OpenGL ES fragment shader.
+     * Holds the handle to the color variable in the OpenGL ES fragment shader.
      */
     protected int mColorHandle;
 
     /**
-     * Handle to the position variable in the OpenGL ES vertex shader.
+     * Holds the handle to the position variable in the OpenGL ES vertex shader.
      */
     protected int mPositionHandle;
 
     /**
-     * Handle to the texture coordinates variable in the OpenGL ES vertex shader.
+     * Holds the handle to the texture coordinates variable in the OpenGL ES vertex shader.
      */
     protected int mTexCoordsHandle;
 
     /**
-     * Handle to the sampler variable in the OpenGL ES fragment shader.
+     * Holds the handle to the sampler variable in the OpenGL ES fragment shader.
      */
     protected int mSamplerHandle;
 
     /**
-     * Handle to the vertex shader.
+     * Holds the handle to the vertex shader.
      */
     private int mVertexShader;
 
     /**
-     * Handle to the fragment shader.
+     * Holds the handle to the fragment shader.
      */
     private int mFragmentShader;
 
@@ -181,6 +183,11 @@ public class TextureShaderProgram implements ShaderProgram {
         GLES20.glDisableVertexAttribArray(mTexCoordsHandle);
     }
 
+    /**
+     * Feeds texture a coordinate buffer to this shader program.
+     *
+     * @param buffer Texture coordinate buffer
+     */
     public void feedTexCoords(FloatBuffer buffer) {
         if (buffer == null)
             buffer = defaultTextureBuffer;
@@ -188,12 +195,23 @@ public class TextureShaderProgram implements ShaderProgram {
         GLES20.glVertexAttribPointer(mTexCoordsHandle, 2, GLES20.GL_FLOAT, false, 0, buffer);
     }
 
+    /**
+     * Feeds a texture to this shader program.
+     *
+     * @param textureDataHandle Texture data handle
+     */
     public void feed(int textureDataHandle) {
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureDataHandle);
         GLES20.glUniform1i(mSamplerHandle, 0);
     }
 
+    /**
+     * Compiles this shader program with given vertex and fragment shader codes.
+     *
+     * @param vertexShaderCode   Vertex shader code
+     * @param fragmentShaderCode Fragment shader code
+     */
     protected void compile(String vertexShaderCode, String fragmentShaderCode) {
         mVertexShader = loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
         mFragmentShader = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
@@ -208,6 +226,7 @@ public class TextureShaderProgram implements ShaderProgram {
      *
      * @param type       Shader type
      * @param shaderCode Shader code in plain text
+     *
      * @return The handle to the shader
      */
     private int loadShader(int type, String shaderCode) {

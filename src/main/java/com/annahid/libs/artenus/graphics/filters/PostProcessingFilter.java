@@ -38,6 +38,7 @@ public interface PostProcessingFilter {
      *
      * @param pass  Current pass number (starting at 0)
      * @param setup The frame setup for the previous pass
+     *
      * @return A value indicating whether another pass is required to complete this filter (other
      * than the current pass that is being set up)
      */

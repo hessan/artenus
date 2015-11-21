@@ -59,7 +59,7 @@ public abstract class Dialog extends Scene {
     public static final int RESULT_CANCEL = 4;
 
     /**
-     * The result of the dialog. Initially this field is {@code RESULT_NONE}. Setting a different
+     * Holds the dialog result. Initially this field is {@code RESULT_NONE}. Setting a different
      * value for this field will cause the dialog to be dismissed. The scene can then check the
      * provided result and take an action accordingly. Some general results are included as
      * constants in this class. However, the developer can define their own result values, as long
@@ -68,22 +68,22 @@ public abstract class Dialog extends Scene {
     protected int result;
 
     /**
-     * The collection of entities that lie above the dark shade and make up te dialog.
+     * Holds the collection of entities that lie above the dark shade and make up te dialog.
      */
     private final EntityCollection col;
 
     /**
-     * The black shade that is used to dim the screen behind the dialog.
+     * Represents the black shade that is used to dim the screen behind the dialog.
      */
     private final LineSprite shade;
 
     /**
-     * The parent scene.
+     * Holds the parent scene.
      */
     private final Scene scene;
 
     /**
-     * A value indicating whether the dialog is currently displayed.
+     * Indicates whether the dialog is currently displayed.
      */
     private boolean showing = false;
 
@@ -197,6 +197,7 @@ public abstract class Dialog extends Scene {
      * determined by the return value.
      *
      * @param elapsedTime The time passed since the last frame
+     *
      * @return {@code true} if the dialog has completed fading in, {@code false} otherwise
      */
     protected abstract boolean fadeIn(float elapsedTime);
@@ -206,6 +207,7 @@ public abstract class Dialog extends Scene {
      * determined by the return value.
      *
      * @param elapsedTime The time passed since the last frame
+     *
      * @return {@code true} if the dialog has completed fading out, {@code false} otherwise
      */
     protected abstract boolean fadeOut(float elapsedTime);

@@ -23,7 +23,7 @@ import android.opengl.GLES20;
 import com.annahid.libs.artenus.graphics.TextureShaderProgram;
 
 /**
- * The shader program used by the touch map to render button hot (clickable) regions.
+ * Used by the touch map to render button hot (clickable) regions.
  *
  * @author Hessan Feghhi
  */
@@ -37,6 +37,7 @@ class TouchMapShaderProgram extends TextureShaderProgram {
             "  vTexCoord = aTexCoord;" +
             "  gl_Position = uMVPMatrix * vPosition;" +
             '}';
+
     /**
      * Fragment shader code that converts the mapped texture to a mono-chrome image with boolean
      * texel transparencies (0 or 1).

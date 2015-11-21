@@ -39,9 +39,9 @@ import java.util.Stack;
 
 /**
  * <p>
- * A resizable list of {@code Entity} objects that implements {@link Entity}, so it can be added to
- * a scene as a single entity. When added as an entity, it renders all contained entities when
- * its {@code render} method is called.</p>
+ * Provides a resizable list of {@code Entity} objects that implements {@link Entity}, so it can be
+ * added to a scene as a single entity. When added as an entity, it renders all contained entities
+ * when its {@code render} method is called.</p>
  * <p>
  * Entity collections have their own position, rotation, and scaling factors. The transformations
  * of the entities added to a collection are relative to the global transformations of the
@@ -58,110 +58,42 @@ public class EntityCollection
         extends ConcurrentCollection<Entity>
         implements Entity, Animatable, Touchable, Transformable, Renderable {
     /**
-     * Provides basic iterator functionality for {@code EntityCollection}.
+     * Holds the animation handler responsible for the collection as a whole.
      */
-    private final class BasicIterator implements Iterator<Entity> {
-        BasicIterator(Iterator<Entity> it) {
-            this.it = it;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return it.hasNext();
-        }
-
-        @Override
-        public Entity next() {
-            lastReturned = it.next();
-            return lastReturned;
-        }
-
-        @Override
-        public void remove() {
-            if (lastReturned == null)
-                return;
-
-            if (scene != null)
-                lastReturned.onDetach(scene);
-
-            it.remove();
-
-            lastReturned = null;
-        }
-
-        private Entity lastReturned;
-        private Iterator<Entity> it;
-    }
+    protected AnimationHandler anim;
 
     /**
-     * Provides a special kind of iterator that digs deep into sub-collections in a depth-first
-     * fashion.
+     * Holds the color filter affecting the collection.
      */
-    private final class RecursiveIterator implements Iterator<Entity> {
-        RecursiveIterator(Iterator<Entity> it) {
-            stack.push(it);
-        }
-
-        @Override
-        public boolean hasNext() {
-            final Iterator<Entity> it = getCurrentIterator();
-            return it != null && it.hasNext();
-        }
-
-        @Override
-        public Entity next() {
-            Iterator<Entity> it = getCurrentIterator();
-
-            if (it == null)
-                throw new NoSuchElementException();
-
-            lastReturned = it.next();
-            lastIterator = it;
-
-            if (lastReturned instanceof EntityCollection)
-                stack.push(((EntityCollection) lastReturned).iterator());
-
-            return lastReturned;
-        }
-
-        @Override
-        public void remove() {
-            if (lastReturned == null)
-                return;
-
-            if (scene != null)
-                lastReturned.onDetach(scene);
-
-            lastIterator.remove();
-            lastReturned = null;
-            lastIterator = null;
-        }
-
-        private Iterator<Entity> getCurrentIterator() {
-            if (stack.isEmpty())
-                return null;
-
-            Iterator<Entity> it = stack.peek();
-
-            while (!it.hasNext()) {
-                stack.pop();
-
-                if (stack.isEmpty())
-                    break;
-
-                it = stack.peek();
-            }
-
-            return null;
-        }
-
-        private Entity lastReturned;
-        private Iterator<Entity> lastIterator;
-        private Stack<Iterator<Entity>> stack = new Stack<>();
-    }
+    private RGB colorFilter = new RGB(1, 1, 1);
 
     /**
-     * Constructs an {@code EntityCollection}.
+     * Holds the position of the collection as a whole.
+     */
+    private final Point2D pos;
+
+    /**
+     * Holds the scaling components of the collection as a whole.
+     */
+    private final Point2D scale;
+
+    /**
+     * Holds the rotational angle of the collection as a whole.
+     */
+    private float rotation;
+
+    /**
+     * Holds the scene this collection currently belongs to (the one it is attached to).
+     */
+    private Scene scene = null;
+
+    /**
+     * Holds the effect affecting the collection as a single graphical unit.
+     */
+    private Effect effect;
+
+    /**
+     * Creates an {@code EntityCollection}.
      */
     public EntityCollection() {
         pos = new Point2D(0, 0);
@@ -267,13 +199,13 @@ public class EntityCollection
     }
 
     @Override
-    public void setAnimation(AnimationHandler animation) {
-        anim = animation;
+    public AnimationHandler getAnimation() {
+        return anim;
     }
 
     @Override
-    public AnimationHandler getAnimation() {
-        return anim;
+    public void setAnimation(AnimationHandler animation) {
+        anim = animation;
     }
 
     @Override
@@ -282,18 +214,23 @@ public class EntityCollection
     }
 
     @Override
+    public void setPosition(Point2D position) {
+        setPosition(position.x, position.y);
+    }
+
+    @Override
     public float getRotation() {
         return rotation;
     }
 
     @Override
-    public Point2D getScale() {
-        return scale;
+    public void setRotation(float angle) {
+        rotation = angle;
     }
 
     @Override
-    public void setRotation(float angle) {
-        rotation = angle;
+    public Point2D getScale() {
+        return scale;
     }
 
     @Override
@@ -319,11 +256,6 @@ public class EntityCollection
     }
 
     @Override
-    public void setPosition(Point2D position) {
-        setPosition(position.x, position.y);
-    }
-
-    @Override
     public void setPosition(float x, float y) {
         pos.x = x;
         pos.y = y;
@@ -337,13 +269,13 @@ public class EntityCollection
     }
 
     @Override
-    public void setColorFilter(RGB rgb) {
-        setColorFilter(rgb.r, rgb.g, rgb.b);
+    public RGB getColorFilter() {
+        return colorFilter;
     }
 
     @Override
-    public RGB getColorFilter() {
-        return colorFilter;
+    public void setColorFilter(RGB rgb) {
+        setColorFilter(rgb.r, rgb.g, rgb.b);
     }
 
     @Override
@@ -371,15 +303,6 @@ public class EntityCollection
     @Override
     public boolean hasBehavior(Behaviors behavior) {
         return true;
-    }
-
-    /**
-     * Gets the scene this collection is currently attached to.
-     *
-     * @return The scene
-     */
-    protected Scene getScene() {
-        return this.scene;
     }
 
     /**
@@ -432,6 +355,7 @@ public class EntityCollection
      * themselves, it searches recursively through them as well, until it finds {@code e}.
      *
      * @param e The entity to be removed
+     *
      * @return {@code true} if the entity is removed, and {@code false} if it doesn't exist in
      * this collection
      */
@@ -494,19 +418,126 @@ public class EntityCollection
     }
 
     @Override
-    public void setAlpha(float alpha) {
-    }
-
-    @Override
     public float getAlpha() {
         return 1;
     }
 
-    private RGB colorFilter = new RGB(1, 1, 1);
-    private final Point2D pos, scale;
-    private float rotation;
-    private Scene scene = null;
-    private Effect effect;
+    @Override
+    public void setAlpha(float alpha) {
+    }
 
-    protected AnimationHandler anim;
+    /**
+     * Gets the scene this collection is currently attached to.
+     *
+     * @return The scene
+     */
+    protected Scene getScene() {
+        return this.scene;
+    }
+
+    /**
+     * Provides basic iterator functionality for {@code EntityCollection}.
+     */
+    private final class BasicIterator implements Iterator<Entity> {
+        private Entity lastReturned;
+
+        private Iterator<Entity> it;
+
+        BasicIterator(Iterator<Entity> it) {
+            this.it = it;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return it.hasNext();
+        }
+
+        @Override
+        public Entity next() {
+            lastReturned = it.next();
+            return lastReturned;
+        }
+
+        @Override
+        public void remove() {
+            if (lastReturned == null)
+                return;
+
+            if (scene != null)
+                lastReturned.onDetach(scene);
+
+            it.remove();
+
+            lastReturned = null;
+        }
+    }
+
+    /**
+     * Provides a special kind of iterator that digs deep into sub-collections in a depth-first
+     * fashion.
+     */
+    private final class RecursiveIterator implements Iterator<Entity> {
+        private Entity lastReturned;
+
+        private Iterator<Entity> lastIterator;
+
+        private Stack<Iterator<Entity>> stack = new Stack<>();
+
+        RecursiveIterator(Iterator<Entity> it) {
+            stack.push(it);
+        }
+
+        @Override
+        public boolean hasNext() {
+            final Iterator<Entity> it = getCurrentIterator();
+            return it != null && it.hasNext();
+        }
+
+        @Override
+        public Entity next() {
+            Iterator<Entity> it = getCurrentIterator();
+
+            if (it == null)
+                throw new NoSuchElementException();
+
+            lastReturned = it.next();
+            lastIterator = it;
+
+            if (lastReturned instanceof EntityCollection)
+                stack.push(((EntityCollection) lastReturned).iterator());
+
+            return lastReturned;
+        }
+
+        @Override
+        public void remove() {
+            if (lastReturned == null)
+                return;
+
+            if (scene != null)
+                lastReturned.onDetach(scene);
+
+            lastIterator.remove();
+            lastReturned = null;
+            lastIterator = null;
+        }
+
+        private Iterator<Entity> getCurrentIterator() {
+            if (stack.isEmpty())
+                return null;
+
+            Iterator<Entity> it = stack.peek();
+
+            while (!it.hasNext()) {
+                stack.pop();
+
+                if (stack.isEmpty())
+                    break;
+
+                it = stack.peek();
+            }
+
+            return null;
+        }
+    }
 }

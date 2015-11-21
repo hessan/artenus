@@ -21,7 +21,7 @@ package com.annahid.libs.artenus.physics;
 import com.annahid.libs.artenus.data.Point2D;
 
 /**
- * An implementation of {@link com.annahid.libs.artenus.physics.JointDescriptor}
+ * Provides an implementation of {@link com.annahid.libs.artenus.physics.JointDescriptor}
  * that describes a revolute joint. Revolute joints provide single-axis rotation function used in
  * many places such as door hinges, folding mechanisms, and other uni-axial rotation devices.
  *
@@ -34,6 +34,8 @@ public class RevoluteJointDescriptor extends JointDescriptor {
      * @see RevoluteJointDescriptor
      */
     public static final int TYPE = 0;
+
+    Point2D anchorPoint;
 
     /**
      * Constructs a {@code RevoluteJointDescriptor} between two bodies at the given
@@ -49,6 +51,4 @@ public class RevoluteJointDescriptor extends JointDescriptor {
         body2 = b2;
         anchorPoint = anchor;
     }
-
-    Point2D anchorPoint;
 }

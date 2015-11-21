@@ -46,7 +46,37 @@ public final class Product {
     public static int ENTITLEMENT = 4;
 
     /**
-     * Constructs a new instance of {@code Product} with the specified information.
+     * Holds product SKU as specified in the app-store
+     */
+    String sku;
+
+    /**
+     * Holds product title.
+     */
+    private String title;
+
+    /**
+     * Holds product description.
+     */
+    private String desc;
+
+    /**
+     * Holds product price.
+     */
+    private String price;
+
+    /**
+     * Holds product type.
+     */
+    private int type;
+
+    /**
+     * Holds the receipt for this product if there exists one.
+     */
+    private ProductReceipt receipt;
+
+    /**
+     * Creates a new instance of {@code Product} with the specified information.
      *
      * @param sku   Product SKU as specified in the app-store
      * @param title Product title
@@ -110,9 +140,22 @@ public final class Product {
     }
 
     /**
+     * Gets the product receipt. A product has a receipt if it has been acquired by the user. The
+     * receipt contains purchase information.
+     *
+     * @return Product receipt, or {@code null} if there is no purchase
+     *
+     * @see ProductReceipt
+     */
+    public ProductReceipt getReceipt() {
+        return receipt;
+    }
+
+    /**
      * This method is called internally during a purchase flow, to assign a receipt to this product.
      *
      * @param receipt Product receipt, or {@code null} if there is no purchase
+     *
      * @see #getReceipt()
      * @see ProductReceipt
      */
@@ -121,37 +164,16 @@ public final class Product {
     }
 
     /**
-     * Gets the product receipt. A product has a receipt if it has been acquired by the user. The
-     * receipt contains purchase information.
-     *
-     * @return Product receipt, or {@code null} if there is no purchase
-     * @see ProductReceipt
-     */
-    public ProductReceipt getReceipt() {
-        return receipt;
-    }
-
-    /**
      * Indicates whether some other object is equal to this one. Equality in the context of
      * products is closely related to equal SKUs, hence that's what is compared by this method.
      *
      * @param obj Object to compare to
-     * @return    {@code true} if {@code obj} is a product with the same SKU as this instance,
+     *
+     * @return {@code true} if {@code obj} is a product with the same SKU as this instance,
      * {@code false} otherwise.
      */
     @Override
     public boolean equals(Object obj) {
         return obj instanceof Product && ((Product) obj).sku.equals(sku);
     }
-
-    /**
-     * Product SKU as specified in the app-store
-     */
-    String sku;
-
-    private String title;
-    private String desc;
-    private String price;
-    private int type;
-    private ProductReceipt receipt;
 }

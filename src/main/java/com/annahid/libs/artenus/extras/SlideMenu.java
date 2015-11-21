@@ -44,62 +44,46 @@ import java.util.List;
 @SuppressWarnings("UnusedDeclaration")
 public final class SlideMenu extends EntityCollection {
 
-    private float dotV[] = {0, 0};
+    private float dotV[] = { 0, 0 };
 
-    private float dist, h, th;
+    private float dist;
+
+    private float h;
+
+    private float th;
 
     /**
-     * The first touched x position that initiated sliding.
+     * Hold the first touched x position that initiated sliding.
      */
     private float startX;
 
     /**
-     * Location value when sliding began.
+     * Hold the location value when sliding began.
      */
     private float startPos;
 
     /**
-     * Current scroll location.
+     * Holds current scroll location.
      */
     private float currentLoc;
 
     /**
-     * The center position for the selected item.
+     * Holds the center position for the selected item.
      */
     private float centerX;
 
     /**
-     * Selected item index.
+     * Holds selected item index.
      */
     private int sel;
 
     /**
-     * The list of event handlers currently listening to events from this slide menu.
+     * Contains event handlers currently listening to events from this slide menu.
      */
     private List<WeakReference<Listener>> itemChangeListeners = new LinkedList<>();
 
     /**
-     * Interface for event handlers that listen to slide menu events.
-     */
-    public interface Listener {
-        /**
-         * Called when an item has been clicked.
-         *
-         * @param itemIndex The zero-based index of the clicked item
-         */
-        void onItemClicked(int itemIndex);
-
-        /**
-         * Called when a new item is slid into selection.
-         *
-         * @param newItem  Newly selected item
-         * @param prevItem Previously selected item
-         */
-        void onItemChanged(int newItem, int prevItem);
-    }
-
-    /**
-     * Constructs a {@code SlideMenu} with the given information for the given scene.
+     * Creates a {@code SlideMenu} with the given information for the given scene.
      *
      * @param center       The center location of the menu
      * @param itemDistance The distance between items
@@ -227,12 +211,12 @@ public final class SlideMenu extends EntityCollection {
     }
 
     /**
-     * This method gives you information you require to set up indicators. It provides
-     * transparency information for each indicator. An indicator has full transparency
-     * if the corresponding menu item is completely in view and starts to gradually
-     * decrease to zero when it goes out of focus.
+     * Provides information required to set up indicators. It provides transparency information for
+     * each indicator. An indicator has full transparency if the corresponding menu item is
+     * completely in view and starts to gradually decrease to zero when it goes out of focus.
      *
      * @param index Menu item index
+     *
      * @return Indicator transparency
      */
     public final float getIndicatorAlpha(int index) {
@@ -244,6 +228,7 @@ public final class SlideMenu extends EntityCollection {
      * and item has been tapped.
      *
      * @param event Event information
+     *
      * @return {@code true} if a menu item has been tapped, {@code false} otherwise
      */
     @Override
@@ -282,21 +267,21 @@ public final class SlideMenu extends EntityCollection {
     }
 
     /**
-     * Navigates to the menu item specified and focuses that item.
-     *
-     * @param index Item index
-     */
-    public final void setSelectedItem(int index) {
-        sel = index;
-    }
-
-    /**
      * Gets the currently selected (focused) menu item.
      *
      * @return Item index
      */
     public final int getSelectedItem() {
         return sel;
+    }
+
+    /**
+     * Navigates to the menu item specified and focuses that item.
+     *
+     * @param index Item index
+     */
+    public final void setSelectedItem(int index) {
+        sel = index;
     }
 
     /**
@@ -330,5 +315,25 @@ public final class SlideMenu extends EntityCollection {
         for (WeakReference<Listener> listener : itemChangeListeners)
             if (listener.get() != null)
                 listener.get().onItemClicked(item);
+    }
+
+    /**
+     * Interface for event handlers that listen to slide menu events.
+     */
+    public interface Listener {
+        /**
+         * Called when an item has been clicked.
+         *
+         * @param itemIndex The zero-based index of the clicked item
+         */
+        void onItemClicked(int itemIndex);
+
+        /**
+         * Called when a new item is slid into selection.
+         *
+         * @param newItem  Newly selected item
+         * @param prevItem Previously selected item
+         */
+        void onItemChanged(int newItem, int prevItem);
     }
 }

@@ -44,8 +44,14 @@ import com.annahid.libs.artenus.core.Scene;
  *
  * @author Hessan Feghhi
  */
-public class EntityPair
-        implements Entity, Animatable, Touchable, Transformable, Renderable {
+public class EntityPair implements Entity, Animatable, Touchable, Transformable, Renderable {
+    protected AnimationHandler anim;
+
+    private Entity first, second;
+
+    private final Point2D pos, scale;
+
+    private float rotation;
 
     /**
      * Constructs a new entity pair, with given entities.
@@ -79,13 +85,13 @@ public class EntityPair
     }
 
     @Override
-    public void setAnimation(AnimationHandler animation) {
-        anim = animation;
+    public AnimationHandler getAnimation() {
+        return anim;
     }
 
     @Override
-    public AnimationHandler getAnimation() {
-        return anim;
+    public void setAnimation(AnimationHandler animation) {
+        anim = animation;
     }
 
     @Override
@@ -94,18 +100,23 @@ public class EntityPair
     }
 
     @Override
+    public void setPosition(Point2D position) {
+        setPosition(position.x, position.y);
+    }
+
+    @Override
     public float getRotation() {
         return rotation;
     }
 
     @Override
-    public Point2D getScale() {
-        return scale;
+    public void setRotation(float angle) {
+        rotation = angle;
     }
 
     @Override
-    public void setRotation(float angle) {
-        rotation = angle;
+    public Point2D getScale() {
+        return scale;
     }
 
     @Override
@@ -131,11 +142,6 @@ public class EntityPair
     }
 
     @Override
-    public void setPosition(Point2D position) {
-        setPosition(position.x, position.y);
-    }
-
-    @Override
     public void setPosition(float x, float y) {
         pos.x = x;
         pos.y = y;
@@ -150,17 +156,17 @@ public class EntityPair
     }
 
     @Override
-    public void setColorFilter(RGB rgb) {
-        setColorFilter(rgb.r, rgb.g, rgb.b);
-    }
-
-    @Override
     public RGB getColorFilter() {
         if (first.hasBehavior(Behaviors.RENDERABLE))
             return ((Renderable) first).getColorFilter();
         else if (second.hasBehavior(Behaviors.RENDERABLE))
             return ((Renderable) second).getColorFilter();
         else return new RGB(0, 0, 0);
+    }
+
+    @Override
+    public void setColorFilter(RGB rgb) {
+        setColorFilter(rgb.r, rgb.g, rgb.b);
     }
 
     @Override
@@ -179,6 +185,7 @@ public class EntityPair
      * Determines whether this entity pair has the specified behavior.
      *
      * @param behavior Behavior to be checked
+     *
      * @return {@code true} if this entity pair has the behavior, {@code false} otherwise
      */
     @Override
@@ -246,14 +253,6 @@ public class EntityPair
     }
 
     @Override
-    public void setAlpha(float alpha) {
-        if (first.hasBehavior(Behaviors.RENDERABLE))
-            ((Renderable) first).setAlpha(alpha);
-        if (second.hasBehavior(Behaviors.RENDERABLE))
-            ((Renderable) second).setAlpha(alpha);
-    }
-
-    @Override
     public float getAlpha() {
         if (first.hasBehavior(Behaviors.RENDERABLE))
             return ((Renderable) first).getAlpha();
@@ -262,9 +261,11 @@ public class EntityPair
         return 0;
     }
 
-    private Entity first, second;
-    private final Point2D pos, scale;
-    private float rotation;
-
-    protected AnimationHandler anim;
+    @Override
+    public void setAlpha(float alpha) {
+        if (first.hasBehavior(Behaviors.RENDERABLE))
+            ((Renderable) first).setAlpha(alpha);
+        if (second.hasBehavior(Behaviors.RENDERABLE))
+            ((Renderable) second).setAlpha(alpha);
+    }
 }

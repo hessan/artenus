@@ -101,6 +101,13 @@ public interface RenderingContext {
     void rect();
 
     /**
+     * Gets the shader program currently assigned to the rendering context.
+     *
+     * @return The active shader program
+     */
+    ShaderProgram getShader();
+
+    /**
      * <p>Sets the shader program for the rendering context. All graphical method calls after
      * calling this method will work with the shader specified. Using this method correctly is
      * crucial to compatibility with the framework. The following are the rules that apply to all
@@ -124,13 +131,6 @@ public interface RenderingContext {
      * @param shader The shader program, or {@code null} to use the default program
      */
     void setShader(ShaderProgram shader);
-
-    /**
-     * Gets the shader program currently assigned to the rendering context.
-     *
-     * @return The active shader program
-     */
-    ShaderProgram getShader();
 
     /**
      * Gets the logical width of the context. Artenus unifies provides uniform graphics on various

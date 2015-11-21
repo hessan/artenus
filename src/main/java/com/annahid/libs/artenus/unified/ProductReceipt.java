@@ -67,7 +67,7 @@ public interface ProductReceipt {
     /**
      * Indicates whether the product is currently in the possession of the user.
      *
-     * @return    {@code true} if purchased, {@code false} otherwise
+     * @return {@code true} if purchased, {@code false} otherwise
      */
     boolean isPurchased();
 

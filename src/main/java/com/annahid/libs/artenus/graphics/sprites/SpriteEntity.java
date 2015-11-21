@@ -30,9 +30,9 @@ import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.core.Scene;
 
 /**
- * The base class for all sprites. A sprite is a mobile piece of graphic that can represent an
- * object in the game. Sprites are the graphical entities that are used in scenes. They can be
- * moved, rotated, scaled and animated according to their role in the game.
+ * Base class for all sprites. A sprite is a mobile piece of graphic that can represent an object in
+ * the game. Sprites are the graphical entities that are used in scenes. They can be moved, rotated,
+ * scaled and animated according to their role in the game.
  *
  * @author Hessan Feghhi
  * @see com.annahid.libs.artenus.core.Scene
@@ -40,37 +40,37 @@ import com.annahid.libs.artenus.core.Scene;
 @SuppressWarnings("UnusedDeclaration")
 public abstract class SpriteEntity implements Entity, Animatable, Renderable, Transformable {
     /**
-     * Color filter currently applied to this sprite.
+     * Holds color filter currently applied to this sprite.
      */
     protected final RGB cf = new RGB(1, 1, 1);
 
     /**
-     * Current position of this sprite.
+     * Holds current position of this sprite.
      */
     protected final Point2D pos;
 
     /**
-     * Scaling factor in both dimensions.
+     * Holds scaling factor in both dimensions.
      */
     protected final Point2D scale;
 
     /**
-     * The rotational angle.
+     * Holds the rotational angle.
      */
     protected float rotation;
 
     /**
-     * The animation currently applied to this sprite.
+     * Holds the animation currently applied to this sprite.
      */
     protected AnimationHandler anim;
 
     /**
-     * The alpha transparency value for this sprite.
+     * Holds the alpha transparency value for this sprite.
      */
     protected float alpha;
 
     /**
-     * The effect currently applied to the sprite.
+     * Holds the effect currently applied to this sprite.
      */
     Effect effect;
 
@@ -85,17 +85,6 @@ public abstract class SpriteEntity implements Entity, Animatable, Renderable, Tr
     }
 
     /**
-     * Sets the animation handler for this sprite. Once set, the animation will be played on this
-     * sprite automatically, until set to {@code null}.
-     *
-     * @param animation The animation handler, or {@code null} to remove animation
-     */
-    public final void setAnimation(AnimationHandler animation) {
-        anim = animation;
-    }
-
-
-    /**
      * Gets the current animation handler assigned to this sprite.
      *
      * @return The animation handler, or {@code null} if it there is no animation assigned to
@@ -106,14 +95,41 @@ public abstract class SpriteEntity implements Entity, Animatable, Renderable, Tr
         return anim;
     }
 
+    /**
+     * Sets the animation handler for this sprite. Once set, the animation will be played on this
+     * sprite automatically, until set to {@code null}.
+     *
+     * @param animation The animation handler, or {@code null} to remove animation
+     */
+    public final void setAnimation(AnimationHandler animation) {
+        anim = animation;
+    }
+
     @Override
     public final Point2D getPosition() {
         return pos;
     }
 
+    /**
+     * Sets the position of this sprite. This method is guaranteed not to have any performance
+     * benefit over {@link SpriteEntity#setPosition(float, float)}.
+     *
+     * @param position The new position
+     */
+    @Override
+    public final void setPosition(Point2D position) {
+        if (position != null)
+            setPosition(position.x, position.y);
+    }
+
     @Override
     public final float getRotation() {
         return rotation;
+    }
+
+    @Override
+    public final void setRotation(float angle) {
+        rotation = angle;
     }
 
     /**
@@ -124,11 +140,6 @@ public abstract class SpriteEntity implements Entity, Animatable, Renderable, Tr
     @Override
     public final Point2D getScale() {
         return scale;
-    }
-
-    @Override
-    public final void setRotation(float angle) {
-        rotation = angle;
     }
 
     /**
@@ -180,18 +191,6 @@ public abstract class SpriteEntity implements Entity, Animatable, Renderable, Tr
     }
 
     /**
-     * Sets the position of this sprite. This method is guaranteed not to have any performance
-     * benefit over {@link SpriteEntity#setPosition(float, float)}.
-     *
-     * @param position The new position
-     */
-    @Override
-    public final void setPosition(Point2D position) {
-        if (position != null)
-            setPosition(position.x, position.y);
-    }
-
-    /**
      * Sets the position of this sprite.
      *
      * @param x The x coordinate of the new position
@@ -204,6 +203,18 @@ public abstract class SpriteEntity implements Entity, Animatable, Renderable, Tr
     }
 
     /**
+     * Gets the transparency value for this sprite.
+     *
+     * @return The alpha value for transparency
+     *
+     * @see com.annahid.libs.artenus.graphics.sprites.SpriteEntity#setAlpha(float)
+     */
+    @Override
+    public final float getAlpha() {
+        return alpha;
+    }
+
+    /**
      * Sets the transparency value for this sprite. An alpha value of 1 indicates a fully opaque
      * sprite and a value of 0 is an invisible sprite. Any value in between can be specified to
      * achieve transparency.
@@ -213,17 +224,6 @@ public abstract class SpriteEntity implements Entity, Animatable, Renderable, Tr
     @Override
     public final void setAlpha(float alphaValue) {
         alpha = alphaValue;
-    }
-
-    /**
-     * Gets the transparency value for this sprite.
-     *
-     * @return The alpha value for transparency
-     * @see com.annahid.libs.artenus.graphics.sprites.SpriteEntity#setAlpha(float)
-     */
-    @Override
-    public final float getAlpha() {
-        return alpha;
     }
 
     /**
@@ -242,6 +242,17 @@ public abstract class SpriteEntity implements Entity, Animatable, Renderable, Tr
     }
 
     /**
+     * Gets the color filter for this sprite. Modifying the fields in the returned value affects
+     * the color filter.
+     *
+     * @return The color filter
+     */
+    @Override
+    public final RGB getColorFilter() {
+        return cf;
+    }
+
+    /**
      * Sets the color filter for this sprite. The original colors will be multiplied by this color
      * when rendering.
      *
@@ -252,17 +263,6 @@ public abstract class SpriteEntity implements Entity, Animatable, Renderable, Tr
         cf.r = rgb.r;
         cf.g = rgb.g;
         cf.b = rgb.b;
-    }
-
-    /**
-     * Gets the color filter for this sprite. Modifying the fields in the returned value affects
-     * the color filter.
-     *
-     * @return The color filter
-     */
-    @Override
-    public final RGB getColorFilter() {
-        return cf;
     }
 
     @Override

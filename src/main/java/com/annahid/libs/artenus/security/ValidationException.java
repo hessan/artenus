@@ -22,13 +22,13 @@ package com.annahid.libs.artenus.security;
  */
 @SuppressWarnings("UnusedDeclaration")
 public class ValidationException extends Exception {
-	public ValidationException() {
-		super();
-	}
+    private static final long serialVersionUID = 1L;
 
-	public ValidationException(String s) {
-		super(s);
-	}
+    public ValidationException() {
+        super();
+    }
 
-	private static final long serialVersionUID = 1L;
+    public ValidationException(String s) {
+        super(s);
+    }
 }
