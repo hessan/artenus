@@ -16,7 +16,7 @@
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.annahid.libs.artenus.utils;
+package com.annahid.libs.artenus.extras;
 
 import android.support.annotation.NonNull;
 import android.view.MotionEvent;

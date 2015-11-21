@@ -21,4 +21,4 @@
  * this package are not part of the core functionality of Artenus, but they provide specific
  * functionality built on top of the framework to further facilitate game development.
  */
-package com.annahid.libs.artenus.utils;
+package com.annahid.libs.artenus.extras;
