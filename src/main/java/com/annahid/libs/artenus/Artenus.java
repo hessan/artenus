@@ -48,11 +48,36 @@ import java.lang.ref.WeakReference;
  * @author Hessan Feghhi
  */
 public abstract class Artenus extends Activity {
-    private static Artenus instance;
+    /**
+     * Holds the Artenus instance. Only one instance should exist per application.
+     * This instance is assigned not in the constructor, but when its context is ready.
+     */
+    private static WeakReference<Artenus> instance = null;
+
+    /**
+     * A value indicating whether the default splash screen will be displayed. This value
+     * can be set by calling the protected constructor.
+     */
     private static boolean hideIntro;
+
+    /**
+     * App-store as specified in the Android manifest file.
+     */
     private static UnifiedServices.Store manifestStore;
+
+    /**
+     * Default stage.
+     */
     private WeakReference<StageImpl> stage;
+
+    /**
+     * Audio manager; used for mapping volume keys to media volume.
+     */
     private AudioManager audio;
+
+    /**
+     * A value indicating whether the app is out-focused.
+     */
     private boolean hasOutFocused = false;
 
     /**
@@ -61,6 +86,9 @@ public abstract class Artenus extends Activity {
      * @param hideIntro A value indicating whether to hide the initial splash screen
      */
     protected Artenus(boolean hideIntro) {
+        if (Artenus.instance != null) {
+            throw new RuntimeException("An Artenus instance has already been created.");
+        }
         Artenus.hideIntro = hideIntro;
     }
 
@@ -77,7 +105,10 @@ public abstract class Artenus extends Activity {
      * @return The running instance
      */
     public static Artenus getInstance() {
-        return instance;
+        if (instance == null) {
+            return null;
+        }
+        return instance.get();
     }
 
     /**
@@ -112,7 +143,7 @@ public abstract class Artenus extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        instance = this;
+        instance = new WeakReference<>(this);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -206,7 +237,7 @@ public abstract class Artenus extends Activity {
     }
 
     /**
-     * Exits the game or application.
+     * Exits the game or application. This is the recommended method to exit within the framework.
      */
     @SuppressWarnings("UnusedDeclaration")
     public final void exit() {
