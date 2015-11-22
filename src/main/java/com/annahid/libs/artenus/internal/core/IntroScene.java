@@ -82,6 +82,12 @@ final class IntroScene extends Scene {
         showIntro = !Artenus.shouldHideIntro();
     }
 
+    /**
+     * Gets the singleton instance of the intro scene.
+     *
+     * @param stage Parent stage
+     * @return The instance
+     */
     public static Scene getInstance(Stage stage) {
         if (instance == null) {
             instance = new WeakReference<Scene>(new IntroScene(stage));
@@ -106,14 +112,16 @@ final class IntroScene extends Scene {
             if (diff > 3500) {
                 whiteness = Math.max(0, whiteness - elapsedTime * 2);
                 annahid.setAlpha(Math.max(0, annahid.getAlpha() - elapsedTime * 4));
-            } else whiteness = Math.min(1, whiteness + elapsedTime * 4);
+            } else {
+                whiteness = Math.min(1, whiteness + elapsedTime * 4);
+            }
 
             if (!gameRun) {
                 setBackColor(whiteness, whiteness, whiteness);
 
-                if (diff > 4000)
+                if (diff > 4000) {
                     runGame(stage);
-                else {
+                } else {
                     final float scale = annahid.getScale().x + 0.075f * elapsedTime;
                     annahid.setScale(scale, scale);
                 }
@@ -126,6 +134,11 @@ final class IntroScene extends Scene {
         TextureManager.addLocal(R.raw.annahid);
     }
 
+    /**
+     * Requests to run the game after the splash screen, if it has not already run.
+     *
+     * @param stage Parent stage
+     */
     private void runGame(Stage stage) {
         if (!gameRun) {
             remove(annahid);
@@ -133,9 +146,9 @@ final class IntroScene extends Scene {
 
             final StageManager manager = stage.getManager();
 
-            if (manager == null)
+            if (manager == null) {
                 throw new IllegalStateException("No stage manager is specified.");
-
+            }
             manager.onLoadStage(stage);
             ((StageImpl) stage).forceScene(stage.getManager().createInitialScene(stage));
             gameRun = true;

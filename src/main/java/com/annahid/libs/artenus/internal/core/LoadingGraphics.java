@@ -31,10 +31,19 @@ import com.annahid.libs.artenus.data.RGB;
  * @author Hessan Feghhi
  */
 final class LoadingGraphics {
+    /**
+     * Holds the background color of the loading graphics.
+     */
     private final RGB clearColor = new RGB(0, 0, 0);
 
+    /**
+     * Holds the loading progress bar sprite.
+     */
     private LineSprite loadingBarSprite;
 
+    /**
+     * Holds the loading display sprite.
+     */
     private ImageSprite loadingSprite;
 
     /**

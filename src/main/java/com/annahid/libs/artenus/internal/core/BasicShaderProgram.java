@@ -55,10 +55,19 @@ class BasicShaderProgram implements ShaderProgram {
      */
     int mProgram;
 
+    /**
+     * Holds a handle to th MVP matrix variable in the shader program.
+     */
     int mMVPMatrixHandle;
 
+    /**
+     * Holds a handle to the color variable in the shader program.
+     */
     int mColorHandle;
 
+    /**
+     * Holds a handle to the position variable in the shader program.
+     */
     int mPositionHandle;
 
     /**
@@ -123,6 +132,14 @@ class BasicShaderProgram implements ShaderProgram {
         GLES20.glDeleteProgram(mProgram);
     }
 
+    /**
+     * Compiles a shader code and returns the handle to the compiled code.
+     *
+     * @param type       Shader type
+     * @param shaderCode Shader code
+     *
+     * @return Handle to the compiled shader
+     */
     private int loadShader(int type, String shaderCode) {
         int shader = GLES20.glCreateShader(type);
         GLES20.glShaderSource(shader, shaderCode);

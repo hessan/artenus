@@ -155,7 +155,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
     }
 
     /**
-     * Converts stage x to screen x coordination considering the scaling factor.
+     * Converts stage x to screen x coordinate considering the scaling factor.
      *
      * @param x Stage x
      *
@@ -167,7 +167,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
     }
 
     /**
-     * Converts stage y to screen y coordination considering the scaling factor.
+     * Converts stage y to screen y coordinate considering the scaling factor.
      *
      * @param y Stage y
      *
@@ -244,7 +244,7 @@ public final class StageImpl extends GLSurfaceView implements Stage {
     }
 
     /**
-     * This method handles the physical back button for this {@code Stage}.
+     * Handles the device's back button for this {@code Stage}.
      *
      * @return {@code true} if the back button has been handled by this {@code Stage} or the
      * currently active {@code Scene}, {@code false} otherwise
@@ -287,11 +287,11 @@ public final class StageImpl extends GLSurfaceView implements Stage {
      */
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
-        int action = event.getAction() & MotionEvent.ACTION_MASK;
         final int pointerIndex = event.getActionIndex();
         final float x = screenToLogicalX(event.getX(pointerIndex));
         final float y = screenToLogicalY(event.getY(pointerIndex));
         final int pointerId = event.getPointerId(pointerIndex);
+        int action = event.getAction() & MotionEvent.ACTION_MASK;
 
         if (action == MotionEvent.ACTION_DOWN || action == MotionEvent.ACTION_POINTER_DOWN)
             action = TouchEvent.EVENT_DOWN;
@@ -346,8 +346,9 @@ public final class StageImpl extends GLSurfaceView implements Stage {
         super.onResume();
         scheduleTimer();
 
-        if (handler != null)
+        if (handler != null) {
             handler.onEvent(this, StageEvents.RESUME);
+        }
     }
 
     /**
@@ -402,24 +403,25 @@ public final class StageImpl extends GLSurfaceView implements Stage {
                             nextScene = null;
                             mRenderer.getLoadingGraphics().renew();
                         }
-                    } else if (stPhase > 0)
+                    } else if (stPhase > 0) {
                         stPhase = Math.max(0, stPhase - diff / 250000000.0f);
-
-                    if (currentScene != null)
+                    }
+                    if (currentScene != null) {
                         if (currentScene.isLoaded())
                             currentScene.advance(diff / 1000000000.0f);
-
+                    }
                     requestRender();
                 }
 
                 mLastTime = time;
 
-                if (diff < 17000000)
+                if (diff < 17000000) {
                     try {
                         Thread.sleep(20 - diff / 1000000);
                     } catch (InterruptedException e) {
                         // Do nothing
                     }
+                }
             }
         }
     }

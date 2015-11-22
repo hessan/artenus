@@ -117,7 +117,7 @@ public class EntityCollection
     /**
      * Returns a basic iterator over the elements.
      *
-     * @return an iterator over only the direct children of this entity
+     * @return An iterator over only the direct children of this entity
      */
     @NonNull
     @Override
@@ -131,7 +131,7 @@ public class EntityCollection
      * items directly contained in this collection. Instead, it recognizes entity collections and
      * iterates recursively through them as well.
      *
-     * @return an iterator over the elements in this list and all sub-lists
+     * @return An iterator over the elements in this list and all sub-lists
      */
     @NonNull
     @SuppressWarnings("unused")
@@ -468,7 +468,6 @@ public class EntityCollection
                 lastReturned.onDetach(scene);
 
             it.remove();
-
             lastReturned = null;
         }
     }
@@ -478,6 +477,9 @@ public class EntityCollection
      * fashion.
      */
     private final class RecursiveIterator implements Iterator<Entity> {
+        /**
+         * Keeps track of the last entity returned by ths iterator.
+         */
         private Entity lastReturned;
 
         private Iterator<Entity> lastIterator;

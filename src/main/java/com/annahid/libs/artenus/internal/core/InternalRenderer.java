@@ -46,90 +46,89 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 /**
- * The internal stage renderer, operating with OpenGL ES 2.0.
+ * Used by stage as the internal OpenGL ES 2.0 renderer.
  *
  * @author Hessan Feghhi
  */
-class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
+final class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
     /**
-     * The list of filters currently effective.
+     * Contains currently effective filters.
      */
     List<PostProcessingFilter> filters = new ArrayList<>(10);
 
     /**
-     * Calculated logical width.
+     * Holds calculated logical width.
      */
     float vw;
 
     /**
-     * Calculated logical height.
+     * Holds calculated logical height.
      */
     float vh;
 
     /**
-     * The real width of the rendering area.
+     * Holds the real width of the rendering area.
      */
     int screenWidth;
 
     /**
-     * The real height of the rendering area.
+     * Holds the real height of the rendering area.
      */
     int screenHeight;
 
     /**
-     * The transformation matrix stack used to comply with rendering context requirement.
+     * Holds the transformation matrix stack used to comply with rendering context requirement.
      */
     private final Stack<float[]> matrixStack = new Stack<>();
 
     /**
-     * The projection matrix, which will be multipled with the transformation matrix.
+     * Holds the projection matrix, which will be multipled with the transformation matrix.
      */
     private final float[] mvpMatrix = new float[16];
 
     /**
-     * Current transformation matrix.
+     * Holds current transformation matrix.
      */
     private float[] currentMatrix;
 
     /**
-     * Scratch matrix, used for computations.
+     * Holds the scratch matrix, used for computations.
      */
     private float[] scratch;
 
     /**
-     * The vertex buffer for the default rectangular primitive.
+     * Holds the vertex buffer for the default rectangular primitive.
      */
     private FloatBuffer vertexBuffer = null;
 
     /**
-     * The current shader program.
+     * Holds the current shader program.
      */
     private ShaderProgram shader;
 
     /**
-     * The default shader program used when {@code null} shader program is specified.
+     * Holds the default shader program used when {@code null} shader program is specified.
      */
     private ShaderProgram basicShader;
 
     /**
-     * Parent stage.
+     * Holds the parent stage.
      */
     private StageImpl stage;
 
     /**
-     * Graphics shown when texture loading is in progress.
+     * Holds the graphics shown when texture loading is in progress.
      */
     private LoadingGraphics loading = new LoadingGraphics();
 
     /**
-     * The two back-buffers used for triple buffering.
+     * Contains the two back-buffers used for triple buffering.
      */
     private RenderTarget[] targets = new RenderTarget[2];
 
     /**
-     * This field is used to delay texture loading  a bit to let
-     * the loading screen appear before. It holds the start time
-     * for delay calculation.
+     * Used to delay texture loading a bit to let the loading screen appear first. It holds the
+     * start time for delay calculation.
      */
     private long loadingDelay = 0;
 
@@ -200,7 +199,8 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
         TextureManager.setTextureScalingFactor(
                 (float) Math.min(screenHeight, screenWidth) / 600.0f
         );
-        onResize(vw, vh);
+
+        Matrix.orthoM(mvpMatrix, 0, 0, vw, vh, 0, -1, 1);
 
         for (int i = 0; i < targets.length; i++) {
             if (targets[i] != null) {
@@ -285,38 +285,46 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
         }
     }
 
+    @Override
     public void pushMatrix() {
         float[] newMatrix = currentMatrix.clone();
         matrixStack.push(currentMatrix);
         currentMatrix = newMatrix;
     }
 
+    @Override
     public void popMatrix() {
         if (matrixStack.size() > 0) {
             currentMatrix = matrixStack.pop();
         }
     }
 
+    @Override
     public void rotate(float angle) {
         Matrix.rotateM(currentMatrix, 0, angle, 0, 0, 1);
     }
 
+    @Override
     public void scale(float x, float y) {
         Matrix.scaleM(currentMatrix, 0, x, y, 1);
     }
 
+    @Override
     public void translate(float x, float y) {
         Matrix.translateM(currentMatrix, 0, x, y, 0);
     }
 
+    @Override
     public void identity() {
         Matrix.setIdentityM(currentMatrix, 0);
     }
 
+    @Override
     public void setColorFilter(float r, float g, float b, float a) {
         shader.feed(r, g, b, a);
     }
 
+    @Override
     public void rect() {
         Matrix.multiplyMM(scratch, 0, mvpMatrix, 0, currentMatrix, 0);
         shader.feed(scratch);
@@ -394,12 +402,13 @@ class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext {
         GLES20.glViewport(0, 0, setup.getWidth(), setup.getHeight());
     }
 
+    /**
+     * Gets the loading graphics.
+     *
+     * @return Loading graphics
+     */
     LoadingGraphics getLoadingGraphics() {
         return loading;
-    }
-
-    void onResize(float w, float h) {
-        Matrix.orthoM(mvpMatrix, 0, 0, w, h, 0, -1, 1);
     }
 
     /**
