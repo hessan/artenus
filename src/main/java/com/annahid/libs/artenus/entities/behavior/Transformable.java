@@ -43,7 +43,7 @@ public interface Transformable {
     void setPosition(Point2D position);
 
     /**
-     * Sets the position of this sprite.
+     * Sets the position of this entity.
      *
      * @param x The x coordinate of the new position
      * @param y The y coordinate of the new position
