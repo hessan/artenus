@@ -34,34 +34,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A {@link FilteredEntity} that represents a physical body in physics simulation. As the physical
- * body represented by this entity moves and rotates due to physical simulation, this entity will
- * modify the position and rotation of the underlying {@code Entity}, depending on connection
- * preferences.
+ * Represents a physical body in physics simulation. As the physical body represented by this entity
+ * moves and rotates due to physical simulation, this entity will modify the position and rotation
+ * of the underlying {@code Entity}, depending on connection preferences.
  *
  * @author Hessan Feghhi
  */
 @SuppressWarnings("UnusedDeclaration")
 public class PhysicalBody extends FilteredEntity {
-    /**
-     * Holds the Box2D body associated with this physical body.
-     */
-    Body body;
-
-    Descriptor desc;
-
-    List<JointDescriptor> joints = new ArrayList<>(5);
-
-    private Shape shape;
-
-    private float density;
-
-    private float friction;
-
-    private float restitution;
-
-    private int connections = POSITION | ROTATION;
-
     /**
      * Defines position connection. If this connection is set, the {@code PhysicalBody} will lock
      * the position of the underlying entity to that of itself. This connection is set by default
@@ -77,26 +57,44 @@ public class PhysicalBody extends FilteredEntity {
     public static final int ROTATION = 2;
 
     /**
-     * The Behavior specifies how a physical body is simulated. The default is DYNAMIC.
+     * Holds the Box2D body associated with this physical body.
      */
-    public enum Behavior {
-        /**
-         * Defines a dynamic body. Dynamic bodies are normally simulated.
-         */
-        DYNAMIC,
+    Body body;
 
-        /**
-         * Defines a static body. Static bodies do not move and are fixed at
-         * their place. Collisions dot alter their positions.
-         */
-        STATIC,
+    /**
+     * Holds the physical body descriptor.
+     */
+    Descriptor desc;
 
-        /**
-         * Defines a kinematic body. Kinematic bodies can be manually moved or
-         * rotated. But they cannot be moved by collisions or external forces.
-         */
-        KINEMATIC
-    }
+    /**
+     * Contains joints currently constraining this physical body.
+     */
+    List<JointDescriptor> joints = new ArrayList<>(5);
+
+    /**
+     * Holds the shape descriptor.
+     */
+    private Shape shape;
+
+    /**
+     * Holds the density value.
+     */
+    private float density;
+
+    /**
+     * Holds the friction value.
+     */
+    private float friction;
+
+    /**
+     * Holds the restitution value.
+     */
+    private float restitution;
+
+    /**
+     * Holds the bit-mapped list of connections to the underlying entity.
+     */
+    private int connections = POSITION | ROTATION;
 
     public PhysicalBody(Entity entity) {
         this(entity, null);
@@ -188,6 +186,7 @@ public class PhysicalBody extends FilteredEntity {
      * The shape will change will take effect on the next frame.
      *
      * @param s The new shape for the body
+     *
      * @see com.annahid.libs.artenus.physics.Shape
      */
     public final void setShape(Shape s) {
@@ -202,6 +201,7 @@ public class PhysicalBody extends FilteredEntity {
      * of {@link Behavior#DYNAMIC}, {@link Behavior#STATIC}, or {@link Behavior#KINEMATIC}.
      *
      * @return The body type
+     *
      * @see Behavior
      */
     public final Behavior getType() {
@@ -213,6 +213,7 @@ public class PhysicalBody extends FilteredEntity {
      * {@link Behavior#STATIC}, {@link Behavior#DYNAMIC}, or {@link Behavior#KINEMATIC}.
      *
      * @param type The desired simulation type
+     *
      * @see Behavior
      */
     public final void setType(Behavior type) {
@@ -425,7 +426,6 @@ public class PhysicalBody extends FilteredEntity {
         density = value;
     }
 
-
     /**
      * Gets the currently assigned friction of the body.
      *
@@ -549,6 +549,7 @@ public class PhysicalBody extends FilteredEntity {
      * entity may also be modified, depending on selected connections.
      *
      * @param elapsedTime Elapsed time in seconds since the last frame
+     *
      * @see com.annahid.libs.artenus.physics.PhysicalBody#setConnections(int)
      */
     @Override
@@ -569,6 +570,15 @@ public class PhysicalBody extends FilteredEntity {
     }
 
     /**
+     * Gets the current connections associated with this physical body.
+     *
+     * @return the bit-masked list of connections
+     */
+    public int getConnections() {
+        return connections;
+    }
+
+    /**
      * Sets connections for this physical body. Valid values are {@link #POSITION} and
      * {@link #ROTATION}.
      *
@@ -576,15 +586,6 @@ public class PhysicalBody extends FilteredEntity {
      */
     public void setConnections(int conn) {
         connections = conn;
-    }
-
-    /**
-     * Gets the current connections associated with this physical body.
-     *
-     * @return the bit-masked list of connections
-     */
-    public int getConnections() {
-        return connections;
     }
 
     final void createFixture() {
@@ -596,16 +597,47 @@ public class PhysicalBody extends FilteredEntity {
         body.createFixture(def);
     }
 
+    /**
+     * The Behavior specifies how a physical body is simulated. The default is DYNAMIC.
+     */
+    public enum Behavior {
+        /**
+         * Defines a dynamic body. Dynamic bodies are normally simulated.
+         */
+        DYNAMIC,
+
+        /**
+         * Defines a static body. Static bodies do not move and are fixed at
+         * their place. Collisions dot alter their positions.
+         */
+        STATIC,
+
+        /**
+         * Defines a kinematic body. Kinematic bodies can be manually moved or
+         * rotated. But they cannot be moved by collisions or external forces.
+         */
+        KINEMATIC
+    }
+
     static final class Descriptor {
         Behavior type = Behavior.DYNAMIC;
+
         float angularVelocity = 0;
+
         float linearDamping = 0;
+
         Point2D linearVelocity = new Point2D(0, 0);
+
         boolean active = true;
+
         float angularDamping = 0;
+
         Point2D position = new Point2D(0, 0);
+
         float angle = 0;
+
         boolean bullet = false;
+
         boolean fixedRotation = false;
     }
 }

@@ -38,18 +38,30 @@ import com.annahid.libs.artenus.R;
 public class ConsoleActivity extends Activity {
     private static ConsoleActivity instance = null;
 
+    /**
+     * Holds the script host used to run scripts on this console.
+     */
     private static ScriptHost host;
 
+    /**
+     * Holds the current code.
+     */
     private static String code = "";
 
+    /**
+     * Holds the text box control that contains the code.
+     */
     private EditText txtCommand;
 
+    /**
+     * Holds the execute button.
+     */
     private Button btnExecute;
 
     /**
      * Opens a console window with the given script host.
      *
-     * @param context The application context
+     * @param context Application context
      * @param host    The script host interpreting scripts
      *
      * @see ScriptHost
@@ -64,7 +76,7 @@ public class ConsoleActivity extends Activity {
     }
 
     /**
-     * Retrieves the scripts currently showing on the editor.
+     * Gets the script currently showing on the editor.
      *
      * @return The script text
      */

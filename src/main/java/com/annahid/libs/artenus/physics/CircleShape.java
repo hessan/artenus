@@ -33,6 +33,9 @@ public final class CircleShape implements Shape {
      */
     public static final int TYPE = 0;
 
+    /**
+     * Holds the radius.
+     */
     private float r;
 
     /**

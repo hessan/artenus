@@ -21,9 +21,9 @@ package com.annahid.libs.artenus.physics;
 import org.jbox2d.dynamics.joints.Joint;
 
 /**
- * The base class for all classes that describe joints in physical simulation. Joints are
- * constraints that relate two bodies and limit their freedom based on their mutual relation and on
- * the nature of the joint.
+ * Superclass for all classes that describe joints in physical simulation. Joints are constraints
+ * that relate two bodies and limit their freedom based on their mutual relation and on the nature
+ * of the joint.
  *
  * @author Hessan Feghhi
  */

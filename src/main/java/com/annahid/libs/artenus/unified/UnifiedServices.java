@@ -61,6 +61,9 @@ public abstract class UnifiedServices {
      */
     private static UnifiedServices instance = null;
 
+    /**
+     * Holds bit-mapped service flags.
+     */
     private int services;
 
     /**
@@ -233,34 +236,34 @@ public abstract class UnifiedServices {
     protected abstract int init(int inputServices);
 
     /**
-     * The Store defines the app store the unified services operate in
+     * App-stores known by the framework.
      */
     public enum Store {
         /**
-         * Undefined app-store
+         * Store value used when the app-store is not specified
          */
         NONE,
         /**
-         * Google Play
+         * Store value for Google Play
          */
         GOOGLE,
         /**
-         * Amazon Appstore
+         * Store value for Amazon Appstore
          */
         AMAZON,
 
         /**
-         * Cafe Bazaar (local Iranian app-store)
+         * Store value for Cafe Bazaar (local Iranian app-store)
          */
         BAZAAR,
 
         /**
-         * Samsung Apps
+         * Store value for Samsung Apps
          */
         SAMSUNG,
 
         /**
-         * Cando (local Iranian app-store)
+         * Store value for Cando (local Iranian app-store)
          */
         CANDO
     }

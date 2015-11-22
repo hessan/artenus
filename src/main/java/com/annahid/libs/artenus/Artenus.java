@@ -55,28 +55,28 @@ public abstract class Artenus extends Activity {
     private static WeakReference<Artenus> instance = null;
 
     /**
-     * A value indicating whether the default splash screen will be displayed. This value
-     * can be set by calling the protected constructor.
+     * Indicates whether the default splash screen will be displayed. This value can be set by
+     * calling the protected constructor.
      */
     private static boolean hideIntro;
 
     /**
-     * App-store as specified in the Android manifest file.
+     * Holds the app-store as specified in the Android manifest file.
      */
     private static UnifiedServices.Store manifestStore;
 
     /**
-     * Default stage.
+     * Holds a reference to the default stage.
      */
     private WeakReference<StageImpl> stage;
 
     /**
-     * Audio manager; used for mapping volume keys to media volume.
+     * Holds the audio manager used for mapping volume keys to media volume.
      */
     private AudioManager audio;
 
     /**
-     * A value indicating whether the app is out-focused.
+     * Indicates whether the app is out-focused.
      */
     private boolean hasOutFocused = false;
 

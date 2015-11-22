@@ -19,8 +19,8 @@
 package com.annahid.libs.artenus.physics;
 
 /**
- * Represents a rectangular {@link com.annahid.libs.artenus.physics.Shape} that
- * can be used for physical simulation.
+ * Represents a rectangular {@link com.annahid.libs.artenus.physics.Shape} that can be used for
+ * physical simulation.
  *
  * @author Hessan Feghhi
  */

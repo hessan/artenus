@@ -25,18 +25,18 @@ import android.os.Bundle;
 import com.annahid.libs.artenus.Artenus;
 
 /**
- * Super-class for all in-app billing managers. A unified services implementation should return an
+ * Superclass for all in-app billing managers. A unified services implementation should return an
  * instance of this class if it handles in-app products and subscriptions.
  */
 @SuppressWarnings("UnusedDeclaration")
 public abstract class InventoryManager {
     /**
-     * Event handler responsible for inventory events.
+     * Holds the event handler responsible for inventory events.
      */
     private InventoryListener listener;
 
     /**
-     * List of SKUs this inventory tracks.
+     * Contains SKUs this inventory tracks.
      */
     private String[] inventorySKUs;
 
@@ -47,22 +47,22 @@ public abstract class InventoryManager {
     }
 
     /**
-     * This method is internally called as part of {@link UnifiedServices#onCreate(Context)}.
+     * Called internally as part of {@link UnifiedServices#onCreate(Context)}.
      *
      * @param context Artenus context
      */
     public abstract void onCreate(Context context);
 
     /**
-     * This method is internally called as part of {@link UnifiedServices#onCreate(Context)}.
+     * Called internally as part of {@link UnifiedServices#onCreate(Context)}.
      *
      * @param context Artenus context
      */
     public abstract void onDestroy(Context context);
 
     /**
-     * This method is internally called by {@link UnifiedServices#onActivityResult(int, int, Intent)}
-     * to handle activity results for in-app billing.
+     * Called internally by {@link UnifiedServices#onActivityResult(int, int, Intent)} to handle
+     * activity results for in-app billing.
      *
      * @param requestCode The integer request code
      * @param resultCode  The integer result code returned by the child activity

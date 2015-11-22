@@ -28,32 +28,32 @@ package com.annahid.libs.artenus.physics;
 @SuppressWarnings("UnusedDeclaration")
 public final class CollisionInfo {
     /**
-     * The first body involved in the collision.
+     * Holds the first body involved in the collision.
      */
     public PhysicalBody body1;
 
     /**
-     * The second body involved in the collision.
+     * Holds the second body involved in the collision.
      */
     public PhysicalBody body2;
 
     /**
-     * An array of normal impulses for the collision.
+     * Contains normal impulses for the collision.
      */
     public float[] normalImpulses;
 
     /**
-     * An array of tangent impulses for the collision.
+     * Contains tangent impulses for the collision.
      */
     public float[] tangentImpulses;
 
     /**
-     * The number of impulses included in this collision.
+     * Holds the number of impulses included in this collision.
      */
     public int impulseCount;
 
     /**
-     * The tangent relative speed of colliding bodies.
+     * Holds the tangent relative speed of colliding bodies.
      */
     public float tangentSpeed;
 

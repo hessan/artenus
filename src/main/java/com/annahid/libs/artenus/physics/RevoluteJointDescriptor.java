@@ -35,15 +35,18 @@ public class RevoluteJointDescriptor extends JointDescriptor {
      */
     public static final int TYPE = 0;
 
+    /**
+     * Holds the anchor point.
+     */
     Point2D anchorPoint;
 
     /**
-     * Constructs a {@code RevoluteJointDescriptor} between two bodies at the given
-     * anchor point. The bodies will be "pinned" together at that point.
+     * Creates a {@code RevoluteJointDescriptor} between two bodies at the given anchor point. The
+     * bodies will be "pinned" together at that point.
      *
-     * @param b1     The first body involved
-     * @param b2     The second body involved
-     * @param anchor The anchor point
+     * @param b1     First body involved
+     * @param b2     Second body involved
+     * @param anchor Anchor point
      */
     public RevoluteJointDescriptor(PhysicalBody b1, PhysicalBody b2, Point2D anchor) {
         super(TYPE);

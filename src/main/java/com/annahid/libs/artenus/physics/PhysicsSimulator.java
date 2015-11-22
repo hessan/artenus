@@ -47,32 +47,36 @@ import java.util.List;
 @SuppressWarnings("UnusedDeclaration")
 public final class PhysicsSimulator {
     /**
-     * Pixels per meter. This framework is based on pixel measures. However,
-     * everything other than distances are calculated by their SI units in physics
-     * simulations. To conform distances to the SI unit, this value indicates
-     * how many pixels define a meter. Note that setting this value to zero causes
-     * division by zero and results in application crash.
+     * Holds the number of pixels per meter. This framework is based on pixel measures. However,
+     * everything other than distances are calculated by their SI units in physics simulations. To
+     * conform distances to the SI unit, this value indicates how many pixels define a meter. Note
+     * that setting this value to zero causes division by zero and results in application crash.
      */
     public static float pixelsPerMeter = 60;
 
     /**
-     * Use this field to scale the physical time. The value of this parameter is
-     * originally 1, which means that the time in the physical world is as fast
-     * as the time in scene animations. Setting this value enables you to speed
-     * up or slow down physics.
+     * Holds time scale. Use this field to scale the physical time. The value of this parameter is
+     * originally 1, which means that the time in the physical world is as fast as the time in scene
+     * animations. Setting this value enables you to speed up or slow down physics.
      */
     public float timeScale = 1;
 
+    /**
+     * Holds the JBox2D world.
+     */
     private World world;
 
     private List<CollisionInfo> collisions = new ArrayList<>();
 
     private CollisionListener collisionListener = null;
 
+    /**
+     * Indicates whether the game (hence the simulator) is paused.
+     */
     private boolean paused = false;
 
     /**
-     * Constructs a {@code PhysicsSimulator}.
+     * Creates a new instance of {@code PhysicsSimulator}.
      */
     public PhysicsSimulator() {
         world = new World(new Vec2(0, 0));
@@ -106,10 +110,9 @@ public final class PhysicsSimulator {
     }
 
     /**
-     * Sets the 2-dimensional gravity of the physical world.
-     * (meters per seconds squared).
+     * Gets the 2-dimensional gravity of the physical world (in meters per seconds squared).
      *
-     * @return The gravity of the world
+     * @return Gravity
      */
     public Point2D getGravity() {
         final Vec2 gravity = world.getGravity();
@@ -117,7 +120,7 @@ public final class PhysicsSimulator {
     }
 
     /**
-     * Sets the 2-dimensional gravity of the physical world.
+     * Sets the 2-dimensional gravity of the physical world (in meters per seconds squared).
      *
      * @param xFactor The x factor of gravity
      * @param yFactor The y factor of gravity
@@ -129,7 +132,7 @@ public final class PhysicsSimulator {
     /**
      * Gets the collision listener currently appointed for handling collisions.
      *
-     * @return The collision listener or {@code null} if none assigned
+     * @return The collision listener, or {@code null} if none is assigned
      *
      * @see CollisionListener
      */
@@ -138,10 +141,9 @@ public final class PhysicsSimulator {
     }
 
     /**
-     * Appoints a collision listener to this physics simulator to handle collisions.
+     * Sets the listener responsible handling collision events.
      *
-     * @param listener The collision listener. Setting this value to {@code null}
-     *                 removes the listener
+     * @param listener Collision listener; setting this value to {@code null} removes the listener
      *
      * @see CollisionListener
      */
@@ -150,11 +152,11 @@ public final class PhysicsSimulator {
     }
 
     /**
-     * Advances the world by the given time. This method is called internally by the
-     * scene and you do not need to directly invoke it.
+     * Advances the world by the given time. This method is called internally by the scene and you
+     * do not need to directly invoke it.
      *
-     * @param elapsedTime        The time passed since last frame. This value will be scaled
-     *                           using {@link #timeScale}
+     * @param elapsedTime        The time passed since last frame. This value will be scaled using
+     *                           {@link #timeScale}
      * @param velocityIterations The number of velocity points to interpolate between
      * @param positionIterations The number of position points to interpolate between
      */
@@ -164,12 +166,11 @@ public final class PhysicsSimulator {
     }
 
     /**
-     * Signals the simulator that it is a good time to handle collisions. Normally
-     * all collisions are queued in the simulator when they happen. This is to avoid
-     * concurrent modification of sensitive variables. This method is then called when
-     * it is safe, and it handles all collisions in the queue until the queue is empty.
-     * You do not need to call this method manually if you are using physics simulation
-     * through a scene.
+     * Signals the simulator that it is a good time to handle collisions. Normally all collisions
+     * are queued in the simulator when they happen. This is to avoid concurrent modification of
+     * sensitive variables. This method is then called when it is safe, and it handles all
+     * collisions in the queue until the queue is empty. You do not need to call this method
+     * manually if you are using physics simulation through a scene.
      */
     public void handleCollisions() {
         if (collisionListener != null)
@@ -179,7 +180,7 @@ public final class PhysicsSimulator {
     }
 
     /**
-     * Gets whether the simulator is paused.
+     * Indicates whether the simulator is paused.
      *
      * @return {@code true} if paused or {@code false} otherwise
      */
@@ -188,8 +189,8 @@ public final class PhysicsSimulator {
     }
 
     /**
-     * Changes the paused state of the simulator. Physical bodies in a paused simulator
-     * remain halted until the simulator is resumed.
+     * Changes the paused state of the simulator. Physical bodies in a paused simulator remain
+     * halted until the simulator is resumed.
      *
      * @param p {@code true} to pause the simulator or {@code false} to un-pause it
      */
@@ -198,8 +199,8 @@ public final class PhysicsSimulator {
     }
 
     /**
-     * Attaches a physical body to the simulator. You do not need to call this method
-     * directly if you are using physics simulation through a scene.
+     * Attaches a physical body to the simulator. You do not need to call this method directly if
+     * you are using physics simulation through a scene.
      *
      * @param body The new physical body
      *
@@ -255,10 +256,9 @@ public final class PhysicsSimulator {
     }
 
     /**
-     * Detaches a physical body from the simulator. You do not need to call this method
-     * directly if you are using physics simulation through the scene. Once a body is
-     * detached from the simulator, it must be disposed. Physical objects removed from
-     * the scene are NOT reusable.
+     * Detaches a physical body from the simulator. You do not need to call this method directly if
+     * you are using physics simulation through the scene. Once a body is detached from the
+     * simulator, it must be disposed. Physical objects removed from the scene are NOT reusable.
      *
      * @param body The physical body to remove
      *

@@ -25,8 +25,8 @@ import android.view.View;
 import java.lang.ref.WeakReference;
 
 /**
- * The superclass of unified ad managers. If a {@code UnifiedServices} implementation supports ads,
- * it should provide a sub-class of this class.
+ * Superclass of unified ad managers. If a {@code UnifiedServices} implementation supports ads, it
+ * should provide a sub-class of this class.
  *
  * @author Hessan Feghhi
  */
