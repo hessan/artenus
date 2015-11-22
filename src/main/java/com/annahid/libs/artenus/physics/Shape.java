@@ -19,7 +19,7 @@
 package com.annahid.libs.artenus.physics;
 
 /**
- * The interface for 2-dimensional physical shapes.
+ * Interface for 2-dimensional physical shapes.
  *
  * @author Hessan Feghhi
  * @see com.annahid.libs.artenus.physics.PhysicalBody

@@ -19,8 +19,8 @@
 package com.annahid.libs.artenus.core;
 
 /**
- * Interface for all classes that handle stage events. This is one of the key interfaces that must
- * be implemented in any game that uses this framework. It is the companion of {@code Stage} and
+ * Interface for classes that handle stage events. This is one of the key interfaces that must be
+ * implemented in any game that uses this framework. It is the companion of {@code Stage} and
  * handles basic functionality for the game. You can assign a {@code StageManager} to your stage
  * using {@link com.annahid.libs.artenus.core.Stage#setManager}. Failing to provide a stage manager
  * will cause your application to crash with an {@code IllegalStateException} when it tries to load

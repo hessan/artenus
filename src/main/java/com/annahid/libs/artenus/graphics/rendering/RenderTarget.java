@@ -32,18 +32,39 @@ import java.nio.FloatBuffer;
  * @author Hessan Feghhi
  */
 public class RenderTarget {
+    /**
+     * Holds OpenGL ES render buffer handle.
+     */
     private int renderBufferHandle;
 
+    /**
+     * Holds OpenGL ES frame buffer handle.
+     */
     private int frameBufferHandle;
 
+    /**
+     * Holds OpenGL ES texture handle.
+     */
     private int textureHandle;
 
+    /**
+     * Holds frame buffer width.
+     */
     private int fboWidth;
 
+    /**
+     * Holds frame buffer height.
+     */
     private int fboHeight;
 
+    /**
+     * Holds the viewport corresponding to this render target.
+     */
     private Viewport viewport;
 
+    /**
+     * Holds the texture coordinate buffer for the working area of this render target.
+     */
     private FloatBuffer frameTexCoords;
 
     /**

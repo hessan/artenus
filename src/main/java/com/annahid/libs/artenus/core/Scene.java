@@ -30,11 +30,10 @@ import com.annahid.libs.artenus.entities.behavior.Touchable;
 
 /**
  * Represents a single scene in a game. If you view the whole game as a play, the terms for {@link
- * Stage} and {@code Scene} will make complete sense to you, as they are intentionally named this
- * way in the framework. A game can have several scenes based on its nature. For example, a simple
- * game consists of a menu scene, a game scene and a game over scene where scores and rankings are
- * shown. Scenes methods provide the means to manipulate stage properties and navigate between
- * scenes.
+ * Stage} and {@code Scene} will make complete sense, as they are intentionally named this way in
+ * the framework. A game can have several scenes based on its nature. For example, a simple game
+ * consists of a menu scene, a game scene and a game over scene where scores and rankings are shown.
+ * Scenes methods provide the means to manipulate stage properties and navigate between scenes.
  *
  * @author Hessan Feghhi
  */
@@ -58,7 +57,7 @@ public class Scene implements Touchable {
     private RGB bgColor = new RGB(0, 0, 0);
 
     /**
-     * Holds the collection of entities that make up the scene.
+     * Contains entities that make up the scene.
      */
     private final EntityCollection entities;
 
@@ -205,7 +204,7 @@ public class Scene implements Touchable {
     }
 
     /**
-     * Checks whether the scene is halted.
+     * Indicates whether the scene is currently halted.
      *
      * @return {@code true} if the scene is halted, and {@code false} otherwise
      */

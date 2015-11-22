@@ -44,7 +44,7 @@ public interface Animatable {
     /**
      * Advances the animation for this animatable. This method is called once per animation frame.
      *
-     * @param elapsedTime the amount of time since last call to this method
+     * @param elapsedTime The amount of time since last call to this method
      */
     void advance(float elapsedTime);
 }

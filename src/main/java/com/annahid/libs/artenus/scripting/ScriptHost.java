@@ -19,8 +19,8 @@
 package com.annahid.libs.artenus.scripting;
 
 /**
- * The interface for classes that interpret and execute scripts. If your game supports scripting,
- * you can implement this interface to take advantage of the script console user interface.
+ * Interface for classes that interpret and execute scripts. If your game supports scripting, you
+ * can implement this interface to take advantage of the script console user interface.
  *
  * @author Hessan Feghhi
  * @see ConsoleActivity

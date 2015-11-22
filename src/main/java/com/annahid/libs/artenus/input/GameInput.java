@@ -24,7 +24,7 @@ import com.annahid.libs.artenus.core.Scene;
 import com.annahid.libs.artenus.entities.behavior.Behaviors;
 
 /**
- * The base class for all game input controllers. A game input manager maps inputs from a specific
+ * Superclass for all game input controllers. A game input manager maps inputs from a specific
  * source to the unified Artenus game controller pattern. A virtual controller in this framework has
  * a single direction knob and four action keys. The direction knob can indicate any possible
  * direction in a circle centered at the knob.
@@ -79,9 +79,9 @@ public abstract class GameInput implements Entity {
     }
 
     /**
-     * Appoints an {@link InputListener} to respond to input status changes of this
-     * {@code GameInput}. Each time the key map or the direction changes, the
-     * listener is signaled to process the event.
+     * Sets the {@link InputListener} responsible for handling input status changes of this
+     * {@code GameInput}. Each time the key map or the direction changes, the listener is signaled
+     * to process the event.
      *
      * @param listener The new listener to be appointed, or {@code null} to remove the listener
      *

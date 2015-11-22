@@ -45,12 +45,34 @@ import com.annahid.libs.artenus.core.Scene;
  * @author Hessan Feghhi
  */
 public class EntityPair implements Entity, Animatable, Touchable, Transformable, Renderable {
+    /**
+     * Holds the animation handler affecting the entities in the pair.
+     */
     protected AnimationHandler anim;
 
-    private Entity first, second;
+    /**
+     * Holds the first entity of the pair.
+     */
+    private Entity first;
 
-    private final Point2D pos, scale;
+    /**
+     * Holds the second entity of the pair.
+     */
+    private Entity second;
 
+    /**
+     * Holds the position of the pair as a whole.
+     */
+    private final Point2D pos;
+
+    /**
+     * Holds the scale of the pair as a whole.
+     */
+    private final Point2D scale;
+
+    /**
+     * Holds the rotational angle for the pair as a whole.
+     */
     private float rotation;
 
     /**

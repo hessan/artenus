@@ -30,7 +30,7 @@ import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.core.Scene;
 
 /**
- * Base class for all sprites. A sprite is a mobile piece of graphic that can represent an object in
+ * Superclass for all sprites. A sprite is a mobile piece of graphic that can represent an object in
  * the game. Sprites are the graphical entities that are used in scenes. They can be moved, rotated,
  * scaled and animated according to their role in the game.
  *
@@ -75,7 +75,7 @@ public abstract class SpriteEntity implements Entity, Animatable, Renderable, Tr
     Effect effect;
 
     /**
-     * Creates a generic sprite. This method is called by subclasses to initialize the sprite.
+     * Called by subclasses to initialize the sprite.
      */
     protected SpriteEntity() {
         pos = new Point2D(0.0f, 0.0f);
@@ -298,8 +298,9 @@ public abstract class SpriteEntity implements Entity, Animatable, Renderable, Tr
      */
     @Override
     public final void advance(float elapsedTime) {
-        if (anim == null)
+        if (anim == null) {
             return;
+        }
         anim.advance(this, elapsedTime);
     }
 }

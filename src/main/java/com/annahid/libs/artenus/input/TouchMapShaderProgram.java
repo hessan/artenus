@@ -28,6 +28,9 @@ import com.annahid.libs.artenus.graphics.TextureShaderProgram;
  * @author Hessan Feghhi
  */
 class TouchMapShaderProgram extends TextureShaderProgram {
+    /**
+     * Holds the vertex shader.
+     */
     private static final String vertexShaderCode =
             "uniform mat4 uMVPMatrix;" +
             "attribute vec4 vPosition;" +
@@ -39,8 +42,8 @@ class TouchMapShaderProgram extends TextureShaderProgram {
             '}';
 
     /**
-     * Fragment shader code that converts the mapped texture to a mono-chrome image with boolean
-     * texel transparencies (0 or 1).
+     * Holds fragment shader code that converts the mapped texture to a mono-chrome image with
+     * boolean texel transparencies (0 or 1).
      */
     private static final String fragmentShaderCode =
             "precision mediump float;" +

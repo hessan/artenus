@@ -28,12 +28,11 @@ import com.annahid.libs.artenus.data.ConcurrentCollection;
 import java.util.Collection;
 
 /**
- * This class is the central point to manipulate {@code Texture} objects in the framework.
- * It provides methods to create, load and unload textures and it will make sure that
- * textures that are used are valid. This class handles the "loading" of graphical assets
- * when your game starts up, or before every scene with local assets. But this procedure
- * is effectively hidden from the developer and you do not need to worry about creating
- * your own loading screens and texture handling.
+ * Serves as the central point to manipulate {@code Texture} objects in the framework. It provides
+ * methods to create, load and unload textures and it will make sure that textures that are used are
+ * valid. This class handles the "loading" of graphical assets when your game starts up, or before
+ * every scene with local assets. But this procedure is effectively hidden from the developer and
+ * you do not need to worry about creating your own loading screens and texture handling.
  *
  * @author Hessan Feghhi
  */
@@ -97,12 +96,21 @@ public final class TextureManager {
      */
     private static int state;
 
+    /**
+     * Contains local texture identifiers for the current scene.
+     */
     private static int[] localTex = null;
 
+    /**
+     * Holds the loading texture.
+     */
     private static Texture loadingTexture;
 
     private static int loadedCount = 0; // For displaying purposes only
 
+    /**
+     * Holds the scaling factor used for adapting texture dimensions to screen dimensions.
+     */
     private static float texScale = 1.0f;
 
     /**

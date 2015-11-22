@@ -38,18 +38,16 @@ import java.util.NoSuchElementException;
 import java.util.Stack;
 
 /**
- * <p>
- * Provides a resizable list of {@code Entity} objects that implements {@link Entity}, so it can be
- * added to a scene as a single entity. When added as an entity, it renders all contained entities
- * when its {@code render} method is called.</p>
- * <p>
- * Entity collections have their own position, rotation, and scaling factors. The transformations
+ * <p>Provides a resizable list of {@code Entity} objects that implements {@link Entity}, so it can
+ * be added to a scene as a single entity. When added as an entity, it renders all contained
+ * entities when its {@code render} method is called.</p>
+ * <p>Entity collections have their own position, rotation, and scaling factors. The transformations
  * of the entities added to a collection are relative to the global transformations of the
  * collection. Effects in an entity collection are also added to the collection, and not to
- * individual entities.
- * </p>
+ * individual entities.</p>
  *
  * @author Hessan Feghhi
+ *
  * @see Entity
  * @see com.annahid.libs.artenus.entities.EntityPair
  * @see com.annahid.libs.artenus.core.Scene
@@ -385,7 +383,7 @@ public class EntityCollection
      * Advances the associated animation handler, and then advances all entities added to this
      * collection.
      *
-     * @param elapsedTime the amount of time since last call to this method
+     * @param elapsedTime Elapsed time since the last call to this method
      */
     @Override
     public void advance(float elapsedTime) {
@@ -439,6 +437,9 @@ public class EntityCollection
      * Provides basic iterator functionality for {@code EntityCollection}.
      */
     private final class BasicIterator implements Iterator<Entity> {
+        /**
+         * Keeps track of the last entity returned by ths iterator.
+         */
         private Entity lastReturned;
 
         private Iterator<Entity> it;

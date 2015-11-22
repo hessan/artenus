@@ -23,9 +23,9 @@ import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.graphics.Font;
 
 /**
- * A subclass of {@link SpriteEntity} which represents a text. A text is a series of characters
- * displayed on the screen using a {@code Font}. This class provides all controls relating to size,
- * color and text manipulation to manage the piece of text that is added to the scene.
+ * Represents a text block. A text is a series of characters displayed on the screen using a
+ * {@link Font}. This class provides all controls relating to size, color and text manipulation to
+ * manage the piece of text that is added to the scene.
  *
  * @author Hessan Feghhi
  * @see SpriteEntity

@@ -74,7 +74,7 @@ public class FilterPassSetup extends Viewport {
     }
 
     /**
-     * Gets a value indicating whether the next pass is in-place.
+     * Indicates whether the next pass is in-place.
      *
      * @return {@code true} if in-place, {@code false} otherwise
      */

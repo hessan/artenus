@@ -19,7 +19,7 @@
 package com.annahid.libs.artenus.input;
 
 /**
- * An interface for classes that response to input status changes.
+ * Interface for classes that response to input status changes.
  *
  * @author Hessan Feghhi
  */

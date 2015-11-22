@@ -24,11 +24,11 @@ import com.annahid.libs.artenus.entities.EntityCollection;
 import com.annahid.libs.artenus.graphics.sprites.LineSprite;
 
 /**
- * The superclass for all dialogs. A dialog is a user interface component that pauses the normal
+ * Superclass for all dialogs. A dialog is a user interface component that pauses the normal
  * operation of a scene to do a short task, and resumes the scene upon the completion of the task.
  * Examples of dialogs are pop-up messages, waiting circles, and friend choosers. When a dialog is
- * displayed on a scene, the content of the scene will be still visible behind the dialog, but
- * dimmer than the content of the dialog. Input is also captured only by the dialog.
+ * displayed on a scene, the contents of the scene will still be visible behind the dialog, but
+ * dimmer than the contents of the dialog. Input is also captured only by the dialog.
  *
  * @author Hessan Feghhi
  */

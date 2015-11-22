@@ -70,8 +70,10 @@ public final class ShadowEffect extends Effect {
 
         context.popMatrix();
 
-        if (baseEffect == null)
+        if (baseEffect == null) {
             renderable.render(context, Renderable.FLAG_IGNORE_EFFECTS);
-        else baseEffect.render(context, renderable, alpha);
+        } else {
+            baseEffect.render(context, renderable, alpha);
+        }
     }
 }

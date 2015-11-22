@@ -55,8 +55,15 @@ final class IntroScene extends Scene {
      */
     private boolean gameRun = false;
 
+    /**
+     * Holds the logo.
+     */
     private ImageSprite annahid = null;
 
+    /**
+     * Indicates whether the intro should be displayed. The scene gracefully hands over to the
+     * game without showing the intro if this value is {@code false}.
+     */
     private final boolean showIntro;
 
     /**
@@ -64,6 +71,11 @@ final class IntroScene extends Scene {
      */
     private final long startTime;
 
+    /**
+     * Prevents external instantiation.
+     *
+     * @param parentStage Parent stage
+     */
     private IntroScene(Stage parentStage) {
         super(parentStage);
         startTime = System.currentTimeMillis();

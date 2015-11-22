@@ -37,7 +37,7 @@ public interface PostProcessingFilter {
      * pass. Width and height specified for the next pass cannot exceed raw output dimensions.
      *
      * @param pass  Current pass number (starting at 0)
-     * @param setup The frame setup for the previous pass
+     * @param setup Frame setup for the previous pass
      *
      * @return A value indicating whether another pass is required to complete this filter (other
      * than the current pass that is being set up)
@@ -51,9 +51,9 @@ public interface PostProcessingFilter {
      * this filter. Note that the result of the final pass might still be processed by other
      * post-processing filters before actually being displayed on the screen.
      *
-     * @param pass          This current pass number (starting at 0)
-     * @param context       The rendering context
-     * @param renderedFrame The raw rendered frame if pass is 0, or the result of the previous pass
+     * @param pass          Current pass number (starting at 0)
+     * @param context       Rendering context
+     * @param renderedFrame Raw rendered frame if pass is 0, or the result of the previous pass
      */
     void render(int pass, RenderingContext context, RenderTarget renderedFrame);
 }

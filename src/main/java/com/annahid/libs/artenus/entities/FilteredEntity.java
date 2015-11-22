@@ -28,16 +28,24 @@ import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.core.Scene;
 
 /**
- * An entity that applies all its methods on an underlying entity. This class is the superclass
- * of all classes that provide a modification on the behavior of other entities.
+ * Superclass of all classes that provide a modification on the behavior of other entities. It
+ * represents an entity that applies all its methods on an underlying entity.
  *
  * @author Hessan Feghhi
  */
 public abstract class FilteredEntity
         implements Entity, Animatable, Transformable, Renderable {
 
+    /**
+     * Holds the underlying entity.
+     */
     protected Entity target;
 
+    /**
+     * Called by subclasses to setup this filtered entity with the given underlying entity.
+     *
+     * @param e Underlying entity
+     */
     protected FilteredEntity(Entity e) {
         target = e == null ? NullEntity.getInstance() : e;
     }
@@ -206,6 +214,11 @@ public abstract class FilteredEntity
         return behavior != Behaviors.TOUCHABLE && target.hasBehavior(behavior);
     }
 
+    /**
+     * Gets the underlying entity.
+     *
+     * @return Underlying entity
+     */
     public final Entity getUnderlyingEntity() {
         return target;
     }

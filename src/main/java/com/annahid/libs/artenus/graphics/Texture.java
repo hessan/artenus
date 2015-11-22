@@ -71,7 +71,7 @@ public class Texture {
     private Bitmap bmp = null;
 
     /**
-     * Constructs a new {@code Texture} with the given image.
+     * Creates a new {@code Texture} with the given image.
      *
      * @param resourceId The resource identifier of the image
      */
@@ -103,10 +103,10 @@ public class Texture {
     }
 
     /**
-     * Prepares the OpenGL context for rendering this {@code Texture}. This method must be
-     * called before calling {@link #draw(RenderingContext, float, float, float, float, float)} for
-     * correct rendering. However, it is recommended that you do not call any of these
-     * methods directly. The framework handles low-level rendering.
+     * Prepares the OpenGL context for rendering this {@code Texture}. This method must be called
+     * before calling {@link #draw(RenderingContext, float, float, float, float, float)} for correct
+     * rendering. However, it is recommended that you do not call any of these methods directly. The
+     * framework handles low-level rendering.
      *
      * @param textureBuffer The texture buffer
      */
@@ -119,14 +119,14 @@ public class Texture {
     }
 
     /**
-     * Renders this {@code Texture} on the given OpenGL context in the given rectangular
-     * region. It is recommended that you do not call this method directly.
+     * Renders this {@code Texture} on the given OpenGL context in the given rectangular region. It
+     * is recommended that you do not call this method directly.
      *
-     * @param x   The x coordinate of the region to draw the texture
-     * @param y   The y coordinate of the region to draw the texture
-     * @param w   The width of the region to draw the texture
-     * @param h   The height of the region to draw the texture
-     * @param rot The rotation angle of the rectangular region
+     * @param x   x coordinate of the region to draw the texture
+     * @param y   y coordinate of the region to draw the texture
+     * @param w   Width of the region to draw the texture
+     * @param h   Height of the region to draw the texture
+     * @param rot Rotation angle of the rectangular region
      */
     public final void draw(RenderingContext ctx, float x, float y, float w, float h, float rot) {
         ctx.pushMatrix();
@@ -138,9 +138,9 @@ public class Texture {
     }
 
     /**
-     * Indicates whether the texture is loaded. The texture can be displayed only when
-     * it is loaded. You normally don't need to check this directly and the framework
-     * takes all the required precautions not to allow you to use unloaded textures.
+     * Indicates whether the texture is loaded. The texture can be displayed only when it is loaded.
+     * You normally don't need to check this directly and the framework takes all the required
+     * precautions not to allow you to use unloaded textures.
      *
      * @return {@code true} if loaded, or {@code false} otherwise
      */
@@ -149,8 +149,8 @@ public class Texture {
     }
 
     /**
-     * Gets the width of the {@code Texture}. This will be the processed width, so if
-     * you are using an SVG texture, it will indicate the power-of-two estimation of the
+     * Gets the width of the {@code Texture}. This will be the processed width, so if you are using
+     * an SVG texture, it will indicate the power-of-two estimation of the
      * width.
      *
      * @return The width of the texture
@@ -160,9 +160,8 @@ public class Texture {
     }
 
     /**
-     * Gets the height of the {@code Texture}. This will be the processed height, so if
-     * you are using an SVG texture, it will indicate the power-of-two estimation of the
-     * height.
+     * Gets the height of the {@code Texture}. This will be the processed height, so if you are
+     * using an SVG texture, it will indicate the power-of-two estimation of the height.
      *
      * @return The width of the texture
      */
@@ -171,9 +170,9 @@ public class Texture {
     }
 
     /**
-     * Unloads this {@code Texture}. It is highly recommended that you do not call this
-     * method directly, as it might cause problems. {@code TextureManager} takes the
-     * responsibility for loading and unloading textures whenever required.
+     * Unloads this {@code Texture}. It is highly recommended that you do not call this method
+     * directly, as it might cause problems. {@code TextureManager} takes the responsibility for
+     * loading and unloading textures whenever required.
      *
      * @see TextureManager
      */
@@ -183,10 +182,10 @@ public class Texture {
     }
 
     /**
-     * Gets the OpenGL texture identifier associated with this texture. Applications of
-     * this method are rare and it is recommended not to use this method.
+     * Gets the OpenGL ES texture identifier associated with this texture. Applications of this
+     * method are rare and it is recommended not to use this method.
      *
-     * @return The OpenGL texture identifier
+     * @return The OpenGL ES texture identifier
      */
     public final int getTextureHandle() {
         return textureId;

@@ -81,7 +81,7 @@ public abstract class Artenus extends Activity {
     private boolean hasOutFocused = false;
 
     /**
-     * Constructs a new instance of Artenus activity.
+     * Creates a new instance of Artenus activity.
      *
      * @param hideIntro A value indicating whether to hide the initial splash screen
      */
@@ -93,7 +93,7 @@ public abstract class Artenus extends Activity {
     }
 
     /**
-     * Constructs a new instance of Artenus activity.
+     * Creates a new instance of Artenus activity.
      */
     protected Artenus() {
         this(false);
@@ -185,8 +185,7 @@ public abstract class Artenus extends Activity {
 
         setContentView(R.layout.game_layout);
         stage = new WeakReference<>((StageImpl) findViewById(R.id.gameStage));
-        ShaderManager.register(TextureManager.getShaderProgram());
-        BlurFilter.init();
+        ShaderManager.register(TextureManager.getShaderProgram());;
         init(stage.get());
 
         UnifiedServices unified = UnifiedServices.getInstance();
@@ -291,8 +290,8 @@ public abstract class Artenus extends Activity {
     }
 
     /**
-     * Initializes the game. Subclasses should use this method to load textures and other resources
-     * into the framework.
+     * Initializes the game. Subclasses should implement this method and use it as an entry point to
+     * load textures and other resources into the framework.
      *
      * @param stage The stage for the game
      */

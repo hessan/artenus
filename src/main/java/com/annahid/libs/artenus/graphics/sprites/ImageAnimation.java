@@ -188,11 +188,11 @@ public final class ImageAnimation implements AnimationHandler {
     }
 
     /**
-     * The Trend specifies how the animation frames are repeated. The default is LOOP.
+     * Animation trend specifies how animation frames are repeated. The default is LOOP.
      */
     public enum Trend {
         /**
-         * Animation trend that involves playing frames in a loop
+         * Animation trend that involves playing frames in a loop.
          */
         LOOP,
         /**

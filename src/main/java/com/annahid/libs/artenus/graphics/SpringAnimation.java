@@ -32,23 +32,22 @@ import com.annahid.libs.artenus.entities.behavior.Transformable;
 @SuppressWarnings("UnusedDeclaration")
 public final class SpringAnimation implements AnimationHandler {
     /**
-     * Specifies the animation should affect the x component of the entity's position
+     * Specifies the animation should affect the x component of the entity's position.
      */
     public static final int X = 1;
 
     /**
-     * Specifies the spring animation should affect the y component of the entity's
-     * position
+     * Specifies the spring animation should affect the y component of the entity's position.
      */
     public static final int Y = 2;
 
     /**
-     * Specifies the spring animation should affect the entity's scale
+     * Specifies the spring animation should affect the entity's scale.
      */
     public static final int SCALE = 4;
 
     /**
-     * Specifies the spring animation should affect the entity's rotational angle
+     * Specifies the spring animation should affect the entity's rotational angle.
      */
     public static final int ROTATION = 8;
 
@@ -99,9 +98,9 @@ public final class SpringAnimation implements AnimationHandler {
      * @param target      The target value of the selected property for the animation
      * @param kValue      The K value of the spring, which determines how quickly it will bounce
      *                    back from a stretched position
-     * @param decayFactor The decay factor of the spring motion. If this value is set to any
-     *                    number above zero, the motion will decayed until it reaches a halt. The
-     *                    speed of decay is determined by the value of this parameter.
+     * @param decayFactor The decay factor of the spring motion; if this value is set to any number
+     *                    above zero, the motion will decayed until it reaches a halt; the speed of
+     *                    decay is determined by the value of this parameter
      */
     public SpringAnimation(int type, float initial, float target, float kValue, float decayFactor) {
         t = type;
@@ -116,7 +115,7 @@ public final class SpringAnimation implements AnimationHandler {
     /**
      * Gets the current value of the property used in the animation.
      *
-     * @return The value of the selected property. Selected property is determined by animation type.
+     * @return The value of the selected property; selected property is determined by animation type
      *
      * @see #getType()
      */
@@ -128,7 +127,7 @@ public final class SpringAnimation implements AnimationHandler {
      * Gets the target value of the property used in the animation. The target value can be viewed
      * as the center of oscillation.
      *
-     * @return The target value of the selected property. Selected property is determined by
+     * @return The target value of the selected property; selected property is determined by
      * animation type
      *
      * @see #getType()
@@ -141,8 +140,8 @@ public final class SpringAnimation implements AnimationHandler {
      * Gets the target value of the property used in the animation. The target value can be viewed
      * as the center of oscillation.
      *
-     * @param value The target value of the selected property. Selected property is determined by
-     *              animation type.
+     * @param value Target value of the selected property; selected property is determined by
+     *              animation type
      *
      * @see #getType()
      */

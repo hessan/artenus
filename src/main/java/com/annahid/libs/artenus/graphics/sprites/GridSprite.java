@@ -31,9 +31,9 @@ import java.nio.FloatBuffer;
  * <p>Provides a grid of texture blocks. It is intended for platform or map based games. You can
  * create a large grid and add it to the scene as a normal sprite. Only the portion of the grid that
  * is visible will be rendered. Use this sprite for level maps.</p>
- * <p>Please note that this class is subject to revision or removal in the future. It is NOT
- * yet deprecated. Support for platform-based games is currently being revised and a faster and
- * more robust framework will be introduced in future versions.</p>
+ * <p>Note that this class is subject to revision or removal in the future. It is NOT yet
+ * deprecated. Support for platform-based games is currently being revised and a faster and more
+ * robust framework will be introduced in future versions.</p>
  *
  * @author Hessan Feghhi
  */
@@ -69,6 +69,9 @@ public final class GridSprite extends SpriteEntity {
      */
     private float blkH;
 
+    /**
+     * Holds the thickness of the overlapping area around blocks, in pixels.
+     */
     private float m;
 
     /**
@@ -293,9 +296,9 @@ public final class GridSprite extends SpriteEntity {
     }
 
     /**
-     * Converts a pixel coordination into the corresponding column number on the grid.
+     * Converts a pixel coordinate into the corresponding column number on the grid.
      *
-     * @param x The x coordination value
+     * @param x The x coordinate
      *
      * @return The resulting column number
      */
@@ -304,9 +307,9 @@ public final class GridSprite extends SpriteEntity {
     }
 
     /**
-     * Converts a pixel coordination into the corresponding row number on the grid.
+     * Converts a pixel coordinate into the corresponding row number on the grid.
      *
-     * @param y The y coordination value
+     * @param y The y coordinate
      *
      * @return The resulting row number
      */

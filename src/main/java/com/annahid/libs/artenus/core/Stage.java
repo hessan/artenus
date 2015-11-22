@@ -23,11 +23,11 @@ import com.annahid.libs.artenus.graphics.filters.PostProcessingFilter;
 import com.annahid.libs.artenus.graphics.rendering.ShaderProgram;
 
 /**
- * <p>This interface is one of the key components of this framework. The {@code Stage} is where
- * everything actually happens. Each game has a stage on which different scenes appear. Its instance
- * is passed to the application through {@link com.annahid.libs.artenus.Artenus#init}. The
+ * Represents the stage. This interface is one of the key components of this framework. The stage is
+ * where everything actually happens. Each game has a stage on which different scenes appear. Its
+ * instance is passed to the application through {@link com.annahid.libs.artenus.Artenus#init}. The
  * application needs to assign a {@link com.annahid.libs.artenus.core.StageManager} to the stage in
- * order to handle its important event.</p>
+ * order to handle its important event.
  *
  * @author Hessan Feghhi
  * @see StageManager
@@ -133,8 +133,9 @@ public interface Stage {
     StageManager getManager();
 
     /**
-     * Appoints a stage manager to handle required functionality for this {@code Stage}. You MUST
-     * assign a stage manager before doing anything else with this {@code Stage}.
+     * Sets the stage manager responsible for handling required functionality for this
+     * {@code Stage}. You MUST assign a stage manager before doing anything else with this
+     * {@code Stage}.
      *
      * @param stageManager The stage manager
      */

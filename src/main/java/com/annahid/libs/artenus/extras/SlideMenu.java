@@ -35,9 +35,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Provides the user interface for horizontal menus that use slide action
- * to navigate. It takes sprites as menu items and handles scaling and moving them
- * as necessary. At any point you can get the currently focused item.
+ * Provides the user interface for horizontal menus that use slide action to navigate. It takes
+ * sprites as menu items and handles scaling and moving them as necessary. At any point you can get
+ * the currently focused item.
  *
  * @author Hessan Feghhi
  */
@@ -102,7 +102,7 @@ public final class SlideMenu extends EntityCollection {
     }
 
     /**
-     * Assigns a new event listener to listen to item selection events.
+     * Appoints a new event listener to listen to item selection events.
      *
      * @param listener Event listener to be added
      */
@@ -297,8 +297,8 @@ public final class SlideMenu extends EntityCollection {
     /**
      * Does nothing. Changing position is not supported by slide menu.
      *
-     * @param x x value (not used)
-     * @param y y value (not used)
+     * @param x Not used
+     * @param y Not used
      */
     @Override
     public void setPosition(float x, float y) {

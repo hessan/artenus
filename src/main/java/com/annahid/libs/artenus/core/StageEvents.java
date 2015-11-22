@@ -27,23 +27,23 @@ package com.annahid.libs.artenus.core;
  */
 public enum StageEvents {
     /**
-     * Indicates that the stage has gone into a paused state. This event is triggered when the
-     * Artenus activity goes in the background.
+     * Stage event meaning that the stage has gone into a paused state. This event is triggered when
+     * the Artenus activity goes in the background.
      */
     PAUSE(1),
     /**
-     * Indicates that the stage has resumed from a paused state. This event is triggered when the
-     * Artenus activity resumes from a background state.
+     * Stage event meaning that the stage has resumed from a paused state. This event is triggered
+     * when the Artenus activity resumes from a background state.
      */
     RESUME(2),
     /**
-     * Indicates that the stage has just allocated resources to display content. This event is
-     * triggered when the OpenGL view's {@code onSurfaceCreated} method is invoked.
+     * Stage event meaning that the stage has just allocated resources to display content. This
+     * event is triggered when the OpenGL view's {@code onSurfaceCreated} method is invoked.
      */
     DISPLAY(3);
 
     /**
-     * The current value of this enumeration.
+     * Holds the current value of this enumeration.
      */
     private final int value;
 

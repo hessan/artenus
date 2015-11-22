@@ -80,8 +80,8 @@ public interface Renderable {
     Effect getEffect();
 
     /**
-     * Assigns an effect to this entity. Each entity can only have one effect assigned to it.
-     * Multiple effects can be chained together to create a single effect.
+     * Sets the top-level effect for this entity. Each entity can only have one effect assigned to
+     * it. Multiple effects can be chained together to create a single effect.
      *
      * @see com.annahid.libs.artenus.graphics.Effect
      */

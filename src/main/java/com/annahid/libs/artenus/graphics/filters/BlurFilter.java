@@ -35,6 +35,13 @@ public class BlurFilter implements PostProcessingFilter {
     private static BlurShaderProgram program = new BlurShaderProgram();
 
     /**
+     * Registers the blur shadedr program with the shader manager.
+     */
+    static {
+        ShaderManager.register(program);
+    }
+
+    /**
      * Holds blur amount.
      */
     private float amount;
@@ -49,10 +56,6 @@ public class BlurFilter implements PostProcessingFilter {
      * {@link #render(int, RenderingContext, RenderTarget)}.
      */
     private Viewport savedSetup;
-
-    public static void init() {
-        ShaderManager.register(program);
-    }
 
     /**
      * Gets the current blurring amount.

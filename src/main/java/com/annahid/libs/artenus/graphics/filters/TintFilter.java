@@ -71,7 +71,7 @@ public class TintFilter implements PostProcessingFilter {
      * Always returns {@code false} as this filter only has one pass.
      *
      * @param pass  Current pass number (starting at 0)
-     * @param setup The frame setup for the previous pass
+     * @param setup Frame setup for the previous pass
      *
      * @return {@code false}
      */

@@ -149,16 +149,34 @@ public class ImageSprite extends SpriteEntity {
          */
         private FloatBuffer[] textureBuffers;
 
+        /**
+         * Holds frame (or block) width.
+         */
         private float fw;
 
+        /**
+         * Holds frame (or block) height.
+         */
         private float fh;
 
+        /**
+         * Holds the number of frames that will be cut out of the atlas horizontally.
+         */
         private int fc;
 
+        /**
+         * Holds the number of frames that will be cut out of the atlas vertically.
+         */
         private int fch;
 
+        /**
+         * Holds the x coordinate of the top-left corner of the first frame.
+         */
         private int sx;
 
+        /**
+         * Holds the y coordinate of the top-left corner of the first frame.
+         */
         private int sy;
 
         /**
@@ -246,7 +264,7 @@ public class ImageSprite extends SpriteEntity {
         void generate(int w, int h) {
             textureBuffers = new FloatBuffer[fc * fch];
 
-            for (int indexh = 0; indexh < fch; indexh++)
+            for (int indexh = 0; indexh < fch; indexh++) {
                 for (int index = 0; index < fc; index++) {
                     final float x1 = (sx + fw * (float) index) / (float) w;
                     final float x2 = (sx + fw * (float) (index + 1)) / (float) w;
@@ -267,6 +285,7 @@ public class ImageSprite extends SpriteEntity {
                     textureBuffer.position(0);
                     textureBuffers[indexh * fc + index] = textureBuffer;
                 }
+            }
         }
     }
 }

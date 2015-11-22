@@ -48,8 +48,14 @@ public final class SoundManager {
 
     private static int bgLength = 0;
 
+    /**
+     * Holds the asset path to the current background music.
+     */
     private static String currentMusic = null;
 
+    /**
+     * Holds the general volume of the sound manager.
+     */
     private static float generalVolume = 1.0f;
 
     /**
