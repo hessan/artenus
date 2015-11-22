@@ -82,8 +82,8 @@ public final class Product {
      * @param title Product title
      * @param desc  Description
      * @param price Price, including the currency
-     * @param type  Product type, which can be one of {@link #CONSUMABLE}, {@link #SUBSCRIPTION},
-     *              or {@link #ENTITLEMENT}.
+     * @param type  Product type; it can be one of {@link #CONSUMABLE}, {@link #SUBSCRIPTION}, or
+     *              {@link #ENTITLEMENT}
      */
     public Product(String sku, String title, String desc, String price, int type) {
         this.sku = sku;

@@ -43,14 +43,23 @@ public abstract class AdManager {
     private static final int MESSAGE_DESTROY_AD = 114;
 
     /**
-     * Holds the handler for IPC messaging with this {@code AdManager} instance.
+     * Holds the ad layout managed by this ad manager.
      */
-    public MyHandler handler = null;
-
     protected AdLayout adLayout = null;
 
+    /**
+     * Holds the handler for IPC messaging with this {@code AdManager} instance.
+     */
+    MyHandler handler = null;
+
+    /**
+     * Holds the event handler responding to ad placement changes.
+     */
     private AdPlacementListener listener;
 
+    /**
+     * Holds the store-specific ad unit identifier.
+     */
     private String adUnitId = null;
 
     /**
@@ -137,7 +146,7 @@ public abstract class AdManager {
      */
     protected abstract void destroyAdView(View adView);
 
-    AdPlacementListener getAdPlacementListener() {
+    final AdPlacementListener getAdPlacementListener() {
         return listener;
     }
 
@@ -150,7 +159,13 @@ public abstract class AdManager {
         this.listener = listener;
     }
 
-    void sendSignalToMainThread(int msgId, int param) {
+    /**
+     * Uses the handler to apply the ad placement change request on the UI thread.
+     *
+     * @param msgId Message identifier
+     * @param param Message parameter
+     */
+    final void sendSignalToMainThread(int msgId, int param) {
         if (handler != null) {
             final Message msg = new Message();
             msg.what = msgId;
@@ -160,52 +175,68 @@ public abstract class AdManager {
     }
 
     /**
-     * Specifies whether and where an ad view can be displayed.
+     * Ad placement and visibility options.
      */
     public enum Show {
         /**
-         * An option that indicates the ad should be hidden.
+         * Option indicating that the ad should be hidden.
          */
         HIDDEN,
 
         /**
-         * Indicates the ad unit should be displayed at the top-left corner.
+         * Option indicating that the ad unit should be displayed at the top-left corner.
          */
         TOP_LEFT,
 
         /**
-         * Indicates the ad unit should be displayed at the top center.
+         * Option indicating that the ad unit should be displayed at the top center.
          */
         TOP_CENTER,
 
         /**
-         * Indicates the ad unit should be displayed at the top-right corner.
+         * Option indicating that the ad unit should be displayed at the top-right corner.
          */
         TOP_RIGHT,
 
         /**
-         * Indicates the ad unit should be displayed at the bottom-left corner.
+         * Option indicating that the ad unit should be displayed at the bottom-left corner.
          */
         BOTTOM_LEFT,
 
         /**
-         * An option that indicates the ad unit should be displayed at the bottom center.
+         * Option indicating that the ad unit should be displayed at the bottom center.
          */
         BOTTOM_CENTER,
 
         /**
-         * Indicates the ad unit should be displayed at the bottom-right corner.
+         * Option indicating that the ad unit should be displayed at the bottom-right corner.
          */
         BOTTOM_RIGHT
     }
 
+    /**
+     * Handles ad placement changes on the UI thread.
+     */
     private static class MyHandler extends Handler {
+        /**
+         * Holds the reference to the ad manager.
+         */
         private WeakReference<AdManager> admRef;
 
+        /**
+         * Creates a new instance of the handler.
+         *
+         * @param adm Ad manager instance
+         */
         public MyHandler(AdManager adm) {
             admRef = new WeakReference<>(adm);
         }
 
+        /**
+         * Handles an incoming message.
+         *
+         * @param msg The message
+         */
         public void handleMessage(Message msg) {
             final AdManager adm = admRef.get();
 
@@ -219,7 +250,6 @@ public abstract class AdManager {
                     return;
 
                 Show show = Show.values()[msg.arg1];
-
                 adm.adLayout.showAd(show);
 
                 if (adm.listener != null)

@@ -41,7 +41,7 @@ public abstract class InventoryManager {
     private String[] inventorySKUs;
 
     /**
-     * Constructs an empty instance of {@code InventoryManager}.
+     * Creates an empty instance of {@code InventoryManager}.
      */
     protected InventoryManager() {
     }

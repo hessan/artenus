@@ -78,7 +78,6 @@ public final class AdLayout extends ViewGroup {
     protected final void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         final int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         final int heightSize = MeasureSpec.getSize(widthMeasureSpec);
-
         final int count = getChildCount();
 
         for (int i = 0; i < count; i++) {
