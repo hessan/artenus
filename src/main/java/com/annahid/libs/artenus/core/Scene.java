@@ -108,8 +108,9 @@ public class Scene implements Touchable {
      * @see PhysicsSimulator
      */
     public final PhysicsSimulator getPhysicsSimulator() {
-        if (physics == null)
+        if (physics == null) {
             physics = new PhysicsSimulator();
+        }
         return physics;
     }
 

@@ -38,30 +38,6 @@ import java.util.Collection;
  */
 public final class TextureManager {
     /**
-     * Indicates that the texture manager has all the textures but they are not loaded.
-     */
-    public static final int STATE_FRESH = 0;
-
-    /**
-     * Indicates that the texture manager is loading the textures.
-     */
-    public static final int STATE_LOADING = 1;
-
-    /**
-     * Indicates that the texture manager is unloading some or all of the textures. This
-     * can also be a part of the loading process, where it first unloads the previous
-     * textures which are no longer required. It just indicates the course of action that
-     * is currently being taken.
-     */
-    public static final int STATE_UNLOADING = 2;
-
-    /**
-     * Indicates that the texture manager has finished loading the textures. In this
-     * state the textures are functional.
-     */
-    public static final int STATE_LOADED = 3;
-
-    /**
      * Used for mutual exclusion.
      */
     private static final Object texLock = new Object();
@@ -94,7 +70,7 @@ public final class TextureManager {
     /**
      * Holds loading status.
      */
-    private static int state;
+    private static States state = States.FRESH;
 
     /**
      * Contains local texture identifiers for the current scene.
@@ -177,7 +153,7 @@ public final class TextureManager {
      * @see #addLocal(int...)
      */
     public static void add(int... textureSet) {
-        state = STATE_LOADING;
+        state = States.LOADING;
 
         final SparseArray<Texture> tempMap = new SparseArray<>();
 
@@ -208,7 +184,7 @@ public final class TextureManager {
         texMap = tempMap;
         bkMap.clear();
 
-        state = STATE_FRESH;
+        state = States.FRESH;
     }
 
     /**
@@ -222,7 +198,7 @@ public final class TextureManager {
     public static void addLocal(int... textureSet) {
         Texture tex;
 
-        state = STATE_LOADING;
+        state = States.LOADING;
 
         for (int textureId : textureSet) {
             tex = new Texture(textureId);
@@ -231,7 +207,7 @@ public final class TextureManager {
         }
 
         localTex = textureSet;
-        state = STATE_FRESH;
+        state = States.FRESH;
     }
 
     /**
@@ -240,7 +216,7 @@ public final class TextureManager {
      */
     public static void unloadLocal() {
         if (localTex != null) {
-            state = STATE_UNLOADING;
+            state = States.UNLOADING;
 
             for (int textureId : localTex) {
                 final Texture tex = texMap.get(textureId);
@@ -251,7 +227,7 @@ public final class TextureManager {
         }
 
         localTex = null;
-        state = STATE_FRESH;
+        state = States.FRESH;
     }
 
     /**
@@ -286,13 +262,9 @@ public final class TextureManager {
     /**
      * Gets the current state of the texture manager.
      *
-     * @return One of the following values:
-     * {@link #STATE_FRESH},
-     * {@link #STATE_LOADING},
-     * {@link #STATE_UNLOADING}, or
-     * {@link #STATE_LOADED}.
+     * @return The state
      */
-    public static int getCurrentState() {
+    public static States getCurrentState() {
         return state;
     }
 
@@ -301,13 +273,13 @@ public final class TextureManager {
      * screen is displayed before this method starts. Manual use of this method is not recommended.
      */
     public static void loadTextures() {
-        if (state != STATE_FRESH)
+        if (state != States.FRESH)
             return;
 
-        state = STATE_LOADING;
+        state = States.LOADING;
 
         final Object[] list = texList.toArray();
-        int ret = STATE_LOADED;
+        States ret = States.LOADED;
         int count = 0;
 
         synchronized (texLock) {
@@ -335,12 +307,12 @@ public final class TextureManager {
                 final Texture tex = (Texture) obj;
 
                 if (tex != null && !tex.isLoaded()) {
-                    ret = STATE_FRESH;
+                    ret = States.FRESH;
                 } else count++;
             }
         }
 
-        loadedCount = ret == STATE_LOADED ? 0 : count;
+        loadedCount = ret == States.LOADED ? 0 : count;
         state = ret;
     }
 
@@ -368,14 +340,14 @@ public final class TextureManager {
      */
     public static void unloadAll() {
         synchronized (texLock) {
-            state = STATE_UNLOADING;
+            state = States.UNLOADING;
 
             for (Texture tex : texList)
                 tex.destroy();
 
             texList.clear();
             texMap.clear();
-            state = STATE_FRESH;
+            state = States.FRESH;
         }
     }
 
@@ -386,12 +358,12 @@ public final class TextureManager {
      */
     public static void unloadTextures() {
         synchronized (texLock) {
-            state = STATE_UNLOADING;
+            state = States.UNLOADING;
 
             for (Texture tex : texList)
                 tex.destroy();
 
-            state = STATE_FRESH;
+            state = States.FRESH;
         }
     }
 
@@ -417,5 +389,34 @@ public final class TextureManager {
      */
     public static void setTextureScalingFactor(float factor) {
         texScale = factor;
+    }
+
+    /**
+     * States a texture manager can be in.
+     */
+    public enum States {
+        /**
+         * State indicating that the texture manager has all the textures but they are not loaded.
+         */
+        FRESH,
+
+        /**
+         * State indicating that the texture manager is loading the textures.
+         */
+        LOADING,
+
+        /**
+         * State indicating that the texture manager is unloading some or all of the textures. This
+         * can also be a part of the loading process, where it first unloads the previous textures
+         * which are no longer required. It just indicates the course of action that is currently
+         * being taken.
+         */
+        UNLOADING,
+
+        /**
+         * State indicating that the texture manager has finished loading the textures. In this
+         * state the textures are functional.
+         */
+        LOADED
     }
 }

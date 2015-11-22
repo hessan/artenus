@@ -18,6 +18,7 @@
 package com.annahid.libs.artenus.entities;
 
 import com.annahid.libs.artenus.entities.behavior.Behaviors;
+import com.annahid.libs.artenus.graphics.animation.AnimationHandler;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.data.RGB;
@@ -33,9 +34,7 @@ import com.annahid.libs.artenus.core.Scene;
  *
  * @author Hessan Feghhi
  */
-public abstract class FilteredEntity
-        implements Entity, Animatable, Transformable, Renderable {
-
+public abstract class FilteredEntity implements Entity, Animatable, Transformable, Renderable {
     /**
      * Holds the underlying entity.
      */

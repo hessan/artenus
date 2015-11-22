@@ -21,7 +21,7 @@ package com.annahid.libs.artenus.graphics.sprites;
 import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.data.RGB;
 import com.annahid.libs.artenus.entities.Entity;
-import com.annahid.libs.artenus.entities.AnimationHandler;
+import com.annahid.libs.artenus.graphics.animation.AnimationHandler;
 import com.annahid.libs.artenus.entities.behavior.Animatable;
 import com.annahid.libs.artenus.entities.behavior.Behaviors;
 import com.annahid.libs.artenus.entities.behavior.Transformable;

@@ -214,17 +214,18 @@ final class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext
 
     @Override
     public void onDrawFrame(GL10 gl) {
-        final int ts = TextureManager.getCurrentState();
-        if (ts != TextureManager.STATE_LOADED) {
-            if (IntroScene.introShown)
+        final TextureManager.States ts = TextureManager.getCurrentState();
+        if (ts != TextureManager.States.LOADED) {
+            if (IntroScene.introShown) {
                 loading.render(this);
-
-            if (loadingDelay == 0)
+            }
+            if (loadingDelay == 0) {
                 loadingDelay = System.currentTimeMillis();
-
-            if (ts == TextureManager.STATE_FRESH && System.currentTimeMillis() - loadingDelay > 200)
+            }
+            if (ts == TextureManager.States.FRESH
+                    && System.currentTimeMillis() - loadingDelay > 200) {
                 TextureManager.loadTextures();
-
+            }
             return;
         }
         loadingDelay = 0;

@@ -32,6 +32,9 @@ import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
  * @author Hessan Feghhi
  */
 public class BlurFilter implements PostProcessingFilter {
+    /**
+     * Holds the shader program used for blurring.
+     */
     private static BlurShaderProgram program = new BlurShaderProgram();
 
     /**

@@ -18,7 +18,7 @@
 
 package com.annahid.libs.artenus.entities.behavior;
 
-import com.annahid.libs.artenus.entities.AnimationHandler;
+import com.annahid.libs.artenus.graphics.animation.AnimationHandler;
 
 /**
  * Interface for all entities that can be animated. Sprites all implement this behavior.

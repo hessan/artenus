@@ -16,8 +16,9 @@
  *  along with Foobar.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.annahid.libs.artenus.entities;
+package com.annahid.libs.artenus.graphics.animation;
 
+import com.annahid.libs.artenus.entities.Entity;
 import com.annahid.libs.artenus.entities.behavior.Animatable;
 
 /**
