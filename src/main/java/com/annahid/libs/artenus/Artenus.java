@@ -30,7 +30,6 @@ import android.view.KeyEvent;
 import android.view.WindowManager;
 
 import com.annahid.libs.artenus.graphics.TextureManager;
-import com.annahid.libs.artenus.graphics.filters.BlurFilter;
 import com.annahid.libs.artenus.graphics.rendering.ShaderManager;
 import com.annahid.libs.artenus.internal.core.StageImpl;
 import com.annahid.libs.artenus.sound.SoundManager;
@@ -106,7 +105,7 @@ public abstract class Artenus extends Activity {
      */
     public static Artenus getInstance() {
         if (instance == null) {
-            return null;
+            throw new IllegalStateException("Artenus instance does not exist!");
         }
         return instance.get();
     }
@@ -185,7 +184,7 @@ public abstract class Artenus extends Activity {
 
         setContentView(R.layout.game_layout);
         stage = new WeakReference<>((StageImpl) findViewById(R.id.gameStage));
-        ShaderManager.register(TextureManager.getShaderProgram());;
+        ShaderManager.register(TextureManager.getShaderProgram());
         init(stage.get());
 
         UnifiedServices unified = UnifiedServices.getInstance();
