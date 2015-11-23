@@ -60,7 +60,7 @@ public class RogueInt {
      */
     public RogueInt(int initialValue) {
         seed = (int) (100 * Math.random()) + 10;
-        setValue(initialValue);
+        set(initialValue);
     }
 
     /**
@@ -68,7 +68,7 @@ public class RogueInt {
      *
      * @return Stored value
      */
-    public int getValue() {
+    public int get() {
         return (value - seed) / (seed > 60 ? 3 : 2);
     }
 
@@ -77,7 +77,7 @@ public class RogueInt {
      *
      * @param newValue The new value to be stored
      */
-    public void setValue(int newValue) {
+    public void set(int newValue) {
         value = newValue * (seed > 60 ? 3 : 2) + seed;
     }
 
@@ -88,6 +88,6 @@ public class RogueInt {
      */
     @Override
     public String toString() {
-        return String.valueOf(getValue());
+        return String.valueOf(get());
     }
 }
