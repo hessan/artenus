@@ -129,13 +129,12 @@ public final class LineSprite extends SpriteEntity {
 
     @Override
     public final void render(RenderingContext context, int flags) {
+        context.setShader(null);
+
         if (effect != null && (flags & FLAG_IGNORE_EFFECTS) == 0) {
             effect.render(context, this, alpha);
             return;
         }
-
-        if ((flags & FLAG_IGNORE_EFFECTS) == 0)
-            context.setShader(null);
 
         context.pushMatrix();
         context.translate(pos.x, pos.y);
