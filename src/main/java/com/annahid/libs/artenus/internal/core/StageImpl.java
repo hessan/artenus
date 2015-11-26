@@ -108,13 +108,13 @@ public final class StageImpl extends GLSurfaceView implements Stage {
             setEGLConfigChooser(5, 6, 5, 0, 0, 0);
         else setEGLConfigChooser(8, 8, 8, 8, 0, 0);
 
-        setEGLContextClientVersion(2);
         mRenderer = new InternalRenderer(this);
         setRenderer(mRenderer);
         scheduleTimer();
 
-        if (Build.VERSION.SDK_INT >= 11)
+        if (Build.VERSION.SDK_INT >= 11) {
             setPreserveEGLContextOnPause(true);
+        }
 
         setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         setScene(IntroScene.getInstance(this));
@@ -334,8 +334,9 @@ public final class StageImpl extends GLSurfaceView implements Stage {
         TextureManager.getLoadingTexture().destroy();
         advanceThread = null;
 
-        if (handler != null)
+        if (handler != null) {
             handler.onEvent(this, StageEvents.PAUSE);
+        }
     }
 
     /**

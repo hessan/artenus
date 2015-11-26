@@ -175,9 +175,9 @@ final class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext
         GLES20.glDisable(GLES20.GL_DEPTH_TEST);
         GLES20.glBlendFunc(GLES20.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
-        if (stage.handler != null)
+        if (stage.handler != null) {
             stage.handler.onEvent(stage, StageEvents.DISPLAY);
-
+        }
         ShaderManager.loadAll();
         TextureManager.unloadTextures();
     }

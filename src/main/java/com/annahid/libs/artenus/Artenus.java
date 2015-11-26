@@ -27,6 +27,7 @@ import android.media.AudioManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.KeyEvent;
+import android.view.Window;
 import android.view.WindowManager;
 
 import com.annahid.libs.artenus.graphics.TextureManager;
@@ -85,9 +86,6 @@ public abstract class Artenus extends Activity {
      * @param hideIntro A value indicating whether to hide the initial splash screen
      */
     protected Artenus(boolean hideIntro) {
-        if (Artenus.instance != null) {
-            throw new RuntimeException("An Artenus instance has already been created.");
-        }
         Artenus.hideIntro = hideIntro;
     }
 
@@ -142,9 +140,8 @@ public abstract class Artenus extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         instance = new WeakReference<>(this);
-
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
@@ -179,9 +176,9 @@ public abstract class Artenus extends Activity {
             manifestStore = UnifiedServices.Store.NONE;
         }
 
-        if (!SoundManager.isContextInitialized())
+        if (!SoundManager.isContextInitialized()) {
             SoundManager.initContext(this);
-
+        }
         setContentView(R.layout.game_layout);
         stage = new WeakReference<>((StageImpl) findViewById(R.id.gameStage));
         ShaderManager.register(TextureManager.getShaderProgram());
@@ -240,7 +237,7 @@ public abstract class Artenus extends Activity {
      */
     @SuppressWarnings("UnusedDeclaration")
     public final void exit() {
-        finish();
+        System.exit(0);
     }
 
     @Override
@@ -255,9 +252,9 @@ public abstract class Artenus extends Activity {
     protected void onResume() {
         super.onResume();
 
-        if (!hasOutFocused)
+        if (!hasOutFocused) {
             SoundManager.resumeMusic();
-
+        }
         stage.get().onResume();
         UnifiedServices.getInstance().onResume();
     }

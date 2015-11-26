@@ -89,7 +89,7 @@ final class IntroScene extends Scene {
      * @return The instance
      */
     public static Scene getInstance(Stage stage) {
-        if (instance == null) {
+        if (instance == null || instance.get() == null || instance.get().getStage() != stage) {
             instance = new WeakReference<Scene>(new IntroScene(stage));
         }
         return instance.get();
@@ -98,7 +98,6 @@ final class IntroScene extends Scene {
     @Override
     public final void advance(float elapsedTime) {
         super.advance(elapsedTime);
-
         final long diff = System.currentTimeMillis() - startTime;
 
         if (showIntro) {
@@ -126,7 +125,9 @@ final class IntroScene extends Scene {
                     annahid.setScale(scale, scale);
                 }
             }
-        } else runGame(stage);
+        } else {
+            runGame(stage);
+        }
     }
 
     @Override
