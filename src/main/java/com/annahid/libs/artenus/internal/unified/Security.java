@@ -25,7 +25,7 @@ import com.annahid.libs.artenus.security.Base64;
 import com.annahid.libs.artenus.security.Base64DecoderException;
 import com.annahid.libs.artenus.security.Obfuscator;
 import com.annahid.libs.artenus.security.ValidationException;
-import com.annahid.libs.artenus.unified.UnifiedServices;
+import com.annahid.libs.artenus.unified.Stores;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -132,12 +132,12 @@ final class Security {
         return false;
     }
 
-    public static String getLicenseKey(Context context, UnifiedServices.Store store) throws java.io.IOException, ValidationException {
+    public static String getLicenseKey(Context context, Stores store) throws java.io.IOException, ValidationException {
         final Obfuscator ob = new AESObfuscator(new byte[] { -47, 87, -95, -45, -103, -17, -11, 32, -64, 101, -36, -113, 64, 33, -128, -85, -57, 75, -64, 51 }, context.getPackageName(), "IABK");
         final InputStreamReader reader = new InputStreamReader(context.getAssets().open("artenus.abk"));
         final BufferedReader br = new BufferedReader(reader);
 
-        UnifiedServices.Store currentStore = store;
+        Stores currentStore = store;
         String result = null;
 
         while (true) {
@@ -148,14 +148,14 @@ final class Security {
 
             if (ln.startsWith("set_store")) {
                 if (ln.endsWith("(google)"))
-                    currentStore = UnifiedServices.Store.GOOGLE;
+                    currentStore = Stores.GOOGLE;
                 else if (ln.endsWith("(amazon)"))
-                    currentStore = UnifiedServices.Store.AMAZON;
+                    currentStore = Stores.AMAZON;
                 else if (ln.endsWith("(bazaar)"))
-                    currentStore = UnifiedServices.Store.BAZAAR;
+                    currentStore = Stores.BAZAAR;
                 else if (ln.endsWith("(cando)"))
-                    currentStore = UnifiedServices.Store.CANDO;
-                else currentStore = UnifiedServices.Store.SAMSUNG;
+                    currentStore = Stores.CANDO;
+                else currentStore = Stores.SAMSUNG;
             } else {
                 result = ln;
 

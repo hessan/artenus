@@ -20,6 +20,7 @@ package com.annahid.libs.artenus.internal.unified;
 
 import android.content.Context;
 
+import com.annahid.libs.artenus.unified.Stores;
 import com.annahid.libs.artenus.unified.UnifiedServices;
 import com.annahid.libs.artenus.unified.AdManager;
 import com.annahid.libs.artenus.unified.GameServices;
@@ -45,8 +46,8 @@ public final class DummyUnifiedServices extends UnifiedServices {
     }
 
     @Override
-    public Store getStore() {
-        return Store.SAMSUNG;
+    public Stores getStore() {
+        return Stores.SAMSUNG;
     }
 
     @Override

@@ -193,9 +193,9 @@ public abstract class UnifiedServices {
      *
      * @return The store
      *
-     * @see com.annahid.libs.artenus.unified.UnifiedServices.Store
+     * @see Stores
      */
-    public abstract Store getStore();
+    public abstract Stores getStore();
 
     /**
      * Gets an instance of {@link AdManager} provided by this implementation.
@@ -235,36 +235,4 @@ public abstract class UnifiedServices {
      */
     protected abstract int init(int inputServices);
 
-    /**
-     * App-stores known by the framework.
-     */
-    public enum Store {
-        /**
-         * Store value used when the app-store is not specified
-         */
-        NONE,
-        /**
-         * Store value for Google Play
-         */
-        GOOGLE,
-        /**
-         * Store value for Amazon Appstore
-         */
-        AMAZON,
-
-        /**
-         * Store value for Cafe Bazaar (local Iranian app-store)
-         */
-        BAZAAR,
-
-        /**
-         * Store value for Samsung Apps
-         */
-        SAMSUNG,
-
-        /**
-         * Store value for Cando (local Iranian app-store)
-         */
-        CANDO
-    }
 }

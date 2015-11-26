@@ -21,6 +21,7 @@ package com.annahid.libs.artenus.internal.unified;
 import android.content.Context;
 import android.content.Intent;
 
+import com.annahid.libs.artenus.unified.Stores;
 import com.annahid.libs.artenus.unified.UnifiedServices;
 import com.annahid.libs.artenus.unified.AdManager;
 import com.annahid.libs.artenus.unified.GameServices;
@@ -115,8 +116,8 @@ public final class BazaarUnifiedServices extends UnifiedServices {
     }
 
     @Override
-    public Store getStore() {
-        return Store.BAZAAR;
+    public Stores getStore() {
+        return Stores.BAZAAR;
     }
 
     @Override

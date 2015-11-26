@@ -35,6 +35,7 @@ import com.annahid.libs.artenus.graphics.rendering.ShaderManager;
 import com.annahid.libs.artenus.internal.core.StageImpl;
 import com.annahid.libs.artenus.sound.SoundManager;
 import com.annahid.libs.artenus.core.Stage;
+import com.annahid.libs.artenus.unified.Stores;
 import com.annahid.libs.artenus.unified.UnifiedServices;
 import com.annahid.libs.artenus.unified.AdLayout;
 
@@ -63,7 +64,7 @@ public abstract class Artenus extends Activity {
     /**
      * Holds the app-store as specified in the Android manifest file.
      */
-    private static UnifiedServices.Store manifestStore;
+    private static Stores manifestStore;
 
     /**
      * Holds a reference to the default stage.
@@ -124,7 +125,7 @@ public abstract class Artenus extends Activity {
      *
      * @see com.annahid.libs.artenus.unified.UnifiedServices
      */
-    public static UnifiedServices.Store getManifestAppStore() {
+    public static Stores getManifestAppStore() {
         return manifestStore;
     }
 
@@ -151,29 +152,29 @@ public abstract class Artenus extends Activity {
             ApplicationInfo ai = getPackageManager().getApplicationInfo(
                     getPackageName(), PackageManager.GET_META_DATA);
             final String store = ai.metaData.getString("com.annahid.libs.artenus.APP_STORE");
-            manifestStore = UnifiedServices.Store.NONE;
+            manifestStore = Stores.NONE;
 
             if (store != null) {
                 switch (store) {
                     case "google":
-                        manifestStore = UnifiedServices.Store.GOOGLE;
+                        manifestStore = Stores.GOOGLE;
                         break;
                     case "amazon":
-                        manifestStore = UnifiedServices.Store.AMAZON;
+                        manifestStore = Stores.AMAZON;
                         break;
                     case "bazaar":
-                        manifestStore = UnifiedServices.Store.BAZAAR;
+                        manifestStore = Stores.BAZAAR;
                         break;
                     case "cando":
-                        manifestStore = UnifiedServices.Store.CANDO;
+                        manifestStore = Stores.CANDO;
                         break;
                     case "samsung":
-                        manifestStore = UnifiedServices.Store.SAMSUNG;
+                        manifestStore = Stores.SAMSUNG;
                         break;
                 }
             }
         } catch (PackageManager.NameNotFoundException | NullPointerException e) {
-            manifestStore = UnifiedServices.Store.NONE;
+            manifestStore = Stores.NONE;
         }
 
         if (!SoundManager.isContextInitialized()) {

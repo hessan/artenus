@@ -22,7 +22,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.annahid.libs.artenus.Artenus;
-import com.annahid.libs.artenus.unified.UnifiedServices;
+import com.annahid.libs.artenus.unified.Stores;
 import com.annahid.libs.artenus.unified.InventoryListener;
 import com.annahid.libs.artenus.unified.InventoryManager;
 import com.annahid.libs.artenus.unified.Product;
@@ -126,7 +126,7 @@ final class CandoInventoryManager extends InventoryManager {
         String base64EncodedPublicKey;
 
         try {
-            base64EncodedPublicKey = Security.getLicenseKey(context, UnifiedServices.Store.CANDO);
+            base64EncodedPublicKey = Security.getLicenseKey(context, Stores.CANDO);
         } catch (Exception ex) {
             return;
         }
