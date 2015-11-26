@@ -297,7 +297,7 @@ public abstract class SpriteEntity implements Entity, Animatable, Renderable, Tr
      * @param elapsedTime The elapsed time since the previous frame
      */
     @Override
-    public final void advance(float elapsedTime) {
+    public void advance(float elapsedTime) {
         if (anim == null) {
             return;
         }
