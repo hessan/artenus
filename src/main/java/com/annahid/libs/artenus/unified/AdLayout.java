@@ -35,7 +35,7 @@ public final class AdLayout extends ViewGroup {
     /**
      * Indicates how the ad is currently displayed.
      */
-    private AdManager.Show adShown = AdManager.Show.HIDDEN;
+    private AdManager.Placements adShown = AdManager.Placements.HIDDEN;
 
     /**
      * Holds the visible height of the banner ad.
@@ -144,7 +144,7 @@ public final class AdLayout extends ViewGroup {
      * @return The height in pixels
      */
     final int getAdHeight() {
-        return adShown == AdManager.Show.HIDDEN ? 0 : adHeight;
+        return adShown == AdManager.Placements.HIDDEN ? 0 : adHeight;
     }
 
     /**
@@ -152,9 +152,9 @@ public final class AdLayout extends ViewGroup {
      *
      * @param show The location to display the ad, or HIDDEN to hide it
      */
-    final void showAd(AdManager.Show show) {
+    final void showAd(AdManager.Placements show) {
         final int count = getChildCount();
-        final AdManager.Show prevShow = adShown;
+        final AdManager.Placements prevShow = adShown;
 
         adShown = show;
 
@@ -163,10 +163,10 @@ public final class AdLayout extends ViewGroup {
 
             if (!(child instanceof GLSurfaceView))
                 child.setVisibility(
-                        show == AdManager.Show.HIDDEN ? View.INVISIBLE : View.VISIBLE);
+                        show == AdManager.Placements.HIDDEN ? View.INVISIBLE : View.VISIBLE);
         }
 
-        if (prevShow != show && show != AdManager.Show.HIDDEN)
+        if (prevShow != show && show != AdManager.Placements.HIDDEN)
             requestLayout();
     }
 }

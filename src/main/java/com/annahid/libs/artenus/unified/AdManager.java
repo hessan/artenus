@@ -77,16 +77,16 @@ public abstract class AdManager {
      *
      * @param show Value indicating ad placement options
      */
-    public final void showAd(Show show) {
+    public final void showAd(Placements show) {
         sendSignalToMainThread(MESSAGE_SHOW_AD, show.ordinal());
     }
 
     /**
-     * Hides the ad unit. This is the same as calling {@link AdManager#showAd(Show)} with the
-     * {@link Show#HIDDEN} option.
+     * Hides the ad unit. This is the same as calling {@link AdManager#showAd(Placements)} with the
+     * {@link Placements#HIDDEN} option.
      */
     public final void hideAd() {
-        showAd(Show.HIDDEN);
+        showAd(Placements.HIDDEN);
     }
 
     /**
@@ -177,7 +177,7 @@ public abstract class AdManager {
     /**
      * Ad placement and visibility options.
      */
-    public enum Show {
+    public enum Placements {
         /**
          * Option indicating that the ad should be hidden.
          */
@@ -249,11 +249,11 @@ public abstract class AdManager {
                 if (adView == null)
                     return;
 
-                Show show = Show.values()[msg.arg1];
+                Placements show = Placements.values()[msg.arg1];
                 adm.adLayout.showAd(show);
 
                 if (adm.listener != null)
-                    adm.listener.onAdVisibilityChange(show != Show.HIDDEN);
+                    adm.listener.onAdVisibilityChange(show != Placements.HIDDEN);
             } else if (msg.what == MESSAGE_DESTROY_AD) {
                 final View adView = adm.getAdView();
 
