@@ -21,9 +21,16 @@ package com.annahid.libs.artenus.internal.unified;
 import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.unified.GameServices;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.games.Games;
+import com.google.android.gms.games.achievement.Achievement;
+import com.google.android.gms.games.achievement.Achievements;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 final class GoogleGameServices implements GameServices {
     private static final int REQUEST_ACHIEVEMENTS = 9015;
@@ -34,10 +41,30 @@ final class GoogleGameServices implements GameServices {
 
     GoogleApiClient mGoogleApiClient = null;
 
+    private final Set<String> achieved = new HashSet<>();
+
     public void setGoogleApiClient(GoogleApiClient client) {
         mGoogleApiClient = client;
     }
 
+    void loadAchievements() {
+        Games.Achievements.load(mGoogleApiClient, true).setResultCallback(
+                new ResultCallback<Achievements.LoadAchievementsResult>() {
+                    @Override
+                    public void onResult(Achievements.LoadAchievementsResult loadAchievementsResult) {
+                        for (Achievement achievement : loadAchievementsResult.getAchievements()) {
+                            if (achievement.getState() == Achievement.STATE_UNLOCKED) {
+                                achieved.add(achievement.getAchievementId());
+                            }
+
+                        }
+                    }
+                });
+    }
+
+    public boolean isAchievementUnlocked(String achievementId) {
+        return achieved.contains(achievementId);
+    }
 
     @Override
     public void submitScore(String lbId, int score, Object payload) {

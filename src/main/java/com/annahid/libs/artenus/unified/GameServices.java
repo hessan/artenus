@@ -96,6 +96,16 @@ public interface GameServices {
     void ensureAchievements(List<String> achievementIds);
 
     /**
+     * Indicates whether an achievement is unlocked (achieved). Depending on the app-store, there
+     * may be a loading delay before this method returns up-to-date results for all achievements.
+     *
+     * @param achievementId Achievement identifier
+     *
+     * @return {@code true} if the achievement is unlocked, {@code false} otherwise
+     */
+    boolean isAchievementUnlocked(String achievementId);
+
+    /**
      * Indicates whether this {@code GameServices} supports achievements.
      *
      * @return {@code true} if achievements are supported, and {@code false} otherwise

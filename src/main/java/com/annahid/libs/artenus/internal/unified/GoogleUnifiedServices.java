@@ -85,6 +85,7 @@ public final class GoogleUnifiedServices extends UnifiedServices {
             if (hasServices(SERVICE_GAMES)) {
                 loginManager.setGoogleApiClient(apiClient);
                 gameServices.setGoogleApiClient(apiClient);
+                gameServices.loadAchievements();
             }
 
             loginManager.setGoogleApiClient(apiClient);
