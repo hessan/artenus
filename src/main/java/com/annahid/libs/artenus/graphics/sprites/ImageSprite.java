@@ -20,7 +20,9 @@ package com.annahid.libs.artenus.graphics.sprites;
 
 import com.annahid.libs.artenus.graphics.Texture;
 import com.annahid.libs.artenus.graphics.TextureManager;
+import com.annahid.libs.artenus.graphics.TextureShaderProgram;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
+import com.annahid.libs.artenus.graphics.rendering.ShaderProgram;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -114,10 +116,17 @@ public class ImageSprite extends SpriteEntity {
             return;
         }
 
-        if ((flags & FLAG_IGNORE_EFFECTS) == 0)
-            context.setShader(TextureManager.getShaderProgram());
-
         if (alpha != 0) {
+            TextureShaderProgram program = (TextureShaderProgram) TextureManager.getShaderProgram();
+
+            if ((flags & FLAG_IGNORE_EFFECTS) != 0) {
+                if (context.getShader() instanceof TextureShaderProgram) {
+                    program = (TextureShaderProgram) context.getShader();
+                }
+            }
+
+            context.setShader(program);
+
             if (effect != null && (flags & FLAG_IGNORE_EFFECTS) == 0) {
                 effect.render(context, this, alpha);
             } else {
@@ -126,7 +135,7 @@ public class ImageSprite extends SpriteEntity {
 
                 final float width = scale.x * cutout.fw, height = scale.y * cutout.fh;
 
-                frames.prepare(cutout.textureBuffers[currentFrame]);
+                frames.prepare(program, cutout.textureBuffers[currentFrame]);
 
                 if ((flags & FLAG_IGNORE_COLOR_FILTER) == 0)
                     context.setColorFilter(alpha * cf.r, alpha * cf.g, alpha * cf.b, alpha);

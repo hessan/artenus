@@ -129,7 +129,9 @@ public final class LineSprite extends SpriteEntity {
 
     @Override
     public final void render(RenderingContext context, int flags) {
-        context.setShader(null);
+        if ((flags & FLAG_IGNORE_EFFECTS) == 0)
+            context.setShader(null);
+        else context.setShader(context.getShader());
 
         if (effect != null && (flags & FLAG_IGNORE_EFFECTS) == 0) {
             effect.render(context, this, alpha);
@@ -141,9 +143,9 @@ public final class LineSprite extends SpriteEntity {
         context.rotate(rotation);
         context.scale(scale.x, scale.y);
 
-        if ((flags & FLAG_IGNORE_COLOR_FILTER) == 0)
+        if ((flags & FLAG_IGNORE_COLOR_FILTER) == 0) {
             context.setColorFilter(cf.r * alpha, cf.g * alpha, cf.b * alpha, alpha);
-
+        }
         context.rect();
         context.popMatrix();
     }

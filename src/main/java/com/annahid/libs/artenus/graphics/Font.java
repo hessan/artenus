@@ -290,23 +290,28 @@ public final class Font extends Texture {
      * Draws a text on the OpenGL context using the information provided. This method is internally
      * called by {@code TextSprite} to draw the text.
      *
-     * @param ca  The character array representation of the text
-     * @param sx  Starting x coordinate
-     * @param sy  Starting y coordinate
-     * @param h   The desired height of the text. This controls font size
-     * @param rot Rotation angle of the text
-     * @param rtl {@code true} if the text should be drawn in right-to-left direction,
-     *            and {@code false} otherwise
+     * @param context Rendering context
+     * @param program Shader program to use
+     * @param ca      The character array representation of the text
+     * @param sx      Starting x coordinate
+     * @param sy      Starting y coordinate
+     * @param h       The desired height of the text. This controls font size
+     * @param rot     Rotation angle of the text
+     * @param rtl     {@code true} if the text should be drawn in right-to-left direction, and
+     *                {@code false} otherwise
      */
     public void draw(
             RenderingContext context,
-            char[] ca, float sx, float sy, float h, float rot, boolean rtl) {
+            TextureShaderProgram program,
+            char[] ca,
+            float sx,
+            float sy,
+            float h,
+            float rot,
+            boolean rtl
+    ) {
         if (textureBuffers == null)
             buildTextureBuffers();
-
-        final TextureShaderProgram program =
-                (TextureShaderProgram) TextureManager.getShaderProgram();
-        context.setShader(program);
 
         float y = 0;
         float currentX = 0;

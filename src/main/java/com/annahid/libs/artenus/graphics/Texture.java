@@ -28,6 +28,7 @@ import android.opengl.GLUtils;
 
 import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
+import com.annahid.libs.artenus.graphics.rendering.ShaderProgram;
 import com.larvalabs.svgandroid.SVG;
 import com.larvalabs.svgandroid.SVGParser;
 
@@ -108,12 +109,10 @@ public class Texture {
      * rendering. However, it is recommended that you do not call any of these methods directly. The
      * framework handles low-level rendering.
      *
+     * @param program       Shader program to use
      * @param textureBuffer The texture buffer
      */
-    public final void prepare(FloatBuffer textureBuffer) {
-        final TextureShaderProgram program =
-                (TextureShaderProgram) TextureManager.getShaderProgram();
-
+    public final void prepare(TextureShaderProgram program, FloatBuffer textureBuffer) {
         program.feed(textureId);
         program.feedTexCoords(textureBuffer);
     }
