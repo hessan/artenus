@@ -22,7 +22,6 @@ import android.opengl.GLES20;
 import android.os.Debug;
 import android.util.Pair;
 
-import com.annahid.libs.artenus.Artenus;
 import com.annahid.libs.artenus.graphics.rendering.RenderTarget;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.graphics.rendering.ShaderManager;

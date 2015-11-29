@@ -25,7 +25,6 @@ import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.entities.Entity;
 import com.annahid.libs.artenus.entities.FilteredEntity;
 import com.annahid.libs.artenus.entities.behavior.Touchable;
-import com.annahid.libs.artenus.entities.behavior.Transformable;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
