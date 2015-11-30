@@ -107,9 +107,8 @@ public final class SlideInput extends GameInput implements Touchable {
     }
 
     /**
-     * Gets the x coordinate of the reference point, which is the first
-     * point the user touched to trigger the direction knob. This point
-     * is maintained until the next gesture.
+     * Gets the x coordinate of the reference point, which is the first point the user touched to
+     * trigger the direction knob. This point is maintained until the next gesture.
      *
      * @return The x component of the reference point.
      */
@@ -118,9 +117,8 @@ public final class SlideInput extends GameInput implements Touchable {
     }
 
     /**
-     * Gets the y coordinate of the reference point, which is the first
-     * point the user touched to trigger the direction knob. This point
-     * is maintained until the next gesture.
+     * Gets the y coordinate of the reference point, which is the first point the user touched to
+     * trigger the direction knob. This point is maintained until the next gesture.
      *
      * @return The y component of the reference point.
      */
@@ -149,13 +147,13 @@ public final class SlideInput extends GameInput implements Touchable {
     }
 
     /**
-     * Handles touch events for {@code SlideInput}.
+     * Handles touch events for this {@code SlideInput}.
      */
     @Override
     public boolean handleTouch(TouchEvent event) {
-        if (stage.getScene().isHalted())
+        if (stage.getScene().isHalted()) {
             return false;
-
+        }
         if (event.action == TouchEvent.EVENT_DOWN) {
             if (startId < 0 && event.x > x1 && event.x < x2 && event.y > y1 && event.y < y2) {
                 startId = event.pointerId;
@@ -167,17 +165,20 @@ public final class SlideInput extends GameInput implements Touchable {
         } else {
             if (startId >= 0) {
                 holdKeyMap();
-                direction.x = event.x - reference.x;
-                direction.y = event.y - reference.y;
-                if (Math.abs(direction.x) < threshold) direction.x = 0;
-                if (Math.abs(direction.y) < threshold) direction.y = 0;
-
-                if (direction.x != 0 || direction.y != 0) {
-                    float size = (float)
-                            Math.sqrt(direction.x * direction.x + direction.y * direction.y);
-                    direction.x /= size;
-                    direction.y /= size;
+                float x = event.x - reference.x, y = event.y - reference.y;
+                if (Math.abs(x) < threshold) {
+                    x = 0;
                 }
+                if (Math.abs(y) < threshold) {
+                    y = 0;
+                }
+                if (x != 0 || y != 0) {
+                    final float size = (float) Math.sqrt(x * x + y * y);
+                    x /= size;
+                    y /= size;
+                }
+                direction.x = x;
+                direction.y = y;
                 releaseKeyMap();
             }
         }
