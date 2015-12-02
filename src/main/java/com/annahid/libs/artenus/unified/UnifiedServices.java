@@ -161,9 +161,8 @@ public abstract class UnifiedServices {
     }
 
     /**
-     * Called internally by {@link Artenus#onActivityResult(int, int, Intent)}.
-     * Unified services implementations direct it to their sub-services to handle their own
-     * activity requests.
+     * Called internally by {@link Artenus#onActivityResult(int, int, Intent)}. Unified services
+     * implementations direct it to their sub-services to handle their own activity requests.
      *
      * @param requestCode The integer request code
      * @param resultCode  The integer result code returned by the child activity
@@ -177,7 +176,7 @@ public abstract class UnifiedServices {
 
     /**
      * Checks if this instance supports specified services. These might be different than those
-     * provided in {@link #getInstance(int)}, as implementations mask out services they don't
+     * provided in {@link #getInstance(int)}, as implementations mask out services they do not
      * support.
      *
      * @param servicesMask Bit-masked list of services
@@ -227,7 +226,7 @@ public abstract class UnifiedServices {
     public abstract InventoryManager getInventoryManager();
 
     /**
-     * Called on sub-classes to initialize the services, and mask out those they don't support.
+     * Called on sub-classes to initialize the services, and mask out those they do not support.
      *
      * @param inputServices Bit-masked list of requested services
      *

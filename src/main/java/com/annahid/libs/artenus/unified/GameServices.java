@@ -34,10 +34,9 @@ public interface GameServices {
      *
      * @param lbId    Leaderboard string identifier
      * @param score   The score to be submitted
-     * @param payload Additional information to accompany the score. This parameter
-     *                does not have any effect for current providers and is reserved for future use.
-     *                An example of use of this parameter is score validation using some extra in-game
-     *                states and information.
+     * @param payload Additional information to accompany the score. This parameter is not
+     *                necessarily used by a unified services provider. An example use case of this
+     *                parameter is score validation using some extra in-game states and information.
      */
     void submitScore(String lbId, int score, Object payload);
 
@@ -61,9 +60,9 @@ public interface GameServices {
     void unlockAchievement(String achievementId);
 
     /**
-     * Reveals a hidden achievement. This is different from unlocking, as it
-     * is still going to be displayed as not achieved. Some providers do not
-     * support this function, in which case this method will have no effect.
+     * Reveals a hidden achievement. This is different from unlocking, as it is still going to be
+     * displayed as not achieved. Some providers do not support this function, in which case this
+     * method will have no effect.
      *
      * @param achievementId The string identifier of the achievement
      */
@@ -75,9 +74,8 @@ public interface GameServices {
      *
      * @param achievementId The string identifier of the achievement
      * @param amount        The number of steps to progress
-     * @param max           Maximum step count. Some providers have this already in
-     *                      their database. But it is recommended that you provide this number for
-     *                      global support.
+     * @param max           Maximum step count. Some providers have this already in their database.
+     *                      But it is recommended that you provide this number for global support.
      */
     void incrementAchievement(String achievementId, int amount, int max);
 
@@ -87,9 +85,8 @@ public interface GameServices {
     void showAchievements();
 
     /**
-     * Ensures that all the achievements in a given list are unlocked. This method
-     * will unlock any achievement in the list that is not unlocked. For other
-     * items, it has no effect.
+     * Ensures that all the achievements in a given list are unlocked. This method will unlock any
+     * achievement in the list that is not unlocked. For other items, it has no effect.
      *
      * @param achievementIds The list of string identifiers for the achievements
      */

@@ -35,7 +35,7 @@ public class ProductList {
     private Map<String, Product> mSkuMap = new HashMap<>(8);
 
     /**
-     * Adds a new product to the group.
+     * Adds a new product to this list.
      *
      * @param product The new product
      */
@@ -44,7 +44,7 @@ public class ProductList {
     }
 
     /**
-     * Retrieves a product from the group.
+     * Gets a product from this list.
      *
      * @param sku SKU of the desired product
      *
@@ -58,7 +58,7 @@ public class ProductList {
     }
 
     /**
-     * Retrieves all products in the group.
+     * Gets all products in this list.
      *
      * @return A collection of products
      */

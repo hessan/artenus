@@ -113,7 +113,7 @@ public class TouchEvent {
     }
 
     /**
-     * Gets the pointeer identifier associated with this touch event (for multi-touch systems).
+     * Gets the pointer identifier associated with this touch event (for multi-touch systems).
      *
      * @return The pointer identifier
      */

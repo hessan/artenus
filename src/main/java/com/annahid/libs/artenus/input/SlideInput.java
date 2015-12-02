@@ -45,24 +45,49 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public final class SlideInput extends GameInput implements Touchable {
     /**
-     * Buttons currently assigned to different action keys.
+     * Contains buttons currently assigned to different action keys.
      */
     private final Map<Integer, Button> buttons = new HashMap<>(5);
 
+    /**
+     * Holds the reference point for the direction knob, which is the point where the user first
+     * touches.
+     */
     private final Point2D reference = new Point2D(0, 0);
 
+    /**
+     * Holds the pointer identifier for the reference point.
+     */
     private int startId = -1;
 
+    /**
+     * Holds the threshold below which the direction is not picked up by the knob.
+     */
     private int threshold;
 
+    /**
+     * Holds the reference to the stage instance.
+     */
     private Stage stage;
 
+    /**
+     * Holds the x coordinate of the top-left corner of the effective knob area.
+     */
     private float x1;
 
+    /**
+     * Holds the y coordinate of the top-left corner of the effective knob area.
+     */
     private float y1;
 
+    /**
+     * Holds the x coordinate of the bottom-right corner of the effective knob area.
+     */
     private float x2;
 
+    /**
+     * Holds the y coordinate of the bottom-right corner of the effective knob area.
+     */
     private float y2;
 
     /**

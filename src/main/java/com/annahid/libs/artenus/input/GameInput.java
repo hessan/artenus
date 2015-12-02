@@ -118,10 +118,9 @@ public abstract class GameInput implements Entity {
     }
 
     /**
-     * Changes the status of a key or a combination of keys to pressed. Subclasses
-     * should use this method to alter the key map. This method must be called
-     * after a {@link #holdKeyMap()} call and before a {@link #releaseKeyMap()}
-     * call. Otherwise the changes will not be reported
+     * Changes the status of a key or a combination of keys to pressed. Subclasses should use this
+     * method to alter the key map. This method must be called after a {@link #holdKeyMap()} call
+     * and before a {@link #releaseKeyMap()} call. Otherwise the changes will not be reported
      *
      * @param keyCode The key identifier(s) to be pressed
      */
@@ -130,10 +129,9 @@ public abstract class GameInput implements Entity {
     }
 
     /**
-     * Changes the status of a key or a combination of keys to released. Subclasses
-     * should use this method to alter the key map. This method must be called
-     * after a {@link #holdKeyMap()} call and before a {@link #releaseKeyMap()}
-     * call. Otherwise the changes will not be reported.
+     * Changes the status of a key or a combination of keys to released. Subclasses should use this
+     * method to alter the key map. This method must be called after a {@link #holdKeyMap()} call
+     * and before a {@link #releaseKeyMap()} call. Otherwise the changes will not be reported.
      *
      * @param keyCode The key identifier(s) to be released
      */
@@ -142,8 +140,8 @@ public abstract class GameInput implements Entity {
     }
 
     /**
-     * Determines whether the key (or any of the multiple keys) specified are
-     * currently in the pressed state.
+     * Determines whether the key (or any of the multiple keys) specified are currently in the
+     * pressed state.
      *
      * @param keyCode The key identifier(s) to check
      *
@@ -154,10 +152,9 @@ public abstract class GameInput implements Entity {
     }
 
     /**
-     * Gets the complete key map. The key map is a bit-set containing information
-     * about the pressed state of the keys. If you {@code and} the return value with
-     * any of the key identifiers, the result will be zero if the corresponding key
-     * is not pressed, and non-zero otherwise.
+     * Gets the complete key map. The key map is a bit-set containing information about the pressed
+     * state of the keys. If you {@code and} the return value with any of the key identifiers, the
+     * result will be zero if the corresponding key is not pressed, and non-zero otherwise.
      *
      * @return The key map bitwise integer
      */
@@ -175,11 +172,10 @@ public abstract class GameInput implements Entity {
     }
 
     /**
-     * Registers this {@code GameInput} with the given scene. Some input
-     * managers might need some initialization that needs context. This method is
-     * where they should do those procedures. All input managers must implement
-     * this method. This method is called internally and you must not invoke it
-     * manually.
+     * Registers this {@code GameInput} with the given scene. Some input managers might need some
+     * initialization that needs context. This method is where they should do those procedures. All
+     * input managers must implement this method. This method is called internally and you must not
+     * invoke it manually.
      *
      * @param scene The scene that will use this input manager to handle inputs
      */
@@ -187,8 +183,8 @@ public abstract class GameInput implements Entity {
     public abstract void onAttach(Scene scene);
 
     /**
-     * Unregisters this {@code GameInput} and releases resources associated to
-     * it. This method is called internally and you must not invoke it manually.
+     * Unregisters this {@code GameInput} and releases resources associated to it. This method is
+     * called internally and you must not invoke it manually.
      *
      * @param scene The scene that will use this input manager to handle inputs
      */

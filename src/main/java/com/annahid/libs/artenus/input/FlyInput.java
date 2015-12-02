@@ -31,8 +31,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Manages game input, using device tilting as the direction knob, and {@code TouchButton} objects
- * as the the action buttons.
+ * <p>Manages game input, using device tilting as the direction knob, and {@code TouchButton}
+ * objects as the the action buttons.</p>
+ * <p>This class is not yet mature and fully tested, and it is recommended that you do not yet use
+ * it in your games.</p>
  *
  * @author Hessan Feghhi
  */
@@ -48,6 +50,9 @@ public class FlyInput extends GameInput {
 
     private final List<Integer> keyIds = new ArrayList<>(5);
 
+    /**
+     * Holds the event handler for sensor events.
+     */
     private final SensorEventListener myListener = new SensorEventListener() {
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
         }
@@ -105,7 +110,8 @@ public class FlyInput extends GameInput {
     }
 
     /**
-     * Registers this {@code FlyInput} manager to the given context and begins listening for sensor data.
+     * Registers this {@code FlyInput} manager to the given context and begins listening for sensor
+     * data.
      */
     @Override
     public void onAttach(Scene scene) {

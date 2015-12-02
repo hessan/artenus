@@ -31,8 +31,8 @@ public interface AdPlacementListener {
     void onAdVisibilityChange(boolean visible);
 
     /**
-     * Called when the height of the ad unit changes. This includes when it virtually
-     * becomes 0 as a result of it being hidden.
+     * Called when the height of the ad unit changes. This includes when it virtually becomes 0 as a
+     * result of hiding.
      *
      * @param height New height of the ad unit
      */
