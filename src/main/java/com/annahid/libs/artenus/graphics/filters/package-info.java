@@ -25,5 +25,7 @@
  * <p>You can either use the filters provided in this package, or design your own post-processing
  * filters. When you design a new filter, you should optimize the number of passes needed to
  * complete the filter.</p>
+ *
+ * @author Hessan Feghhi
  */
 package com.annahid.libs.artenus.graphics.filters;

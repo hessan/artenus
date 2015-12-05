@@ -17,6 +17,8 @@
  */
 
 /**
- * Contains graphical components of the framework and the rendering sub-system.
+ * Contains graphical components of the framework and the rendering subsystem.
+ *
+ * @author Hessan Feghhi
  */
 package com.annahid.libs.artenus.graphics;

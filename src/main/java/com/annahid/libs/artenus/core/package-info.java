@@ -17,6 +17,11 @@
  */
 
 /**
- * Contains core components of the framework, including stage, scenes, and dialogs.
+ * Contains core components of the framework, including stage, scenes, and dialogs. The basic
+ * architecture of the framework consists of an Artenus activity, which contains a single instance
+ * of {@code Stage}. The game flow is controlled by switching {@code Scene} objects on the stage.
+ *
+ * @author Hessan Feghhi
+ * @see com.annahid.libs.artenus.Artenus
  */
 package com.annahid.libs.artenus.core;

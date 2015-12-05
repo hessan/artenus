@@ -62,10 +62,19 @@ public abstract class GameInput implements Entity {
      */
     protected Point2D direction;
 
+    /**
+     * Holds the backup for the original direction, which is set when a knob gesture begins.
+     */
     private Point2D savedDirection;
 
+    /**
+     * Holds the key map. Each bit in this integer corresponds to a controller key.
+     */
     private int keyMap;
 
+    /**
+     * Holds the backup for the key map. This field is used to determine changes in {@link #keyMap}.
+     */
     private int savedKeyMap;
 
     private InputListener listener = null;

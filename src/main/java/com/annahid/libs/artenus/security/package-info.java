@@ -18,5 +18,7 @@
 
 /**
  * Provides for security and encryption requirements of a game.
+ *
+ * @author Hessan Feghhi
  */
 package com.annahid.libs.artenus.security;

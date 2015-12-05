@@ -19,5 +19,7 @@
 /**
  * Contains the physics simulation framework. Using the classes and interfaces in this package, you
  * can integrate 2-dimensional physics into the game.
+ *
+ * @author Hessan Feghhi
  */
 package com.annahid.libs.artenus.physics;

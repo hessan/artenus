@@ -41,8 +41,8 @@ package com.annahid.libs.artenus.data;
  *
  * @author Hessan Feghhi
  */
-@SuppressWarnings("UnusedDeclaration")
-public class RogueInt {
+@SuppressWarnings("unused")
+public class RogueInt extends Number {
     /**
      * Holds the modified value.
      */
@@ -64,21 +64,52 @@ public class RogueInt {
     }
 
     /**
-     * Returns the value represented by this {@code RougeInt} instance.
+     * Stores a new value in this {@code RougeInt} instance.
+     *
+     * @param intValue The new value to be stored
+     */
+    public void set(int intValue) {
+        value = intValue * (seed > 60 ? 3 : 2) + seed;
+    }
+
+    /**
+     * Returns the value represented by this {@code RogueInt} instance.
      *
      * @return Stored value
      */
-    public int get() {
+    @Override
+    public int intValue() {
         return (value - seed) / (seed > 60 ? 3 : 2);
     }
 
     /**
-     * Stores a new value in this {@code RougeInt} instance.
+     * Returns the double representation of the value represented by this {@code RogueInt} instance.
      *
-     * @param newValue The new value to be stored
+     * @return Stored value converted to double
      */
-    public void set(int newValue) {
-        value = newValue * (seed > 60 ? 3 : 2) + seed;
+    @Override
+    public double doubleValue() {
+        return (double) intValue();
+    }
+
+    /**
+     * Returns the float representation of the value represented by this {@code RogueInt} instance.
+     *
+     * @return Stored value converted to float
+     */
+    @Override
+    public float floatValue() {
+        return (float) intValue();
+    }
+
+    /**
+     * Returns the long representation of the value represented by this {@code RogueInt} instance.
+     *
+     * @return Stored value converted to long
+     */
+    @Override
+    public long longValue() {
+        return intValue();
     }
 
     /**
@@ -88,6 +119,6 @@ public class RogueInt {
      */
     @Override
     public String toString() {
-        return String.valueOf(get());
+        return String.valueOf(intValue());
     }
 }

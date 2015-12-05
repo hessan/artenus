@@ -19,5 +19,7 @@
 /**
  * Contains classes for different kinds of sprites. A sprite in this framework is an entity that
  * provides a graphical representation.
+ *
+ * @author Hessan Feghhi
  */
 package com.annahid.libs.artenus.graphics.sprites;

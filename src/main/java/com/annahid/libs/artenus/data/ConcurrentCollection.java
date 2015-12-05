@@ -29,7 +29,7 @@ import java.util.Iterator;
  * both ends of the collection) as it is used as part of the entities and scene logic in Artenus.
  * </p>
  * <p>Java's standard LinkedList implementation is not thread-safe and hence it is programmed to
- * through exceptions on concurrent modification and access scenarios. There are some alternatives
+ * throw exceptions on concurrent modification and access scenarios. There are some alternatives
  * in the standard library, but Artenus uses this minimalistic collection implementation for its
  * internal use. You can use this class if you need a synchronized sequential-access collection.</p>
  * <p>The {@code size}, {@code isEmpty}, {@code iterator}, {@code add}, {@code prepend},
@@ -140,8 +140,8 @@ public class ConcurrentCollection<T> implements Collection<T> {
     }
 
     /**
-     * Returns true if this list contains the specified element. More formally, returns true if and
-     * only if this list contains at least one element e such that <tt>(o==null ? e==null :
+     * Returns {@code true} if this list contains the specified element. More formally, returns true
+     * if and only if this list contains at least one element e such that <tt>(o==null ? e==null :
      * o.equals(e))</tt>.
      *
      * @param object Element whose presence in this list is to be tested
@@ -282,7 +282,7 @@ public class ConcurrentCollection<T> implements Collection<T> {
     }
 
     /**
-     * Returns true if this list contains no elements.
+     * Indicates whether this collection contains no elements.
      *
      * @return {@code true} if this list contains no elements
      */
@@ -318,7 +318,7 @@ public class ConcurrentCollection<T> implements Collection<T> {
      * @param array Not used.
      * @param <T1>  Not used.
      *
-     * @return Nothing; it only throws a {@code UnsupportedOperationException}
+     * @return Nothing; it only throws an {@code UnsupportedOperationException}
      *
      * @throws UnsupportedOperationException
      */
@@ -329,7 +329,7 @@ public class ConcurrentCollection<T> implements Collection<T> {
     }
 
     /**
-     * Returns the first element in this collection (the element at the front of the collection).
+     * Gets the first element in this collection (the element at the front of the collection).
      *
      * @return The first element of this collection
      */
@@ -338,7 +338,7 @@ public class ConcurrentCollection<T> implements Collection<T> {
     }
 
     /**
-     * Returns the last element in this collection (the element at the back of the collection).
+     * Gets the last element in this collection (the element at the back of the collection).
      *
      * @return The last element of this collection
      */
@@ -363,14 +363,26 @@ public class ConcurrentCollection<T> implements Collection<T> {
     }
 
     /**
-     * Represents an iterator for a concurrent collection. An intance of this iterator is returned
+     * Represents an iterator for a concurrent collection. An instance of this iterator is returned
      * by the {@link ConcurrentCollection#iterator()} method.
      */
     private final class It implements Iterator<T> {
+        /**
+         * Holds the current element this iterator points to. This element will be returned by the
+         * next call to {@link #next()}.
+         */
         Element<T> current;
 
+        /**
+         * Holds the latest element that was returned by this iterator.
+         */
         Element<T> recent;
 
+        /**
+         * Creates an iterator starting at the given element.
+         *
+         * @param start Starting element
+         */
         It(Element<T> start) {
             current = start;
         }

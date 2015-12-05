@@ -19,5 +19,7 @@
 /**
  * Provides behavioral interfaces for entities. Each entity in a scene can have one or more of the
  * behaviors defined in this package.
+ *
+ * @author Hessan Feghhi
  */
 package com.annahid.libs.artenus.entities.behavior;

@@ -18,5 +18,7 @@
 
 /**
  * Contains data structures and data types that are frequently used within the framework.
+ *
+ * @author Hessan Feghhi
  */
 package com.annahid.libs.artenus.data;

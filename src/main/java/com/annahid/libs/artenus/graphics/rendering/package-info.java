@@ -17,8 +17,10 @@
  */
 
 /**
- * Provides for scripting functionality within games.
+ * Contains the rendering subsystem. Classes in this package are the closest to the underlying
+ * graphics engine (such as OpenGL).
  *
  * @author Hessan Feghhi
+ * @see com.annahid.libs.artenus.graphics.filters
  */
-package com.annahid.libs.artenus.scripting;
+package com.annahid.libs.artenus.graphics.rendering;

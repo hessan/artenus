@@ -18,5 +18,7 @@
 
 /**
  * Contains the audio framework.
+ *
+ * @author Hessan Feghhi
  */
 package com.annahid.libs.artenus.sound;
