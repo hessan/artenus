@@ -64,9 +64,11 @@ public abstract class GameInput implements Entity {
 
     private Point2D savedDirection;
 
-    private int keyMap, savedKeyMap;
+    private int keyMap;
 
-    private InputListener l = null;
+    private int savedKeyMap;
+
+    private InputListener listener = null;
 
     /**
      * Creates an {@code GameInput} with all buttons unpressed and the directional knob at its rest
@@ -88,7 +90,7 @@ public abstract class GameInput implements Entity {
      * @see InputListener
      */
     public final void setListener(InputListener listener) {
-        l = listener;
+        this.listener = listener;
     }
 
     /**
@@ -111,9 +113,9 @@ public abstract class GameInput implements Entity {
      * the associated {@link InputListener} will be called back to respond to the change.
      */
     protected void releaseKeyMap() {
-        if (l != null && (keyMap != savedKeyMap
+        if (listener != null && (keyMap != savedKeyMap
                 || direction.x != savedDirection.x || direction.y != savedDirection.y)) {
-            l.inputStatusChanged(this);
+            listener.inputStatusChanged(this);
         }
     }
 
@@ -173,9 +175,7 @@ public abstract class GameInput implements Entity {
 
     /**
      * Registers this {@code GameInput} with the given scene. Some input managers might need some
-     * initialization that needs context. This method is where they should do those procedures. All
-     * input managers must implement this method. This method is called internally and you must not
-     * invoke it manually.
+     * initialization that needs context. This method is where they should initialize themselves.
      *
      * @param scene The scene that will use this input manager to handle inputs
      */
@@ -183,8 +183,7 @@ public abstract class GameInput implements Entity {
     public abstract void onAttach(Scene scene);
 
     /**
-     * Unregisters this {@code GameInput} and releases resources associated to it. This method is
-     * called internally and you must not invoke it manually.
+     * Unregisters this {@code GameInput} and releases resources associated with it.
      *
      * @param scene The scene that will use this input manager to handle inputs
      */

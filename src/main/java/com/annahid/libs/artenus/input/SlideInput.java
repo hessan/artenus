@@ -91,6 +91,13 @@ public final class SlideInput extends GameInput implements Touchable {
     private float y2;
 
     /**
+     * Creates a new instance of slide input, which can be added to a scene.
+     */
+    public SlideInput() {
+
+    }
+
+    /**
      * Assigns a touch button to an action key for this input manager.
      *
      * @param key    The action key to associate with
@@ -127,6 +134,13 @@ public final class SlideInput extends GameInput implements Touchable {
         buttons.put(key, button);
     }
 
+    /**
+     * Gets the button mapped to the given controller key.
+     *
+     * @param key Controller key
+     *
+     * @return The button
+     */
     public Button getButton(int key) {
         return buttons.get(key);
     }
@@ -151,9 +165,6 @@ public final class SlideInput extends GameInput implements Touchable {
         return reference.y;
     }
 
-    /**
-     * Registers this {@code SlideInput} manager to the given context.
-     */
     @Override
     public void onAttach(Scene scene) {
         stage = scene.getStage();
