@@ -28,7 +28,7 @@ import com.annahid.libs.artenus.graphics.rendering.ShaderManager;
  *
  * @author Hessan Feghhi
  */
-class ShadowShaderProgram extends TextureShaderProgram {
+final class ShadowShaderProgram extends TextureShaderProgram {
     /**
      * Holds the vertex shader.
      */
@@ -49,9 +49,10 @@ class ShadowShaderProgram extends TextureShaderProgram {
             "precision mediump float;" +
             "uniform sampler2D uTex;" +
             "uniform float uAlpha;" +
+            "uniform float uShadowAlpha;" +
             "varying vec2 vTexCoord;" +
             "void main() {" +
-            "  vec4 temp = uAlpha * texture2D( uTex, vTexCoord );" +
+            "  vec4 temp = uAlpha * uShadowAlpha * texture2D( uTex, vTexCoord );" +
             "  gl_FragColor = vec4(0, 0, 0, temp.a);" +
             '}';
 
@@ -70,6 +71,11 @@ class ShadowShaderProgram extends TextureShaderProgram {
      */
     private int mShadowAlpha;
 
+    /**
+     * Gets the singleton instance of this class.
+     *
+     * @return The instance
+     */
     static ShadowShaderProgram getInstance() {
         return instance;
     }
@@ -81,7 +87,8 @@ class ShadowShaderProgram extends TextureShaderProgram {
         mPositionHandle = GLES20.glGetAttribLocation(mProgram, "vPosition");
         mTexCoordsHandle = GLES20.glGetAttribLocation(mProgram, "aTexCoord");
         mSamplerHandle = GLES20.glGetUniformLocation(mProgram, "uTex");
-        mShadowAlpha = GLES20.glGetUniformLocation(mProgram, "uAlpha");
+        mColorHandle = GLES20.glGetUniformLocation(mProgram, "uAlpha");
+        mShadowAlpha = GLES20.glGetUniformLocation(mProgram, "uShadowAlpha");
     }
 
     /**
@@ -94,7 +101,8 @@ class ShadowShaderProgram extends TextureShaderProgram {
      */
     @Override
     public void feed(float r, float g, float b, float a) {
-        // This shader program does not support color filtering.
+        // We only need the alpha value from the color filter
+        GLES20.glUniform1f(mColorHandle, a);
     }
 
     /**
