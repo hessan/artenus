@@ -212,4 +212,22 @@ public abstract class FilteredEntity implements Entity, Animatable, Transformabl
     public final Entity getUnderlyingEntity() {
         return target;
     }
+
+    /**
+     * Checks whether this instance or its underlying entity equals the given object. Filtered
+     * entities are only decorators, and the real object to be compared should be their target.
+     * This facilitates for example the removal of the underlying object from an entity collection
+     * directly rather than using its decorator, or recursive removal.
+     *
+     * @param o Object to be compared
+     *
+     * @return {@code true} if this filtered entity or its underlying entity is the same as o,
+     *         {@code false} otherwise
+     *
+     * @see {@link EntityCollection#recursiveRemove(Entity)}
+     */
+    @Override
+    public boolean equals(Object o) {
+        return (o instanceof Entity) && (this == o || this.getUnderlyingEntity().equals(o));
+    }
 }
