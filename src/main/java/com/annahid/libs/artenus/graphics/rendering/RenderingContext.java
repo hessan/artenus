@@ -117,7 +117,7 @@ public interface RenderingContext {
      * <li>Some aspects of the rendering context are reset after setting a shader, so it is
      * recommended to be the first call in {@link Renderable#render(RenderingContext, int)}.
      * </li>
-     * <li>If the render method is called with {@link Renderable#FLAG_IGNORE_EFFECTS} filter,
+     * <li>If the render method is called with {@link Renderable#FLAG_PRESERVE_SHADER_PROGRAM} filter,
      * no shader program should be applied. The system uses this flag to render objects in
      * plain graphics, for effects or touch maps. Setting a shader when this flag is on causes
      * instability in the system.

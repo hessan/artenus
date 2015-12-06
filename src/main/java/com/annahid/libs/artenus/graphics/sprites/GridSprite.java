@@ -263,15 +263,10 @@ public final class GridSprite extends SpriteEntity {
             }
         }
 
-        if (effect != null && (flags & FLAG_IGNORE_EFFECTS) == 0) {
-            effect.render(context, this, alpha);
-            return;
-        }
-
         final float bw = blkW - m * 2, bh = blkH - m * 2;
         final int[][] blocks = this.blocks;
 
-        if ((flags & FLAG_IGNORE_EFFECTS) == 0)
+        if ((flags & FLAG_PRESERVE_SHADER_PROGRAM) == 0)
             context.setShader(TextureManager.getShaderProgram());
         final TextureShaderProgram program =
                 (TextureShaderProgram) TextureManager.getShaderProgram();
@@ -280,7 +275,7 @@ public final class GridSprite extends SpriteEntity {
         context.pushMatrix();
         context.rotate(rotation);
 
-        for (int i = vc1; i < vc2; i++)
+        for (int i = vc1; i < vc2; i++) {
             for (int j = vr1; j < vr2; j++) {
                 final float a = alpha * alphas[i][j];
                 context.setColorFilter(a, a, a, a);
@@ -291,7 +286,7 @@ public final class GridSprite extends SpriteEntity {
                 context.rect();
                 context.popMatrix();
             }
-
+        }
         context.popMatrix();
     }
 

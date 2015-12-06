@@ -116,7 +116,7 @@ public final class TouchMap {
             final TouchButton button = entry.getValue();
             shader.feedObjectId((entry.getKey() + 256) % 256);
             context.pushMatrix(button.popLatestMatrix());
-            button.render(context, Renderable.FLAG_IGNORE_EFFECTS);
+            button.render(context, Renderable.FLAG_PRESERVE_SHADER_PROGRAM);
             context.popMatrix();
         }
         while (!processQueue.isEmpty()) {

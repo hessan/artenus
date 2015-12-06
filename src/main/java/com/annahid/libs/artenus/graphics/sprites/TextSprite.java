@@ -159,20 +159,18 @@ public final class TextSprite extends SpriteEntity {
     @Override
     public final void render(RenderingContext ctx, int flags) {
         TextureShaderProgram program = (TextureShaderProgram) TextureManager.getShaderProgram();
-        if ((flags & FLAG_IGNORE_EFFECTS) != 0) {
+
+        if ((flags & FLAG_PRESERVE_SHADER_PROGRAM) != 0) {
             if (ctx.getShader() instanceof TextureShaderProgram) {
                 program = (TextureShaderProgram) ctx.getShader();
             }
         }
+
+        // Change or reset the state of the shader program (depending on the flag).
         ctx.setShader(program);
 
-        if (effect != null && (flags & FLAG_IGNORE_EFFECTS) == 0)
-            effect.render(ctx, this, alpha);
-        else if (alpha != 0) {
-
-            if ((flags & FLAG_IGNORE_COLOR_FILTER) == 0)
-                ctx.setColorFilter(alpha * cf.r, alpha * cf.g, alpha * cf.b, alpha);
-
+        if (alpha != 0) {
+            ctx.setColorFilter(alpha * cf.r, alpha * cf.g, alpha * cf.b, alpha);
             myFont.draw(ctx, program, ca, pos.x, pos.y, scale.x, rotation, rtl);
         }
     }
