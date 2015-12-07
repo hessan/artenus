@@ -150,7 +150,9 @@ public abstract class Artenus extends Activity {
 
         try {
             ApplicationInfo ai = getPackageManager().getApplicationInfo(
-                    getPackageName(), PackageManager.GET_META_DATA);
+                    getPackageName(),
+                    PackageManager.GET_META_DATA
+            );
             final String store = ai.metaData.getString("com.annahid.libs.artenus.APP_STORE");
             manifestStore = Stores.NONE;
 
@@ -187,12 +189,12 @@ public abstract class Artenus extends Activity {
 
         UnifiedServices unified = UnifiedServices.getInstance();
 
-        if (unified == null)
+        if (unified == null) {
             unified = UnifiedServices.getInstance(0);
-
-        if (unified.hasServices(UnifiedServices.SERVICE_ADS))
+        }
+        if (unified.hasServices(UnifiedServices.SERVICE_ADS)) {
             unified.getAdManager().setAdLayout((AdLayout) stage.get().getParent());
-
+        }
         unified.onCreate(this);
     }
 
@@ -214,10 +216,11 @@ public abstract class Artenus extends Activity {
 
     @Override
     public boolean onKeyUp(int keyCode, @NonNull KeyEvent event) {
-        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK)
-            if (stage != null && stage.get() != null)
-                if (stage.get().onBackButton())
-                    return true;
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            if (stage != null && stage.get() != null && stage.get().onBackButton()) {
+                return true;
+            }
+        }
         return super.onKeyUp(keyCode, event);
     }
 
@@ -225,9 +228,9 @@ public abstract class Artenus extends Activity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
 
-        if (!hasFocus)
+        if (!hasFocus) {
             hasOutFocused = true;
-        else if (hasOutFocused) {
+        } else if (hasOutFocused) {
             SoundManager.resumeMusic();
             hasOutFocused = false;
         }

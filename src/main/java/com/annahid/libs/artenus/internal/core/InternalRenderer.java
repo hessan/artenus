@@ -147,7 +147,6 @@ final class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext
                     -0.5f, 0.5f, 0.0f,  // 2. left-top
                     0.5f, 0.5f, 0.0f   // 3. right-top
             };
-
             final ByteBuffer vbb = ByteBuffer.allocateDirect(vertices.length * 4);
             vbb.order(ByteOrder.nativeOrder());
             vertexBuffer = vbb.asFloatBuffer();
@@ -279,9 +278,11 @@ final class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext
         popMatrix();
 
         if (stage.currentScene != null) {
-            if (stage.currentScene.getDialog() != null)
+            if (stage.currentScene.getDialog() != null) {
                 stage.currentScene.getDialog().getTouchMap().process(this);
-            else stage.currentScene.getTouchMap().process(this);
+            } else {
+                stage.currentScene.getTouchMap().process(this);
+            }
             shader.cleanup();
         }
     }
@@ -421,8 +422,9 @@ final class InternalRenderer implements GLSurfaceView.Renderer, RenderingContext
         clear(clearColor.r, clearColor.g, clearColor.b);
 
         if (stage.currentScene != null) {
-            if (!stage.currentScene.isLoaded())
+            if (!stage.currentScene.isLoaded()) {
                 stage.currentScene.onLoaded();
+            }
             stage.currentScene.render(this);
         }
 
