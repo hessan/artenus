@@ -22,7 +22,6 @@ import com.annahid.libs.artenus.graphics.Texture;
 import com.annahid.libs.artenus.graphics.TextureManager;
 import com.annahid.libs.artenus.graphics.TextureShaderProgram;
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
-import com.annahid.libs.artenus.graphics.rendering.ShaderProgram;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -109,17 +108,24 @@ public class ImageSprite extends SpriteEntity {
         if (frames == null) {
             if (cutout == null) {
                 frames = TextureManager.getLoadingTexture();
-                cutout = new Cutout(TextureManager.getLoadingTextureWidth(), TextureManager.getLoadingTextureHeight(), 1);
-                if (!frames.isLoaded())
+                cutout = new Cutout(
+                        TextureManager.getLoadingTextureWidth(),
+                        TextureManager.getLoadingTextureHeight(),
+                        1
+                );
+                if (!frames.isLoaded()) {
                     frames.waitLoad();
-            } else frames = TextureManager.getTexture(resId);
+                }
+            } else {
+                frames = TextureManager.getTexture(resId);
+            }
             return;
         }
 
         if (alpha != 0) {
             TextureShaderProgram program = (TextureShaderProgram) TextureManager.getShaderProgram();
 
-            if ((flags & FLAG_IGNORE_EFFECTS) != 0) {
+            if ((flags & FLAG_PRESERVE_SHADER_PROGRAM) != 0) {
                 if (context.getShader() instanceof TextureShaderProgram) {
                     program = (TextureShaderProgram) context.getShader();
                 }
@@ -127,21 +133,13 @@ public class ImageSprite extends SpriteEntity {
 
             context.setShader(program);
 
-            if (effect != null && (flags & FLAG_IGNORE_EFFECTS) == 0) {
-                effect.render(context, this, alpha);
-            } else {
-                if (!cutout.isGenerated())
-                    cutout.generate(frames.getWidth(), frames.getHeight());
-
-                final float width = scale.x * cutout.fw, height = scale.y * cutout.fh;
-
-                frames.prepare(program, cutout.textureBuffers[currentFrame]);
-
-                if ((flags & FLAG_IGNORE_COLOR_FILTER) == 0)
-                    context.setColorFilter(alpha * cf.r, alpha * cf.g, alpha * cf.b, alpha);
-
-                frames.draw(context, pos.x, pos.y, width, height, rotation);
+            if (!cutout.isGenerated()) {
+                cutout.generate(frames.getWidth(), frames.getHeight());
             }
+            final float width = scale.x * cutout.fw, height = scale.y * cutout.fh;
+            frames.prepare(program, cutout.textureBuffers[currentFrame]);
+            context.setColorFilter(alpha * cf.r, alpha * cf.g, alpha * cf.b, alpha);
+            frames.draw(context, pos.x, pos.y, width, height, rotation);
         }
     }
 

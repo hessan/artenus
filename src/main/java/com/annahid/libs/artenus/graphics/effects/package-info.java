@@ -17,10 +17,8 @@
  */
 
 /**
- * Contains the entity framework. Entities are objects or collections of objects that make up a
- * scene. Using the entities framework, all entities can be treated in a unified way, regardless
- * of their specific characteristics.
- *
- * @author Hessan Feghhi
+ * Contains classes that handle visual effects. Effects such as "drop shadow" are handled using
+ * decoration in Artenus. Each effect is a {@link com.annahid.libs.artenus.entities.FilteredEntity}
+ * that renders the underlying entity in a specific way.
  */
-package com.annahid.libs.artenus.entities;
+package com.annahid.libs.artenus.graphics.effects;

@@ -29,7 +29,6 @@ import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.data.RGB;
 import com.annahid.libs.artenus.entities.behavior.Animatable;
 import com.annahid.libs.artenus.entities.behavior.Transformable;
-import com.annahid.libs.artenus.graphics.Effect;
 import com.annahid.libs.artenus.entities.behavior.Touchable;
 import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.core.Scene;
@@ -85,11 +84,6 @@ public class EntityCollection
      * Holds the scene this collection currently belongs to (the one it is attached to).
      */
     private Scene scene = null;
-
-    /**
-     * Holds the effect affecting the collection as a single graphical unit.
-     */
-    private Effect effect;
 
     /**
      * Creates an {@code EntityCollection}.
@@ -309,9 +303,7 @@ public class EntityCollection
      */
     @Override
     public void render(RenderingContext ctx, int flags) {
-        if (effect != null && (flags & FLAG_IGNORE_EFFECTS) == 0)
-            effect.render(ctx, this, 1);
-        else try {
+        try {
             ctx.pushMatrix();
             ctx.translate(pos.x, pos.y);
             ctx.rotate(rotation);
@@ -404,16 +396,6 @@ public class EntityCollection
                 return true;
         }
         return false;
-    }
-
-    @Override
-    public Effect getEffect() {
-        return effect;
-    }
-
-    @Override
-    public void setEffect(Effect effect) {
-        this.effect = effect;
     }
 
     @Override

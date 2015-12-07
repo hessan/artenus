@@ -25,7 +25,6 @@ import com.annahid.libs.artenus.graphics.animation.AnimationHandler;
 import com.annahid.libs.artenus.entities.behavior.Animatable;
 import com.annahid.libs.artenus.entities.behavior.Behaviors;
 import com.annahid.libs.artenus.entities.behavior.Transformable;
-import com.annahid.libs.artenus.graphics.Effect;
 import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.core.Scene;
 
@@ -68,11 +67,6 @@ public abstract class SpriteEntity implements Entity, Animatable, Renderable, Tr
      * Holds the alpha transparency value for this sprite.
      */
     protected float alpha;
-
-    /**
-     * Holds the effect currently applied to this sprite.
-     */
-    Effect effect;
 
     /**
      * Called by subclasses to initialize the sprite.
@@ -278,16 +272,6 @@ public abstract class SpriteEntity implements Entity, Animatable, Renderable, Tr
         return behavior == Behaviors.RENDERABLE
                 || behavior == Behaviors.ANIMATABLE
                 || behavior == Behaviors.TRANSFORMABLE;
-    }
-
-    @Override
-    public Effect getEffect() {
-        return effect;
-    }
-
-    @Override
-    public void setEffect(Effect effect) {
-        this.effect = effect;
     }
 
     /**

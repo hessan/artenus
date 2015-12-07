@@ -20,7 +20,6 @@ package com.annahid.libs.artenus.entities.behavior;
 
 import com.annahid.libs.artenus.graphics.rendering.RenderingContext;
 import com.annahid.libs.artenus.data.RGB;
-import com.annahid.libs.artenus.graphics.Effect;
 
 /**
  * Interface for all entities that support rendering of visual content.
@@ -28,19 +27,11 @@ import com.annahid.libs.artenus.graphics.Effect;
  * @author Hessan Feghhi
  */
 public interface Renderable {
-    /**
-     * Rendering flag: ignore color filtering, if present.
-     *
-     * @see Renderable#setColorFilter
-     */
-    int FLAG_IGNORE_COLOR_FILTER = 1;
 
     /**
      * Rendering flag: ignore effects, if present.
-     *
-     * @see com.annahid.libs.artenus.graphics.Effect
      */
-    int FLAG_IGNORE_EFFECTS = 2;
+    int FLAG_PRESERVE_SHADER_PROGRAM = 2;
 
     /**
      * Sets the color filter for this entity. The original colors should be multiplied by this color
@@ -68,24 +59,6 @@ public interface Renderable {
      * @param rgb The color multipliers
      */
     void setColorFilter(RGB rgb);
-
-    /**
-     * Gets the effect currently assigned to this entity. Multiple effects can be chained together
-     * to create a single effect.
-     *
-     * @return The effect chain currently assigned to this entity
-     *
-     * @see com.annahid.libs.artenus.graphics.Effect
-     */
-    Effect getEffect();
-
-    /**
-     * Sets the top-level effect for this entity. Each entity can only have one effect assigned to
-     * it. Multiple effects can be chained together to create a single effect.
-     *
-     * @see com.annahid.libs.artenus.graphics.Effect
-     */
-    void setEffect(Effect effect);
 
     /**
      * Gets the transparency value for this renderable.

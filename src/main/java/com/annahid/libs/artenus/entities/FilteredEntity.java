@@ -24,7 +24,6 @@ import com.annahid.libs.artenus.data.Point2D;
 import com.annahid.libs.artenus.data.RGB;
 import com.annahid.libs.artenus.entities.behavior.Animatable;
 import com.annahid.libs.artenus.entities.behavior.Transformable;
-import com.annahid.libs.artenus.graphics.Effect;
 import com.annahid.libs.artenus.entities.behavior.Renderable;
 import com.annahid.libs.artenus.core.Scene;
 
@@ -122,20 +121,23 @@ public abstract class FilteredEntity implements Entity, Animatable, Transformabl
 
     @Override
     public void setScale(float scaleX, float scaleY) {
-        if (target.hasBehavior(Behaviors.TRANSFORMABLE))
+        if (target.hasBehavior(Behaviors.TRANSFORMABLE)) {
             ((Transformable) target).setScale(scaleX, scaleY);
+        }
     }
 
     @Override
     public void setColorFilter(float r, float g, float b) {
-        if (target.hasBehavior(Behaviors.RENDERABLE))
+        if (target.hasBehavior(Behaviors.RENDERABLE)) {
             ((Renderable) target).setColorFilter(r, g, b);
+        }
     }
 
     @Override
     public RGB getColorFilter() {
-        if (target.hasBehavior(Behaviors.RENDERABLE))
+        if (target.hasBehavior(Behaviors.RENDERABLE)) {
             return ((Renderable) target).getColorFilter();
+        }
 
         return null;
     }
@@ -146,30 +148,18 @@ public abstract class FilteredEntity implements Entity, Animatable, Transformabl
     }
 
     @Override
-    public Effect getEffect() {
-        if (target.hasBehavior(Behaviors.RENDERABLE))
-            return ((Renderable) target).getEffect();
-
-        return null;
-    }
-
-    @Override
-    public void setEffect(Effect effect) {
-        if (target.hasBehavior(Behaviors.RENDERABLE))
-            ((Renderable) target).setEffect(effect);
-    }
-
-    @Override
     public float getAlpha() {
-        if (target.hasBehavior(Behaviors.RENDERABLE))
+        if (target.hasBehavior(Behaviors.RENDERABLE)) {
             return ((Renderable) target).getAlpha();
+        }
         return 0;
     }
 
     @Override
     public void setAlpha(float alpha) {
-        if (target.hasBehavior(Behaviors.RENDERABLE))
+        if (target.hasBehavior(Behaviors.RENDERABLE)) {
             ((Renderable) target).setAlpha(alpha);
+        }
     }
 
     @Override
@@ -187,8 +177,9 @@ public abstract class FilteredEntity implements Entity, Animatable, Transformabl
      */
     @Override
     public void render(RenderingContext ctx, int flags) {
-        if (target.hasBehavior(Behaviors.RENDERABLE))
+        if (target.hasBehavior(Behaviors.RENDERABLE)) {
             ((Renderable) target).render(ctx, flags);
+        }
     }
 
     @Override
@@ -220,5 +211,23 @@ public abstract class FilteredEntity implements Entity, Animatable, Transformabl
      */
     public final Entity getUnderlyingEntity() {
         return target;
+    }
+
+    /**
+     * Checks whether this instance or its underlying entity equals the given object. Filtered
+     * entities are only decorators, and the real object to be compared should be their target.
+     * This facilitates for example the removal of the underlying object from an entity collection
+     * directly rather than using its decorator, or recursive removal.
+     *
+     * @param o Object to be compared
+     *
+     * @return {@code true} if this filtered entity or its underlying entity is the same as o,
+     *         {@code false} otherwise
+     *
+     * @see {@link EntityCollection#recursiveRemove(Entity)}
+     */
+    @Override
+    public boolean equals(Object o) {
+        return (o instanceof Entity) && (this == o || this.getUnderlyingEntity().equals(o));
     }
 }
