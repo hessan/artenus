@@ -17,20 +17,20 @@ entities that start with one that is in the collection.
 Entity effect handling has been completely reworked. Before, the code for adding a shadow effect to
 a sprite would look like this:
   
-```
+```java
 imageSprite.setEffect(new ShadowEffect(2, 3, 0.35f));
 scene.add(imageSprite);
 ```
 
 but now it now it looks like the following:
 
-```
+```java
 scene.add(new DropShadow(imageSprite).setOffset(2, 3).setShadowAlpha(0.35f));
 ```
 
 or more concisely (which is less readable):
 
-```
+```java
 scene.add(new DropShadow(imageSprite, 2, 3, 0.35f));
 ```  
 
