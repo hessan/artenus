@@ -69,7 +69,7 @@ complicated logic. Always let the framework do the heavy lifting for you where i
 
 ## Reference
 
-[Artenus 2D Framework Reference](http://annahid.com/artenus-docs/)
+[Artenus 2D Framework Reference](http://annahid.com/artenus/)
 
 ## Developed By
 
